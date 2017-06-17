@@ -1,5 +1,10 @@
 import {uniqBy, isEmpty} from 'lodash'
 
+/**
+ * This is a babel plugin that converts an object to PropTypes
+ * @param t
+ * @returns {{visitor: {ArrayExpression: (function(*)), NullLiteral: (function(*)), StringLiteral: (function(*)), NumericLiteral: (function(*)), ArrowFunctionExpression: (function(*)), FunctionExpression: (function(*)), BooleanLiteral: (function(*)), Program: (function(*, *)), ObjectExpression: (function(*))}}}
+ */
 export default function ({types: t}) {
   return {
     visitor: {
@@ -46,7 +51,7 @@ export default function ({types: t}) {
         path.replaceWith(t.identifier('PropTypes.bool'))
       },
 
-      Program(path, state) {
+      Program(path) {
         path.traverse({
           enter(path) {
             t.removeComments(path.node);
