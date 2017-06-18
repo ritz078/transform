@@ -125,6 +125,7 @@ export default class ConversionPanel extends PureComponent {
           .section {
             flex: 1;
             position: relative;
+            height: calc(100vh - 50px);
           }
 
           .right {
