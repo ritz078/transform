@@ -10,15 +10,20 @@ export default function ({types: t}) {
     visitor: {
       ArrayExpression(path) {
         if (t.isCallExpression(path.parent)) return;
-        const uniqueElements = uniqBy(path.node.elements, 'type');
+        let uniqueElements = uniqBy(path.node.elements, 'type');
 
-        const elements = [t.arrayExpression([...uniqueElements])];
+        if(t.isObjectExpression(uniqueElements[0])) {
+          uniqueElements = [t.callExpression(
+            t.memberExpression(t.identifier("PropTypes"), t.identifier("shape")),
+            uniqueElements
+          )]
+        }
 
-        if (!isEmpty(uniqueElements)) {
+        if ((!isEmpty(uniqueElements) && uniqueElements.length === 1) || t.isCallExpression(uniqueElements)) {
           path.replaceWith(
             t.callExpression(
               t.memberExpression(t.identifier("PropTypes"), t.identifier("arrayOf")),
-              elements
+              uniqueElements
             )
           )
         } else {
