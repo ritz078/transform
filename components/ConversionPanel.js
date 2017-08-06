@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import isBrowser from 'is-in-browser'
-import { transform } from 'babel-standalone'
 import store from 'store2'
 import {js_beautify} from 'js-beautify'
 import copy from 'copy-text-to-clipboard'
-import Head from 'next/head'
 import Layout from '../components/Layout'
+
+const theme = 'tomorrow'
 
 let brace
 let AceEditor
@@ -14,7 +14,9 @@ if (isBrowser) {
   brace = require('brace').default
   AceEditor = require('react-ace').default
   require('brace/mode/javascript')
-  require('brace/theme/tomorrow')
+  require(`brace/theme/${theme}`)
+  require('brace/mode/json')
+  require('brace/mode/typescript')
 }
 
 export default class ConversionPanel extends PureComponent {
@@ -42,9 +44,18 @@ export default class ConversionPanel extends PureComponent {
   }
 
   componentDidMount() {
+    const {name} = this.props
     this.setState({
       value: store(`${name}_code`) || this.props.defaultText,
       resultValue: store(`${name}_result`) || this.props.getTransformedValue(this.props.defaultText)
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {name} = nextProps
+    this.setState({
+      value: store(`${name}_code`) || nextProps.defaultText,
+      resultValue: store(`${name}_result`) || nextProps.getTransformedValue(nextProps.defaultText)
     })
   }
 
@@ -73,8 +84,11 @@ export default class ConversionPanel extends PureComponent {
   }
 
   prettifyCode = () => {
+    const value = js_beautify(this.state.value)
     this.setState({
-      value: js_beautify(this.state.value)
+      value
+    }, () => {
+      store(`${this.props.name}_code`, value)
     })
   }
 
@@ -89,10 +103,6 @@ export default class ConversionPanel extends PureComponent {
     return (
       <Layout pathname={this.props.pathname}>
         <div className="wrapper">
-          <Head>
-            <title>Transform | Online code transformation</title>
-            <meta rel="description" content="An online utility to convert a JSON object to prop-types or Typescript Interface."/>
-          </Head>
           <style jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lato');
           .wrapper {
@@ -173,8 +183,17 @@ export default class ConversionPanel extends PureComponent {
               height: 100% !important;
            }
 
+           .right #code {
+            background-color: #fafafa;
+           }
+
           .right .ace_content, .right, .right .ace-tomorrow {
             background-color: #fafafa;
+          }
+
+          .right {
+            box-sizing: border-box;
+            padding-bottom: 10px;
           }
         `}</style>
 
@@ -183,7 +202,7 @@ export default class ConversionPanel extends PureComponent {
               {isBrowser &&
               <AceEditor
                 mode={this.props.leftMode}
-                theme="tomorrow"
+                theme={theme}
                 onChange={this.onChange}
                 name="code"
                 value={this.state.value}
@@ -202,7 +221,7 @@ export default class ConversionPanel extends PureComponent {
               {isBrowser &&
               <AceEditor
                 mode={this.props.rightMode}
-                theme="tomorrow"
+                theme={theme}
                 name="code"
                 readOnly
                 value={js_beautify(this.state.resultValue)}

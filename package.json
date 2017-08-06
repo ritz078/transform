@@ -7,6 +7,7 @@
     "start": "next start",
     "build": "next build",
     "dev": "next dev",
+    "analyze": "cross-env ANALYZE=1 next build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -27,6 +28,7 @@
     "react-ace": "^5.1.2",
     "react-dom": "^15.6.1",
     "react-github-corner": "^0.3.0",
-    "store2": "^2.5.1"
+    "store2": "^2.5.1",
+    "webpack-bundle-analyzer": "^2.9.0"
   }
 }

@@ -1,15 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Json2dts, toValidJSON } from 'json2dts'
-import isBrowser from 'is-in-browser'
 import ConversionPanel from '../components/ConversionPanel'
-
-let brace
-let AceEditor
-if (isBrowser) {
-  brace = require('brace').default
-  AceEditor = require('react-ace').default
-  require('brace/mode/json')
-}
 
 const defaultText = ` 
 {
@@ -38,9 +29,10 @@ export default class Json2Ts extends PureComponent {
     return (
       <ConversionPanel
         getTransformedValue={this.getTransformedValue}
-        name={'prop_types'}
+        name={'ts_interface'}
         defaultText={defaultText}
         leftMode="json"
+        rightMode="typescript"
         pathname={this.props.url.pathname}
       />
     )

@@ -46,6 +46,8 @@ export default function ({children, pathname}) {
   return (
     <div className="main-wrapper">
       <Head>
+        <title>Transform | Online code transformation</title>
+        <meta rel="description" content="An online utility to convert a JSON object to prop-types or Typescript Interface."/>
         <link rel="icon" type="image/png" href="/static/favicon.png" />
         <link rel='stylesheet' type='text/css' href='/static/nprogress.css' />
         <script>
