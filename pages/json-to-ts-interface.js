@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react'
 import dynamic from 'next/dynamic'
 import { Json2dts, toValidJSON } from 'json2dts'
+import Layout from '../components/Layout'
+
 const ConversionPanel = dynamic(import('../components/ConversionPanel'))
 
 const defaultText = ` 
@@ -13,7 +15,6 @@ const defaultText = `
   }
 }
 `
-
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue) => {
@@ -28,14 +29,16 @@ export default class Json2Ts extends PureComponent {
 
   render () {
     return (
-      <ConversionPanel
-        getTransformedValue={this.getTransformedValue}
-        name={'ts_interface'}
-        defaultText={defaultText}
-        leftMode="json"
-        rightMode="typescript"
-        url={this.props.url}
-      />
+      <Layout pathname={this.props.url.pathname}>
+        <ConversionPanel
+          getTransformedValue={this.getTransformedValue}
+          name={'ts_interface'}
+          defaultText={defaultText}
+          leftMode="json"
+          rightMode="typescript"
+          url={this.props.url}
+        />
+      </Layout>
     )
   }
 }

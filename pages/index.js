@@ -1,7 +1,9 @@
-import React, {PureComponent} from 'react'
+import React, { PureComponent } from 'react'
 import plugin from '../utils/babel-plugin-js-to-prop-types'
 
 import dynamic from 'next/dynamic'
+import Layout from '../components/Layout'
+
 const ConversionPanel = dynamic(import('../components/ConversionPanel'))
 
 const defaultText = `// Enter the object you want to convert in the 
@@ -19,21 +21,23 @@ const x = {
 
 export default class Main extends PureComponent {
   getTransformedValue = (newValue) => {
-    const { code } = babelTransform(newValue, {
+    const {code} = babelTransform(newValue, {
       presets: ['es2015'],
       plugins: [plugin]
     })
     return code
   }
 
-  render() {
+  render () {
     return (
-      <ConversionPanel
-        url={this.props.url}
-        getTransformedValue={this.getTransformedValue}
-        name={'prop_types'}
-        defaultText={defaultText}
-      />
+      <Layout pathname={this.props.url.pathname}>
+        <ConversionPanel
+          url={this.props.url}
+          getTransformedValue={this.getTransformedValue}
+          name={'prop_types'}
+          defaultText={defaultText}
+        />
+      </Layout>
     )
   }
 }

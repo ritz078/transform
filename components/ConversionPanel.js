@@ -3,10 +3,9 @@ import PropTypes from 'prop-types'
 import Router from 'next/router'
 import { transform } from 'babel-standalone'
 import isBrowser from 'is-in-browser'
-import {js_beautify} from 'js-beautify'
-import {beauty} from 'css-beauty'
+import { js_beautify } from 'js-beautify'
+import { beauty } from 'css-beauty'
 import copy from 'copy-text-to-clipboard'
-import Layout from '../components/Layout'
 
 const theme = 'tomorrow'
 
@@ -47,7 +46,7 @@ export default class ConversionPanel extends PureComponent {
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const {name} = this.props
     const code = this.props.url.query.code || this.props.defaultText
     this.setState({
@@ -88,7 +87,7 @@ export default class ConversionPanel extends PureComponent {
   }
 
   prettifyCode = () => {
-    const value = this.props.leftMode === 'css' ? beauty(this.state.value) :js_beautify(this.state.value)
+    const value = this.props.leftMode === 'css' ? beauty(this.state.value) : js_beautify(this.state.value)
     this.setState({
       value
     }, () => {
@@ -109,9 +108,8 @@ export default class ConversionPanel extends PureComponent {
 
   render () {
     return (
-      <Layout pathname={this.props.url.pathname}>
-        <div className="wrapper">
-          <style jsx>{`
+      <div className="wrapper">
+        <style jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lato');
           .wrapper {
             display: flex;
@@ -177,7 +175,7 @@ export default class ConversionPanel extends PureComponent {
 
         `}</style>
 
-          <style global jsx>{`
+        <style global jsx>{`
           *{
             margin: 0;
             padding: 0;
@@ -205,50 +203,49 @@ export default class ConversionPanel extends PureComponent {
           }
         `}</style>
 
-          <div className="content-wrapper">
-            <div className="section left">
-              {isBrowser &&
-              <AceEditor
-                mode={this.props.leftMode}
-                theme={theme}
-                onChange={this.onChange}
-                name="code"
-                value={this.state.value}
-                editorProps={{$blockScrolling: true}}
-                highlightActiveLine={false}
-                scrollMargin={[20]}
-                focus
-                fontSize={14}
-                wrapEnabled
-              />
-              }
+        <div className="content-wrapper">
+          <div className="section left">
+            {isBrowser &&
+            <AceEditor
+              mode={this.props.leftMode}
+              theme={theme}
+              onChange={this.onChange}
+              name="code"
+              value={this.state.value}
+              editorProps={{$blockScrolling: true}}
+              highlightActiveLine={false}
+              scrollMargin={[20]}
+              focus
+              fontSize={14}
+              wrapEnabled
+            />
+            }
 
-              <button className="btn" onClick={this.prettifyCode}>Prettify</button>
-            </div>
-            <div className="section right">
-              {isBrowser &&
-              <AceEditor
-                mode={this.props.rightMode}
-                theme={theme}
-                name="code"
-                readOnly
-                value={js_beautify(this.state.resultValue)}
-                editorProps={{$blockScrolling: true}}
-                scrollMargin={[20]}
-                fontSize={14}
-                showGutter={false}
-                highlightActiveLine={false}
-                wrapEnabled
-              />
-              }
-              <button className="btn" onClick={this.copyCode}>Copy</button>
-            </div>
+            <button className="btn" onClick={this.prettifyCode}>Prettify</button>
           </div>
-          <div className="footer">
-            <span className="error">{this.state.info}</span>
+          <div className="section right">
+            {isBrowser &&
+            <AceEditor
+              mode={this.props.rightMode}
+              theme={theme}
+              name="code"
+              readOnly
+              value={js_beautify(this.state.resultValue)}
+              editorProps={{$blockScrolling: true}}
+              scrollMargin={[20]}
+              fontSize={14}
+              showGutter={false}
+              highlightActiveLine={false}
+              wrapEnabled
+            />
+            }
+            <button className="btn" onClick={this.copyCode}>Copy</button>
           </div>
         </div>
-      </Layout>
+        <div className="footer">
+          <span className="error">{this.state.info}</span>
+        </div>
+      </div>
     )
   }
 }
