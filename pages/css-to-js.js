@@ -5,8 +5,26 @@ import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 
 const defaultText = `
-.abc {
-  background-color: green;
+.main-wrapper {
+  flex-direction: row;
+  display: flex;
+  flex: 1;
+}
+
+#content {
+  flex: 1;
+}
+
+ul {
+  padding: 20px 0;
+  flex: 1;
+}
+
+li {
+  color: whitesmoke;
+  font-family: 'Lato', sans-serif;
+  line-height: 44px;
+  cursor: pointer;
 }
 `
 
