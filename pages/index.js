@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import { transform } from 'babel-standalone'
-import plugin from '../utils/plugin'
+import plugin from '../utils/babel-plugin-js-to-prop-types'
 import ConversionPanel from '../components/ConversionPanel'
 
 const defaultText = `// Enter the object you want to convert in the 

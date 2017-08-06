@@ -7,6 +7,13 @@ module.exports = {
     config.node = {
       fs: 'empty'
     }
+
+    if (!dev) {
+      config.plugins.push(
+        new BabiliPlugin()
+      )
+    }
+
     return config;
   }
 };

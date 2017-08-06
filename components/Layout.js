@@ -2,6 +2,16 @@ import React from 'react'
 import isBrowser from 'is-in-browser'
 import Link from 'next/link'
 import Head from 'next/head'
+import NProgress from 'nprogress'
+import Router from 'next/router'
+import GithubCorner from 'react-github-corner'
+
+Router.onRouteChangeStart = (url) => {
+  console.log(`Loading: ${url}`)
+  NProgress.start()
+}
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
 
 function isActiveRoute (routeName) {
   if (isBrowser) {
@@ -28,11 +38,16 @@ function trackingScript() {
   ga('send', 'pageview');
 }
 
-export default function ({children}) {
+export default function ({children, pathname}) {
+  function getClass (path) {
+    return path === pathname ? "active" : ""
+  }
+
   return (
     <div className="main-wrapper">
       <Head>
         <link rel="icon" type="image/png" href="/static/favicon.png" />
+        <link rel='stylesheet' type='text/css' href='/static/nprogress.css' />
         <script>
           {isBrowser && trackingScript()}
         </script>
@@ -65,14 +80,22 @@ export default function ({children}) {
         li {
           color: whitesmoke;
           font-family: 'Lato', sans-serif;
-          line-height: 40px;
-          padding-left: 15px;
+          line-height: 44px;
           cursor: pointer;
+        }
+
+        li.active {
+          background-color: #333;
         }
 
         li:hover {
           color: #fff;
           background-color: #2d2d2d;
+        }
+
+        a:not(.twitter):not(.github) {
+          display: block;
+          padding-left: 15px;
         }
 
         a {
@@ -85,30 +108,65 @@ export default function ({children}) {
         }
 
         .footer {
-          height: 70px;
+          height: 90px;
           text-align: center;
           color: #fff;
           font-family: 'Lato', sans-serif;
         }
 
         .footer svg {
-          height: 30px;
+          height: 36px;
           width: 30px;
           color: #fff;
+        }
+
+        .badge {
+          display: inline-block;
+          font-size: 12px;
+          position: absolute;
+          margin-top: 6px;
+          margin-left: 4px;
+          background-color: #2196f3;
+          height: 13px;
+          padding: 2px 4px;
+          border-radius: 2px;
+          line-height: 12px;
+        }
+
+        iframe {
+          border: 0;
+          overflow: hidden;
+          display: table;
+          margin: 0 auto;
+          width: 61px;
+          height: 20px;
         }
       `}</style>
 
       <div className="sidebar">
+        <GithubCorner
+          href="https://github.com/ritz078/transform-www"
+          height={80}
+          width={80}
+          direction="left"
+        />
         <div className="logo">
           <Logo/>
         </div>
         <ul>
-          <li><Link prefetch href="/"><a>JS Object to React PropTypes</a></Link></li>
+          <li className={getClass("/")}><Link prefetch href="/"><a>JS Object to React PropTypes</a></Link></li>
+          <li className={getClass("/json-to-ts-interface")}><Link prefetch href="/json-to-ts-interface"><a>JSON to Typescript Interface <span className="badge">new</span></a></Link></li>
         </ul>
 
         <div className="footer">
-          <a href="https://github.com/ritz078/transform-www"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414"><path d="M8 0C3.58 0 0 3.582 0 8c0 3.535 2.292 6.533 5.47 7.59.4.075.547-.172.547-.385 0-.19-.007-.693-.01-1.36-2.226.483-2.695-1.073-2.695-1.073-.364-.924-.89-1.17-.89-1.17-.725-.496.056-.486.056-.486.803.056 1.225.824 1.225.824.714 1.223 1.873.87 2.33.665.072-.517.278-.87.507-1.07-1.777-.2-3.644-.888-3.644-3.953 0-.873.31-1.587.823-2.147-.09-.202-.36-1.015.07-2.117 0 0 .67-.215 2.2.82.64-.178 1.32-.266 2-.27.68.004 1.36.092 2 .27 1.52-1.035 2.19-.82 2.19-.82.43 1.102.16 1.915.08 2.117.51.56.82 1.274.82 2.147 0 3.073-1.87 3.75-3.65 3.947.28.24.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.14.46.55.38C13.71 14.53 16 11.53 16 8c0-4.418-3.582-8-8-8"/></svg></a>
-          <br />Created by <a href="https://twitter.com/ritz078">@ritz078</a>
+          <iframe
+            src="https://platform.twitter.com/widgets/tweet_button.html?size=s&url=https%3A%2F%2Ftransform.now.sh&via=ritz078&text=An online utility to convert a JSON object to prop-types or Typescript Interface.&hashtags=propTypes,typescript"
+            width="140"
+            height="28"
+            title="Twitter Tweet Button"
+            style={{border: 0, overflow: 'hidden'}}>
+          </iframe>
+          <br />Created by <a className="twitter" href="https://twitter.com/ritz078">@ritz078</a>
         </div>
       </div>
       <div className="content">

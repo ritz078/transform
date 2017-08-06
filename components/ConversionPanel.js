@@ -17,19 +17,18 @@ if (isBrowser) {
   require('brace/theme/tomorrow')
 }
 
-
-
 export default class ConversionPanel extends PureComponent {
   static propTypes = {
-    plugin: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     leftMode: PropTypes.string,
-    rightMode: PropTypes.string
+    rightMode: PropTypes.string,
+    pathname: PropTypes.string
   }
 
   static defaultProps = {
     leftMode: 'javascript',
-    rightMode: 'javascript'
+    rightMode: 'javascript',
+    pathname: '/'
   }
 
   constructor (props) {
@@ -88,11 +87,11 @@ export default class ConversionPanel extends PureComponent {
 
   render () {
     return (
-      <Layout>
+      <Layout pathname={this.props.pathname}>
         <div className="wrapper">
           <Head>
-            <title>Transform | Convert an object to propTypes</title>
-            <meta rel="description" content="Convert an object to propTypes"/>
+            <title>Transform | Online code transformation</title>
+            <meta rel="description" content="An online utility to convert a JSON object to prop-types or Typescript Interface."/>
           </Head>
           <style jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lato');
@@ -183,7 +182,7 @@ export default class ConversionPanel extends PureComponent {
             <div className="section left">
               {isBrowser &&
               <AceEditor
-                mode="javascript"
+                mode={this.props.leftMode}
                 theme="tomorrow"
                 onChange={this.onChange}
                 name="code"
@@ -202,7 +201,7 @@ export default class ConversionPanel extends PureComponent {
             <div className="section right">
               {isBrowser &&
               <AceEditor
-                mode="javascript"
+                mode={this.props.rightMode}
                 theme="tomorrow"
                 name="code"
                 readOnly
