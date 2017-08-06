@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import Router from 'next/router'
-import { transform } from 'babel-standalone'
 import isBrowser from 'is-in-browser'
 import { js_beautify } from 'js-beautify'
 import { beauty } from 'css-beauty'
@@ -12,9 +11,9 @@ const theme = 'tomorrow'
 let brace
 let AceEditor
 if (isBrowser) {
-  window.babelTransform = transform
   brace = require('brace').default
   AceEditor = require('react-ace').default
+
   require('brace/mode/javascript')
   require(`brace/theme/${theme}`)
   require('brace/mode/json')
@@ -26,8 +25,7 @@ export default class ConversionPanel extends PureComponent {
   static propTypes = {
     name: PropTypes.string.isRequired,
     leftMode: PropTypes.string,
-    rightMode: PropTypes.string,
-    pathname: PropTypes.string
+    rightMode: PropTypes.string
   }
 
   static defaultProps = {
@@ -53,6 +51,11 @@ export default class ConversionPanel extends PureComponent {
       value: code,
       resultValue: this.props.getTransformedValue(code)
     })
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextProps, this.props, nextState)
+    return true
   }
 
   onChange = (newValue) => {
@@ -137,7 +140,7 @@ export default class ConversionPanel extends PureComponent {
             flex-direction: row;
           }
 
-          .section {
+         .section {
             flex: 1;
             position: relative;
             height: calc(100vh - 50px);
@@ -146,6 +149,18 @@ export default class ConversionPanel extends PureComponent {
           .right {
             border-left: 1px solid #eee;
             padding: 20px;
+          }
+
+          @media screen and (max-width: 1000px) {
+            .content-wrapper {
+              flex-direction: column;
+            }
+            .section {
+              height: auto;
+            }
+            .right {
+              border-top: 1px solid #eee;
+            }
           }
 
           .error {

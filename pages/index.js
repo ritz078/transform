@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react'
 import plugin from '../utils/babel-plugin-js-to-prop-types'
-
-import dynamic from 'next/dynamic'
 import Layout from '../components/Layout'
+import { transform } from 'babel-standalone'
 
-const ConversionPanel = dynamic(import('../components/ConversionPanel'))
+import ConversionPanel from '../components/ConversionPanel'
 
 const defaultText = `// Enter the object you want to convert in the 
 // following form
@@ -21,7 +20,7 @@ const x = {
 
 export default class Main extends PureComponent {
   getTransformedValue = (newValue) => {
-    const {code} = babelTransform(newValue, {
+    const {code} = transform(newValue, {
       presets: ['es2015'],
       plugins: [plugin]
     })

@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react'
 import dynamic from 'next/dynamic'
 import plugin from '../utils/css-to-js'
 import Layout from '../components/Layout'
-
-const ConversionPanel = dynamic(import('../components/ConversionPanel'))
+import ConversionPanel from '../components/ConversionPanel'
 
 const defaultText = `
 .abc {
@@ -11,7 +10,7 @@ const defaultText = `
 }
 `
 
-export default class Main extends PureComponent {
+export default class Css2Js extends PureComponent {
   getTransformedValue = (newValue) => {
     return plugin(newValue)
   }

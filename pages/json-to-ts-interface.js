@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react'
 import dynamic from 'next/dynamic'
 import { Json2dts, toValidJSON } from 'json2dts'
 import Layout from '../components/Layout'
-
-const ConversionPanel = dynamic(import('../components/ConversionPanel'))
+import ConversionPanel from '../components/ConversionPanel'
 
 const defaultText = ` 
 {

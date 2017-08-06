@@ -6,6 +6,8 @@ import NProgress from 'nprogress'
 import Router from 'next/router'
 import GithubCorner from 'react-github-corner'
 
+NProgress.configure({ showSpinner: false })
+
 Router.onRouteChangeStart = (url) => {
     if(url.indexOf('code=') === -1) {
       NProgress.start()
@@ -122,7 +124,7 @@ export default function ({children, pathname}) {
           font-size: 12px;
           position: absolute;
           margin-top: 6px;
-          margin-left: 4px;
+          margin-left: 6px;
           background-color: #2196f3;
           height: 13px;
           padding: 2px 4px;
