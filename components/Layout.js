@@ -7,17 +7,12 @@ import Router from 'next/router'
 import GithubCorner from 'react-github-corner'
 
 Router.onRouteChangeStart = (url) => {
-  console.log(`Loading: ${url}`)
-  NProgress.start()
+    if(url.indexOf('code=') === -1) {
+      NProgress.start()
+    }
 }
 Router.onRouteChangeComplete = () => NProgress.done()
 Router.onRouteChangeError = () => NProgress.done()
-
-function isActiveRoute (routeName) {
-  if (isBrowser) {
-    return window.location.pathname === routeName
-  }
-}
 
 function Logo () {
   return (
@@ -158,6 +153,7 @@ export default function ({children, pathname}) {
         <ul>
           <li className={getClass("/")}><Link prefetch href="/"><a>JS Object to React PropTypes</a></Link></li>
           <li className={getClass("/json-to-ts-interface")}><Link prefetch href="/json-to-ts-interface"><a>JSON to Typescript Interface <span className="badge">new</span></a></Link></li>
+          <li className={getClass("/css-to-js")}><Link prefetch href="/css-to-js"><a>CSS to JS Objects <span className="badge">new</span></a></Link></li>
         </ul>
 
         <div className="footer">

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
+import dynamic from 'next/dynamic'
 import { Json2dts, toValidJSON } from 'json2dts'
-import ConversionPanel from '../components/ConversionPanel'
+const ConversionPanel = dynamic(import('../components/ConversionPanel'))
 
 const defaultText = ` 
 {
@@ -33,7 +34,7 @@ export default class Json2Ts extends PureComponent {
         defaultText={defaultText}
         leftMode="json"
         rightMode="typescript"
-        pathname={this.props.url.pathname}
+        url={this.props.url}
       />
     )
   }
