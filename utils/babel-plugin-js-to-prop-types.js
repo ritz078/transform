@@ -1,4 +1,5 @@
-import {uniqBy, isEmpty} from 'lodash'
+import uniqBy from 'lodash/uniqBy'
+import isEmpty from 'lodash/isEmpty'
 
 /**
  * This is a babel plugin that converts an object to PropTypes

@@ -25,10 +25,8 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-ace": "^5.1.2",
-    "react-alert": "^2.2.0",
     "react-dom": "^15.6.1",
     "react-github-corner": "^0.3.0",
-    "react-toastify": "^1.7.0",
     "store2": "^2.5.1"
   }
 }
