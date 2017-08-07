@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import dynamic from 'next/dynamic'
 import plugin from '../utils/css-to-js'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'

@@ -45,17 +45,11 @@ export default class ConversionPanel extends PureComponent {
   }
 
   componentDidMount () {
-    const {name} = this.props
     const code = this.props.url.query.code || this.props.defaultText
     this.setState({
       value: code,
       resultValue: this.props.getTransformedValue(code)
     })
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextProps, this.props, nextState)
-    return true
   }
 
   onChange = (newValue) => {

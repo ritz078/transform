@@ -3,17 +3,7 @@ import dynamic from 'next/dynamic'
 import { Json2dts, toValidJSON } from '../utils/json-to-ts-flow'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
-
-const defaultText = ` 
-{
-  "foo": "bar",
-  "ids": [1, 2, 3],
-  "hello": {
-    "x": "lkjlj",
-    "y": "kjhkjhkjh"
-  }
-}
-`
+import defaultText from '../utils/dummy-json'
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue) => {
