@@ -40,7 +40,8 @@ export default class ConversionPanel extends PureComponent {
     this.state = {
       resultValue: '',
       value: '',
-      info: ''
+      info: '',
+      infoType: ''
     }
   }
 
@@ -58,13 +59,15 @@ export default class ConversionPanel extends PureComponent {
 
       this.setState({
         resultValue: code,
-        info: ''
+        info: '',
+        infoType: ''
       })
 
       this.setCodeInUrl(newValue)
     } catch (e) {
       this.setState({
-        info: e.message
+        info: e.message,
+        infoType: 'error'
       })
     }
 
@@ -110,7 +113,8 @@ export default class ConversionPanel extends PureComponent {
   copyCode = () => {
     copy(this.state.resultValue)
     this.setState({
-      info: 'Code copied to clipboard.'
+      info: 'Code copied to clipboard.',
+      infoType: 'success'
     })
   }
 
@@ -137,6 +141,16 @@ export default class ConversionPanel extends PureComponent {
             align-items: center;
             text-align: center;
             justify-content: center;
+          }
+
+          .has-error {
+            background-color: #e74c3c;
+            box-shadow: 0 0 1px 1px rgba(0,0,0,0.1);
+          }
+
+          .has-success {
+            background-color: #27ae60;
+            box-shadow: 0 0 1px 1px rgba(0,0,0,0.1);
           }
 
           .content-wrapper {
@@ -167,8 +181,8 @@ export default class ConversionPanel extends PureComponent {
             }
           }
 
-          .error {
-            color: red;
+          .info {
+            color: white;
             font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
           }
 
@@ -296,8 +310,8 @@ export default class ConversionPanel extends PureComponent {
             }
           </div>
         </div>
-        <div className="footer">
-          <span className="error">{this.state.info}</span>
+        <div className={`footer${this.state.infoType ? ' has-' + this.state.infoType : '' }`}>
+          <span className="info">{this.state.info}</span>
         </div>
       </div>
     )
