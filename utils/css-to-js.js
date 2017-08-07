@@ -161,7 +161,7 @@ function convertoToJS(tokens){
 
 function renderJS(items){
 
-  let objects = ['var styles = {']
+  let objects = ['const styles = {']
   objects = objects.concat(items.map(renderItem).join(","));
   objects.push("}");
   return objects.join("\n");

@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react'
 import plugin from '../utils/css-to-js'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
+import transform from 'css-to-react-native'
+import kebabCase from 'lodash/kebabCase'
 
 const defaultText = `
 .main-wrapper {
@@ -20,16 +22,37 @@ ul {
 }
 
 li {
+  font-family:'Lato';
   color: whitesmoke;
-  font-family: 'Lato', sans-serif;
   line-height: 44px;
   cursor: pointer;
 }
 `
 
 export default class Css2Js extends PureComponent {
+  state = {
+    isRn: false
+  }
+
+  getRnCode = (newValue) => {
+    const styles = {}
+    const code = eval('(' + plugin(newValue).split('=')[1] + ')')
+    Object.keys(code).forEach(key => {
+      styles[key] = {}
+      const arr = []
+      Object.keys(code[key]).forEach(key2 => {
+        arr.push([
+          kebabCase(key2),
+          code[key][key2]
+        ])
+      })
+      styles[key] = transform(arr)
+    })
+    return styles
+  }
+
   getTransformedValue = (newValue) => {
-    return plugin(newValue)
+    return this.state.isRn ? `const styles = StyleSheet.create(${JSON.stringify(this.getRnCode(newValue))})` : plugin(newValue)
   }
 
   render () {
@@ -41,6 +64,7 @@ export default class Css2Js extends PureComponent {
           getTransformedValue={this.getTransformedValue}
           name={'css_to_js'}
           defaultText={defaultText}
+          onRnToggle={(checked, cb) => this.setState({isRn: checked}, cb)}
         />
       </Layout>
     )

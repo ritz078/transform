@@ -83,6 +83,17 @@ export default class ConversionPanel extends PureComponent {
     })
   }
 
+  toggleRight = (e) => {
+    const checked = e.currentTarget.checked
+    if (this.props.onRnToggle) {
+      this.props.onRnToggle(checked, () => {
+        this.setState({
+          resultValue: this.props.getTransformedValue(this.state.value)
+        })
+      })
+    }
+  }
+
   prettifyCode = () => {
     const value = this.props.leftMode === 'css' ? beauty(this.state.value) : js_beautify(this.state.value)
     this.setState({
@@ -137,12 +148,11 @@ export default class ConversionPanel extends PureComponent {
          .section {
             flex: 1;
             position: relative;
-            height: calc(100vh - 50px);
+            height: calc(100vh - 100px);
           }
 
           .right {
             border-left: 1px solid #eee;
-            padding: 20px;
           }
 
           @media screen and (max-width: 1000px) {
@@ -163,9 +173,6 @@ export default class ConversionPanel extends PureComponent {
           }
 
           .btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
             background-color: #2196F3;
             font-size: 14px;
             padding: 7px 14px;
@@ -176,10 +183,23 @@ export default class ConversionPanel extends PureComponent {
             outline: none;
             color: #fff;
             line-height: 16px;
+            height: 32px;
           }
 
           .btn:hover {
             background-color: #2380ca;
+          }
+
+          .header {
+            height: 50px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 9999;
+    position: relative;
           }
 
         `}</style>
@@ -206,14 +226,33 @@ export default class ConversionPanel extends PureComponent {
             background-color: #fafafa;
           }
 
+          .right .ace_scroller {
+            padding: 0 20px;
+          }
+
           .right {
             box-sizing: border-box;
             padding-bottom: 10px;
+          }
+
+          label {
+                font-family: 'Lato';
+    padding: 0 12px;
+        cursor: pointer;
+
+          }
+
+          label input {
+            margin-right: 4px;
+    font-size: 16px;
           }
         `}</style>
 
         <div className="content-wrapper">
           <div className="section left">
+            <div className="header">
+              <button className="btn" onClick={this.prettifyCode}>Prettify</button>
+            </div>
             {isBrowser &&
             <AceEditor
               mode={this.props.leftMode}
@@ -230,9 +269,16 @@ export default class ConversionPanel extends PureComponent {
             />
             }
 
-            <button className="btn" onClick={this.prettifyCode}>Prettify</button>
           </div>
           <div className="section right">
+            <div className="header">
+              <button className="btn" onClick={this.copyCode}>Copy</button>
+              {this.props.onRnToggle &&
+                <label htmlFor="#text">
+                <input type="checkbox" id="#text" onChange={this.toggleRight} /> React Native
+              </label>
+              }
+            </div>
             {isBrowser &&
             <AceEditor
               mode={this.props.rightMode}
@@ -248,7 +294,6 @@ export default class ConversionPanel extends PureComponent {
               wrapEnabled
             />
             }
-            <button className="btn" onClick={this.copyCode}>Copy</button>
           </div>
         </div>
         <div className="footer">
