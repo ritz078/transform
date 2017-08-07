@@ -1,5 +1,4 @@
-const x = `
-{
+const x = `{
   "hello": [
     {
       "_id": "5988946e45e52d60b33a25c7",

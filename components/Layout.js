@@ -43,8 +43,8 @@ export default function ({children, pathname}) {
   return (
     <div className="main-wrapper">
       <Head>
-        <title>Transform | Online code transformation</title>
-        <meta rel="description" content="An online utility to convert a JSON object to prop-types or Typescript Interface."/>
+        <title>Transform | All important React transforms at one place.</title>
+        <meta rel="description" content="An online utility to convert a JSON object to prop-types, Typescript Interface or flow types. It also converts your CSS into JS."/>
         <link rel="icon" type="image/png" href="/static/favicon.png" />
         <link rel='stylesheet' type='text/css' href='/static/nprogress.css' />
         <script>
@@ -161,7 +161,7 @@ export default function ({children, pathname}) {
 
         <div className="footer">
           <iframe
-            src="https://platform.twitter.com/widgets/tweet_button.html?size=s&url=https%3A%2F%2Ftransform.now.sh&via=ritz078&text=An online utility to convert a JSON object to prop-types or Typescript Interface.&hashtags=propTypes,typescript"
+            src="https://platform.twitter.com/widgets/tweet_button.html?size=s&url=https%3A%2F%2Ftransform.now.sh&via=ritz078&text=All important React transforms at one place.&hashtags=propTypes,typescript"
             width="140"
             height="28"
             title="Twitter Tweet Button"
