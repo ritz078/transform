@@ -22,8 +22,8 @@ export default class Json2Ts extends PureComponent {
     if (typeof text2Obj !== 'object' || Array.isArray(text2Obj)) {
       throw new Error('Pass a valid JSON Object. Arrays are not acceptable even though they are valid JSON.')
     }
-    converter.parse(text2Obj, 'RootJson')
-    return converter.getCode()
+    converter.parse(text2Obj, 'props')
+    return converter.getCode(true)
   }
 
   render () {

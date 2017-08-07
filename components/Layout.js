@@ -154,8 +154,9 @@ export default function ({children, pathname}) {
         </div>
         <ul>
           <li className={getClass("/")}><Link prefetch href="/"><a>JS Object to React PropTypes</a></Link></li>
-          <li className={getClass("/json-to-ts-interface")}><Link prefetch href="/json-to-ts-interface"><a>JSON to Typescript Interface <span className="badge">new</span></a></Link></li>
-          <li className={getClass("/css-to-js")}><Link prefetch href="/css-to-js"><a>CSS to JS Objects <span className="badge">new</span></a></Link></li>
+          <li className={getClass("/json-to-flow-types")}><Link prefetch href="/json-to-flow-types"><a>JSON to Flow Types</a></Link></li>
+          <li className={getClass("/json-to-ts-interface")}><Link prefetch href="/json-to-ts-interface"><a>JSON to Typescript Interface</a></Link></li>
+          <li className={getClass("/css-to-js")}><Link prefetch href="/css-to-js"><a>CSS to JS Objects</a></Link></li>
         </ul>
 
         <div className="footer">
