@@ -25,7 +25,6 @@ li {
   font-family:'Lato';
   color: whitesmoke;
   line-height: 44px;
-  cursor: pointer;
 }
 `
 

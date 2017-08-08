@@ -169,18 +169,6 @@ export default class ConversionPanel extends PureComponent {
             border-left: 1px solid #eee;
           }
 
-          @media screen and (max-width: 1000px) {
-            .content-wrapper {
-              flex-direction: column;
-            }
-            .section {
-              height: auto;
-            }
-            .right {
-              border-top: 1px solid #eee;
-            }
-          }
-
           .info {
             color: white;
             font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
@@ -212,7 +200,6 @@ export default class ConversionPanel extends PureComponent {
     flex-direction: row-reverse;
     align-items: center;
     padding: 0 10px;
-    z-index: 9999;
     position: relative;
           }
 

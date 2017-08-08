@@ -99,6 +99,7 @@ export default function ({children, pathname}) {
 
         a {
           color: #fff;
+          text-decoration: none;
         }
 
         .logo {
