@@ -1896,7 +1896,7 @@ fbjs@^0.6.1:
     ua-parser-js "^0.7.9"
     whatwg-fetch "^0.9.0"
 
-fbjs@^0.8.5, fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.5, fbjs@^0.8.9:
   version "0.8.14"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.14.tgz#d1dbe2be254c35a91e09f31f9cd50a40b2a0ed1c"
   dependencies:
@@ -2268,6 +2268,15 @@ htmltojsx@^0.2.6:
   dependencies:
     jsdom-no-contextify "~3.1.0"
     react "~0.14.6"
+    yargs "~4.6.0"
+
+"htmltojsx@https://github.com/ritz078/react-magic/tarball/feature-svg-attributes":
+  version "0.2.7-dev"
+  resolved "https://github.com/ritz078/react-magic/tarball/feature-svg-attributes#0660603bb5a6cef8aa6abe08b63e9f71d2a42ca8"
+  dependencies:
+    jsdom-no-contextify "~3.1.0"
+    react "~15.4.1"
+    react-dom "~15.4.1"
     yargs "~4.6.0"
 
 http-errors@~1.4.0:
@@ -3454,6 +3463,14 @@ react-dom@^15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
+react-dom@~15.4.1:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
+  dependencies:
+    fbjs "^0.8.1"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
+
 react-github-corner@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/react-github-corner/-/react-github-corner-0.3.0.tgz#b34c613e6f9cceb49fbe51378b78a9061af4da98"
@@ -3491,6 +3508,14 @@ react@~0.14.6:
   dependencies:
     envify "^3.0.0"
     fbjs "^0.6.1"
+
+react@~15.4.1:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.4.2.tgz#41f7991b26185392ba9bae96c8889e7e018397ef"
+  dependencies:
+    fbjs "^0.8.4"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
