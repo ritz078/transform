@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import Router from 'next/router'
 import isBrowser from 'is-in-browser'
-import {js_beautify, html, css} from 'js-beautify'
 import copy from 'copy-text-to-clipboard'
 
 const theme = 'tomorrow'
@@ -18,6 +17,13 @@ if (isBrowser) {
   require('brace/mode/typescript')
   require('brace/mode/css')
   require('brace/mode/html')
+}
+
+const prettierParsers = {
+  css: 'postcss',
+  json: 'json',
+  javascript: 'babylon',
+  typescript: 'babylon'
 }
 
 type Props = {
@@ -116,24 +122,14 @@ export default class ConversionPanel extends PureComponent {
     const { leftMode } = this.props
     const { value } = this.state
 
-    if(leftMode === 'html' || leftMode === 'json' || leftMode === 'css') {
-        let prettified
-        if(leftMode === 'html') {
-          prettified = html(value, {
-            "indent_size": 2
-          })
-        } else if (leftMode === 'css') {
-          prettified = css(value, {
-            "indent_size": 2
-          })
-        } else if (leftMode === 'json') {
-          prettified = js_beautify(value, {
-            "indent_size": 2
-          })
-        }
-        this.setResult(prettified)
+    if(leftMode === 'html') {
+        import('pretty').then(pretty => {
+          this.setResult(pretty(value))
+        })
     } else {
-      this.setResult(prettier.format(value))
+      this.setResult(prettier.format(value, {
+        parser: prettierParsers[leftMode]
+      }))
     }
   }
 
@@ -151,6 +147,8 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
+        <script src="https://bundle.run/prettier@1.5.3"/>
+
         <style jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lato');
           .wrapper {
@@ -324,7 +322,7 @@ export default class ConversionPanel extends PureComponent {
               theme={theme}
               name="code"
               readOnly
-              value={rightMode === 'jsx' ? window.prettier.format(resultValue) : js_beautify(resultValue, {"indent_size": 2})}
+              value={window.prettier.format(resultValue)}
               editorProps={{$blockScrolling: true}}
               scrollMargin={[20]}
               fontSize={14}

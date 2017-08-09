@@ -5,7 +5,7 @@ import ConversionPanel from '../components/ConversionPanel'
 
 const converter = new HTMLtoJSX({
   createClass: false,
-  outputClassName: 'RootComponent'
+  outputClassName: 'MainComponent'
 })
 
 const defaultText = `<div class="hello" data-id="1">
@@ -26,7 +26,6 @@ export default class Css2Js extends PureComponent {
   render () {
     return (
       <Layout pathname={this.props.url.pathname}>
-        <script src="https://bundle.run/prettier@1.5.3"/>
         <ConversionPanel
           url={this.props.url}
           leftTitle="HTML"

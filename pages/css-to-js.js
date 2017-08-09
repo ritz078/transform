@@ -5,8 +5,7 @@ import ConversionPanel from '../components/ConversionPanel'
 import transform from 'css-to-react-native'
 import kebabCase from 'lodash/kebabCase'
 
-const defaultText = `
-.main-wrapper {
+const defaultText = `.main-wrapper {
   flex-direction: row;
   display: flex;
   flex: 1;

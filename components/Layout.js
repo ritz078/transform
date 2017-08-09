@@ -105,7 +105,7 @@ export default function ({children, pathname}) {
         }
 
         .footer {
-          height: 90px;
+          height: 70px;
           text-align: center;
           color: #fff;
           font-family: 'Lato', sans-serif;
@@ -159,13 +159,6 @@ export default function ({children, pathname}) {
         </ul>
 
         <div className="footer">
-          <iframe
-            src="https://platform.twitter.com/widgets/tweet_button.html?size=s&url=https%3A%2F%2Ftransform.now.sh&via=ritz078&text=All important React transforms at one place.&hashtags=propTypes,typescript"
-            width="140"
-            height="28"
-            title="Twitter Tweet Button"
-            style={{border: 0, overflow: 'hidden'}}>
-          </iframe>
           <br />Created by <a className="twitter" href="https://twitter.com/ritz078">@ritz078</a>
         </div>
       </div>
