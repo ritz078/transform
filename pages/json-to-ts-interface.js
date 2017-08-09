@@ -20,6 +20,8 @@ export default class Json2Ts extends PureComponent {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
+          leftTitle="JSON"
+          rightTitle="TypeScript Interface"
           getTransformedValue={this.getTransformedValue}
           name={'ts_interface'}
           defaultText={defaultText}

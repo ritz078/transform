@@ -20,6 +20,8 @@ export default class Main extends PureComponent {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
+          leftTitle="JSON"
+          rightTitle="PropTypes"
           url={this.props.url}
           leftMode="json"
           getTransformedValue={this.getTransformedValue}

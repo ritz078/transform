@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
 import Router from 'next/router'
 import isBrowser from 'is-in-browser'
-import { js_beautify } from 'js-beautify'
-import { beauty } from 'css-beauty'
+import {js_beautify, html, css} from 'js-beautify'
 import copy from 'copy-text-to-clipboard'
 
 const theme = 'tomorrow'
@@ -19,14 +17,23 @@ if (isBrowser) {
   require('brace/mode/json')
   require('brace/mode/typescript')
   require('brace/mode/css')
+  require('brace/mode/html')
+}
+
+type Props = {
+  leftMode: ?string,
+  rightMode: ?string,
+  resultValue: string,
+  onCheckboxChange: Function,
+  checkboxText: ?string,
+  pathname: string,
+  initialCheckboxValue: boolean,
+  leftTitle: string,
+  rightTitle: string
 }
 
 export default class ConversionPanel extends PureComponent {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    leftMode: PropTypes.string,
-    rightMode: PropTypes.string
-  }
+  props : Props
 
   static defaultProps = {
     leftMode: 'javascript',
@@ -53,7 +60,7 @@ export default class ConversionPanel extends PureComponent {
     })
   }
 
-  onChange = (newValue) => {
+  onChange = (newValue: string) => {
     try {
       const code = this.props.getTransformedValue(newValue)
 
@@ -77,7 +84,6 @@ export default class ConversionPanel extends PureComponent {
   }
 
   setCodeInUrl = (code) => {
-
     Router.replace({
       pathname: this.props.url.pathname,
       query: {
@@ -86,10 +92,10 @@ export default class ConversionPanel extends PureComponent {
     })
   }
 
-  toggleRight = (e) => {
+  toggleCheckbox = (e: MouseEvent) => {
     const checked = e.currentTarget.checked
-    if (this.props.onRnToggle) {
-      this.props.onRnToggle(checked, () => {
+    if (this.props.onCheckboxChange) {
+      this.props.onCheckboxChange(checked, () => {
         this.setState({
           resultValue: this.props.getTransformedValue(this.state.value)
         })
@@ -97,17 +103,38 @@ export default class ConversionPanel extends PureComponent {
     }
   }
 
-  prettifyCode = () => {
-    const value = this.props.leftMode === 'css' ? beauty(this.state.value) : js_beautify(this.state.value)
+  setResult = (result: string) => {
     this.setState({
-      value
+      value: result
     }, () => {
-      this.props.url.push({
-        query: {
-          code: value
-        }
-      })
+      this.setCodeInUrl(result)
     })
+  }
+
+  prettifyCode = () => {
+    const { prettier } = window
+    const { leftMode } = this.props
+    const { value } = this.state
+
+    if(leftMode === 'html' || leftMode === 'json' || leftMode === 'css') {
+        let prettified
+        if(leftMode === 'html') {
+          prettified = html(value, {
+            "indent_size": 2
+          })
+        } else if (leftMode === 'css') {
+          prettified = css(value, {
+            "indent_size": 2
+          })
+        } else if (leftMode === 'json') {
+          prettified = js_beautify(value, {
+            "indent_size": 2
+          })
+        }
+        this.setResult(prettified)
+    } else {
+      this.setResult(prettier.format(value))
+    }
   }
 
   copyCode = () => {
@@ -119,6 +146,9 @@ export default class ConversionPanel extends PureComponent {
   }
 
   render () {
+    const { leftMode, rightMode, onCheckboxChange, checkboxText, initialCheckboxValue, leftTitle, rightTitle } = this.props
+    const {infoType, resultValue, value, info} = this.state
+
     return (
       <div className="wrapper">
         <style jsx>{`
@@ -197,10 +227,16 @@ export default class ConversionPanel extends PureComponent {
             background-color: white;
             border-bottom: 1px solid #eee;
             display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
-    padding: 0 10px;
-    position: relative;
+            align-items: center;
+            padding: 0 10px;
+            position: relative;
+            justify-content: space-between;
+            font-family: 'Lato';
+          }
+
+          .title {
+            padding-left: 4px;
+            color: #666;
           }
 
         `}</style>
@@ -237,30 +273,31 @@ export default class ConversionPanel extends PureComponent {
           }
 
           label {
-                font-family: 'Lato';
-    padding: 0 12px;
-        cursor: pointer;
+            font-family: 'Lato';
+            padding: 0 12px;
+            cursor: pointer;
 
           }
 
           label input {
             margin-right: 4px;
-    font-size: 16px;
+            font-size: 16px;
           }
         `}</style>
 
         <div className="content-wrapper">
           <div className="section left">
             <div className="header">
+              <div className="title">{leftTitle}</div>
               <button className="btn" onClick={this.prettifyCode}>Prettify</button>
             </div>
             {isBrowser &&
             <AceEditor
-              mode={this.props.leftMode}
+              mode={leftMode}
               theme={theme}
               onChange={this.onChange}
               name="code"
-              value={this.state.value}
+              value={value}
               editorProps={{$blockScrolling: true}}
               highlightActiveLine={false}
               scrollMargin={[20]}
@@ -273,20 +310,21 @@ export default class ConversionPanel extends PureComponent {
           </div>
           <div className="section right">
             <div className="header">
-              <button className="btn" onClick={this.copyCode}>Copy</button>
-              {this.props.onRnToggle &&
-                <label htmlFor="#text">
-                <input type="checkbox" id="#text" onChange={this.toggleRight} /> React Native
+              <div className="title">{rightTitle}</div>
+              {onCheckboxChange &&
+              <label htmlFor="#text">
+                <input type="checkbox" id="#text" defaultChecked={initialCheckboxValue} onChange={this.toggleCheckbox} /> {checkboxText}
               </label>
               }
+              <button className="btn" onClick={this.copyCode}>Copy</button>
             </div>
             {isBrowser &&
             <AceEditor
-              mode={this.props.rightMode}
+              mode={rightMode === 'jsx' ? 'javascript' : rightMode}
               theme={theme}
               name="code"
               readOnly
-              value={js_beautify(this.state.resultValue)}
+              value={rightMode === 'jsx' ? window.prettier.format(resultValue) : js_beautify(resultValue, {"indent_size": 2})}
               editorProps={{$blockScrolling: true}}
               scrollMargin={[20]}
               fontSize={14}
@@ -297,8 +335,8 @@ export default class ConversionPanel extends PureComponent {
             }
           </div>
         </div>
-        <div className={`footer${this.state.infoType ? ' has-' + this.state.infoType : '' }`}>
-          <span className="info">{this.state.info}</span>
+        <div className={`footer${infoType ? ' has-' + infoType : '' }`}>
+          <span className="info">{info}</span>
         </div>
       </div>
     )

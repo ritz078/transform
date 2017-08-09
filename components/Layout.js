@@ -47,9 +47,6 @@ export default function ({children, pathname}) {
         <meta rel="description" content="An online utility to convert a JSON object to prop-types, Typescript Interface or flow types. It also converts your CSS into JS."/>
         <link rel="icon" type="image/png" href="/static/favicon.png" />
         <link rel='stylesheet' type='text/css' href='/static/nprogress.css' />
-        <script>
-          {isBrowser && trackingScript()}
-        </script>
       </Head>
       <style jsx>{`
         .sidebar{
@@ -158,6 +155,7 @@ export default function ({children, pathname}) {
           <li className={getClass("/json-to-flow-types")}><Link prefetch href="/json-to-flow-types"><a>JSON to Flow Types</a></Link></li>
           <li className={getClass("/json-to-ts-interface")}><Link prefetch href="/json-to-ts-interface"><a>JSON to Typescript Interface</a></Link></li>
           <li className={getClass("/css-to-js")}><Link prefetch href="/css-to-js"><a>CSS to JS Objects</a></Link></li>
+          <li className={getClass("/html-to-jsx")}><Link prefetch href="/html-to-jsx"><a>HTML to JSX</a></Link></li>
         </ul>
 
         <div className="footer">
@@ -174,6 +172,9 @@ export default function ({children, pathname}) {
       <div className="content">
         {children}
       </div>
+      <script>
+        {isBrowser && trackingScript()}
+      </script>
     </div>
   )
 }

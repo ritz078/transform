@@ -1,4 +1,5 @@
 const BabiliPlugin = require("babili-webpack-plugin")
+const webpack = require("webpack")
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { ANALYZE } = process.env
 
@@ -9,6 +10,10 @@ module.exports = {
     config.node = {
       fs: 'empty'
     }
+
+    config.plugins.push(
+      new webpack.DefinePlugin({IN_BROWSER: true})
+    )
 
     if (!dev) {
       config.plugins.push(
