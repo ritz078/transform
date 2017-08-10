@@ -33,6 +33,8 @@ function trackingScript() {
 
   ga('create', 'UA-60624235-5', 'auto');
   ga('send', 'pageview');
+
+  Raven.config('https://95251eabb60248e6a8253e09590c11bd@sentry.io/202059').install()
 }
 
 export default function ({children, pathname}) {
@@ -99,6 +101,10 @@ export default function ({children, pathname}) {
           text-decoration: none;
         }
 
+        .twitter {
+          color: #6dc7ff;
+        }
+
         .logo {
           height: 180px;
           margin: 0 auto;
@@ -159,12 +165,13 @@ export default function ({children, pathname}) {
         </ul>
 
         <div className="footer">
-          <br />Created by <a className="twitter" href="https://twitter.com/ritz078">@ritz078</a>
+          <br />Created by <a target="_blank" className="twitter" href="https://twitter.com/ritz078">@ritz078</a>
         </div>
       </div>
       <div className="content">
         {children}
       </div>
+      <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossOrigin="anonymous"/>
       <script>
         {isBrowser && trackingScript()}
       </script>

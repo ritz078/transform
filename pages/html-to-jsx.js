@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import HTMLtoJSX from 'htmltojsx'
+import HTMLtoJSX from '@tsuyoshiwada/htmltojsx'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 
@@ -15,7 +15,7 @@ const defaultText = `<div class="hello" data-id="1">
 
 export default class Css2Js extends PureComponent {
   state={
-    createClass: true
+    createClass: false
   }
 
   getTransformedValue = (newValue: string) => {
