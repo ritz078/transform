@@ -19,11 +19,18 @@ if (isBrowser) {
   require('brace/mode/html')
 }
 
-const prettierParsers = {
-  css: 'postcss',
-  json: 'json',
-  javascript: 'babylon',
-  typescript: 'babylon'
+// const prettierParsers = {
+//   css: 'postcss',
+//   json: 'json',
+//   javascript: 'babylon',
+//   typescript: 'babylon'
+// }
+
+const prettifyMap = {
+  css: 'css_beautify',
+  json: 'js_beautify',
+  html: 'html_beautify',
+  typescript: 'js_beautify'
 }
 
 type Props = {
@@ -118,19 +125,11 @@ export default class ConversionPanel extends PureComponent {
   }
 
   prettifyCode = () => {
-    const { prettier } = window
+    debugger
     const { leftMode } = this.props
     const { value } = this.state
 
-    if(leftMode === 'html') {
-        import('pretty').then(pretty => {
-          this.setResult(pretty(value))
-        })
-    } else {
-      this.setResult(prettier.format(value, {
-        parser: prettierParsers[leftMode]
-      }))
-    }
+    this.setResult(window[prettifyMap[leftMode]](value, {indent_size: 2}))
   }
 
   copyCode = () => {
@@ -147,7 +146,9 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
-        <script src="https://bundle.run/prettier@1.5.3"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-html.js"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-css.js"></script>
 
         <style jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lato');
@@ -322,7 +323,7 @@ export default class ConversionPanel extends PureComponent {
               theme={theme}
               name="code"
               readOnly
-              value={window.prettier.format(resultValue)}
+              value={window.js_beautify(resultValue, {e4x: true})}
               editorProps={{$blockScrolling: true}}
               scrollMargin={[20]}
               fontSize={14}
