@@ -1,22 +1,22 @@
-import React, { PureComponent } from 'react'
-import Router from 'next/router'
-import isBrowser from 'is-in-browser'
-import copy from 'copy-text-to-clipboard'
+import React, { PureComponent } from "react";
+import Router from "next/router";
+import isBrowser from "is-in-browser";
+import copy from "copy-text-to-clipboard";
 
-const theme = 'tomorrow'
+const theme = "tomorrow";
 
-let brace
-let AceEditor
+let brace;
+let AceEditor;
 if (isBrowser) {
-  brace = require('brace').default
-  AceEditor = require('react-ace').default
+  brace = require("brace").default;
+  AceEditor = require("react-ace").default;
 
-  require('brace/mode/javascript')
-  require(`brace/theme/${theme}`)
-  require('brace/mode/json')
-  require('brace/mode/typescript')
-  require('brace/mode/css')
-  require('brace/mode/html')
+  require("brace/mode/javascript");
+  require(`brace/theme/${theme}`);
+  require("brace/mode/json");
+  require("brace/mode/typescript");
+  require("brace/mode/css");
+  require("brace/mode/html");
 }
 
 // const prettierParsers = {
@@ -27,11 +27,11 @@ if (isBrowser) {
 // }
 
 const prettifyMap = {
-  css: 'css_beautify',
-  json: 'js_beautify',
-  html: 'html_beautify',
-  typescript: 'js_beautify'
-}
+  css: "css_beautify",
+  json: "js_beautify",
+  html: "html_beautify",
+  typescript: "js_beautify"
+};
 
 type Props = {
   leftMode: ?string,
@@ -43,112 +43,123 @@ type Props = {
   initialCheckboxValue: boolean,
   leftTitle: string,
   rightTitle: string
-}
+};
 
 export default class ConversionPanel extends PureComponent {
-  props : Props
+  props: Props;
 
   static defaultProps = {
-    leftMode: 'javascript',
-    rightMode: 'javascript',
-    pathname: '/'
-  }
+    leftMode: "javascript",
+    rightMode: "javascript",
+    pathname: "/"
+  };
 
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
 
     this.state = {
-      resultValue: '',
-      value: '',
-      info: '',
-      infoType: ''
-    }
+      resultValue: "",
+      value: "",
+      info: "",
+      infoType: ""
+    };
   }
 
-  componentDidMount () {
-    const code = this.props.url.query.code || this.props.defaultText
+  componentDidMount() {
+    const code = this.props.url.query.code || this.props.defaultText;
     this.setState({
       value: code,
       resultValue: this.props.getTransformedValue(code)
-    })
+    });
   }
 
   onChange = (newValue: string) => {
     try {
-      const code = this.props.getTransformedValue(newValue)
+      const code = this.props.getTransformedValue(newValue);
 
       this.setState({
         resultValue: code,
-        info: '',
-        infoType: ''
-      })
+        info: "",
+        infoType: ""
+      });
 
-      this.setCodeInUrl(newValue)
+      this.setCodeInUrl(newValue);
     } catch (e) {
       this.setState({
         info: e.message,
-        infoType: 'error'
-      })
+        infoType: "error"
+      });
     }
 
     this.setState({
       value: newValue
-    })
-  }
+    });
+  };
 
-  setCodeInUrl = (code) => {
+  setCodeInUrl = code => {
     Router.replace({
       pathname: this.props.url.pathname,
       query: {
         code
       }
-    })
-  }
+    });
+  };
 
   toggleCheckbox = (e: MouseEvent) => {
-    const checked = e.currentTarget.checked
+    const checked = e.currentTarget.checked;
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
         this.setState({
           resultValue: this.props.getTransformedValue(this.state.value)
-        })
-      })
+        });
+      });
     }
-  }
+  };
 
   setResult = (result: string) => {
-    this.setState({
-      value: result
-    }, () => {
-      this.setCodeInUrl(result)
-    })
-  }
+    this.setState(
+      {
+        value: result
+      },
+      () => {
+        this.setCodeInUrl(result);
+      }
+    );
+  };
 
   prettifyCode = () => {
-    debugger
-    const { leftMode } = this.props
-    const { value } = this.state
+    debugger;
+    const { leftMode } = this.props;
+    const { value } = this.state;
 
-    this.setResult(window[prettifyMap[leftMode]](value, {indent_size: 2}))
-  }
+    this.setResult(window[prettifyMap[leftMode]](value, { indent_size: 2 }));
+  };
 
   copyCode = () => {
-    copy(this.state.resultValue)
+    copy(this.state.resultValue);
     this.setState({
-      info: 'Code copied to clipboard.',
-      infoType: 'success'
-    })
-  }
+      info: "Code copied to clipboard.",
+      infoType: "success"
+    });
+  };
 
-  render () {
-    const { leftMode, rightMode, onCheckboxChange, checkboxText, initialCheckboxValue, leftTitle, rightTitle } = this.props
-    const {infoType, resultValue, value, info} = this.state
+  render() {
+    const {
+      leftMode,
+      rightMode,
+      onCheckboxChange,
+      checkboxText,
+      initialCheckboxValue,
+      leftTitle,
+      rightTitle
+    } = this.props;
+    const { infoType, resultValue, value, info } = this.state;
 
     return (
       <div className="wrapper">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-html.js"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-css.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify.js" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-html.js" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-css.js" />
 
         <style jsx>{`
           @import url('https://fonts.googleapis.com/css?family=Lato');
@@ -159,12 +170,12 @@ export default class ConversionPanel extends PureComponent {
             flex-direction: column;
           }
 
-          .footer{
+          .footer {
             height: 50px;
             width: 100%;
             font-family: 'Lato';
             background-color: white;
-            box-shadow: 0 0 1px 1px rgba(0,0,0,0.2);
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
             z-index: 999;
             display: flex;
             align-items: center;
@@ -174,12 +185,12 @@ export default class ConversionPanel extends PureComponent {
 
           .has-error {
             background-color: #e74c3c;
-            box-shadow: 0 0 1px 1px rgba(0,0,0,0.1);
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
           }
 
           .has-success {
             background-color: #27ae60;
-            box-shadow: 0 0 1px 1px rgba(0,0,0,0.1);
+            box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
           }
 
           .content-wrapper {
@@ -188,7 +199,7 @@ export default class ConversionPanel extends PureComponent {
             flex-direction: row;
           }
 
-         .section {
+          .section {
             flex: 1;
             position: relative;
             height: calc(100vh - 100px);
@@ -200,11 +211,12 @@ export default class ConversionPanel extends PureComponent {
 
           .info {
             color: white;
-            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas',
+              'source-code-pro', monospace;
           }
 
           .btn {
-            background-color: #2196F3;
+            background-color: #2196f3;
             font-size: 14px;
             padding: 7px 14px;
             z-index: 9;
@@ -237,28 +249,29 @@ export default class ConversionPanel extends PureComponent {
             padding-left: 4px;
             color: #666;
           }
-
         `}</style>
 
         <style global jsx>{`
-          *{
+          * {
             margin: 0;
             padding: 0;
             -webkit-font-smoothing: antialiased;
           }
 
-           #code{
-              display: flex;
-              flex: 1;
-              width: 100% !important;
-              height: 100% !important;
-           }
+          #code {
+            display: flex;
+            flex: 1;
+            width: 100% !important;
+            height: 100% !important;
+          }
 
-           .right #code {
+          .right #code {
             background-color: #fafafa;
-           }
+          }
 
-          .right .ace_content, .right, .right .ace-tomorrow {
+          .right .ace_content,
+          .right,
+          .right .ace-tomorrow {
             background-color: #fafafa;
           }
 
@@ -275,7 +288,6 @@ export default class ConversionPanel extends PureComponent {
             font-family: 'Lato';
             padding: 0 12px;
             cursor: pointer;
-
           }
 
           label input {
@@ -287,57 +299,69 @@ export default class ConversionPanel extends PureComponent {
         <div className="content-wrapper">
           <div className="section left">
             <div className="header">
-              <div className="title">{leftTitle}</div>
-              <button className="btn" onClick={this.prettifyCode}>Prettify</button>
+              <div className="title">
+                {leftTitle}
+              </div>
+              <button className="btn" onClick={this.prettifyCode}>
+                Prettify
+              </button>
             </div>
             {isBrowser &&
-            <AceEditor
-              mode={leftMode}
-              theme={theme}
-              onChange={this.onChange}
-              name="code"
-              value={value}
-              editorProps={{$blockScrolling: true}}
-              highlightActiveLine={false}
-              scrollMargin={[20]}
-              focus
-              fontSize={14}
-              wrapEnabled
-            />
-            }
-
+              <AceEditor
+                mode={leftMode}
+                theme={theme}
+                onChange={this.onChange}
+                name="code"
+                value={value}
+                editorProps={{ $blockScrolling: true }}
+                highlightActiveLine={false}
+                scrollMargin={[20]}
+                focus
+                fontSize={14}
+                wrapEnabled
+              />}
           </div>
           <div className="section right">
             <div className="header">
-              <div className="title">{rightTitle}</div>
+              <div className="title">
+                {rightTitle}
+              </div>
               {onCheckboxChange &&
-              <label htmlFor="#text">
-                <input type="checkbox" id="#text" defaultChecked={initialCheckboxValue} onChange={this.toggleCheckbox} /> {checkboxText}
-              </label>
-              }
-              <button className="btn" onClick={this.copyCode}>Copy</button>
+                <label htmlFor="#text">
+                  <input
+                    type="checkbox"
+                    id="#text"
+                    defaultChecked={initialCheckboxValue}
+                    onChange={this.toggleCheckbox}
+                  />{" "}
+                  {checkboxText}
+                </label>}
+              <button className="btn" onClick={this.copyCode}>
+                Copy
+              </button>
             </div>
             {isBrowser &&
-            <AceEditor
-              mode={rightMode === 'jsx' ? 'javascript' : rightMode}
-              theme={theme}
-              name="code"
-              readOnly
-              value={window.js_beautify(resultValue, {e4x: true})}
-              editorProps={{$blockScrolling: true}}
-              scrollMargin={[20]}
-              fontSize={14}
-              showGutter={false}
-              highlightActiveLine={false}
-              wrapEnabled
-            />
-            }
+              <AceEditor
+                mode={rightMode === "jsx" ? "javascript" : rightMode}
+                theme={theme}
+                name="code"
+                readOnly
+                value={window.js_beautify(resultValue, { e4x: true })}
+                editorProps={{ $blockScrolling: true }}
+                scrollMargin={[20]}
+                fontSize={14}
+                showGutter={false}
+                highlightActiveLine={false}
+                wrapEnabled
+              />}
           </div>
         </div>
-        <div className={`footer${infoType ? ' has-' + infoType : '' }`}>
-          <span className="info">{info}</span>
+        <div className={`footer${infoType ? " has-" + infoType : ""}`}>
+          <span className="info">
+            {info}
+          </span>
         </div>
       </div>
-    )
+    );
   }
 }

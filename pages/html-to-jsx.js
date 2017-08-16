@@ -1,29 +1,29 @@
-import React, { PureComponent } from 'react'
-import HTMLtoJSX from '@tsuyoshiwada/htmltojsx'
-import Layout from '../components/Layout'
-import ConversionPanel from '../components/ConversionPanel'
+import React, { PureComponent } from "react";
+import HTMLtoJSX from "@tsuyoshiwada/htmltojsx";
+import Layout from "../components/Layout";
+import ConversionPanel from "../components/ConversionPanel";
 
 const converter = new HTMLtoJSX({
   createClass: false,
-  outputClassName: 'MainComponent'
-})
+  outputClassName: "MainComponent"
+});
 
 const defaultText = `<div class="hello" data-id="1">
     Hello world!
     <input type="text" name="foo">
-</div>`
+</div>`;
 
 export default class Css2Js extends PureComponent {
-  state={
+  state = {
     createClass: false
-  }
+  };
 
   getTransformedValue = (newValue: string) => {
-    converter.config.createClass = this.state.createClass
-    return converter.convert(newValue)
-  }
+    converter.config.createClass = this.state.createClass;
+    return converter.convert(newValue);
+  };
 
-  render () {
+  render() {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
@@ -33,13 +33,14 @@ export default class Css2Js extends PureComponent {
           leftMode="html"
           rightMode="jsx"
           getTransformedValue={this.getTransformedValue}
-          name={'html_to_jsx'}
+          name={"html_to_jsx"}
           defaultText={defaultText}
           checkboxText="Create Class"
           initialCheckboxValue={this.state.createClass}
-          onCheckboxChange={(checked: boolean, cb: Function) => this.setState({createClass: checked}, cb)}
+          onCheckboxChange={(checked: boolean, cb: Function) =>
+            this.setState({ createClass: checked }, cb)}
         />
       </Layout>
-    )
+    );
   }
 }

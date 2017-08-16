@@ -8,6 +8,7 @@
     "build": "next build",
     "dev": "next dev",
     "analyze": "cross-env ANALYZE=1 next build",
+    "format": "prettier --write **/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -31,5 +32,8 @@
     "react-dom": "^15.6.1",
     "react-github-corner": "^0.3.0",
     "webpack-bundle-analyzer": "^2.9.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.5.3"
   }
 }
