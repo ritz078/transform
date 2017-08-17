@@ -61,10 +61,10 @@ export default function({ children, pathname }) {
   return (
     <div className="main-wrapper">
       <Head>
-        <title>Transform | All important React transforms at one place.</title>
+        <title>Transform | All important transforms at one place.</title>
         <meta
           rel="description"
-          content="An online utility to convert a JSON object to prop-types, Typescript Interface or flow types. It also converts your CSS into JS and HTML into JSX."
+          content="An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
         />
         <meta name="google-site-verification" content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0" />
         <link rel="icon" type="image/png" href="/static/favicon.png" />
@@ -200,6 +200,11 @@ export default function({ children, pathname }) {
           <li className={getClass("/html-to-jsx")}>
             <Link prefetch href="/html-to-jsx">
               <a>HTML to JSX</a>
+            </Link>
+          </li>
+          <li className={getClass("/json-to-rust-serde")}>
+            <Link prefetch href="/json-to-rust-serde">
+              <a>JSON to Rust Serde</a>
             </Link>
           </li>
         </ul>
