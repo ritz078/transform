@@ -21,9 +21,13 @@ var is;
   }
   is.string = string;
   function number(n) {
-    return typeof n === "number" || n instanceof Number;
+    return (typeof n === "number" || n instanceof Number) && !Number.isInteger(n)
   }
   is.number = number;
+  function integer(n) {
+    return (typeof n === "number" || n instanceof Number) && Number.isInteger(n)
+  }
+  is.integer = integer;
   function boolean(b) {
     return b === !!b || b instanceof Boolean;
   }
@@ -272,7 +276,8 @@ function SHA1(msg) {
 var Types = (function() {
   function Types() {}
   Types.STRING = "String";
-  Types.NUMBER = "u64";
+  Types.NUMBER = "f64";
+  Types.INTEGER = "i64"
   Types.BOOLEAN = "boolean";
   Types.ARRAY = "[]";
   return Types;
@@ -354,6 +359,9 @@ var Json2dts = (function() {
         case is.number(value):
           type = Types.NUMBER;
           break;
+        case is.integer(value):
+          type = Types.INTEGER;
+          break;
         case is.boolean(value):
           type = Types.BOOLEAN;
           break;
@@ -395,6 +403,9 @@ var Json2dts = (function() {
         break;
       case is.number(value):
         type = Types.NUMBER;
+        break;
+      case is.integer(value):
+        type = Types.INTEGER;
         break;
       case is.boolean(value):
         type = Types.BOOLEAN;
