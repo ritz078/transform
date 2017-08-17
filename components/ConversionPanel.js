@@ -137,7 +137,9 @@ export default class ConversionPanel extends PureComponent {
   };
 
   copyCode = () => {
-    copy(this.state.resultValue);
+    const { rightMode } = this.props
+    const { resultValue } = this.state
+    copy(rightMode !== "rust" ? window.js_beautify(resultValue, { e4x: true }) : resultValue);
     this.setState({
       info: "Code copied to clipboard.",
       infoType: "success"
