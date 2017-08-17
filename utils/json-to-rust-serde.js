@@ -319,10 +319,10 @@ var Json2dts = (function() {
     var output;
     var classes = {};
     var outputModule = this.moduleName == "" ? false : true;
-    var interfaceTab = outputModule ? "\t" : "";
-    var propertyTab = interfaceTab + "\t";
+    var interfaceTab = outputModule ? "    " : "";
+    var propertyTab = interfaceTab + "    ";
     Object.keys(this.classes).map(function(clsName) {
-      output = interfaceTab + "#[derive(Serialize, Deserialize)]\nstruct " + clsName + " \n" + interfaceTab + "{\n";
+      output = interfaceTab + "#[derive(Serialize, Deserialize)]\nstruct " + clsName + " {\n";
       Object.keys(_this.classes[clsName]).map(function(key) {
         output += propertyTab + key + ": " + _this.classes[clsName][key] + ",\n";
       });
