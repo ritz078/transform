@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import dynamic from "next/dynamic";
 import { Json2dts, toValidJSON } from "../utils/json-to-rust-serde";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
@@ -29,7 +28,7 @@ export default class Json2Ts extends PureComponent {
           name={"ts_interface"}
           defaultText={defaultText}
           leftMode="json"
-          rightMode="javascript"
+          rightMode="rust"
           url={this.props.url}
         />
       </Layout>
