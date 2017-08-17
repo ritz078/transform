@@ -202,6 +202,11 @@ export default function({ children, pathname }) {
               <a>HTML to JSX</a>
             </Link>
           </li>
+          <li className={getClass("/json-to-rust-serde")}>
+            <Link prefetch href="/json-to-rust-serde">
+              <a>JSON to Rust Serde</a>
+            </Link>
+          </li>
         </ul>
 
         <div className="footer">

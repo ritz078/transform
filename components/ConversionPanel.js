@@ -346,7 +346,7 @@ export default class ConversionPanel extends PureComponent {
                 theme={theme}
                 name="code"
                 readOnly
-                value={window.js_beautify(resultValue, { e4x: true })}
+                value={rightMode ==! "rust" ? window.js_beautify(resultValue, { e4x: true }) : resultValue}
                 editorProps={{ $blockScrolling: true }}
                 scrollMargin={[20]}
                 fontSize={14}
