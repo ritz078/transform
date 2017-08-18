@@ -129,7 +129,6 @@ export default class ConversionPanel extends PureComponent {
   };
 
   prettifyCode = () => {
-    debugger;
     const { leftMode } = this.props;
     const { value } = this.state;
 
