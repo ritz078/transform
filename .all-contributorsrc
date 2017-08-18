@@ -1,0 +1,20 @@
+{
+  "projectName": "transform-www",
+  "projectOwner": "ritz078",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "skade",
+      "name": "Florian Gilcher",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/47542?v=4",
+      "profile": "http://asquera.de",
+      "contributions": [
+        "code"
+      ]
+    }
+  ]
+}
