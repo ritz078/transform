@@ -192,6 +192,11 @@ export default function({ children, pathname }) {
               <a>JSON to Typescript Interface</a>
             </Link>
           </li>
+          <li className={getClass("/json-to-mobx-state-tree")}>
+            <Link prefetch href="/json-to-mobx-state-tree">
+              <a>JSON to MobX-State-Tree Model</a>
+            </Link>
+          </li>
           <li className={getClass("/css-to-js")}>
             <Link prefetch href="/css-to-js">
               <a>CSS to JS Objects</a>
