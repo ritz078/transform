@@ -4,6 +4,10 @@
 
 This project is based on [next.js](https://github.com/zeit/next.js/)
 
+## Code Structure
+- Create a new route - Add a file `new-pathname.js` in `pages` folder.
+- Use ConversionPanel - This Component takes the conversionMethod and renders the Ace Editors.
+
 ## Development
 
 - Fork the repo
