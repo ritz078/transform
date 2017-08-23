@@ -12,6 +12,8 @@ This project is based on [next.js](https://github.com/zeit/next.js/)
 - `yarn dev` then fix issues or add features.
 - Make a pull request.
 
+<a href="https://app.codesponsor.io/link/8CBegPnJTnjtddvd2E18Su4F/ritz078/transform-www" rel="nofollow"><img src="https://app.codesponsor.io/embed/8CBegPnJTnjtddvd2E18Su4F/ritz078/transform-www.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
+
 ## License
 MIT @ Ritesh Kumar
 ## Contributors
