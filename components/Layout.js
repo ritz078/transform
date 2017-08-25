@@ -16,6 +16,38 @@ Router.onRouteChangeStart = url => {
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
+const routes = [{
+  label: 'JSON to React PropTypes',
+  path: '/'
+}, {
+  label: 'JSON to Flow Types',
+  path: '/json-to-flow-types'
+}, {
+  label: 'JSON to Typescript Interface',
+  path: '/json-to-ts-interface'
+}, {
+  label: 'JSON to MobX-State-Tree Model',
+  path: '/json-to-mobx-state-tree'
+}, {
+  label: 'CSS to JS Objects',
+  path: '/css-to-js'
+}, {
+  label: 'HTML to JSX',
+  path: '/html-to-jsx'
+}, {
+  label: 'JSON to Rust Serde',
+  path: '/json-to-rust-serde'
+}, {
+  label: 'JSON to Mongoose Schema',
+  path: '/json-to-mongoose'
+}, {
+  label: "JSON to Big Query Schema",
+  path: "/json-to-big-query"
+}, {
+  label: "JSON to MySQL",
+  path: "/json-to-mysql"
+}]
+
 function Logo() {
   return (
     <svg
@@ -93,6 +125,7 @@ export default function({ children, pathname }) {
         ul {
           padding: 20px 0;
           flex: 1;
+          overflow-y: scroll;
         }
 
         li {
@@ -177,41 +210,13 @@ export default function({ children, pathname }) {
           <Logo />
         </div>
         <ul>
-          <li className={getClass("/")}>
-            <Link prefetch href="/">
-              <a>JSON to React PropTypes</a>
+          {routes.map(route => (
+            <li key={route.path} className={getClass(route.path)}>
+            <Link prefetch href={route.path}>
+              <a>{route.label}</a>
             </Link>
           </li>
-          <li className={getClass("/json-to-flow-types")}>
-            <Link prefetch href="/json-to-flow-types">
-              <a>JSON to Flow Types</a>
-            </Link>
-          </li>
-          <li className={getClass("/json-to-ts-interface")}>
-            <Link prefetch href="/json-to-ts-interface">
-              <a>JSON to Typescript Interface</a>
-            </Link>
-          </li>
-          <li className={getClass("/json-to-mobx-state-tree")}>
-            <Link prefetch href="/json-to-mobx-state-tree">
-              <a>JSON to MobX-State-Tree Model</a>
-            </Link>
-          </li>
-          <li className={getClass("/css-to-js")}>
-            <Link prefetch href="/css-to-js">
-              <a>CSS to JS Objects</a>
-            </Link>
-          </li>
-          <li className={getClass("/html-to-jsx")}>
-            <Link prefetch href="/html-to-jsx">
-              <a>HTML to JSX</a>
-            </Link>
-          </li>
-          <li className={getClass("/json-to-rust-serde")}>
-            <Link prefetch href="/json-to-rust-serde">
-              <a>JSON to Rust Serde</a>
-            </Link>
-          </li>
+          ))}
         </ul>
 
         <div className="footer">

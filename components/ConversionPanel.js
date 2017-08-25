@@ -17,7 +17,8 @@ if (isBrowser) {
   require("brace/mode/typescript");
   require("brace/mode/css");
   require("brace/mode/html");
-  require("brace/mode/rust")
+  require("brace/mode/rust");
+  require("brace/mode/mysql");
 }
 
 // const prettierParsers = {
