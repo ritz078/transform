@@ -165,7 +165,6 @@ export default class ConversionPanel extends PureComponent {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-css.js" />
 
         <style jsx>{`
-          @import url('https://fonts.googleapis.com/css?family=Lato');
           .wrapper {
             display: flex;
             flex: 1;
@@ -179,7 +178,7 @@ export default class ConversionPanel extends PureComponent {
             font-family: 'Lato';
             background-color: white;
             box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
-            z-index: 999;
+            z-index: 99;
             display: flex;
             align-items: center;
             text-align: center;

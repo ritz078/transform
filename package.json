@@ -30,7 +30,9 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-ace": "^5.1.2",
+    "react-collapsible": "^2.0.0",
     "react-dom": "^15.6.1",
+    "react-fuzzy-picker": "^0.5.1",
     "react-github-corner": "^0.3.0",
     "stringify-object": "^3.2.0",
     "webpack-bundle-analyzer": "^2.9.0"

@@ -5,6 +5,7 @@ import Head from "next/head";
 import NProgress from "nprogress";
 import Router from "next/router";
 import GithubCorner from "react-github-corner";
+import FuzzyPicker, { FuzzyWrapper } from "react-fuzzy-picker";
 
 NProgress.configure({ showSpinner: false });
 
@@ -16,37 +17,48 @@ Router.onRouteChangeStart = url => {
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
-const routes = [{
-  label: 'JSON to React PropTypes',
-  path: '/'
-}, {
-  label: 'JSON to Flow Types',
-  path: '/json-to-flow-types'
-}, {
-  label: 'JSON to Typescript Interface',
-  path: '/json-to-ts-interface'
-}, {
-  label: 'JSON to MobX-State-Tree Model',
-  path: '/json-to-mobx-state-tree'
-}, {
-  label: 'CSS to JS Objects',
-  path: '/css-to-js'
-}, {
-  label: 'HTML to JSX',
-  path: '/html-to-jsx'
-}, {
-  label: 'JSON to Rust Serde',
-  path: '/json-to-rust-serde'
-}, {
-  label: 'JSON to Mongoose Schema',
-  path: '/json-to-mongoose'
-}, {
-  label: "JSON to Big Query Schema",
-  path: "/json-to-big-query"
-}, {
-  label: "JSON to MySQL",
-  path: "/json-to-mysql"
-}]
+const routes = [
+  {
+    label: "JSON to React PropTypes",
+    path: "/"
+  },
+  {
+    label: "JSON to Flow Types",
+    path: "/json-to-flow-types",
+  },
+  {
+    label: "JSON to Typescript Interface",
+    path: "/json-to-ts-interface"
+  },
+  {
+    label: "JSON to MobX-State-Tree Model",
+    path: "/json-to-mobx-state-tree"
+  },
+  {
+    label: "CSS to JS Objects",
+    path: "/css-to-js"
+  },
+  {
+    label: "HTML to JSX",
+    path: "/html-to-jsx"
+  },
+  {
+    label: "JSON to Rust Serde",
+    path: "/json-to-rust-serde"
+  },
+  {
+    label: "JSON to Mongoose Schema",
+    path: "/json-to-mongoose"
+  },
+  {
+    label: "JSON to Big Query Schema",
+    path: "/json-to-big-query"
+  },
+  {
+    label: "JSON to MySQL",
+    path: "/json-to-mysql"
+  }
+];
 
 function Logo() {
   return (
@@ -85,6 +97,28 @@ function trackingScript() {
   ga("send", "pageview");
 }
 
+function renderFuzzyPicker(isOpen, onClose) {
+  return (
+    <FuzzyPicker
+      isOpen={isOpen}
+      onClose={onClose}
+      onChange={choice => Router.push(choice.path)}
+      items={routes}
+      itemValue={item => item.label}
+      renderItem={item =>
+        <span>
+          {item.label}
+        </span>}
+    />
+  );
+}
+
+// Here, we check what key must be pressed to open the fuzzy picker
+// We'll use the '/' key for this example.
+function isCorrectKeyPressed(event) {
+  return event.metaKey && event.key === "p";
+}
+
 export default function({ children, pathname }) {
   function getClass(path) {
     return path === pathname ? "active" : "";
@@ -98,7 +132,10 @@ export default function({ children, pathname }) {
           rel="description"
           content="An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
         />
-        <meta name="google-site-verification" content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0" />
+        <meta
+          name="google-site-verification"
+          content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0"
+        />
         <link rel="icon" type="image/png" href="/static/favicon.png" />
         <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
       </Head>
@@ -199,6 +236,10 @@ export default function({ children, pathname }) {
         }
       `}</style>
 
+      <FuzzyWrapper
+        isKeyPressed={isCorrectKeyPressed}
+        popup={renderFuzzyPicker}
+      />
       <div className="sidebar">
         <GithubCorner
           href="https://github.com/ritz078/transform-www"
@@ -210,13 +251,15 @@ export default function({ children, pathname }) {
           <Logo />
         </div>
         <ul>
-          {routes.map(route => (
+          {routes.map(route =>
             <li key={route.path} className={getClass(route.path)}>
-            <Link prefetch href={route.path}>
-              <a>{route.label}</a>
-            </Link>
-          </li>
-          ))}
+              <Link prefetch href={route.path}>
+                <a>
+                  {route.label}
+                </a>
+              </Link>
+            </li>
+          )}
         </ul>
 
         <div className="footer">
