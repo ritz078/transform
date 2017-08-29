@@ -84,6 +84,14 @@ const x = [
         path: "/json-to-mysql"
       }
     ]
+  },
+  {
+    category: 'Scala',
+    iconName: 'icon-scala',
+    content: [{
+      label: 'JSON to Scala case class',
+      path: '/json-to-scala-case-class'
+    }]
   }
 ];
 
