@@ -1,4 +1,53 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
+.rc-collapse {
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+.rc-collapse-anim-active {
+  transition: height 0.2s ease-out;
+}
+
+.rc-collapse > .rc-collapse-item > .rc-collapse-header {
+  height: 38px;
+  line-height: 38px;
+  cursor: pointer;
+}
+.rc-collapse > .rc-collapse-item > .rc-collapse-header .arrow {
+  display: inline-block;
+  content: '\20';
+  width: 0;
+  height: 0;
+  font-size: 0;
+  line-height: 0;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-left: 4px solid #b3b3b3;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.rc-collapse > .rc-collapse-item-disabled > .rc-collapse-header {
+  cursor: not-allowed;
+  color: #999;
+  background-color: #f3f3f3;
+}
+.rc-collapse-content {
+  overflow: hidden;
+}
+
+.rc-collapse-content-inactive {
+  display: none;
+}
+.rc-collapse-item:last-child > .rc-collapse-content {
+  border-radius: 0 0 3px 3px;
+}
+.rc-collapse > .rc-collapse-item-active > .rc-collapse-header .arrow {
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 4px solid #666;
+  margin-right: 6px;
+}
+
+
 /* Make clicks pass-through */
 #nprogress {
   pointer-events: none;

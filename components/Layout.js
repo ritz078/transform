@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import isBrowser from "is-in-browser";
 import Link from "next/link";
 import Head from "next/head";
@@ -6,6 +6,9 @@ import NProgress from "nprogress";
 import Router from "next/router";
 import GithubCorner from "react-github-corner";
 import FuzzyPicker, { FuzzyWrapper } from "react-fuzzy-picker";
+import Collapse, { Panel } from "rc-collapse";
+import flatten from "lodash/flatten";
+import findIndex from "lodash/findIndex";
 
 NProgress.configure({ showSpinner: false });
 
@@ -17,48 +20,74 @@ Router.onRouteChangeStart = url => {
 Router.onRouteChangeComplete = () => NProgress.done();
 Router.onRouteChangeError = () => NProgress.done();
 
-const routes = [
+const x = [
   {
-    label: "JSON to React PropTypes",
-    path: "/"
+    category: "React",
+    iconName: "icon-reactjs",
+    content: [
+      {
+        label: "JSON to React PropTypes",
+        path: "/"
+      },
+      {
+        label: "HTML to JSX",
+        path: "/html-to-jsx"
+      },
+      {
+        label: "CSS to JS Objects",
+        path: "/css-to-js"
+      }
+    ]
   },
   {
-    label: "JSON to Flow Types",
-    path: "/json-to-flow-types",
+    category: "JavaScript",
+    iconName: "icon-javascript",
+    content: [
+      {
+        label: "JSON to Flow Types",
+        path: "/json-to-flow-types"
+      },
+      {
+        label: "JSON to Typescript Interface",
+        path: "/json-to-ts-interface"
+      },
+      {
+        label: "JSON to MobX-State-Tree Model",
+        path: "/json-to-mobx-state-tree"
+      }
+    ]
   },
   {
-    label: "JSON to Typescript Interface",
-    path: "/json-to-ts-interface"
+    category: "Rust",
+    iconName: "icon-rust",
+    content: [
+      {
+        label: "JSON to Rust Serde",
+        path: "/json-to-rust-serde"
+      }
+    ]
   },
   {
-    label: "JSON to MobX-State-Tree Model",
-    path: "/json-to-mobx-state-tree"
-  },
-  {
-    label: "CSS to JS Objects",
-    path: "/css-to-js"
-  },
-  {
-    label: "HTML to JSX",
-    path: "/html-to-jsx"
-  },
-  {
-    label: "JSON to Rust Serde",
-    path: "/json-to-rust-serde"
-  },
-  {
-    label: "JSON to Mongoose Schema",
-    path: "/json-to-mongoose"
-  },
-  {
-    label: "JSON to Big Query Schema",
-    path: "/json-to-big-query"
-  },
-  {
-    label: "JSON to MySQL",
-    path: "/json-to-mysql"
+    category: "Databases",
+    iconName: "icon-database",
+    content: [
+      {
+        label: "JSON to Mongoose Schema",
+        path: "/json-to-mongoose"
+      },
+      {
+        label: "JSON to Big Query Schema",
+        path: "/json-to-big-query"
+      },
+      {
+        label: "JSON to MySQL",
+        path: "/json-to-mysql"
+      }
+    ]
   }
 ];
+
+const routes = flatten(x.map(a => a.content));
 
 function Logo() {
   return (
@@ -119,166 +148,246 @@ function isCorrectKeyPressed(event) {
   return event.metaKey && event.key === "p";
 }
 
-export default function({ children, pathname }) {
-  function getClass(path) {
-    return path === pathname ? "active" : "";
+export default class Layout extends PureComponent {
+  state = {};
+
+  getClass(path) {
+    return path === this.props.pathname ? "active" : "";
   }
 
-  return (
-    <div className="main-wrapper">
-      <Head>
-        <title>Transform | All important transforms at one place.</title>
-        <meta
-          rel="description"
-          content="An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
+  componentDidMount() {
+    this.setKey(this.props.pathname);
+  }
+
+  componentWillReceiveProps({ pathname }) {
+    this.setKey(pathname);
+  }
+
+  setKey = pathname => {
+    this.setState({
+      activeKey: `${findIndex(
+        x,
+        o => o.content.filter(a => a.path === pathname).length
+      ) + 1}`
+    });
+  };
+
+  onChange = activeKey => {
+    this.setState({
+      activeKey
+    });
+  };
+
+  render() {
+    return (
+      <div className="main-wrapper">
+        <Head>
+          <title>Transform | All important transforms at one place.</title>
+          <meta
+            rel="description"
+            content="An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
+          />
+          <meta
+            name="google-site-verification"
+            content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0"
+          />
+          <link rel="icon" type="image/png" href="/static/favicon.png" />
+          <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css"
+          />
+        </Head>
+        <style jsx>{`
+          .sidebar {
+            height: 100vh;
+            width: 250px;
+            background-color: #424242;
+            font-size: 15px;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .main-wrapper {
+            flex-direction: row;
+            display: flex;
+            flex: 1;
+          }
+
+          .content {
+            flex: 1;
+          }
+
+          .nav {
+            padding: 20px 0;
+            flex: 1;
+            overflow-y: scroll;
+          }
+
+          .twitter {
+            color: #6dc7ff;
+          }
+
+          .logo {
+            height: 180px;
+            margin: 0 auto;
+            overflow: hidden;
+          }
+
+          .footer {
+            height: 70px;
+            text-align: center;
+            color: #fff;
+            font-family: 'Lato', sans-serif;
+          }
+
+          .footer svg {
+            height: 36px;
+            width: 30px;
+            color: #fff;
+          }
+
+          .badge {
+            display: inline-block;
+            font-size: 12px;
+            position: absolute;
+            margin-top: 6px;
+            margin-left: 6px;
+            background-color: #2196f3;
+            height: 13px;
+            padding: 2px 4px;
+            border-radius: 2px;
+            line-height: 12px;
+          }
+
+          iframe {
+            border: 0;
+            overflow: hidden;
+            display: table;
+            margin: 0 auto;
+            width: 61px;
+            height: 20px;
+          }
+
+          a.active {
+            background-color: #505050;
+          }
+
+          .info {
+            font-family: 'Lato';
+            color: white;
+            border: 1px solid #7b7b7b;
+            padding: 8px;
+            margin: 0 15px 15px;
+            border-radius: 2px;
+            font-size: 13px;
+            text-align: center;
+          }
+        `}</style>
+
+        <style jsx global>{`
+          .Collapsible__trigger {
+            color: whitesmoke;
+            font-family: 'Lato', sans-serif;
+            line-height: 44px;
+            cursor: pointer;
+          }
+
+          .Collapsible__trigger a:hover {
+            color: #fff;
+            background-color: #2d2d2d;
+          }
+
+          .Collapsible__trigger a:not(.twitter):not(.github) {
+            display: block;
+            padding-left: 14px;
+          }
+
+          .Collapsible__trigger {
+            padding-left: 14px;
+            color: #fff;
+            display: block;
+            text-decoration: none;
+            background-color: #2f2f2f;
+            border-bottom: 1px solid #252525;
+          }
+
+          .rc-collapse-content-box a {
+            display: block;
+            color: #fff;
+            font-family: 'Lato';
+            line-height: 44px;
+            padding-left: 20px;
+            background-color: #3c3c3c;
+            font-size: 14px;
+          }
+        `}</style>
+
+        <FuzzyWrapper
+          isKeyPressed={isCorrectKeyPressed}
+          popup={renderFuzzyPicker}
         />
-        <meta
-          name="google-site-verification"
-          content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0"
-        />
-        <link rel="icon" type="image/png" href="/static/favicon.png" />
-        <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-      </Head>
-      <style jsx>{`
-        .sidebar {
-          height: 100vh;
-          width: 250px;
-          background-color: #424242;
-          font-size: 15px;
-          display: flex;
-          flex-direction: column;
-        }
+        <div className="sidebar">
+          <GithubCorner
+            href="https://github.com/ritz078/transform-www"
+            height={80}
+            width={80}
+            direction="left"
+          />
+          <div className="logo">
+            <Logo />
+          </div>
+          <div className="nav">
+            <div className="info">Use Ctrl/Cmd + P for quick search</div>
 
-        .main-wrapper {
-          flex-direction: row;
-          display: flex;
-          flex: 1;
-        }
+            <Collapse
+              onChange={this.onChange}
+              accordion
+              activeKey={this.state.activeKey}
+            >
+              {x.map((route, i) => {
+                return (
+                  <Panel
+                    key={i + 1}
+                    headerClass="Collapsible__trigger"
+                    header={
+                      <span>
+                        <i className={route.iconName} /> &nbsp; {route.category}
+                      </span>
+                    }
+                  >
+                    {route.content.map(a =>
+                      <Link prefetch href={a.path}>
+                        <a className={this.getClass(a.path)}>
+                          {a.label}
+                        </a>
+                      </Link>
+                    )}
+                  </Panel>
+                );
+              })}
+            </Collapse>
+          </div>
 
-        .content {
-          flex: 1;
-        }
-
-        ul {
-          padding: 20px 0;
-          flex: 1;
-          overflow-y: scroll;
-        }
-
-        li {
-          color: whitesmoke;
-          font-family: 'Lato', sans-serif;
-          line-height: 44px;
-          cursor: pointer;
-        }
-
-        li.active {
-          background-color: #333;
-        }
-
-        li:hover {
-          color: #fff;
-          background-color: #2d2d2d;
-        }
-
-        a:not(.twitter):not(.github) {
-          display: block;
-          padding-left: 15px;
-        }
-
-        a {
-          color: #fff;
-          text-decoration: none;
-        }
-
-        .twitter {
-          color: #6dc7ff;
-        }
-
-        .logo {
-          height: 180px;
-          margin: 0 auto;
-        }
-
-        .footer {
-          height: 70px;
-          text-align: center;
-          color: #fff;
-          font-family: 'Lato', sans-serif;
-        }
-
-        .footer svg {
-          height: 36px;
-          width: 30px;
-          color: #fff;
-        }
-
-        .badge {
-          display: inline-block;
-          font-size: 12px;
-          position: absolute;
-          margin-top: 6px;
-          margin-left: 6px;
-          background-color: #2196f3;
-          height: 13px;
-          padding: 2px 4px;
-          border-radius: 2px;
-          line-height: 12px;
-        }
-
-        iframe {
-          border: 0;
-          overflow: hidden;
-          display: table;
-          margin: 0 auto;
-          width: 61px;
-          height: 20px;
-        }
-      `}</style>
-
-      <FuzzyWrapper
-        isKeyPressed={isCorrectKeyPressed}
-        popup={renderFuzzyPicker}
-      />
-      <div className="sidebar">
-        <GithubCorner
-          href="https://github.com/ritz078/transform-www"
-          height={80}
-          width={80}
-          direction="left"
-        />
-        <div className="logo">
-          <Logo />
+          <div className="footer">
+            <br />Created by{" "}
+            <a
+              target="_blank"
+              className="twitter"
+              href="https://twitter.com/ritz078"
+            >
+              @ritz078
+            </a>
+          </div>
         </div>
-        <ul>
-          {routes.map(route =>
-            <li key={route.path} className={getClass(route.path)}>
-              <Link prefetch href={route.path}>
-                <a>
-                  {route.label}
-                </a>
-              </Link>
-            </li>
-          )}
-        </ul>
-
-        <div className="footer">
-          <br />Created by{" "}
-          <a
-            target="_blank"
-            className="twitter"
-            href="https://twitter.com/ritz078"
-          >
-            @ritz078
-          </a>
+        <div className="content">
+          {this.props.children}
         </div>
+        <script>
+          {isBrowser && trackingScript()}
+        </script>
       </div>
-      <div className="content">
-        {children}
-      </div>
-      <script>
-        {isBrowser && trackingScript()}
-      </script>
-    </div>
-  );
+    );
+  }
 }

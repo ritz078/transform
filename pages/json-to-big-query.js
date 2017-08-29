@@ -1,14 +1,14 @@
 import React, { PureComponent } from "react";
-import { bigquery } from "generate-schema"
-import stringify from "stringify-object"
+import { bigquery } from "generate-schema";
+import stringify from "stringify-object";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-object-json";
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = newValue => {
-    const value = JSON.parse(newValue)
-    return stringify(bigquery(value))
+    const value = JSON.parse(newValue);
+    return stringify(bigquery(value));
   };
 
   render() {

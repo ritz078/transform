@@ -21,11 +21,15 @@ var is;
   }
   is.string = string;
   function number(n) {
-    return (typeof n === "number" || n instanceof Number) && !Number.isInteger(n)
+    return (
+      (typeof n === "number" || n instanceof Number) && !Number.isInteger(n)
+    );
   }
   is.number = number;
   function integer(n) {
-    return (typeof n === "number" || n instanceof Number) && Number.isInteger(n)
+    return (
+      (typeof n === "number" || n instanceof Number) && Number.isInteger(n)
+    );
   }
   is.integer = integer;
   function boolean(b) {
@@ -277,7 +281,7 @@ var Types = (function() {
   function Types() {}
   Types.STRING = "String";
   Types.NUMBER = "f64";
-  Types.INTEGER = "i64"
+  Types.INTEGER = "i64";
   Types.BOOLEAN = "boolean";
   Types.ARRAY = "[]";
   return Types;
@@ -327,9 +331,14 @@ var Json2dts = (function() {
     var interfaceTab = outputModule ? "    " : "";
     var propertyTab = interfaceTab + "    ";
     Object.keys(this.classes).map(function(clsName) {
-      output = interfaceTab + "#[derive(Serialize, Deserialize)]\nstruct " + clsName + " {\n";
+      output =
+        interfaceTab +
+        "#[derive(Serialize, Deserialize)]\nstruct " +
+        clsName +
+        " {\n";
       Object.keys(_this.classes[clsName]).map(function(key) {
-        output += propertyTab + key + ": " + _this.classes[clsName][key] + ",\n";
+        output +=
+          propertyTab + key + ": " + _this.classes[clsName][key] + ",\n";
       });
       output += interfaceTab + "}\n\n";
       classes[clsName] = output;
@@ -372,7 +381,8 @@ var Json2dts = (function() {
               type = "Vec<()>";
             } else {
               if (is.object(value[0])) {
-                type = "Vec<" + _this.getInterfaceType(key, value[0]).trim() + ">";
+                type =
+                  "Vec<" + _this.getInterfaceType(key, value[0]).trim() + ">";
                 _this.analyse_object(value[0], key);
               } else {
                 type = "Vec<" + _this.getBasicType(value[0]) + ">";

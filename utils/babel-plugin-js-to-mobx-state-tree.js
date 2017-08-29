@@ -16,10 +16,7 @@ export default function({ types: t }) {
         if (t.isObjectExpression(uniqueElements[0])) {
           uniqueElements = [
             t.callExpression(
-              t.memberExpression(
-                t.identifier("t"),
-                t.identifier("model")
-              ),
+              t.memberExpression(t.identifier("t"), t.identifier("model")),
               uniqueElements
             )
           ];
@@ -31,10 +28,7 @@ export default function({ types: t }) {
         ) {
           path.replaceWith(
             t.callExpression(
-              t.memberExpression(
-                t.identifier("t"),
-                t.identifier("array")
-              ),
+              t.memberExpression(t.identifier("t"), t.identifier("array")),
               uniqueElements
             )
           );
@@ -76,26 +70,20 @@ export default function({ types: t }) {
         });
       },
 
-      ObjectProperty(path){
-          if(t.isStringLiteral(path.node.key)){
-              path.node.key = t.identifier(path.node.key.value)
-          }
+      ObjectProperty(path) {
+        if (t.isStringLiteral(path.node.key)) {
+          path.node.key = t.identifier(path.node.key.value);
+        }
       },
 
       ObjectExpression(path) {
-        if (
-          t.isCallExpression(path.parent)
-        )
-          return;
+        if (t.isCallExpression(path.parent)) return;
 
         const elements = [path.node];
 
         path.replaceWith(
           t.callExpression(
-            t.memberExpression(
-              t.identifier("t"),
-              t.identifier("model")
-            ),
+            t.memberExpression(t.identifier("t"), t.identifier("model")),
             elements
           )
         );

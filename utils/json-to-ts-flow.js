@@ -326,7 +326,12 @@ var Json2dts = (function() {
         ? interfaceTab + "type " + clsName + " = \n" + interfaceTab + "{\n"
         : interfaceTab + "interface " + clsName + " \n" + interfaceTab + "{\n";
       Object.keys(_this.classes[clsName]).map(function(key) {
-        output += propertyTab + key + ":" + _this.classes[clsName][key] + (flow ? ",\n" : ";\n");
+        output +=
+          propertyTab +
+          key +
+          ":" +
+          _this.classes[clsName][key] +
+          (flow ? ",\n" : ";\n");
       });
       output += interfaceTab + (flow ? "};\n\n" : "}\n\n");
       classes[clsName] = output;

@@ -920,6 +920,13 @@ babel-runtime@6.23.0, babel-runtime@^6.18.0, babel-runtime@^6.20.0, babel-runtim
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
+babel-runtime@6.x:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
+  dependencies:
+    core-js "^2.4.0"
+    regenerator-runtime "^0.11.0"
+
 babel-standalone@^6.25.0:
   version "6.25.0"
   resolved "https://registry.yarnpkg.com/babel-standalone/-/babel-standalone-6.25.0.tgz#759ef04574402b6d1a1b5efa62d18c9a47e4abeb"
@@ -1208,7 +1215,7 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-classnames@^2.2.5:
+classnames@2.x, classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -1261,6 +1268,16 @@ commander@^2.9.0:
 commondir@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/commondir/-/commondir-1.0.1.tgz#ddd800da0c66127393cca5950ea968a3aaf1253b"
+
+component-classes@^1.2.5:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/component-classes/-/component-classes-1.2.6.tgz#c642394c3618a4d8b0b8919efccbbd930e5cd691"
+  dependencies:
+    component-indexof "0.0.3"
+
+component-indexof@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/component-indexof/-/component-indexof-0.0.3.tgz#11d091312239eb8f32c8f25ae9cb002ffe8d3c24"
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -1398,6 +1415,13 @@ crypto-browserify@^3.11.0:
     pbkdf2 "^3.0.3"
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
+
+css-animation@1.x, css-animation@^1.3.2:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/css-animation/-/css-animation-1.4.1.tgz#5b8813125de0fbbbb0bbe1b472ae84221469b7a8"
+  dependencies:
+    babel-runtime "6.x"
+    component-classes "^1.2.5"
 
 css-color-keywords@^1.0.0:
   version "1.0.0"
@@ -3271,7 +3295,7 @@ prop-types-exact@^1.1.1:
     has "^1.0.1"
     object.assign "^4.0.4"
 
-prop-types@15.5.10, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.8:
+prop-types@15.5.10, prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.8:
   version "15.5.10"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.10.tgz#2797dfc3126182e3a95e3dfbb2e893ddd7456154"
   dependencies:
@@ -3344,6 +3368,23 @@ range-parser@^1.0.3, range-parser@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
 
+rc-animate@2.x:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.4.1.tgz#df3e0f56fe106afe4bf52ff408ced241c5178919"
+  dependencies:
+    babel-runtime "6.x"
+    css-animation "^1.3.2"
+    prop-types "15.x"
+
+rc-collapse@^1.7.6:
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/rc-collapse/-/rc-collapse-1.7.6.tgz#64433512d921f750df61433e675bb9547ba5ef6b"
+  dependencies:
+    classnames "2.x"
+    css-animation "1.x"
+    prop-types "^15.5.6"
+    rc-animate "2.x"
+
 rc@^1.1.7:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.1.tgz#2e03e8e42ee450b8cb3dce65be1bf8974e1dfd95"
@@ -3361,6 +3402,12 @@ react-ace@^5.1.2:
     lodash.get "^4.4.2"
     lodash.isequal "^4.1.1"
     opencollective "^1.0.3"
+    prop-types "^15.5.8"
+
+react-collapse@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-4.0.3.tgz#b96de959ed0092a43534630b599a4753dd76d543"
+  dependencies:
     prop-types "^15.5.8"
 
 react-collapsible@^2.0.0:
@@ -3419,6 +3466,10 @@ react-proxy@^3.0.0-alpha.0:
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-3.0.0-alpha.1.tgz#4400426bcfa80caa6724c7755695315209fa4b07"
   dependencies:
     lodash "^4.6.1"
+
+react-responsive-accordion@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-responsive-accordion/-/react-responsive-accordion-1.0.0.tgz#e2c39ee13e18daa40d9d78486beccd27f4988cba"
 
 react@^15.5.4, react@^15.6.1:
   version "15.6.1"
@@ -3505,6 +3556,10 @@ regenerate@^1.2.1:
 regenerator-runtime@^0.10.0:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
+
+regenerator-runtime@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.0.tgz#7e54fe5b5ccd5d6624ea6255c3473be090b802e1"
 
 regenerator-transform@0.9.11:
   version "0.9.11"

@@ -137,9 +137,13 @@ export default class ConversionPanel extends PureComponent {
   };
 
   copyCode = () => {
-    const { rightMode } = this.props
-    const { resultValue } = this.state
-    copy(rightMode !== "rust" ? window.js_beautify(resultValue, { e4x: true }) : resultValue);
+    const { rightMode } = this.props;
+    const { resultValue } = this.state;
+    copy(
+      rightMode !== "rust"
+        ? window.js_beautify(resultValue, { e4x: true })
+        : resultValue
+    );
     this.setState({
       info: "Code copied to clipboard.",
       infoType: "success"
@@ -348,7 +352,11 @@ export default class ConversionPanel extends PureComponent {
                 theme={theme}
                 name="code"
                 readOnly
-                value={rightMode !== "rust" ? window.js_beautify(resultValue, { e4x: true }) : resultValue}
+                value={
+                  rightMode !== "rust"
+                    ? window.js_beautify(resultValue, { e4x: true })
+                    : resultValue
+                }
                 editorProps={{ $blockScrolling: true }}
                 scrollMargin={[20]}
                 fontSize={14}
