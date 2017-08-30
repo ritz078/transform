@@ -128,8 +128,12 @@ const x = [
     ),
     content: [
       {
-        label: "GraphQL schema to TypeScript",
+        label: "GraphQL to TypeScript",
         path: "/graphql-to-typescript"
+      },
+      {
+        label: "GraphQL to Flow",
+        path: "/graphql-to-flow"
       }
     ]
   },

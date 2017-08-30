@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import cn from "classnames";
 import Router from "next/router";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
@@ -46,7 +47,10 @@ type Props = {
   initialCheckboxValue: ?boolean,
   leftTitle: string,
   rightTitle: string,
-  prettifyRightPanel: ?boolean
+  prettifyRightPanel: ?boolean,
+  splitLeft: ?boolean,
+  splitTitle: ?string,
+  splitValue: ?string
 };
 
 export default class ConversionPanel extends PureComponent {
@@ -56,31 +60,34 @@ export default class ConversionPanel extends PureComponent {
     leftMode: "javascript",
     rightMode: "javascript",
     pathname: "/",
-    prettifyRightPanel: true
+    prettifyRightPanel: true,
+    splitLeft: false
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      resultValue: "",
-      value: "",
-      info: "",
-      infoType: ""
-    };
-  }
+  state = {
+    resultValue: "",
+    value: "",
+    splitValue: "",
+    info: "",
+    infoType: ""
+  };
 
   componentDidMount() {
     const code = this.props.url.query.code || this.props.defaultText;
+    const splitValue = this.props.url.query.splitValue || this.props.splitValue;
     this.setState({
       value: code,
-      resultValue: this.props.getTransformedValue(code)
+      splitValue,
+      resultValue: this.props.getTransformedValue(code, splitValue)
     });
   }
 
-  onChange = (newValue: string) => {
+  onChange = (newValue: string, leftSplitValue: string) => {
     try {
-      const code = this.props.getTransformedValue(newValue);
+      const code = this.props.getTransformedValue(
+        newValue || this.state.value,
+        leftSplitValue || this.state.splitValue
+      );
 
       this.setState({
         resultValue: code,
@@ -88,7 +95,7 @@ export default class ConversionPanel extends PureComponent {
         infoType: ""
       });
 
-      this.setCodeInUrl(newValue);
+      this.setCodeInUrl(newValue, leftSplitValue);
     } catch (e) {
       this.setState({
         info: e.message,
@@ -97,15 +104,17 @@ export default class ConversionPanel extends PureComponent {
     }
 
     this.setState({
-      value: newValue
+      value: newValue || this.state.value,
+      splitValue: leftSplitValue || this.state.splitValue
     });
   };
 
-  setCodeInUrl = code => {
+  setCodeInUrl = (code, leftSplitValue) => {
     Router.replace({
       pathname: this.props.url.pathname,
       query: {
-        code
+        code,
+        splitValue: leftSplitValue
       }
     });
   };
@@ -162,9 +171,15 @@ export default class ConversionPanel extends PureComponent {
       initialCheckboxValue,
       leftTitle,
       rightTitle,
-      prettifyRightPanel
+      prettifyRightPanel,
+      splitLeft,
+      splitTitle
     } = this.props;
-    const { infoType, resultValue, value, info } = this.state;
+    const { infoType, resultValue, value, info, splitValue } = this.state;
+
+    const leftClass = cn("section left", {
+      split: splitLeft
+    });
 
     return (
       <div className="wrapper">
@@ -247,6 +262,7 @@ export default class ConversionPanel extends PureComponent {
             height: 50px;
             background-color: white;
             border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
             display: flex;
             align-items: center;
             padding: 0 10px;
@@ -273,6 +289,10 @@ export default class ConversionPanel extends PureComponent {
             flex: 1;
             width: 100% !important;
             height: 100% !important;
+          }
+
+          .split #code {
+            height: 50% !important;
           }
 
           .right #code {
@@ -307,7 +327,7 @@ export default class ConversionPanel extends PureComponent {
         `}</style>
 
         <div className="content-wrapper">
-          <div className="section left">
+          <div className={leftClass}>
             <div className="header">
               <div className="title">{leftTitle}</div>
               <button className="btn" onClick={this.prettifyCode}>
@@ -328,6 +348,30 @@ export default class ConversionPanel extends PureComponent {
                 fontSize={14}
                 wrapEnabled
               />
+            )}
+            {splitLeft &&
+            isBrowser && (
+              <div style={{ display: "contents" }}>
+                <div className="header">
+                  <div className="title">{splitTitle}</div>
+                  <button className="btn" onClick={this.prettifyCode}>
+                    Prettify
+                  </button>
+                </div>
+                <AceEditor
+                  mode={leftMode}
+                  theme={theme}
+                  onChange={x => this.onChange(null, x)}
+                  name="code"
+                  value={splitValue}
+                  editorProps={{ $blockScrolling: true }}
+                  highlightActiveLine={false}
+                  scrollMargin={[20]}
+                  focus
+                  fontSize={14}
+                  wrapEnabled
+                />
+              </div>
             )}
           </div>
           <div className="section right">
