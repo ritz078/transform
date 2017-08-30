@@ -340,9 +340,11 @@ var Json2dts = (function() {
       classes[clsName] = output;
     });
     output = "";
-    Object.keys(classes).sort().forEach(function(key) {
-      output += classes[key];
-    });
+    Object.keys(classes)
+      .sort()
+      .forEach(function(key) {
+        output += classes[key];
+      });
 
     return output;
   };

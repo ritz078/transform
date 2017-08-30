@@ -10,7 +10,6 @@ export default class Json2Ts extends PureComponent {
   };
 
   getTransformedValue = newValue => {
-    console.log(newValue);
     return schemaToInterfaces(JSON.parse(newValue), {
       legacy: this.state.legacyTS
     });

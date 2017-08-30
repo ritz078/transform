@@ -132,6 +132,16 @@ const x = [
         path: "/graphql-to-typescript"
       }
     ]
+  },
+  {
+    category: "XML",
+    iconName: "icon-html",
+    content: [
+      {
+        label: "XML to JSON",
+        path: "/xml-to-json"
+      }
+    ]
   }
 ];
 
@@ -157,7 +167,8 @@ function trackingScript() {
       i[r] ||
       function() {
         (i[r].q = i[r].q || []).push(arguments);
-      }), (i[r].l = 1 * new Date());
+      }),
+      (i[r].l = 1 * new Date());
     (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
     a.async = 1;
     a.src = g;
@@ -182,10 +193,7 @@ function renderFuzzyPicker(isOpen, onClose) {
       onChange={choice => Router.push(choice.path)}
       items={routes}
       itemValue={item => item.label}
-      renderItem={item =>
-        <span>
-          {item.label}
-        </span>}
+      renderItem={item => <span>{item.label}</span>}
     />
   );
 }
@@ -287,7 +295,7 @@ export default class Layout extends PureComponent {
             height: 70px;
             text-align: center;
             color: #fff;
-            font-family: 'Lato', sans-serif;
+            font-family: "Lato", sans-serif;
           }
 
           .footer svg {
@@ -323,7 +331,7 @@ export default class Layout extends PureComponent {
           }
 
           .info {
-            font-family: 'Lato';
+            font-family: "Lato";
             color: white;
             border: 1px solid #7b7b7b;
             padding: 8px;
@@ -337,7 +345,7 @@ export default class Layout extends PureComponent {
         <style jsx global>{`
           .Collapsible__trigger {
             color: whitesmoke;
-            font-family: 'Lato', sans-serif;
+            font-family: "Lato", sans-serif;
             line-height: 44px;
             cursor: pointer;
           }
@@ -370,7 +378,7 @@ export default class Layout extends PureComponent {
           .rc-collapse-content-box a {
             display: block;
             color: #fff;
-            font-family: 'Lato';
+            font-family: "Lato";
             line-height: 44px;
             padding-left: 20px;
             background-color: #3c3c3c;
@@ -407,20 +415,20 @@ export default class Layout extends PureComponent {
                     headerClass="Collapsible__trigger"
                     header={
                       <span>
-                        {route.iconName
-                          ? <i className={route.iconName} />
-                          : route.icon}{" "}
+                        {route.iconName ? (
+                          <i className={route.iconName} />
+                        ) : (
+                          route.icon
+                        )}{" "}
                         &nbsp; {route.category}
                       </span>
                     }
                   >
-                    {route.content.map(a =>
+                    {route.content.map(a => (
                       <Link prefetch href={a.path}>
-                        <a className={this.getClass(a.path)}>
-                          {a.label}
-                        </a>
+                        <a className={this.getClass(a.path)}>{a.label}</a>
                       </Link>
-                    )}
+                    ))}
                   </Panel>
                 );
               })}
@@ -438,12 +446,8 @@ export default class Layout extends PureComponent {
             </a>
           </div>
         </div>
-        <div className="content">
-          {this.props.children}
-        </div>
-        <script>
-          {isBrowser && trackingScript()}
-        </script>
+        <div className="content">{this.props.children}</div>
+        <script>{isBrowser && trackingScript()}</script>
       </div>
     );
   }

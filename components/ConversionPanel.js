@@ -43,7 +43,7 @@ type Props = {
   onCheckboxChange: Function,
   checkboxText: ?string,
   pathname: string,
-  initialCheckboxValue: boolean,
+  initialCheckboxValue: ?boolean,
   leftTitle: string,
   rightTitle: string,
   prettifyRightPanel: ?boolean
@@ -183,7 +183,7 @@ export default class ConversionPanel extends PureComponent {
           .footer {
             height: 50px;
             width: 100%;
-            font-family: 'Lato';
+            font-family: "Lato";
             background-color: white;
             box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
             z-index: 99;
@@ -221,8 +221,8 @@ export default class ConversionPanel extends PureComponent {
 
           .info {
             color: white;
-            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas',
-              'source-code-pro', monospace;
+            font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
+              "source-code-pro", monospace;
           }
 
           .btn {
@@ -252,7 +252,7 @@ export default class ConversionPanel extends PureComponent {
             padding: 0 10px;
             position: relative;
             justify-content: space-between;
-            font-family: 'Lato';
+            font-family: "Lato";
           }
 
           .title {
@@ -295,7 +295,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           label {
-            font-family: 'Lato';
+            font-family: "Lato";
             padding: 0 12px;
             cursor: pointer;
           }
@@ -309,14 +309,12 @@ export default class ConversionPanel extends PureComponent {
         <div className="content-wrapper">
           <div className="section left">
             <div className="header">
-              <div className="title">
-                {leftTitle}
-              </div>
+              <div className="title">{leftTitle}</div>
               <button className="btn" onClick={this.prettifyCode}>
                 Prettify
               </button>
             </div>
-            {isBrowser &&
+            {isBrowser && (
               <AceEditor
                 mode={leftMode}
                 theme={theme}
@@ -329,14 +327,13 @@ export default class ConversionPanel extends PureComponent {
                 focus
                 fontSize={14}
                 wrapEnabled
-              />}
+              />
+            )}
           </div>
           <div className="section right">
             <div className="header">
-              <div className="title">
-                {rightTitle}
-              </div>
-              {onCheckboxChange &&
+              <div className="title">{rightTitle}</div>
+              {onCheckboxChange && (
                 <label htmlFor="#text">
                   <input
                     type="checkbox"
@@ -345,21 +342,24 @@ export default class ConversionPanel extends PureComponent {
                     onChange={this.toggleCheckbox}
                   />{" "}
                   {checkboxText}
-                </label>}
+                </label>
+              )}
               <button className="btn" onClick={this.copyCode}>
                 Copy
               </button>
             </div>
-            {isBrowser &&
+            {isBrowser && (
               <AceEditor
                 mode={rightMode === "jsx" ? "javascript" : rightMode}
                 theme={theme}
                 name="code"
                 readOnly
                 value={
-                  prettifyRightPanel
-                    ? window.js_beautify(resultValue, { e4x: true })
-                    : resultValue
+                  prettifyRightPanel ? (
+                    window.js_beautify(resultValue, { e4x: true })
+                  ) : (
+                    resultValue
+                  )
                 }
                 editorProps={{ $blockScrolling: true }}
                 scrollMargin={[20]}
@@ -367,13 +367,12 @@ export default class ConversionPanel extends PureComponent {
                 showGutter={false}
                 highlightActiveLine={false}
                 wrapEnabled
-              />}
+              />
+            )}
           </div>
         </div>
         <div className={`footer${infoType ? " has-" + infoType : ""}`}>
-          <span className="info">
-            {info}
-          </span>
+          <span className="info">{info}</span>
         </div>
       </div>
     );

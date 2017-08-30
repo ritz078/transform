@@ -337,9 +337,11 @@ var Json2dts = (function() {
       classes[clsName] = output;
     });
     output = outputModule ? "module " + this.moduleName + "\n{\n" : "";
-    Object.keys(classes).sort().forEach(function(key) {
-      output += classes[key];
-    });
+    Object.keys(classes)
+      .sort()
+      .forEach(function(key) {
+        output += classes[key];
+      });
     return output + (outputModule ? "\n}" : "");
   };
   Json2dts.prototype.analyse_object = function(obj, objectName) {
