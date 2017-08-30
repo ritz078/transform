@@ -1,540 +1,112 @@
+import { compileToLegacyIR } from "apollo-codegen/lib/compiler/legacyIR";
+import CodeGenerator from "apollo-codegen/lib/utilities/CodeGenerator";
+import { parse, buildClientSchema } from "graphql";
+
 const x = {
   data: {
     __schema: {
       queryType: {
-        name: "Root"
+        name: "Query"
       },
-      mutationType: null,
+      mutationType: {
+        name: "Mutation"
+      },
       subscriptionType: null,
       types: [
         {
           kind: "OBJECT",
-          name: "Root",
-          description: null,
+          name: "Query",
+          description:
+            "The query type, represents all of the entry points into our object graph",
           fields: [
             {
-              name: "allFilms",
-              description: null,
+              name: "hero",
+              description: "",
               args: [
                 {
-                  name: "after",
-                  description: null,
+                  name: "episode",
+                  description: "",
                   type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
+                    kind: "ENUM",
+                    name: "Episode",
                     ofType: null
                   },
                   defaultValue: null
                 }
               ],
               type: {
-                kind: "OBJECT",
-                name: "FilmsConnection",
+                kind: "INTERFACE",
+                name: "Character",
                 ofType: null
               },
               isDeprecated: false,
               deprecationReason: null
             },
             {
-              name: "film",
-              description: null,
+              name: "reviews",
+              description: "",
+              args: [
+                {
+                  name: "episode",
+                  description: "",
+                  type: {
+                    kind: "NON_NULL",
+                    name: null,
+                    ofType: {
+                      kind: "ENUM",
+                      name: "Episode",
+                      ofType: null
+                    }
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "OBJECT",
+                  name: "Review",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "search",
+              description: "",
+              args: [
+                {
+                  name: "text",
+                  description: "",
+                  type: {
+                    kind: "SCALAR",
+                    name: "String",
+                    ofType: null
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "UNION",
+                  name: "SearchResult",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "character",
+              description: "",
               args: [
                 {
                   name: "id",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "filmID",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "allPeople",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "PeopleConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "person",
-              description: null,
-              args: [
-                {
-                  name: "id",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "personID",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "allPlanets",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "PlanetsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "planet",
-              description: null,
-              args: [
-                {
-                  name: "id",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "planetID",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "Planet",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "allSpecies",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "SpeciesConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "species",
-              description: null,
-              args: [
-                {
-                  name: "id",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "speciesID",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "Species",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "allStarships",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "StarshipsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starship",
-              description: null,
-              args: [
-                {
-                  name: "id",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "starshipID",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "Starship",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "allVehicles",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "VehiclesConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicle",
-              description: null,
-              args: [
-                {
-                  name: "id",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "vehicleID",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "ID",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "Vehicle",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "node",
-              description: "Fetches an object given its ID",
-              args: [
-                {
-                  name: "id",
-                  description: "The ID of an object",
+                  description: "",
                   type: {
                     kind: "NON_NULL",
                     name: null,
@@ -549,7 +121,88 @@ const x = {
               ],
               type: {
                 kind: "INTERFACE",
-                name: "Node",
+                name: "Character",
+                ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "droid",
+              description: "",
+              args: [
+                {
+                  name: "id",
+                  description: "",
+                  type: {
+                    kind: "NON_NULL",
+                    name: null,
+                    ofType: {
+                      kind: "SCALAR",
+                      name: "ID",
+                      ofType: null
+                    }
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "OBJECT",
+                name: "Droid",
+                ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "human",
+              description: "",
+              args: [
+                {
+                  name: "id",
+                  description: "",
+                  type: {
+                    kind: "NON_NULL",
+                    name: null,
+                    ofType: {
+                      kind: "SCALAR",
+                      name: "ID",
+                      ofType: null
+                    }
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "OBJECT",
+                name: "Human",
+                ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "starship",
+              description: "",
+              args: [
+                {
+                  name: "id",
+                  description: "",
+                  type: {
+                    kind: "NON_NULL",
+                    name: null,
+                    ofType: {
+                      kind: "SCALAR",
+                      name: "ID",
+                      ofType: null
+                    }
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "OBJECT",
+                name: "Starship",
                 ofType: null
               },
               isDeprecated: false,
@@ -558,6 +211,178 @@ const x = {
           ],
           inputFields: null,
           interfaces: [],
+          enumValues: null,
+          possibleTypes: null
+        },
+        {
+          kind: "ENUM",
+          name: "Episode",
+          description: "The episodes in the Star Wars trilogy",
+          fields: null,
+          inputFields: null,
+          interfaces: null,
+          enumValues: [
+            {
+              name: "NEWHOPE",
+              description:
+                "Star Wars Episode IV: A New Hope, released in 1977.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "EMPIRE",
+              description:
+                "Star Wars Episode V: The Empire Strikes Back, released in 1980.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "JEDI",
+              description:
+                "Star Wars Episode VI: Return of the Jedi, released in 1983.",
+              isDeprecated: false,
+              deprecationReason: null
+            }
+          ],
+          possibleTypes: null
+        },
+        {
+          kind: "INTERFACE",
+          name: "Character",
+          description: "A character from the Star Wars universe",
+          fields: [
+            {
+              name: "id",
+              description: "The ID of the character",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "ID",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "name",
+              description: "The name of the character",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "String",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "friends",
+              description:
+                "The friends of the character, or an empty list if they have none",
+              args: [],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "INTERFACE",
+                  name: "Character",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "friendsConnection",
+              description:
+                "The friends of the character exposed as a connection with edges",
+              args: [
+                {
+                  name: "first",
+                  description: "",
+                  type: {
+                    kind: "SCALAR",
+                    name: "Int",
+                    ofType: null
+                  },
+                  defaultValue: null
+                },
+                {
+                  name: "after",
+                  description: "",
+                  type: {
+                    kind: "SCALAR",
+                    name: "ID",
+                    ofType: null
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "OBJECT",
+                  name: "FriendsConnection",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "appearsIn",
+              description: "The movies this character appears in",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "LIST",
+                  name: null,
+                  ofType: {
+                    kind: "ENUM",
+                    name: "Episode",
+                    ofType: null
+                  }
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            }
+          ],
+          inputFields: null,
+          interfaces: null,
+          enumValues: null,
+          possibleTypes: [
+            {
+              kind: "OBJECT",
+              name: "Human",
+              ofType: null
+            },
+            {
+              kind: "OBJECT",
+              name: "Droid",
+              ofType: null
+            }
+          ]
+        },
+        {
+          kind: "SCALAR",
+          name: "ID",
+          description:
+            'The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.',
+          fields: null,
+          inputFields: null,
+          interfaces: null,
           enumValues: null,
           possibleTypes: null
         },
@@ -585,45 +410,12 @@ const x = {
         },
         {
           kind: "OBJECT",
-          name: "FilmsConnection",
-          description: "A connection to a list of items.",
+          name: "FriendsConnection",
+          description: "A connection object for a character's friends",
           fields: [
             {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "FilmsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
               name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
+              description: "The total number of friends",
               args: [],
               type: {
                 kind: "SCALAR",
@@ -634,16 +426,48 @@ const x = {
               deprecationReason: null
             },
             {
-              name: "films",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
+              name: "edges",
+              description: "The edges for each of the character's friends.",
               args: [],
               type: {
                 kind: "LIST",
                 name: null,
                 ofType: {
                   kind: "OBJECT",
-                  name: "Film",
+                  name: "FriendsEdge",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "friends",
+              description:
+                "A list of the friends, as a convenience when edges are not needed.",
+              args: [],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "INTERFACE",
+                  name: "Character",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "pageInfo",
+              description: "Information for paginating this connection",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "OBJECT",
+                  name: "PageInfo",
                   ofType: null
                 }
               },
@@ -658,19 +482,19 @@ const x = {
         },
         {
           kind: "OBJECT",
-          name: "PageInfo",
-          description: "Information about pagination in a connection.",
+          name: "FriendsEdge",
+          description: "An edge object for a character's friends",
           fields: [
             {
-              name: "hasNextPage",
-              description: "When paginating forwards, are there more items?",
+              name: "cursor",
+              description: "A cursor used for pagination",
               args: [],
               type: {
                 kind: "NON_NULL",
                 name: null,
                 ofType: {
                   kind: "SCALAR",
-                  name: "Boolean",
+                  name: "ID",
                   ofType: null
                 }
               },
@@ -678,28 +502,35 @@ const x = {
               deprecationReason: null
             },
             {
-              name: "hasPreviousPage",
-              description: "When paginating backwards, are there more items?",
+              name: "node",
+              description: "The character represented by this friendship edge",
               args: [],
               type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "Boolean",
-                  ofType: null
-                }
+                kind: "INTERFACE",
+                name: "Character",
+                ofType: null
               },
               isDeprecated: false,
               deprecationReason: null
-            },
+            }
+          ],
+          inputFields: null,
+          interfaces: [],
+          enumValues: null,
+          possibleTypes: null
+        },
+        {
+          kind: "OBJECT",
+          name: "PageInfo",
+          description: "Information for paginating this connection",
+          fields: [
             {
               name: "startCursor",
-              description: "When paginating backwards, the cursor to continue.",
+              description: "",
               args: [],
               type: {
                 kind: "SCALAR",
-                name: "String",
+                name: "ID",
                 ofType: null
               },
               isDeprecated: false,
@@ -707,12 +538,28 @@ const x = {
             },
             {
               name: "endCursor",
-              description: "When paginating forwards, the cursor to continue.",
+              description: "",
               args: [],
               type: {
                 kind: "SCALAR",
-                name: "String",
+                name: "ID",
                 ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "hasNextPage",
+              description: "",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "Boolean",
+                  ofType: null
+                }
               },
               isDeprecated: false,
               deprecationReason: null
@@ -736,33 +583,33 @@ const x = {
         },
         {
           kind: "OBJECT",
-          name: "FilmsEdge",
-          description: "An edge in a connection.",
+          name: "Review",
+          description: "Represents a review for a movie",
           fields: [
             {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
+              name: "stars",
+              description: "The number of stars this review gave, 1-5",
               args: [],
               type: {
                 kind: "NON_NULL",
                 name: null,
                 ofType: {
                   kind: "SCALAR",
-                  name: "String",
+                  name: "Int",
                   ofType: null
                 }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "commentary",
+              description: "Comment about the movie",
+              args: [],
+              type: {
+                kind: "SCALAR",
+                name: "String",
+                ofType: null
               },
               isDeprecated: false,
               deprecationReason: null
@@ -774,553 +621,58 @@ const x = {
           possibleTypes: null
         },
         {
-          kind: "OBJECT",
-          name: "Film",
-          description: "A single film.",
-          fields: [
-            {
-              name: "title",
-              description: "The title of this film.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "episodeID",
-              description: "The episode number of this film.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "openingCrawl",
-              description:
-                "The opening paragraphs at the beginning of this film.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "director",
-              description: "The name of the director of this film.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "producers",
-              description: "The name(s) of the producer(s) of this film.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "releaseDate",
-              description:
-                "The ISO 8601 date format of film release at original creator country.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "speciesConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "FilmSpeciesConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starshipConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "FilmStarshipsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicleConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "FilmVehiclesConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "characterConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "FilmCharactersConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "planetConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "FilmPlanetsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "created",
-              description:
-                "The ISO 8601 date format of the time that this resource was created.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edited",
-              description:
-                "The ISO 8601 date format of the time that this resource was edited.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "id",
-              description: "The ID of an object",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "ID",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [
-            {
-              kind: "INTERFACE",
-              name: "Node",
-              ofType: null
-            }
-          ],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "INTERFACE",
-          name: "Node",
-          description: "An object with an ID",
-          fields: [
-            {
-              name: "id",
-              description: "The id of the object.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "ID",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
+          kind: "UNION",
+          name: "SearchResult",
+          description: "",
+          fields: null,
           inputFields: null,
           interfaces: null,
           enumValues: null,
           possibleTypes: [
             {
               kind: "OBJECT",
-              name: "Planet",
+              name: "Human",
               ofType: null
             },
             {
               kind: "OBJECT",
-              name: "Species",
+              name: "Droid",
               ofType: null
             },
             {
               kind: "OBJECT",
               name: "Starship",
               ofType: null
-            },
-            {
-              kind: "OBJECT",
-              name: "Vehicle",
-              ofType: null
-            },
-            {
-              kind: "OBJECT",
-              name: "Person",
-              ofType: null
-            },
-            {
-              kind: "OBJECT",
-              name: "Film",
-              ofType: null
             }
           ]
         },
         {
           kind: "OBJECT",
-          name: "Planet",
-          description:
-            "A large mass, planet or planetoid in the Star Wars Universe, at the time of\n0 ABY.",
+          name: "Human",
+          description: "A humanoid creature from the Star Wars universe",
           fields: [
             {
+              name: "id",
+              description: "The ID of the human",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "ID",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
               name: "name",
-              description: "The name of this planet.",
+              description: "What this human calls themselves",
               args: [],
               type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "diameter",
-              description: "The diameter of this planet in kilometers.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "rotationPeriod",
-              description:
-                "The number of standard hours it takes for this planet to complete a single\nrotation on its axis.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "orbitalPeriod",
-              description:
-                "The number of standard days it takes for this planet to complete a single orbit\nof its local star.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "gravity",
-              description:
-                'A number denoting the gravity of this planet, where "1" is normal or 1 standard\nG. "2" is twice or 2 standard Gs. "0.5" is half or 0.5 standard Gs.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "population",
-              description:
-                "The average population of sentient beings inhabiting this planet.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "climates",
-              description: "The climates of this planet.",
-              args: [],
-              type: {
-                kind: "LIST",
+                kind: "NON_NULL",
                 name: null,
                 ofType: {
                   kind: "SCALAR",
@@ -1332,25 +684,43 @@ const x = {
               deprecationReason: null
             },
             {
-              name: "terrains",
-              description: "The terrains of this planet.",
+              name: "homePlanet",
+              description: "The home planet of the human, or null if unknown",
               args: [],
               type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
+                kind: "SCALAR",
+                name: "String",
+                ofType: null
               },
               isDeprecated: false,
               deprecationReason: null
             },
             {
-              name: "surfaceWater",
-              description:
-                "The percentage of the planet surface that is naturally occuring water or bodies\nof water.",
+              name: "height",
+              description: "Height in the preferred unit, default is meters",
+              args: [
+                {
+                  name: "unit",
+                  description: "",
+                  type: {
+                    kind: "ENUM",
+                    name: "LengthUnit",
+                    ofType: null
+                  },
+                  defaultValue: "METER"
+                }
+              ],
+              type: {
+                kind: "SCALAR",
+                name: "Float",
+                ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "mass",
+              description: "Mass in kilograms, or null if unknown",
               args: [],
               type: {
                 kind: "SCALAR",
@@ -1361,22 +731,30 @@ const x = {
               deprecationReason: null
             },
             {
-              name: "residentConnection",
-              description: null,
+              name: "friends",
+              description:
+                "This human's friends, or an empty list if they have none",
+              args: [],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "INTERFACE",
+                  name: "Character",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "friendsConnection",
+              description:
+                "The friends of the human exposed as a connection with edges",
               args: [
                 {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
                   name: "first",
-                  description: null,
+                  description: "",
                   type: {
                     kind: "SCALAR",
                     name: "Int",
@@ -1385,123 +763,59 @@ const x = {
                   defaultValue: null
                 },
                 {
-                  name: "before",
-                  description: null,
+                  name: "after",
+                  description: "",
                   type: {
                     kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
+                    name: "ID",
                     ofType: null
                   },
                   defaultValue: null
                 }
               ],
               type: {
-                kind: "OBJECT",
-                name: "PlanetResidentsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "filmConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "OBJECT",
+                  name: "FriendsConnection",
+                  ofType: null
                 }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "PlanetFilmsConnection",
-                ofType: null
               },
               isDeprecated: false,
               deprecationReason: null
             },
             {
-              name: "created",
-              description:
-                "The ISO 8601 date format of the time that this resource was created.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edited",
-              description:
-                "The ISO 8601 date format of the time that this resource was edited.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "id",
-              description: "The ID of an object",
+              name: "appearsIn",
+              description: "The movies this human appears in",
               args: [],
               type: {
                 kind: "NON_NULL",
                 name: null,
                 ofType: {
-                  kind: "SCALAR",
-                  name: "ID",
+                  kind: "LIST",
+                  name: null,
+                  ofType: {
+                    kind: "ENUM",
+                    name: "Episode",
+                    ofType: null
+                  }
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "starships",
+              description:
+                "A list of starships this person has piloted, or an empty list if none",
+              args: [],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "OBJECT",
+                  name: "Starship",
                   ofType: null
                 }
               },
@@ -1513,11 +827,34 @@ const x = {
           interfaces: [
             {
               kind: "INTERFACE",
-              name: "Node",
+              name: "Character",
               ofType: null
             }
           ],
           enumValues: null,
+          possibleTypes: null
+        },
+        {
+          kind: "ENUM",
+          name: "LengthUnit",
+          description: "Units of height",
+          fields: null,
+          inputFields: null,
+          interfaces: null,
+          enumValues: [
+            {
+              name: "METER",
+              description: "The standard unit around the world",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "FOOT",
+              description: "Primarily used in the United States",
+              isDeprecated: false,
+              deprecationReason: null
+            }
+          ],
           possibleTypes: null
         },
         {
@@ -1533,435 +870,12 @@ const x = {
         },
         {
           kind: "OBJECT",
-          name: "PlanetResidentsConnection",
-          description: "A connection to a list of items.",
+          name: "Starship",
+          description: "",
           fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PlanetResidentsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "residents",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Person",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PlanetResidentsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "Person",
-          description:
-            "An individual person or character within the Star Wars universe.",
-          fields: [
-            {
-              name: "name",
-              description: "The name of this person.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "birthYear",
-              description:
-                "The birth year of the person, using the in-universe standard of BBY or ABY -\nBefore the Battle of Yavin or After the Battle of Yavin. The Battle of Yavin is\na battle that occurs at the end of Star Wars episode IV: A New Hope.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "eyeColor",
-              description:
-                'The eye color of this person. Will be "unknown" if not known or "n/a" if the\nperson does not have an eye.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "gender",
-              description:
-                'The gender of this person. Either "Male", "Female" or "unknown",\n"n/a" if the person does not have a gender.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "hairColor",
-              description:
-                'The hair color of this person. Will be "unknown" if not known or "n/a" if the\nperson does not have hair.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "height",
-              description: "The height of the person in centimeters.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "mass",
-              description: "The mass of the person in kilograms.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "skinColor",
-              description: "The skin color of this person.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "homeworld",
-              description: "A planet that this person was born on or inhabits.",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Planet",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "filmConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "PersonFilmsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "species",
-              description:
-                "The species that this person belongs to, or null if unknown.",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Species",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starshipConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "PersonStarshipsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicleConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "PersonVehiclesConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "created",
-              description:
-                "The ISO 8601 date format of the time that this resource was created.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edited",
-              description:
-                "The ISO 8601 date format of the time that this resource was edited.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
             {
               name: "id",
-              description: "The ID of an object",
+              description: "The ID of the starship",
               args: [],
               type: {
                 kind: "NON_NULL",
@@ -1974,112 +888,10 @@ const x = {
               },
               isDeprecated: false,
               deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [
-            {
-              kind: "INTERFACE",
-              name: "Node",
-              ofType: null
-            }
-          ],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PersonFilmsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
             },
             {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PersonFilmsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "films",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Film",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PersonFilmsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
+              name: "name",
+              description: "The name of the starship",
               args: [],
               type: {
                 kind: "NON_NULL",
@@ -2092,61 +904,22 @@ const x = {
               },
               isDeprecated: false,
               deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "Species",
-          description:
-            "A type of person or character within the Star Wars Universe.",
-          fields: [
-            {
-              name: "name",
-              description: "The name of this species.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
             },
             {
-              name: "classification",
-              description:
-                'The classification of this species, such as "mammal" or "reptile".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "designation",
-              description:
-                'The designation of this species, such as "sentient".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "averageHeight",
-              description: "The average height of this species in centimeters.",
-              args: [],
+              name: "length",
+              description: "Length of the starship, along the longest axis",
+              args: [
+                {
+                  name: "unit",
+                  description: "",
+                  type: {
+                    kind: "ENUM",
+                    name: "LengthUnit",
+                    ofType: null
+                  },
+                  defaultValue: "METER"
+                }
+              ],
               type: {
                 kind: "SCALAR",
                 name: "Float",
@@ -2156,227 +929,48 @@ const x = {
               deprecationReason: null
             },
             {
-              name: "averageLifespan",
-              description: "The average lifespan of this species in years.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "eyeColors",
-              description:
-                "Common eye colors for this species, null if this species does not typically\nhave eyes.",
+              name: "coordinates",
+              description: "",
               args: [],
               type: {
                 kind: "LIST",
                 name: null,
                 ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
+                  kind: "NON_NULL",
+                  name: null,
+                  ofType: {
+                    kind: "LIST",
+                    name: null,
+                    ofType: {
+                      kind: "NON_NULL",
+                      name: null,
+                      ofType: {
+                        kind: "SCALAR",
+                        name: "Float",
+                        ofType: null
+                      }
+                    }
+                  }
                 }
               },
               isDeprecated: false,
               deprecationReason: null
-            },
-            {
-              name: "hairColors",
-              description:
-                "Common hair colors for this species, null if this species does not typically\nhave hair.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "skinColors",
-              description:
-                "Common skin colors for this species, null if this species does not typically\nhave skin.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "language",
-              description: "The language commonly spoken by this species.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "homeworld",
-              description: "A planet that this species originates from.",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Planet",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "personConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "SpeciesPeopleConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "filmConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "SpeciesFilmsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "created",
-              description:
-                "The ISO 8601 date format of the time that this resource was created.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edited",
-              description:
-                "The ISO 8601 date format of the time that this resource was edited.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
+            }
+          ],
+          inputFields: null,
+          interfaces: [],
+          enumValues: null,
+          possibleTypes: null
+        },
+        {
+          kind: "OBJECT",
+          name: "Droid",
+          description:
+            "An autonomous mechanical character in the Star Wars universe",
+          fields: [
             {
               name: "id",
-              description: "The ID of an object",
+              description: "The ID of the droid",
               args: [],
               type: {
                 kind: "NON_NULL",
@@ -2389,13 +983,116 @@ const x = {
               },
               isDeprecated: false,
               deprecationReason: null
+            },
+            {
+              name: "name",
+              description: "What others call this droid",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "String",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "friends",
+              description:
+                "This droid's friends, or an empty list if they have none",
+              args: [],
+              type: {
+                kind: "LIST",
+                name: null,
+                ofType: {
+                  kind: "INTERFACE",
+                  name: "Character",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "friendsConnection",
+              description:
+                "The friends of the droid exposed as a connection with edges",
+              args: [
+                {
+                  name: "first",
+                  description: "",
+                  type: {
+                    kind: "SCALAR",
+                    name: "Int",
+                    ofType: null
+                  },
+                  defaultValue: null
+                },
+                {
+                  name: "after",
+                  description: "",
+                  type: {
+                    kind: "SCALAR",
+                    name: "ID",
+                    ofType: null
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "OBJECT",
+                  name: "FriendsConnection",
+                  ofType: null
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "appearsIn",
+              description: "The movies this droid appears in",
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "LIST",
+                  name: null,
+                  ofType: {
+                    kind: "ENUM",
+                    name: "Episode",
+                    ofType: null
+                  }
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "primaryFunction",
+              description: "This droid's primary function",
+              args: [],
+              type: {
+                kind: "SCALAR",
+                name: "String",
+                ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
             }
           ],
           inputFields: null,
           interfaces: [
             {
               kind: "INTERFACE",
-              name: "Node",
+              name: "Character",
               ofType: null
             }
           ],
@@ -2404,2785 +1101,149 @@ const x = {
         },
         {
           kind: "OBJECT",
-          name: "SpeciesPeopleConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "SpeciesPeopleEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "people",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Person",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "SpeciesPeopleEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "SpeciesFilmsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "SpeciesFilmsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "films",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Film",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "SpeciesFilmsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "SCALAR",
-          name: "ID",
+          name: "Mutation",
           description:
-            'The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.',
-          fields: null,
+            "The mutation type, represents all updates we can make to our data",
+          fields: [
+            {
+              name: "createReview",
+              description: "",
+              args: [
+                {
+                  name: "episode",
+                  description: "",
+                  type: {
+                    kind: "ENUM",
+                    name: "Episode",
+                    ofType: null
+                  },
+                  defaultValue: null
+                },
+                {
+                  name: "review",
+                  description: "",
+                  type: {
+                    kind: "NON_NULL",
+                    name: null,
+                    ofType: {
+                      kind: "INPUT_OBJECT",
+                      name: "ReviewInput",
+                      ofType: null
+                    }
+                  },
+                  defaultValue: null
+                }
+              ],
+              type: {
+                kind: "OBJECT",
+                name: "Review",
+                ofType: null
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            }
+          ],
           inputFields: null,
+          interfaces: [],
+          enumValues: null,
+          possibleTypes: null
+        },
+        {
+          kind: "INPUT_OBJECT",
+          name: "ReviewInput",
+          description:
+            "The input object sent when someone is creating a new review",
+          fields: null,
+          inputFields: [
+            {
+              name: "stars",
+              description: "0-5 stars",
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "Int",
+                  ofType: null
+                }
+              },
+              defaultValue: null
+            },
+            {
+              name: "commentary",
+              description: "Comment about the movie, optional",
+              type: {
+                kind: "SCALAR",
+                name: "String",
+                ofType: null
+              },
+              defaultValue: null
+            },
+            {
+              name: "favorite_color",
+              description: "Favorite color, optional",
+              type: {
+                kind: "INPUT_OBJECT",
+                name: "ColorInput",
+                ofType: null
+              },
+              defaultValue: null
+            }
+          ],
           interfaces: null,
           enumValues: null,
           possibleTypes: null
         },
         {
-          kind: "OBJECT",
-          name: "PersonStarshipsConnection",
-          description: "A connection to a list of items.",
-          fields: [
+          kind: "INPUT_OBJECT",
+          name: "ColorInput",
+          description: "The input object sent when passing in a color",
+          fields: null,
+          inputFields: [
             {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PersonStarshipsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starships",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Starship",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PersonStarshipsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Starship",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
+              name: "red",
+              description: "",
               type: {
                 kind: "NON_NULL",
                 name: null,
                 ofType: {
                   kind: "SCALAR",
-                  name: "String",
+                  name: "Int",
                   ofType: null
                 }
               },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "Starship",
-          description:
-            "A single transport craft that has hyperdrive capability.",
-          fields: [
-            {
-              name: "name",
-              description:
-                'The name of this starship. The common name, such as "Death Star".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
+              defaultValue: null
             },
             {
-              name: "model",
-              description:
-                'The model or official name of this starship. Such as "T-65 X-wing" or "DS-1\nOrbital Battle Station".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starshipClass",
-              description:
-                'The class of this starship, such as "Starfighter" or "Deep Space Mobile\nBattlestation"',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "manufacturers",
-              description: "The manufacturers of this starship.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "costInCredits",
-              description:
-                "The cost of this starship new, in galactic credits.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Float",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "length",
-              description: "The length of this starship in meters.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Float",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "crew",
-              description:
-                "The number of personnel needed to run or pilot this starship.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "passengers",
-              description:
-                "The number of non-essential people this starship can transport.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "maxAtmospheringSpeed",
-              description:
-                "The maximum speed of this starship in atmosphere. null if this starship is\nincapable of atmosphering flight.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "hyperdriveRating",
-              description: "The class of this starships hyperdrive.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Float",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "MGLT",
-              description:
-                'The Maximum number of Megalights this starship can travel in a standard hour.\nA "Megalight" is a standard unit of distance and has never been defined before\nwithin the Star Wars universe. This figure is only really useful for measuring\nthe difference in speed of starships. We can assume it is similar to AU, the\ndistance between our Sun (Sol) and Earth.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cargoCapacity",
-              description:
-                "The maximum number of kilograms that this starship can transport.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Float",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "consumables",
-              description:
-                "The maximum length of time that this starship can provide consumables for its\nentire crew without having to resupply.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "pilotConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "StarshipPilotsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "filmConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "StarshipFilmsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "created",
-              description:
-                "The ISO 8601 date format of the time that this resource was created.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edited",
-              description:
-                "The ISO 8601 date format of the time that this resource was edited.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "id",
-              description: "The ID of an object",
-              args: [],
+              name: "green",
+              description: "",
               type: {
                 kind: "NON_NULL",
                 name: null,
                 ofType: {
                   kind: "SCALAR",
-                  name: "ID",
+                  name: "Int",
                   ofType: null
                 }
               },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [
-            {
-              kind: "INTERFACE",
-              name: "Node",
-              ofType: null
-            }
-          ],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "StarshipPilotsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
+              defaultValue: null
             },
             {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "StarshipPilotsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "pilots",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Person",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "StarshipPilotsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
+              name: "blue",
+              description: "",
               type: {
                 kind: "NON_NULL",
                 name: null,
                 ofType: {
                   kind: "SCALAR",
-                  name: "String",
+                  name: "Int",
                   ofType: null
                 }
               },
-              isDeprecated: false,
-              deprecationReason: null
+              defaultValue: null
             }
           ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "StarshipFilmsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "StarshipFilmsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "films",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Film",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "StarshipFilmsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PersonVehiclesConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PersonVehiclesEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicles",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Vehicle",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PersonVehiclesEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Vehicle",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "Vehicle",
-          description:
-            "A single transport craft that does not have hyperdrive capability",
-          fields: [
-            {
-              name: "name",
-              description:
-                'The name of this vehicle. The common name, such as "Sand Crawler" or "Speeder\nbike".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "model",
-              description:
-                'The model or official name of this vehicle. Such as "All-Terrain Attack\nTransport".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicleClass",
-              description:
-                'The class of this vehicle, such as "Wheeled" or "Repulsorcraft".',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "manufacturers",
-              description: "The manufacturers of this vehicle.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "costInCredits",
-              description: "The cost of this vehicle new, in Galactic Credits.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "length",
-              description: "The length of this vehicle in meters.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Float",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "crew",
-              description:
-                "The number of personnel needed to run or pilot this vehicle.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "passengers",
-              description:
-                "The number of non-essential people this vehicle can transport.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "maxAtmospheringSpeed",
-              description: "The maximum speed of this vehicle in atmosphere.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cargoCapacity",
-              description:
-                "The maximum number of kilograms that this vehicle can transport.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "consumables",
-              description:
-                "The maximum length of time that this vehicle can provide consumables for its\nentire crew without having to resupply.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "pilotConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "VehiclePilotsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "filmConnection",
-              description: null,
-              args: [
-                {
-                  name: "after",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "first",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "before",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "String",
-                    ofType: null
-                  },
-                  defaultValue: null
-                },
-                {
-                  name: "last",
-                  description: null,
-                  type: {
-                    kind: "SCALAR",
-                    name: "Int",
-                    ofType: null
-                  },
-                  defaultValue: null
-                }
-              ],
-              type: {
-                kind: "OBJECT",
-                name: "VehicleFilmsConnection",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "created",
-              description:
-                "The ISO 8601 date format of the time that this resource was created.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edited",
-              description:
-                "The ISO 8601 date format of the time that this resource was edited.",
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "String",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "id",
-              description: "The ID of an object",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "ID",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [
-            {
-              kind: "INTERFACE",
-              name: "Node",
-              ofType: null
-            }
-          ],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "VehiclePilotsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "VehiclePilotsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "pilots",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Person",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "VehiclePilotsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "VehicleFilmsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "VehicleFilmsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "films",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Film",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "VehicleFilmsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PlanetFilmsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PlanetFilmsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "films",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Film",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PlanetFilmsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Film",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmSpeciesConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "FilmSpeciesEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "species",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Species",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmSpeciesEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Species",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmStarshipsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "FilmStarshipsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starships",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Starship",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmStarshipsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Starship",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmVehiclesConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "FilmVehiclesEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicles",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Vehicle",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmVehiclesEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Vehicle",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmCharactersConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "FilmCharactersEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "characters",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Person",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmCharactersEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmPlanetsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "FilmPlanetsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "planets",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Planet",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "FilmPlanetsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Planet",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PeopleConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PeopleEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "people",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Person",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PeopleEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Person",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PlanetsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PlanetsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "planets",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Planet",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "PlanetsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Planet",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "SpeciesConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "SpeciesEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "species",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Species",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "SpeciesEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Species",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "StarshipsConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "StarshipsEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "starships",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Starship",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "StarshipsEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Starship",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "VehiclesConnection",
-          description: "A connection to a list of items.",
-          fields: [
-            {
-              name: "pageInfo",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "PageInfo",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "edges",
-              description: "Information to aid in pagination.",
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "VehiclesEdge",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "totalCount",
-              description:
-                'A count of the total number of objects in this connection, ignoring pagination.\nThis allows a client to fetch the first five objects by passing "5" as the\nargument to "first", then fetch the total count so it could display "5 of 83",\nfor example.',
-              args: [],
-              type: {
-                kind: "SCALAR",
-                name: "Int",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "vehicles",
-              description:
-                'A list of all of the objects returned in the connection. This is a convenience\nfield provided for quickly exploring the API; rather than querying for\n"{ edges { node } }" when no edge data is needed, this field can be be used\ninstead. Note that when clients like Relay need to fetch the "cursor" field on\nthe edge to enable efficient pagination, this shortcut cannot be used, and the\nfull "{ edges { node } }" version should be used instead.',
-              args: [],
-              type: {
-                kind: "LIST",
-                name: null,
-                ofType: {
-                  kind: "OBJECT",
-                  name: "Vehicle",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
-          enumValues: null,
-          possibleTypes: null
-        },
-        {
-          kind: "OBJECT",
-          name: "VehiclesEdge",
-          description: "An edge in a connection.",
-          fields: [
-            {
-              name: "node",
-              description: "The item at the end of the edge",
-              args: [],
-              type: {
-                kind: "OBJECT",
-                name: "Vehicle",
-                ofType: null
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            },
-            {
-              name: "cursor",
-              description: "A cursor for use in pagination",
-              args: [],
-              type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "String",
-                  ofType: null
-                }
-              },
-              isDeprecated: false,
-              deprecationReason: null
-            }
-          ],
-          inputFields: null,
-          interfaces: [],
+          interfaces: null,
           enumValues: null,
           possibleTypes: null
         },
@@ -5207,7 +1268,8 @@ const x = {
                     name: null,
                     ofType: {
                       kind: "OBJECT",
-                      name: "__Type"
+                      name: "__Type",
+                      ofType: null
                     }
                   }
                 }
@@ -5272,7 +1334,8 @@ const x = {
                     name: null,
                     ofType: {
                       kind: "OBJECT",
-                      name: "__Directive"
+                      name: "__Directive",
+                      ofType: null
                     }
                   }
                 }
@@ -5588,7 +1651,8 @@ const x = {
                     name: null,
                     ofType: {
                       kind: "OBJECT",
-                      name: "__InputValue"
+                      name: "__InputValue",
+                      ofType: null
                     }
                   }
                 }
@@ -5787,7 +1851,7 @@ const x = {
           kind: "OBJECT",
           name: "__Directive",
           description:
-            "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL’s execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
+            "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
           fields: [
             {
               name: "name",
@@ -5818,6 +1882,30 @@ const x = {
               deprecationReason: null
             },
             {
+              name: "locations",
+              description: null,
+              args: [],
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "LIST",
+                  name: null,
+                  ofType: {
+                    kind: "NON_NULL",
+                    name: null,
+                    ofType: {
+                      kind: "ENUM",
+                      name: "__DirectiveLocation",
+                      ofType: null
+                    }
+                  }
+                }
+              },
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
               name: "args",
               description: null,
               args: [],
@@ -5832,7 +1920,8 @@ const x = {
                     name: null,
                     ofType: {
                       kind: "OBJECT",
-                      name: "__InputValue"
+                      name: "__InputValue",
+                      ofType: null
                     }
                   }
                 }
@@ -5853,8 +1942,8 @@ const x = {
                   ofType: null
                 }
               },
-              isDeprecated: false,
-              deprecationReason: null
+              isDeprecated: true,
+              deprecationReason: "Use `locations`."
             },
             {
               name: "onFragment",
@@ -5869,8 +1958,8 @@ const x = {
                   ofType: null
                 }
               },
-              isDeprecated: false,
-              deprecationReason: null
+              isDeprecated: true,
+              deprecationReason: "Use `locations`."
             },
             {
               name: "onField",
@@ -5885,21 +1974,166 @@ const x = {
                   ofType: null
                 }
               },
-              isDeprecated: false,
-              deprecationReason: null
+              isDeprecated: true,
+              deprecationReason: "Use `locations`."
             }
           ],
           inputFields: null,
           interfaces: [],
           enumValues: null,
           possibleTypes: null
+        },
+        {
+          kind: "ENUM",
+          name: "__DirectiveLocation",
+          description:
+            "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
+          fields: null,
+          inputFields: null,
+          interfaces: null,
+          enumValues: [
+            {
+              name: "QUERY",
+              description: "Location adjacent to a query operation.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "MUTATION",
+              description: "Location adjacent to a mutation operation.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "SUBSCRIPTION",
+              description: "Location adjacent to a subscription operation.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "FIELD",
+              description: "Location adjacent to a field.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "FRAGMENT_DEFINITION",
+              description: "Location adjacent to a fragment definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "FRAGMENT_SPREAD",
+              description: "Location adjacent to a fragment spread.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "INLINE_FRAGMENT",
+              description: "Location adjacent to an inline fragment.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "SCHEMA",
+              description: "Location adjacent to a schema definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "SCALAR",
+              description: "Location adjacent to a scalar definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "OBJECT",
+              description: "Location adjacent to an object type definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "FIELD_DEFINITION",
+              description: "Location adjacent to a field definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "ARGUMENT_DEFINITION",
+              description: "Location adjacent to an argument definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "INTERFACE",
+              description: "Location adjacent to an interface definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "UNION",
+              description: "Location adjacent to a union definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "ENUM",
+              description: "Location adjacent to an enum definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "ENUM_VALUE",
+              description: "Location adjacent to an enum value definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "INPUT_OBJECT",
+              description:
+                "Location adjacent to an input object type definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            },
+            {
+              name: "INPUT_FIELD_DEFINITION",
+              description:
+                "Location adjacent to an input object field definition.",
+              isDeprecated: false,
+              deprecationReason: null
+            }
+          ],
+          possibleTypes: null
         }
       ],
       directives: [
         {
+          name: "skip",
+          description:
+            "Directs the executor to skip this field or fragment when the `if` argument is true.",
+          locations: ["FIELD", "FRAGMENT_SPREAD", "INLINE_FRAGMENT"],
+          args: [
+            {
+              name: "if",
+              description: "Skipped when true.",
+              type: {
+                kind: "NON_NULL",
+                name: null,
+                ofType: {
+                  kind: "SCALAR",
+                  name: "Boolean",
+                  ofType: null
+                }
+              },
+              defaultValue: null
+            }
+          ]
+        },
+        {
           name: "include",
           description:
             "Directs the executor to include this field or fragment only when the `if` argument is true.",
+          locations: ["FIELD", "FRAGMENT_SPREAD", "INLINE_FRAGMENT"],
           args: [
             {
               name: "if",
@@ -5918,23 +2152,21 @@ const x = {
           ]
         },
         {
-          name: "skip",
+          name: "deprecated",
           description:
-            "Directs the executor to skip this field or fragment when the `if` argument is true.",
+            "Marks an element of a GraphQL schema as no longer supported.",
+          locations: ["FIELD_DEFINITION", "ENUM_VALUE"],
           args: [
             {
-              name: "if",
-              description: "Skipped when true.",
+              name: "reason",
+              description:
+                "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted in [Markdown](https://daringfireball.net/projects/markdown/).",
               type: {
-                kind: "NON_NULL",
-                name: null,
-                ofType: {
-                  kind: "SCALAR",
-                  name: "Boolean",
-                  ofType: null
-                }
+                kind: "SCALAR",
+                name: "String",
+                ofType: null
               },
-              defaultValue: null
+              defaultValue: '"No longer supported"'
             }
           ]
         }
@@ -5943,4 +2175,71 @@ const x = {
   }
 };
 
-export default JSON.stringify(x, null, 2);
+export const dummySchema = JSON.stringify(x, null, 2);
+
+export const dummyQuery = `query HeroAndFriendsNames {
+  hero {
+    name
+    ...heroFriends
+  }
+}
+
+fragment heroFriends on Character {
+  friends {
+    name
+  }
+}`;
+
+export function setup(schema) {
+  const context = {
+    schema: schema,
+    operations: {},
+    fragments: {},
+    typesUsed: {}
+  };
+
+  const generator = new CodeGenerator(context);
+
+  const compileFromSource = source => {
+    const document = parse(source);
+    const context = compileToLegacyIR(schema, document, {
+      mergeInFieldsFromFragmentSpreads: true,
+      addTypename: true
+    });
+    generator.context = context;
+    return context;
+  };
+
+  const addFragment = fragment => {
+    generator.context.fragments[fragment.fragmentName] = fragment;
+  };
+
+  return { generator, compileFromSource, addFragment };
+}
+
+export function transform(newValue, splitValue, generateSource) {
+  if (!splitValue || !newValue) {
+    return;
+  }
+  const schemaData = JSON.parse(newValue);
+
+  if (!schemaData.data && !schemaData.__schema) {
+    throw new Error(
+      "GraphQL schema file should contain a valid GraphQL introspection query result"
+    );
+  }
+
+  try {
+    const schema = buildClientSchema(
+      schemaData.data ? schemaData.data : schemaData
+    );
+
+    const { compileFromSource } = setup(schema);
+
+    const context = compileFromSource(splitValue);
+
+    return generateSource(context);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
