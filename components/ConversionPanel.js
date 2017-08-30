@@ -354,9 +354,6 @@ export default class ConversionPanel extends PureComponent {
               <div style={{ display: "contents" }}>
                 <div className="header">
                   <div className="title">{splitTitle}</div>
-                  <button className="btn" onClick={this.prettifyCode}>
-                    Prettify
-                  </button>
                 </div>
                 <AceEditor
                   mode={leftMode}

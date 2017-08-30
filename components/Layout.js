@@ -387,6 +387,7 @@ export default class Layout extends PureComponent {
             padding-left: 20px;
             background-color: #3c3c3c;
             font-size: 14px;
+            text-decoration: none;
           }
         `}</style>
 
