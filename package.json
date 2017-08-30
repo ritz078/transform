@@ -15,6 +15,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@gql2ts/from-schema": "^1.2.1",
+    "@gql2ts/language-flow": "^1.2.1",
     "@tsuyoshiwada/htmltojsx": "^0.0.4",
     "babel-standalone": "^6.25.0",
     "babili-webpack-plugin": "^0.1.2",

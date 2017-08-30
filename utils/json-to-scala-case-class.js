@@ -6,16 +6,16 @@ var is;
   var hasOwn = ObjProto.hasOwnProperty;
   var index_of = ArrayProto.indexOf
     ? function(arr, val) {
-      return arr.indexOf(val);
-    }
-    : function(arr, val) {
-      for (var i = 0, l = arr.length; i < l; i++) {
-        if (arr[i] === val) {
-          return i;
-        }
+        return arr.indexOf(val);
       }
-      return -1;
-    };
+    : function(arr, val) {
+        for (var i = 0, l = arr.length; i < l; i++) {
+          if (arr[i] === val) {
+            return i;
+          }
+        }
+        return -1;
+      };
   function string(s) {
     return typeof s === "string" || s instanceof String;
   }
@@ -61,11 +61,11 @@ var is;
   is.element =
     typeof HTMLElement !== "undefined"
       ? function(e) {
-        return e instanceof HTMLElement;
-      }
+          return e instanceof HTMLElement;
+        }
       : function(e) {
-        return !!(e && e.nodeType === 1);
-      };
+          return !!(e && e.nodeType === 1);
+        };
   function numeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
@@ -324,17 +324,14 @@ var Json2dts = (function() {
     return this.classes;
   };
   Json2dts.prototype.getCode = function(flow) {
-    const _this = this
-    let output
-    const classes = {}
-    const outputModule = this.moduleName !== ''
-    const interfaceTab = outputModule ? '\t' : ''
-    const propertyTab = interfaceTab + '\t'
+    const _this = this;
+    let output;
+    const classes = {};
+    const outputModule = this.moduleName !== "";
+    const interfaceTab = outputModule ? "\t" : "";
+    const propertyTab = interfaceTab + "\t";
     Object.keys(this.classes).map(function(clsName) {
-      output =
-        interfaceTab + 'case class ' +
-        clsName +
-        " (\n";
+      output = interfaceTab + "case class " + clsName + " (\n";
       Object.keys(_this.classes[clsName]).map(function(key) {
         output +=
           propertyTab + key + ": " + _this.classes[clsName][key] + ",\n";
@@ -350,16 +347,16 @@ var Json2dts = (function() {
     return output;
   };
   Json2dts.prototype.analyse_object = function(obj, objectName) {
-    const _this = this
+    const _this = this;
     if (objectName === void 0) {
       objectName = "json";
     }
     objectName = this.getInterfaceType(objectName, obj);
     this.classes[objectName] = this.classes[objectName] || {};
     Object.keys(obj).map(function(key) {
-      let type = 'string'
-      const sha = ''
-      const value = obj[key]
+      let type = "string";
+      const sha = "";
+      const value = obj[key];
       switch (true) {
         case is.string(value):
           type = Types.STRING;

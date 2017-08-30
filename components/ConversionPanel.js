@@ -45,7 +45,8 @@ type Props = {
   pathname: string,
   initialCheckboxValue: boolean,
   leftTitle: string,
-  rightTitle: string
+  rightTitle: string,
+  prettifyRightPanel: ?boolean
 };
 
 export default class ConversionPanel extends PureComponent {
@@ -54,7 +55,8 @@ export default class ConversionPanel extends PureComponent {
   static defaultProps = {
     leftMode: "javascript",
     rightMode: "javascript",
-    pathname: "/"
+    pathname: "/",
+    prettifyRightPanel: true
   };
 
   constructor(props) {
@@ -159,7 +161,8 @@ export default class ConversionPanel extends PureComponent {
       checkboxText,
       initialCheckboxValue,
       leftTitle,
-      rightTitle
+      rightTitle,
+      prettifyRightPanel
     } = this.props;
     const { infoType, resultValue, value, info } = this.state;
 
@@ -354,7 +357,7 @@ export default class ConversionPanel extends PureComponent {
                 name="code"
                 readOnly
                 value={
-                  rightMode !== "rust"
+                  prettifyRightPanel
                     ? window.js_beautify(resultValue, { e4x: true })
                     : resultValue
                 }

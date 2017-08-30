@@ -2,6 +2,35 @@
 # yarn lockfile v1
 
 
+"@gql2ts/from-schema@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.2.1.tgz#eed6d82164ba85546d40efee9f55d4852e809634"
+  dependencies:
+    "@gql2ts/language-typescript" "^1.2.1"
+    "@gql2ts/util" "^1.2.1"
+    graphql "^0.10.5"
+
+"@gql2ts/language-flow@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-flow/-/language-flow-1.2.1.tgz#ccd33f5b4f52e803cc89ed605220a10779e8c2e3"
+  dependencies:
+    "@gql2ts/language-typescript" "^1.2.1"
+    "@gql2ts/util" "^1.2.1"
+
+"@gql2ts/language-typescript@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.2.1.tgz#e45e641e76721d038af0f2e1875c7420926347f1"
+  dependencies:
+    "@gql2ts/util" "^1.2.1"
+    humps "^2.0.0"
+    typescript "^2.2.2"
+
+"@gql2ts/util@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.2.1.tgz#fad2d545051aeded1bf3ede94139ad52b9003a66"
+  dependencies:
+    graphql "^0.10.5"
+
 "@tsuyoshiwada/htmltojsx@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@tsuyoshiwada/htmltojsx/-/htmltojsx-0.0.4.tgz#73e86b580183ba680f53bc53e84f19d3378f8857"
@@ -2140,6 +2169,12 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
+graphql@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.10.5.tgz#c9be17ca2bdfdbd134077ffd9bbaa48b8becd298"
+  dependencies:
+    iterall "^1.1.0"
+
 gzip-size@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-3.0.0.tgz#546188e9bdc337f673772f81660464b389dce520"
@@ -2272,6 +2307,10 @@ http-status@1.0.1:
 https-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
+
+humps@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/humps/-/humps-2.0.1.tgz#dd02ea6081bd0568dc5d073184463957ba9ef9aa"
 
 iconv-lite@^0.4.17, iconv-lite@~0.4.13:
   version "0.4.18"
@@ -2496,6 +2535,10 @@ isomorphic-fetch@^2.1.1:
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
+
+iterall@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.1.tgz#f7f0af11e9a04ec6426260f5019d9fcca4d50214"
 
 js-beautify@^1.6.12:
   version "1.6.14"
@@ -4085,6 +4128,10 @@ type-is@~1.6.15:
 type-of-is@^3.4.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/type-of-is/-/type-of-is-3.5.1.tgz#eec2fc89b828dbf9900eb6416eee30f4fe0fcd31"
+
+typescript@^2.2.2:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.1.tgz#ce7cc93ada3de19475cc9d17e3adea7aee1832aa"
 
 ua-parser-js@^0.7.9:
   version "0.7.12"
