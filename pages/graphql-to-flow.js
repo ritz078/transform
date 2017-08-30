@@ -13,7 +13,7 @@ export default class Json2Ts extends PureComponent {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
-          leftTitle="GraphQL Schema"
+          leftTitle="Schema"
           rightTitle="Flow"
           getTransformedValue={this.getTransformedValue}
           name={"graphql_to_typescript"}

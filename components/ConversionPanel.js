@@ -83,11 +83,15 @@ export default class ConversionPanel extends PureComponent {
   }
 
   onChange = (newValue: string, leftSplitValue: string) => {
+    const nValue = newValue || this.state.value;
+    const splitValue =
+      leftSplitValue && typeof leftSplitValue === "string"
+        ? leftSplitValue
+        : this.state.splitValue;
+
+    debugger;
     try {
-      const code = this.props.getTransformedValue(
-        newValue || this.state.value,
-        leftSplitValue || this.state.splitValue
-      );
+      const code = this.props.getTransformedValue(nValue, splitValue);
 
       this.setState({
         resultValue: code,
@@ -104,8 +108,8 @@ export default class ConversionPanel extends PureComponent {
     }
 
     this.setState({
-      value: newValue || this.state.value,
-      splitValue: leftSplitValue || this.state.splitValue
+      value: nValue,
+      splitValue: splitValue
     });
   };
 
