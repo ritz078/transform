@@ -430,7 +430,7 @@ export default class Layout extends PureComponent {
                     }
                   >
                     {route.content.map(a => (
-                      <Link prefetch href={a.path}>
+                      <Link key={a.path} prefetch href={a.path}>
                         <a className={this.getClass(a.path)}>{a.label}</a>
                       </Link>
                     ))}
