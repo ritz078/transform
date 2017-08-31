@@ -72,16 +72,19 @@ export default class ConversionPanel extends PureComponent {
   };
 
   componentDidMount() {
-    const code = this.props.url.query.code || this.props.defaultText;
-    const splitValue = this.props.url.query.splitValue || this.props.splitValue;
+    const {defaultText, splitValue} = this.props
+
+    const code = defaultText;
+    const sValue = splitValue;
     this.setState({
       value: code,
-      splitValue,
-      resultValue: this.props.getTransformedValue(code, splitValue)
+      splitValue: sValue,
+      resultValue: this.props.getTransformedValue(code, sValue)
     });
   }
 
-  onChange = (newValue: string, leftSplitValue: string) => {
+  onChange = (newValue, leftSplitValue) => {
+    debugger
     const nValue = newValue || this.state.value;
     const splitValue =
       leftSplitValue && typeof leftSplitValue === "string"
@@ -96,8 +99,6 @@ export default class ConversionPanel extends PureComponent {
         info: "",
         infoType: ""
       });
-
-      this.setCodeInUrl(newValue, leftSplitValue);
     } catch (e) {
       this.setState({
         info: e.message,
@@ -111,17 +112,7 @@ export default class ConversionPanel extends PureComponent {
     });
   };
 
-  setCodeInUrl = (code, leftSplitValue) => {
-    Router.replace({
-      pathname: this.props.url.pathname,
-      query: {
-        code,
-        splitValue: leftSplitValue
-      }
-    });
-  };
-
-  toggleCheckbox = (e: MouseEvent) => {
+  toggleCheckbox = (e) => {
     const checked = e.currentTarget.checked;
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
@@ -132,13 +123,10 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
-  setResult = (result: string) => {
+  setResult = (result) => {
     this.setState(
       {
         value: result
-      },
-      () => {
-        this.setCodeInUrl(result);
       }
     );
   };
@@ -229,7 +217,7 @@ export default class ConversionPanel extends PureComponent {
           .section {
             flex: 1;
             position: relative;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 50px);
           }
 
           .right {
@@ -294,7 +282,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           .split #code {
-            height: 50% !important;
+            height: calc(50% - 52px) !important;
           }
 
           .right #code {
@@ -330,6 +318,7 @@ export default class ConversionPanel extends PureComponent {
 
         <div className="content-wrapper">
           <div className={leftClass}>
+            <div style={{display: 'contents'}}> 
             <div className="header">
               <div className="title">{leftTitle}</div>
               <button className="btn" onClick={this.prettifyCode}>
@@ -351,6 +340,7 @@ export default class ConversionPanel extends PureComponent {
                 wrapEnabled
               />
             )}
+            </div>
             {splitLeft &&
             isBrowser && (
               <div style={{ display: "contents" }}>

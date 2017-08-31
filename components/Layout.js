@@ -215,6 +215,10 @@ export default class Layout extends PureComponent {
     return path === this.props.pathname ? "active" : "";
   }
 
+  componentWillMount() {
+    this.setKey(this.props.pathname)
+  }
+
   componentDidMount() {
     this.setKey(this.props.pathname);
   }
@@ -412,6 +416,7 @@ export default class Layout extends PureComponent {
               onChange={this.onChange}
               accordion
               activeKey={this.state.activeKey}
+              defaultActiveKey={this.state.activeKey}
             >
               {x.map((route, i) => {
                 return (
@@ -430,7 +435,7 @@ export default class Layout extends PureComponent {
                     }
                   >
                     {route.content.map(a => (
-                      <Link prefetch href={a.path}>
+                      <Link key={a.path} prefetch href={a.path}>
                         <a className={this.getClass(a.path)}>{a.label}</a>
                       </Link>
                     ))}
