@@ -190,7 +190,7 @@ export default class ConversionPanel extends PureComponent {
 
     const codeMirrorOptions = {
       lineNumbers: true,
-      theme: "coda",
+      theme: "chrome-devtools",
       lineWrapping: true,
       scrollbarStyle: null
     };
