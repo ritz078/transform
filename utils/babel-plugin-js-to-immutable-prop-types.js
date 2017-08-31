@@ -2,7 +2,7 @@ import uniqBy from "lodash/uniqBy";
 import isEmpty from "lodash/isEmpty";
 
 /**
- * This is a babel plugin that converts an object to PropTypes
+ * This is a babel plugin that converts an object to ImmutablePropTypes
  * @param t
  * @returns {{visitor: {ArrayExpression: (function(*)), NullLiteral: (function(*)), StringLiteral: (function(*)), NumericLiteral: (function(*)), ArrowFunctionExpression: (function(*)), FunctionExpression: (function(*)), BooleanLiteral: (function(*)), Program: (function(*, *)), ObjectExpression: (function(*))}}}
  */
@@ -17,8 +17,8 @@ export default function({ types: t }) {
           uniqueElements = [
             t.callExpression(
               t.memberExpression(
-                t.identifier("PropTypes"),
-                t.identifier("shape")
+                t.identifier("ImmutablePropTypes"),
+                t.identifier("mapContains")
               ),
               uniqueElements
             )
@@ -32,14 +32,14 @@ export default function({ types: t }) {
           path.replaceWith(
             t.callExpression(
               t.memberExpression(
-                t.identifier("PropTypes"),
-                t.identifier("arrayOf")
+                t.identifier("ImmutablePropTypes"),
+                t.identifier("listOf")
               ),
               uniqueElements
             )
           );
         } else {
-          path.replaceWith(t.identifier("PropTypes.array"));
+          path.replaceWith(t.identifier("ImmutablePropTypes.list"));
         }
       },
 
@@ -68,6 +68,12 @@ export default function({ types: t }) {
         path.replaceWith(t.identifier("PropTypes.bool"));
       },
 
+      VariableDeclaration(path) {
+        path.insertBefore(t.identifier(`import ImmutablePropTypes from 'react-immutable-proptypes'
+        import PropTypes from 'prop-types
+        `))
+      },
+
       Program(path) {
         path.traverse({
           enter(path) {
@@ -75,13 +81,6 @@ export default function({ types: t }) {
           }
         });
       },
-
-      VariableDeclaration(path) {
-        path.insertBefore(t.identifier(
-          `import PropTypes from 'prop-types'
-          `))
-      },
-
 
       ObjectExpression(path) {
         if (
@@ -95,8 +94,8 @@ export default function({ types: t }) {
         path.replaceWith(
           t.callExpression(
             t.memberExpression(
-              t.identifier("PropTypes"),
-              t.identifier("shape")
+              t.identifier("ImmutablePropTypes"),
+              t.identifier("mapContains")
             ),
             elements
           )
