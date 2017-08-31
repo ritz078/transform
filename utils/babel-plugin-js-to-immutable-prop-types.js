@@ -68,6 +68,12 @@ export default function({ types: t }) {
         path.replaceWith(t.identifier("PropTypes.bool"));
       },
 
+      VariableDeclaration(path) {
+        path.insertBefore(t.identifier(`import ImmutablePropTypes from 'react-immutable-proptypes'
+        import PropTypes from 'prop-types
+        `))
+      },
+
       Program(path) {
         path.traverse({
           enter(path) {

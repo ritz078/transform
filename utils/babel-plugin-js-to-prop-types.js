@@ -76,6 +76,13 @@ export default function({ types: t }) {
         });
       },
 
+      VariableDeclaration(path) {
+        path.insertBefore(t.identifier(
+          `import PropTypes from 'prop-types'
+          `))
+      },
+
+
       ObjectExpression(path) {
         if (
           t.isVariableDeclarator(path.parent) ||
