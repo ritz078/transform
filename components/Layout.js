@@ -90,7 +90,7 @@ const x = [
     iconName: "icon-scala",
     content: [
       {
-        label: "JSON to Scala case class",
+        label: "JSON to Scala Case Class",
         path: "/json-to-scala-case-class"
       }
     ]
@@ -257,6 +257,7 @@ export default class Layout extends PureComponent {
           />
           <link rel="icon" type="image/png" href="/static/favicon.png" />
           <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+          <link rel="stylesheet" type="text/css" href="/static/codemirror.css" />  
           <link
             rel="stylesheet"
             type="text/css"
@@ -351,6 +352,7 @@ export default class Layout extends PureComponent {
         `}</style>
 
         <style jsx global>{`
+
           .Collapsible__trigger {
             color: whitesmoke;
             font-family: "Lato", sans-serif;

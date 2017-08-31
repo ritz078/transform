@@ -11,6 +11,13 @@ module.exports = {
       fs: 'empty'
     }
 
+    config.module.rules.push(
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
+      }
+    )
+
     config.plugins.push(
       new webpack.DefinePlugin({IN_BROWSER: true})
     )

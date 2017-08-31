@@ -6,20 +6,18 @@ import copy from "copy-text-to-clipboard";
 
 const theme = "tomorrow";
 
-let brace;
-let AceEditor;
+let CodeMirror;
 if (isBrowser) {
-  brace = require("brace").default;
-  AceEditor = require("react-ace").default;
+  CodeMirror = require("react-codemirror2").default;
 
-  require("brace/mode/javascript");
-  require(`brace/theme/${theme}`);
-  require("brace/mode/json");
-  require("brace/mode/typescript");
-  require("brace/mode/css");
-  require("brace/mode/html");
-  require("brace/mode/rust");
-  require("brace/mode/mysql");
+  require("codemirror-graphql/mode");
+  require("codemirror/mode/javascript/javascript");
+  require("codemirror/mode/xml/xml");
+  require("codemirror/mode/jsx/jsx")
+  require("codemirror/mode/css/css")
+  require("codemirror/mode/rust/rust")
+  require("codemirror/mode/sql/sql")
+  require("codemirror/mode/clike/clike")
 }
 
 // const prettierParsers = {
@@ -36,6 +34,26 @@ const prettifyMap = {
   typescript: "js_beautify"
 };
 
+const modeMapping = {
+  javascript: {
+    name: 'javascript'
+  },
+  json: {
+    name: 'javascript',
+    json: true
+  },
+  typescript: {
+    name: 'javascript',
+    typescript: true
+  },
+  html: {
+    name: 'xml',
+    htmlMode: true
+  },
+  mysql: 'text/x-mysql',
+  scala: 'text/x-scala'
+}
+
 type Props = {
   leftMode: ?string,
   rightMode: ?string,
@@ -49,7 +67,8 @@ type Props = {
   prettifyRightPanel: ?boolean,
   splitLeft: ?boolean,
   splitTitle: ?string,
-  splitValue: ?string
+  splitValue: ?string,
+  splitMode: ?string
 };
 
 export default class ConversionPanel extends PureComponent {
@@ -72,7 +91,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   componentDidMount() {
-    const {defaultText, splitValue} = this.props
+    const { defaultText, splitValue } = this.props;
 
     const code = defaultText;
     const sValue = splitValue;
@@ -84,7 +103,6 @@ export default class ConversionPanel extends PureComponent {
   }
 
   onChange = (newValue, leftSplitValue) => {
-    debugger
     const nValue = newValue || this.state.value;
     const splitValue =
       leftSplitValue && typeof leftSplitValue === "string"
@@ -112,7 +130,7 @@ export default class ConversionPanel extends PureComponent {
     });
   };
 
-  toggleCheckbox = (e) => {
+  toggleCheckbox = e => {
     const checked = e.currentTarget.checked;
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
@@ -123,12 +141,10 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
-  setResult = (result) => {
-    this.setState(
-      {
-        value: result
-      }
-    );
+  setResult = result => {
+    this.setState({
+      value: result
+    });
   };
 
   prettifyCode = () => {
@@ -163,13 +179,21 @@ export default class ConversionPanel extends PureComponent {
       rightTitle,
       prettifyRightPanel,
       splitLeft,
-      splitTitle
+      splitTitle,
+      splitMode
     } = this.props;
     const { infoType, resultValue, value, info, splitValue } = this.state;
 
     const leftClass = cn("section left", {
       split: splitLeft
     });
+
+    const codeMirrorOptions = {
+      lineNumbers: true,
+      theme: "chrome-devtools",
+      lineWrapping: true,
+      scrollbarStyle: null
+    };
 
     return (
       <div className="wrapper">
@@ -274,25 +298,36 @@ export default class ConversionPanel extends PureComponent {
             -webkit-font-smoothing: antialiased;
           }
 
-          #code {
+          body {
+            overflow: hidden;
+          }
+
+          .react-codemirror2, .CodeMirror {
             display: flex;
             flex: 1;
             width: 100% !important;
-            height: 100% !important;
+            height: calc(100%) !important;
           }
 
-          .split #code {
+          .right .CodeMirror-scroll {
+            width: 100%;
+          }
+
+          .CodeMirror-scroll {
+            width: 100%;
+          }
+
+          .split #code,
+          .split .CodeMirror {
+            height: calc(100%) !important;
+          }
+          .split .react-codemirror2 {
             height: calc(50% - 52px) !important;
           }
 
-          .right #code {
+          .right .CodeMirror {
             background-color: #fafafa;
-          }
-
-          .right .ace_content,
-          .right,
-          .right .ace-tomorrow {
-            background-color: #fafafa;
+            padding-left: 20px;
           }
 
           .right .ace_scroller {
@@ -318,28 +353,24 @@ export default class ConversionPanel extends PureComponent {
 
         <div className="content-wrapper">
           <div className={leftClass}>
-            <div style={{display: 'contents'}}> 
-            <div className="header">
-              <div className="title">{leftTitle}</div>
-              <button className="btn" onClick={this.prettifyCode}>
-                Prettify
-              </button>
-            </div>
-            {isBrowser && (
-              <AceEditor
-                mode={leftMode}
-                theme={theme}
-                onChange={this.onChange}
-                name="code"
-                value={value}
-                editorProps={{ $blockScrolling: true }}
-                highlightActiveLine={false}
-                scrollMargin={[20]}
-                focus
-                fontSize={14}
-                wrapEnabled
-              />
-            )}
+            <div style={{ display: "contents" }}>
+              <div className="header">
+                <div className="title">{leftTitle}</div>
+                <button className="btn" onClick={this.prettifyCode}>
+                  Prettify
+                </button>
+              </div>
+              {isBrowser && (
+                <CodeMirror
+                  onValueChange={(editor, metadata, value) =>
+                    this.onChange(value)}
+                  value={value}
+                  options={{
+                    mode: modeMapping[leftMode] || leftMode,
+                    ...codeMirrorOptions
+                  }}
+                />
+              )}
             </div>
             {splitLeft &&
             isBrowser && (
@@ -347,18 +378,14 @@ export default class ConversionPanel extends PureComponent {
                 <div className="header">
                   <div className="title">{splitTitle}</div>
                 </div>
-                <AceEditor
-                  mode={leftMode}
-                  theme={theme}
-                  onChange={x => this.onChange(null, x)}
-                  name="code"
+                <CodeMirror
+                  onValueChange={(editor, metadata, value) =>
+                    this.onChange(this.state.value, value)}
                   value={splitValue}
-                  editorProps={{ $blockScrolling: true }}
-                  highlightActiveLine={false}
-                  scrollMargin={[20]}
-                  focus
-                  fontSize={14}
-                  wrapEnabled
+                  options={{
+                    mode: modeMapping[splitMode] || splitMode,
+                    ...codeMirrorOptions
+                  }}
                 />
               </div>
             )}
@@ -382,25 +409,21 @@ export default class ConversionPanel extends PureComponent {
               </button>
             </div>
             {isBrowser && (
-              <AceEditor
-                mode={rightMode === "jsx" ? "javascript" : rightMode}
-                theme={theme}
-                name="code"
-                readOnly
-                value={
-                  prettifyRightPanel ? (
+              <CodeMirror
+                  value={
+                    prettifyRightPanel ? (
                     window.js_beautify(resultValue, { e4x: true })
                   ) : (
                     resultValue
                   )
-                }
-                editorProps={{ $blockScrolling: true }}
-                scrollMargin={[20]}
-                fontSize={14}
-                showGutter={false}
-                highlightActiveLine={false}
-                wrapEnabled
-              />
+                  }
+                  options={{
+                    readOnly: true,
+                    mode: modeMapping[rightMode] || rightMode,
+                    ...codeMirrorOptions,
+                    lineNumbers: false
+                  }}
+                />
             )}
           </div>
         </div>
