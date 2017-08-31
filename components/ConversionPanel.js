@@ -20,13 +20,6 @@ if (isBrowser) {
   require("codemirror/mode/clike/clike")
 }
 
-// const prettierParsers = {
-//   css: 'postcss',
-//   json: 'json',
-//   javascript: 'babylon',
-//   typescript: 'babylon'
-// }
-
 const prettifyMap = {
   css: "css_beautify",
   json: "js_beautify",
