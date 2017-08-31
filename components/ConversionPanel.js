@@ -20,7 +20,6 @@ if (isBrowser) {
   require("brace/mode/html");
   require("brace/mode/rust");
   require("brace/mode/mysql");
-  require("brace/mode/scala");
 }
 
 // const prettierParsers = {
@@ -89,7 +88,6 @@ export default class ConversionPanel extends PureComponent {
         ? leftSplitValue
         : this.state.splitValue;
 
-    debugger;
     try {
       const code = this.props.getTransformedValue(nValue, splitValue);
 

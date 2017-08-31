@@ -7,6 +7,7 @@
     "start": "next start",
     "build": "next build",
     "dev": "next dev",
+    "add": "all-contributors add",
     "analyze": "cross-env ANALYZE=1 next build",
     "format": "prettier --write **/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -42,6 +43,7 @@
     "xml-js": "^1.4.1"
   },
   "devDependencies": {
+    "all-contributors-cli": "^4.4.0",
     "prettier": "^1.6.1"
   }
 }
