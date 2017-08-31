@@ -58,7 +58,6 @@ export default class Css2Js extends PureComponent {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
-          url={this.props.url}
           leftTitle="CSS"
           rightTitle="JavaScript"
           leftMode="css"

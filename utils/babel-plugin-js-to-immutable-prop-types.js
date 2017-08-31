@@ -69,9 +69,11 @@ export default function({ types: t }) {
       },
 
       VariableDeclaration(path) {
-        path.insertBefore(t.identifier(`import ImmutablePropTypes from 'react-immutable-proptypes'
+        path.insertBefore(
+          t.identifier(`import ImmutablePropTypes from 'react-immutable-proptypes'
         import PropTypes from 'prop-types
-        `))
+        `)
+        );
       },
 
       Program(path) {

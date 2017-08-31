@@ -2465,6 +2465,12 @@ graphql@^0.10.1, graphql@^0.10.5:
   dependencies:
     iterall "^1.1.0"
 
+graphql@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.11.2.tgz#13edb9f982f3571dd68ec4e9f3d6aca7e1ba57ef"
+  dependencies:
+    iterall "^1.1.0"
+
 gzip-size@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-3.0.0.tgz#546188e9bdc337f673772f81660464b389dce520"
@@ -2546,6 +2552,10 @@ hmac-drbg@^1.0.0:
 hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
+
+hoist-non-react-statics@^2.2.2:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.3.1.tgz#343db84c6018c650778898240135a1420ee22ce0"
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -3271,9 +3281,9 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-next@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/next/-/next-3.1.0.tgz#8dfff9b89cfb95ba29cf43107dd0b7ff3a4f5d01"
+next@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/next/-/next-3.2.1.tgz#6d694823ac6e74e9be4553117144a6402220490f"
   dependencies:
     ansi-html "0.0.7"
     babel-core "6.25.0"
@@ -3300,6 +3310,7 @@ next@^3.1.0:
     friendly-errors-webpack-plugin "1.5.0"
     glob "7.1.1"
     glob-promise "3.1.0"
+    hoist-non-react-statics "^2.2.2"
     htmlescape "1.1.1"
     http-status "1.0.1"
     json-loader "0.5.4"
@@ -4118,9 +4129,9 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-codemirror2@^0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-0.0.14.tgz#5e232f3af8d00549a624a0721279f574edc84a57"
+react-codemirror2@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-codemirror2/-/react-codemirror2-1.0.0.tgz#b529a6c5c91219f92c751f43a17721cdaf36b05f"
   dependencies:
     codemirror "5.29.0"
 

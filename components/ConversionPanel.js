@@ -13,11 +13,11 @@ if (isBrowser) {
   require("codemirror-graphql/mode");
   require("codemirror/mode/javascript/javascript");
   require("codemirror/mode/xml/xml");
-  require("codemirror/mode/jsx/jsx")
-  require("codemirror/mode/css/css")
-  require("codemirror/mode/rust/rust")
-  require("codemirror/mode/sql/sql")
-  require("codemirror/mode/clike/clike")
+  require("codemirror/mode/jsx/jsx");
+  require("codemirror/mode/css/css");
+  require("codemirror/mode/rust/rust");
+  require("codemirror/mode/sql/sql");
+  require("codemirror/mode/clike/clike");
 }
 
 const prettifyMap = {
@@ -29,23 +29,23 @@ const prettifyMap = {
 
 const modeMapping = {
   javascript: {
-    name: 'javascript'
+    name: "javascript"
   },
   json: {
-    name: 'javascript',
+    name: "javascript",
     json: true
   },
   typescript: {
-    name: 'javascript',
+    name: "javascript",
     typescript: true
   },
   html: {
-    name: 'xml',
+    name: "xml",
     htmlMode: true
   },
-  mysql: 'text/x-mysql',
-  scala: 'text/x-scala'
-}
+  mysql: "text/x-mysql",
+  scala: "text/x-scala"
+};
 
 type Props = {
   leftMode: ?string,
@@ -262,7 +262,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           .btn:hover {
-            background-color: #2380ca;
+            background-color: #0490ff;
           }
 
           .header {
@@ -281,6 +281,7 @@ export default class ConversionPanel extends PureComponent {
           .title {
             padding-left: 4px;
             color: #666;
+            font-weight: normal;
           }
         `}</style>
 
@@ -295,7 +296,8 @@ export default class ConversionPanel extends PureComponent {
             overflow: hidden;
           }
 
-          .react-codemirror2, .CodeMirror {
+          .react-codemirror2,
+          .CodeMirror {
             display: flex;
             flex: 1;
             width: 100%;
@@ -303,7 +305,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           .CodeMirror {
-            height: calc(100%)
+            height: calc(100%);
           }
 
           .right .CodeMirror-scroll {
@@ -351,15 +353,14 @@ export default class ConversionPanel extends PureComponent {
           <div className={leftClass}>
             <div style={{ display: "contents" }}>
               <div className="header">
-                <div className="title">{leftTitle}</div>
+                <h4 className="title">{leftTitle}</h4>
                 <button className="btn" onClick={this.prettifyCode}>
                   Prettify
                 </button>
               </div>
               {isBrowser && (
                 <CodeMirror
-                  onValueChange={(editor, metadata, value) =>
-                    this.onChange(value)}
+                  onChange={(editor, metadata, value) => this.onChange(value)}
                   value={value}
                   options={{
                     mode: modeMapping[leftMode] || leftMode,
@@ -372,10 +373,10 @@ export default class ConversionPanel extends PureComponent {
             isBrowser && (
               <div style={{ display: "contents" }}>
                 <div className="header">
-                  <div className="title">{splitTitle}</div>
+                  <h4 className="title">{splitTitle}</h4>
                 </div>
                 <CodeMirror
-                  onValueChange={(editor, metadata, value) =>
+                  onChange={(editor, metadata, value) =>
                     this.onChange(this.state.value, value)}
                   value={splitValue}
                   options={{
@@ -388,7 +389,7 @@ export default class ConversionPanel extends PureComponent {
           </div>
           <div className="section right">
             <div className="header">
-              <div className="title">{rightTitle}</div>
+              <h4 className="title">{rightTitle}</h4>
               {onCheckboxChange && (
                 <label htmlFor="#text">
                   <input
@@ -406,20 +407,20 @@ export default class ConversionPanel extends PureComponent {
             </div>
             {isBrowser && (
               <CodeMirror
-                  value={
-                    prettifyRightPanel ? (
+                value={
+                  prettifyRightPanel ? (
                     window.js_beautify(resultValue, { e4x: true })
                   ) : (
                     resultValue
                   )
-                  }
-                  options={{
-                    readOnly: true,
-                    mode: modeMapping[rightMode] || rightMode,
-                    ...codeMirrorOptions,
-                    lineNumbers: false
-                  }}
-                />
+                }
+                options={{
+                  readOnly: true,
+                  mode: modeMapping[rightMode] || rightMode,
+                  ...codeMirrorOptions,
+                  lineNumbers: false
+                }}
+              />
             )}
           </div>
         </div>
