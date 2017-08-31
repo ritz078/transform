@@ -305,8 +305,12 @@ export default class ConversionPanel extends PureComponent {
           .react-codemirror2, .CodeMirror {
             display: flex;
             flex: 1;
-            width: 100% !important;
-            height: calc(100%) !important;
+            width: 100%;
+            height: calc(100% - 50px);
+          }
+
+          .CodeMirror {
+            height: calc(100%)
           }
 
           .right .CodeMirror-scroll {
@@ -319,10 +323,10 @@ export default class ConversionPanel extends PureComponent {
 
           .split #code,
           .split .CodeMirror {
-            height: calc(100%) !important;
+            height: calc(100%);
           }
           .split .react-codemirror2 {
-            height: calc(50% - 52px) !important;
+            height: calc(50% - 52px);
           }
 
           .right .CodeMirror {
@@ -336,7 +340,6 @@ export default class ConversionPanel extends PureComponent {
 
           .right {
             box-sizing: border-box;
-            padding-bottom: 10px;
           }
 
           label {
