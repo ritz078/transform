@@ -1,13 +1,12 @@
 # transform-www
 
-> Website for https://transform.now.sh
-
-This project is based on [next.js](https://github.com/zeit/next.js/)
+> All important transformations at one place.
 
 ![Demo](demo.png)
 
 ## Code Structure
 - Create a new route - Add a file `new-pathname.js` in `pages` folder.
+- Update path info in `utils/routes.js`
 - Use ConversionPanel - This Component takes the conversionMethod and renders the Ace Editors.
 
 ## Development
@@ -16,6 +15,7 @@ This project is based on [next.js](https://github.com/zeit/next.js/)
 - Create a new branch.
 - `yarn install`
 - `yarn dev` then fix issues or add features.
+- Add yourself to the contributors list using `yarn addContributor -- githubusername code`
 - Make a pull request.
 
 <a href="https://app.codesponsor.io/link/8CBegPnJTnjtddvd2E18Su4F/ritz078/transform-www" rel="nofollow"><img src="https://app.codesponsor.io/embed/8CBegPnJTnjtddvd2E18Su4F/ritz078/transform-www.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
