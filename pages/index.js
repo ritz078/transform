@@ -33,7 +33,7 @@ export default class Main extends PureComponent {
           getTransformedValue={this.getTransformedValue}
           name={"prop_types"}
           defaultText={defaultText}
-          onCheckboxChange={(checked, cb) => 
+          onCheckboxChange={(checked, cb) =>
             this.setState({ isImmutable: checked }, cb)}
           checkboxText="Immutable Proptypes"
         />

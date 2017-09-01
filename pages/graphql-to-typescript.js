@@ -23,7 +23,7 @@ export default class Json2Ts extends PureComponent {
           url={this.props.url}
           prettifyRightPanel={false}
           splitLeft={true}
-          splitMode={'graphql'}
+          splitMode={"graphql"}
           splitTitle={"Query"}
           splitValue={dummyQuery}
         />
