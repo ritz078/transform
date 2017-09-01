@@ -41,6 +41,7 @@ export const categorizedRoutes = [
       {
         label: "JSON to React PropTypes",
         path: "/",
+        title: 'Transform | All important transforms at one place.',
         desc:
           "An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
       },

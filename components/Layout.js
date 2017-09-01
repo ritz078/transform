@@ -109,12 +109,12 @@ export default class Layout extends PureComponent {
   };
 
   render() {
-    const { label, desc } = activeRouteData(this.props.pathname);
+    const { label, desc, title } = activeRouteData(this.props.pathname);
 
     return (
       <div className="main-wrapper">
         <Head>
-          <title>{label}</title>
+          <title>{title || label}</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" type="image/png" href="/static/favicon.png" />
           <meta
