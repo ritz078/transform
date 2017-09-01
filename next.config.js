@@ -2,6 +2,7 @@ const BabiliPlugin = require("babili-webpack-plugin")
 const webpack = require("webpack")
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { ANALYZE } = process.env
+const glob = require("glob")
 
 module.exports = {
   webpack: (config, { dev }) => {
@@ -37,5 +38,15 @@ module.exports = {
     }
 
     return config;
+  },
+
+  exportPathMap() {
+    const pathMap = {}
+    glob.sync('pages/**/*.js', { ignore: 'pages/_document.js' }).forEach(s => {
+      const path = s.split(/(pages|\.)/)[2].replace(/^\/index$/, '/')
+      console.log(path)
+      pathMap[path] = { page: path }
+    })
+    return pathMap
   }
 };

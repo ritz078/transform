@@ -70,7 +70,8 @@ export const categorizedRoutes = [
       {
         label: "JSON to Typescript Interface",
         path: "/json-to-ts-interface",
-        desc: "An online REPL for converting JSON to generate TypeScript Interface."
+        desc:
+          "An online REPL for converting JSON to generate TypeScript Interface."
       },
       {
         label: "JSON to MobX-State-Tree Model",
@@ -107,7 +108,8 @@ export const categorizedRoutes = [
       {
         label: "JSON to MySQL",
         path: "/json-to-mysql",
-        desc: "An online REPL to generate MySQL table generation code from JSON."
+        desc:
+          "An online REPL to generate MySQL table generation code from JSON."
       }
     ]
   },
@@ -129,12 +131,14 @@ export const categorizedRoutes = [
       {
         label: "GraphQL to TypeScript",
         path: "/graphql-to-typescript",
-        desc: "An online REPL to generate TypeScript type annotations based on a GraphQL schema and query documents."
+        desc:
+          "An online REPL to generate TypeScript type annotations based on a GraphQL schema and query documents."
       },
       {
         label: "GraphQL to Flow",
         path: "/graphql-to-flow",
-        desc: "An online REPL to generate Flow type annotations based on a GraphQL schema and query documents."
+        desc:
+          "An online REPL to generate Flow type annotations based on a GraphQL schema and query documents."
       }
     ]
   },
