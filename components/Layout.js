@@ -122,17 +122,12 @@ export default class Layout extends PureComponent {
             content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0"
           />
           <meta name="description" content={desc} />
-          <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-          <link
-            rel="stylesheet"
-            type="text/css"
-            href="/static/codemirror.css"
-          />
           <link
             rel="stylesheet"
             type="text/css"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css"
           />
+          <link rel="stylesheet" href="/static/styles.css" />
         </Head>
         <style jsx>{`
           .sidebar {

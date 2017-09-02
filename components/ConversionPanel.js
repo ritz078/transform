@@ -3,6 +3,7 @@ import cn from "classnames";
 import Router from "next/router";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
+import { html_beautify, css_beautify, js_beautify } from "js-beautify"
 
 const theme = "tomorrow";
 
@@ -21,10 +22,10 @@ if (isBrowser) {
 }
 
 const prettifyMap = {
-  css: "css_beautify",
-  json: "js_beautify",
-  html: "html_beautify",
-  typescript: "js_beautify"
+  css: css_beautify,
+  json: js_beautify,
+  html: html_beautify,
+  typescript: js_beautify
 };
 
 const modeMapping = {
@@ -144,7 +145,7 @@ export default class ConversionPanel extends PureComponent {
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.setResult(window[prettifyMap[leftMode]](value, { indent_size: 2 }));
+    this.setResult(prettifyMap[leftMode](value, { indent_size: 2 }));
   };
 
   copyCode = () => {
@@ -152,7 +153,7 @@ export default class ConversionPanel extends PureComponent {
     const { resultValue } = this.state;
     copy(
       rightMode !== "rust"
-        ? window.js_beautify(resultValue, { e4x: true })
+        ? js_beautify(resultValue, { e4x: true })
         : resultValue
     );
     this.setState({
@@ -190,10 +191,6 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify.js" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-html.js" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.6.14/beautify-css.js" />
-
         <style jsx>{`
           .wrapper {
             display: flex;
@@ -409,7 +406,7 @@ export default class ConversionPanel extends PureComponent {
               <CodeMirror
                 value={
                   prettifyRightPanel ? (
-                    window.js_beautify(resultValue, { e4x: true })
+                    js_beautify(resultValue, { e4x: true })
                   ) : (
                     resultValue
                   )
