@@ -4,15 +4,14 @@ import { Json2dts, toValidJSON } from "../utils/json-to-ts-flow";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
+import merge from "lodash/merge";
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = newValue => {
     const converter = new Json2dts();
     let text2Obj = JSON.parse(toValidJSON(newValue));
     if (typeof text2Obj !== "object" || Array.isArray(text2Obj)) {
-      throw new Error(
-        "Pass a valid JSON Object. Arrays are not acceptable even though they are valid JSON."
-      );
+      text2Obj = merge({}, ...text2Obj)
     }
     converter.parse(text2Obj, "props");
     return converter.getCode(true);

@@ -4,6 +4,8 @@ import immutablePropsPlugin from "../utils/babel-plugin-js-to-immutable-prop-typ
 import Layout from "../components/Layout";
 import { transform } from "babel-standalone";
 import defaultText from "../utils/dummy-json";
+import { toValidJSON } from "../utils/json-to-ts-flow";
+import merge from "lodash/merge"
 
 import ConversionPanel from "../components/ConversionPanel";
 
@@ -13,9 +15,13 @@ export default class Main extends PureComponent {
   };
 
   getTransformedValue = newValue => {
-    newValue = "const propTypes = " + newValue;
+    let x = JSON.parse(toValidJSON(newValue))
+    if (typeof x !== "object" || Array.isArray(x)) {
+      x = merge({}, ...x)
+    }
+    x = "const propTypes = " + JSON.stringify(x);
     const plugin = this.state.isImmutable ? immutablePropsPlugin : propsPlugin;
-    const { code } = transform(newValue, {
+    const { code } = transform(x, {
       presets: ["es2015"],
       plugins: [plugin]
     });
