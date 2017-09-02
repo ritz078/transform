@@ -1,9 +1,7 @@
 import React, { PureComponent } from "react";
-import plugin from "../utils/css-to-js";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
-import transform from "css-to-react-native";
-import kebabCase from "lodash/kebabCase";
+import cssToJS from "transform-css-to-js";
 
 const defaultText = `.main-wrapper {
   flex-direction: row;
@@ -32,26 +30,8 @@ export default class Css2Js extends PureComponent {
     isRn: false
   };
 
-  getRnCode = (newValue: string) => {
-    const styles = {};
-    const code = eval("(" + plugin(newValue).split("=")[1] + ")");
-    Object.keys(code).forEach(key => {
-      styles[key] = {};
-      const arr = [];
-      Object.keys(code[key]).forEach(key2 => {
-        arr.push([kebabCase(key2), code[key][key2]]);
-      });
-      styles[key] = transform(arr);
-    });
-    return styles;
-  };
-
-  getTransformedValue = (newValue: string) => {
-    return this.state.isRn
-      ? `const styles = StyleSheet.create(${JSON.stringify(
-          this.getRnCode(newValue)
-        )})`
-      : plugin(newValue);
+  getTransformedValue = (newValue) => {
+    return cssToJS(newValue, this.state.isRn)
   };
 
   render() {

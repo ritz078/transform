@@ -4946,6 +4946,14 @@ tough-cookie@~2.3.0:
   dependencies:
     punycode "^1.4.1"
 
+transform-css-to-js@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/transform-css-to-js/-/transform-css-to-js-0.1.1.tgz#20fd40b137849555c063aa55f168680ad00724bb"
+  dependencies:
+    css-to-react-native "^2.0.4"
+    lodash "^4.17.4"
+    stringify-object "^3.2.0"
+
 trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
