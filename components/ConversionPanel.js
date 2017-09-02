@@ -3,7 +3,8 @@ import cn from "classnames";
 import Router from "next/router";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
-import { html_beautify, css_beautify, js_beautify } from "js-beautify"
+import { html_beautify, css_beautify, js_beautify } from "js-beautify";
+import unfetch from "unfetch";
 
 const theme = "tomorrow";
 
@@ -62,7 +63,9 @@ type Props = {
   splitLeft: ?boolean,
   splitTitle: ?string,
   splitValue: ?string,
-  splitMode: ?string
+  splitMode: ?string,
+  showFetchButton: boolean,
+  fetchButtonText: ?string
 };
 
 export default class ConversionPanel extends PureComponent {
@@ -73,7 +76,9 @@ export default class ConversionPanel extends PureComponent {
     rightMode: "javascript",
     pathname: "/",
     prettifyRightPanel: true,
-    splitLeft: false
+    splitLeft: false,
+    showFetchButton: true,
+    fetchButtonText: 'Fetch JSON from URL'
   };
 
   state = {
@@ -94,6 +99,14 @@ export default class ConversionPanel extends PureComponent {
       splitValue: sValue,
       resultValue: this.props.getTransformedValue(code, sValue)
     });
+  }
+
+  fetchJSON = async () => {
+    const url = window.prompt('Enter URL to fetch JSON from a remote server.')
+    if (!url) return
+    const res = await unfetch(url)
+    const json = await res.json()
+    this.onChange(JSON.stringify(json, null, 2))
   }
 
   onChange = (newValue, leftSplitValue) => {
@@ -174,7 +187,9 @@ export default class ConversionPanel extends PureComponent {
       prettifyRightPanel,
       splitLeft,
       splitTitle,
-      splitMode
+      splitMode,
+      showFetchButton,
+      fetchButtonText
     } = this.props;
     const { infoType, resultValue, value, info, splitValue } = this.state;
 
@@ -351,6 +366,7 @@ export default class ConversionPanel extends PureComponent {
             <div style={{ display: "contents" }}>
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
+                {leftMode === 'json' && showFetchButton && <button className="btn" onClick={this.fetchJSON}>{fetchButtonText}</button>}
                 <button className="btn" onClick={this.prettifyCode}>
                   Prettify
                 </button>
