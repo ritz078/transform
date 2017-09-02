@@ -78,6 +78,11 @@ export const categorizedRoutes = [
         label: "JSON to MobX-State-Tree Model",
         path: "/json-to-mobx-state-tree",
         desc: "An online REPL for converting JSON to generate Mobx State Tree."
+      },
+      {
+        label: "JS Object to JSON",
+        path: "/js-object-to-json",
+        desc: "An online REPL for converting JS Object to JSON."
       }
     ]
   },
