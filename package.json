@@ -19,6 +19,7 @@
   "dependencies": {
     "@tsuyoshiwada/htmltojsx": "^0.0.4",
     "apollo-codegen": "0.17.0-alpha.1",
+    "babel-plugin-json-to-proptypes": "^0.1.0",
     "babel-standalone": "^6.26.0",
     "classnames": "^2.2.5",
     "codemirror": "^5.29.0",
