@@ -1,7 +1,3 @@
-import { compileToLegacyIR } from "apollo-codegen/lib/compiler/legacyIR";
-import CodeGenerator from "apollo-codegen/lib/utilities/CodeGenerator";
-import { parse, buildClientSchema } from "graphql";
-
 const x = {
   data: {
     __schema: {
@@ -2189,57 +2185,3 @@ fragment heroFriends on Character {
     name
   }
 }`;
-
-export function setup(schema) {
-  const context = {
-    schema: schema,
-    operations: {},
-    fragments: {},
-    typesUsed: {}
-  };
-
-  const generator = new CodeGenerator(context);
-
-  const compileFromSource = source => {
-    const document = parse(source);
-    const context = compileToLegacyIR(schema, document, {
-      mergeInFieldsFromFragmentSpreads: true,
-      addTypename: true
-    });
-    generator.context = context;
-    return context;
-  };
-
-  const addFragment = fragment => {
-    generator.context.fragments[fragment.fragmentName] = fragment;
-  };
-
-  return { generator, compileFromSource, addFragment };
-}
-
-export function transform(newValue, splitValue, generateSource) {
-  if (!splitValue || !newValue) {
-    return;
-  }
-  const schemaData = JSON.parse(newValue);
-
-  if (!schemaData.data && !schemaData.__schema) {
-    throw new Error(
-      "GraphQL schema file should contain a valid GraphQL introspection query result"
-    );
-  }
-
-  try {
-    const schema = buildClientSchema(
-      schemaData.data ? schemaData.data : schemaData
-    );
-
-    const { compileFromSource } = setup(schema);
-
-    const context = compileFromSource(splitValue);
-
-    return generateSource(context);
-  } catch (e) {
-    throw new Error(e.message);
-  }
-}

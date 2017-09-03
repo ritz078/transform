@@ -4954,6 +4954,13 @@ transform-css-to-js@^0.1.1:
     lodash "^4.17.4"
     stringify-object "^3.2.0"
 
+transform-graphql-type-annotations@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/transform-graphql-type-annotations/-/transform-graphql-type-annotations-0.1.1.tgz#6ac353afcf693c1f038a8b4acbc8a0098a4bba6d"
+  dependencies:
+    apollo-codegen "0.17.0-alpha.1"
+    graphql "^0.10.5"
+
 trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"

@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
-import { generateSource } from "apollo-codegen/lib/flow/codeGeneration";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
-import { dummySchema, dummyQuery, transform } from "../utils/graphql-schema";
+import { dummySchema, dummyQuery } from "../utils/graphql-schema";
+import transform from "transform-graphql-type-annotations"
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue, splitValue) => {
-    return transform(newValue, splitValue, generateSource);
+    return transform(newValue, splitValue);
   };
 
   render() {
