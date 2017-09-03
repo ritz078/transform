@@ -41,6 +41,7 @@
     "stringify-object": "^3.2.0",
     "transform-css-to-js": "^0.1.1",
     "transform-graphql-type-annotations": "^0.1.1",
+    "transform-json-types": "^0.1.1",
     "unfetch": "^3.0.0",
     "xml-js": "^1.4.1"
   },

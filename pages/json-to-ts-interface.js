@@ -1,21 +1,14 @@
 import React, { PureComponent } from "react";
 import dynamic from "next/dynamic";
-import { Json2dts, toValidJSON } from "../utils/json-to-ts-flow";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
-import merge from "lodash/merge"
+import transform from "transform-json-types"
 
 export default class Json2Ts extends PureComponent {
-  getTransformedValue = newValue => {
-    const converter = new Json2dts();
-    let text2Obj = JSON.parse(toValidJSON(newValue));
-    if (typeof text2Obj !== "object" || Array.isArray(text2Obj)) {
-      text2Obj = merge({}, ...text2Obj)
-    }
-    converter.parse(text2Obj, "RootJson");
-    return converter.getCode();
-  };
+  getTransformedValue = code => transform(code, {
+    lang: "typescript"
+  })
 
   render() {
     return (
