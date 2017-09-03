@@ -7,6 +7,18 @@
   "imageSize": 100,
   "commit": true,
   "contributors": [
+      {
+      "login": "ritz078",
+      "name": "Ritesh Kumar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/5389035?v=4",
+      "profile": "http://riteshkr.com",
+      "contributions": [
+        "doc",
+        "code",
+        "ideas",
+        "review"
+      ]
+    },
     {
       "login": "skade",
       "name": "Florian Gilcher",
