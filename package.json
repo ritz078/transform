@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "next start",
-    "build": "rm -rf out && next build && next export",
+    "build": "rm -rf out && next build && next export && cp ./.next/service-worker.js ./out/service-worker.js",
     "dev": "next dev",
     "addContributor": "all-contributors add",
     "analyze": "cross-env ANALYZE=1 next build",
@@ -51,6 +51,7 @@
     "glob": "^7.1.2",
     "prettier": "^1.6.1",
     "style-loader": "^0.18.2",
+    "sw-precache-webpack-plugin": "^0.11.4",
     "webpack-bundle-analyzer": "^2.9.0"
   }
 }
