@@ -7,7 +7,6 @@ import Router from "next/router";
 import GithubCorner from "react-github-corner";
 import FuzzyPicker, { FuzzyWrapper } from "react-fuzzy-picker";
 import Collapse, { Panel } from "rc-collapse";
-import flatten from "lodash/flatten";
 import findIndex from "lodash/findIndex";
 import { categorizedRoutes, routes, activeRouteData } from "../utils/routes";
 
@@ -87,6 +86,10 @@ export default class Layout extends PureComponent {
 
   componentWillMount() {
     this.setKey(this.props.pathname);
+  }
+
+  componentDidMount () {
+    routes.forEach(({path}) => Router.prefetch(path))
   }
 
   componentWillReceiveProps({ pathname }) {
@@ -301,7 +304,7 @@ export default class Layout extends PureComponent {
                     }
                   >
                     {route.content.map(a => (
-                      <Link key={a.path} prefetch href={a.path}>
+                      <Link key={a.path} href={a.path}>
                         <a className={this.getClass(a.path)}>{a.label}</a>
                       </Link>
                     ))}
