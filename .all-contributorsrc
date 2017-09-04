@@ -7,7 +7,7 @@
   "imageSize": 100,
   "commit": true,
   "contributors": [
-      {
+    {
       "login": "ritz078",
       "name": "Ritesh Kumar",
       "avatar_url": "https://avatars3.githubusercontent.com/u/5389035?v=4",
@@ -70,6 +70,15 @@
       "name": "Raathigeshan Kugarajan",
       "avatar_url": "https://avatars0.githubusercontent.com/u/3108160?v=4",
       "profile": "http://raathigesh.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "gyandeeps",
+      "name": "Gyandeep Singh",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5554486?v=4",
+      "profile": "https://gyandeeps.com",
       "contributions": [
         "code"
       ]
