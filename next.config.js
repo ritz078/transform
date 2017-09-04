@@ -38,10 +38,6 @@ module.exports = {
           ],
           runtimeCaching: [
             {
-              handler: 'fastest',
-              urlPattern: /[.](png|jpg|css)/
-            },
-            {
               handler: "networkFirst",
               urlPattern: /^https?.*/
             }

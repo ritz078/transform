@@ -131,6 +131,19 @@ export default class Layout extends PureComponent {
             href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css"
           />
           <link rel="stylesheet" href="/static/styles.css" />
+          <link rel="manifest" href="/static/manifest.json"/>
+          <meta name="theme-color" content="#2196f3"/>
+          <meta name="mobile-web-app-capable" content="yes"/>
+          <meta name="apple-mobile-web-app-capable" content="yes"/>
+          <meta name="application-name" content="Transform"/>
+          <meta name="apple-mobile-web-app-title" content="Transform"/>
+          <meta name="theme-color" content="#2196f3"/>
+          <meta name="msapplication-navbutton-color" content="#2196f3"/>
+          <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+          <meta name="msapplication-starturl" content="./"/>
+          <meta name="msapplication-TileColor" content="#2196f3"/>
+          <meta name="msapplication-TileImage" content="/static/images/icons/icon-144x144.png"/>
+
         </Head>
         <style jsx>{`
           .sidebar {
