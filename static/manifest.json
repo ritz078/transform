@@ -2,7 +2,7 @@
   "name": "Transform",
   "short_name": "Transform",
   "theme_color": "#2196f3",
-  "background_color": "#2196f3",
+  "background_color": "#424242",
   "display": "standalone",
   "Scope": "/",
   "start_url": "/",

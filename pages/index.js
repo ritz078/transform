@@ -30,7 +30,7 @@ export default class Main extends PureComponent {
     ${code}`;
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
         .register("/service-worker.js")
