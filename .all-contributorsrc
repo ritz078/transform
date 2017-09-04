@@ -82,6 +82,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mholt",
+      "name": "Matt Holt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1128849?v=4",
+      "profile": "https://matt.life",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }

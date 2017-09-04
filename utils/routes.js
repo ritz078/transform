@@ -149,6 +149,15 @@ export const categorizedRoutes = [
     ]
   },
   {
+    category: "Go",
+    iconName: "icon-go",
+    content: [{
+      label: "JSON to Go Struct",
+      path: "/json-to-go",
+      desc: "An online REPL to generate Go Struct from JSON."
+    }]
+  },
+  {
     category: "XML",
     iconName: "icon-html",
     content: [

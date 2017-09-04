@@ -20,6 +20,7 @@ const x = `{
       ]
     },
     {
+      "optionalField": "hello",
       "_id": "5988946ef6090217857d7b0f",
       "latitude": 47.460772,
       "longitude": 85.95137,
