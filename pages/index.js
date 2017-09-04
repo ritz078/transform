@@ -30,6 +30,19 @@ export default class Main extends PureComponent {
     ${code}`;
   };
 
+  componentDidMount() {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(registration => {
+          console.log("service worker registration successful");
+        })
+        .catch(err => {
+          console.warn("service worker registration failed");
+        });
+    }
+  }
+
   render() {
     return (
       <Layout pathname={this.props.url.pathname}>

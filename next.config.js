@@ -3,6 +3,7 @@ const webpack = require("webpack")
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { ANALYZE } = process.env
 const glob = require("glob")
+const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin")
 
 module.exports = {
   webpack: (config, { dev }) => {
@@ -26,6 +27,22 @@ module.exports = {
     if (!dev) {
       config.plugins.push(
         new BabiliPlugin()
+      )
+
+      config.plugins.push(
+        new SWPrecacheWebpackPlugin({
+          minify: true,
+          staticFileGlobsIgnorePatterns: [/\.next\//],
+          staticFileGlobs: [
+            'static/**/*' // Precache all static files by default
+          ],
+          runtimeCaching: [
+            {
+              handler: "networkFirst",
+              urlPattern: /^https?.*/
+            }
+          ]
+        })
       )
     }
 
