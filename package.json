@@ -42,7 +42,6 @@
     "lodash": "^4.17.4",
     "next": "^3.2.1",
     "nprogress": "^0.2.0",
-    "pify": "^3.0.0",
     "prop-types": "^15.5.10",
     "rc-collapse": "^1.7.6",
     "react": "^15.6.1",
