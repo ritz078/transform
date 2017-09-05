@@ -37,6 +37,7 @@
     "copy-text-to-clipboard": "^1.0.3",
     "generate-schema": "^2.5.1",
     "is-in-browser": "^1.1.3",
+    "is-svg": "^2.1.0",
     "lodash": "^4.17.4",
     "next": "^3.2.1",
     "nprogress": "^0.2.0",
@@ -51,6 +52,7 @@
     "transform-css-to-js": "^0.1.1",
     "transform-graphql-type-annotations": "^0.1.1",
     "transform-json-types": "^0.2.1",
+    "transform-svg-to-native": "^0.1.1",
     "unfetch": "^3.0.0",
     "xml-js": "^1.4.1"
   },

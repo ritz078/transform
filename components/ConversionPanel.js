@@ -1,11 +1,8 @@
 import React, { PureComponent } from "react";
 import cn from "classnames";
-import Router from "next/router";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
 import unfetch from "unfetch";
-
-const theme = "tomorrow";
 
 let CodeMirror;
 if (isBrowser) {
@@ -72,7 +69,8 @@ type Props = {
   splitValue: ?string,
   splitMode: ?string,
   showFetchButton: boolean,
-  fetchButtonText: ?string
+  fetchButtonText: ?string,
+  getTransformedValue: Function
 };
 
 export default class ConversionPanel extends PureComponent {
@@ -99,13 +97,7 @@ export default class ConversionPanel extends PureComponent {
   componentDidMount() {
     const { defaultText, splitValue } = this.props;
 
-    const code = defaultText;
-    const sValue = splitValue;
-    this.setState({
-      value: code,
-      splitValue: sValue,
-      resultValue: this.props.getTransformedValue(code, sValue)
-    });
+    this.onChange(defaultText, splitValue)
   }
 
   fetchJSON = async () => {
@@ -116,7 +108,7 @@ export default class ConversionPanel extends PureComponent {
     this.onChange(JSON.stringify(json, null, 2))
   }
 
-  onChange = (newValue, leftSplitValue) => {
+  onChange = async (newValue, leftSplitValue) => {
     const nValue = newValue || this.state.value;
     const splitValue =
       leftSplitValue && typeof leftSplitValue === "string"
@@ -124,8 +116,7 @@ export default class ConversionPanel extends PureComponent {
         : this.state.splitValue;
 
     try {
-      const code = this.props.getTransformedValue(nValue, splitValue);
-
+      const code = await this.props.getTransformedValue(nValue, splitValue);
       this.setState({
         resultValue: code,
         info: "",
@@ -148,9 +139,7 @@ export default class ConversionPanel extends PureComponent {
     const checked = e.currentTarget.checked;
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
-        this.setState({
-          resultValue: this.props.getTransformedValue(this.state.value)
-        });
+        this.onChange()
       });
     }
   };
