@@ -3,7 +3,6 @@ import cn from "classnames";
 import Router from "next/router";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
-import { html_beautify, css_beautify, js_beautify } from "js-beautify";
 import unfetch from "unfetch";
 
 const theme = "tomorrow";
@@ -23,12 +22,15 @@ if (isBrowser) {
   require("codemirror/mode/go/go");
 }
 
-const prettifyMap = {
-  css: css_beautify,
-  json: js_beautify,
-  html: html_beautify,
-  typescript: js_beautify
-};
+const prettierParsers = {
+  css: 'postcss',
+  javascript: 'babylon',
+  jsx: 'babylon',
+  graphql: 'graphql',
+  json: 'json',
+  typescript: 'typescript',
+  flow: 'flow'
+}
 
 const modeMapping = {
   javascript: {
@@ -45,6 +47,10 @@ const modeMapping = {
   html: {
     name: "xml",
     htmlMode: true
+  },
+  flow: {
+    name: 'javascript',
+    typescript: true
   },
   mysql: "text/x-mysql",
   scala: "text/x-scala"
@@ -155,12 +161,21 @@ export default class ConversionPanel extends PureComponent {
     });
   };
 
+  setSplitValue = splitValue => this.setState({splitValue})
+
   prettifyCode = () => {
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.setResult(prettifyMap[leftMode](value, { indent_size: 2 }));
+    this.setResult(prettier.format(value, {parser: prettierParsers[leftMode]}));
   };
+
+  prettifySplitCode = () => {
+    const { splitMode } = this.props;
+    const { splitValue } = this.state;
+
+    this.setSplitValue(prettier.format(splitValue, {parser: prettierParsers[splitMode]}));
+  }
 
   copyCode = () => {
     const { rightMode } = this.props;
@@ -207,6 +222,7 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
+        <script src="https://bundle.run/prettier@1.6.1" />
         <style jsx>{`
           .wrapper {
             display: flex;
@@ -368,9 +384,9 @@ export default class ConversionPanel extends PureComponent {
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
                 {leftMode === 'json' && showFetchButton && <button className="btn" onClick={this.fetchJSON}>{fetchButtonText}</button>}
-                <button className="btn" onClick={this.prettifyCode}>
+                {prettierParsers[leftMode] && <button className="btn" onClick={this.prettifyCode}>
                   Prettify
-                </button>
+                </button>}
               </div>
               {isBrowser && (
                 <CodeMirror
@@ -388,6 +404,9 @@ export default class ConversionPanel extends PureComponent {
               <div style={{ display: "contents" }}>
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
+                  {prettierParsers[splitMode] && <button className="btn" onClick={this.prettifySplitCode}>
+                    Prettify
+                  </button>}
                 </div>
                 <CodeMirror
                   onChange={(editor, metadata, value) =>
@@ -422,8 +441,8 @@ export default class ConversionPanel extends PureComponent {
             {isBrowser && (
               <CodeMirror
                 value={
-                  prettifyRightPanel ? (
-                    js_beautify(resultValue, { e4x: true })
+                  prettifyRightPanel && prettierParsers[rightMode] && resultValue ? (
+                    prettier.format(resultValue, {parser:prettierParsers[rightMode], printWidth: 70})
                   ) : (
                     resultValue
                   )

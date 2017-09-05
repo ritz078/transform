@@ -23,6 +23,7 @@ export default class Json2Ts extends PureComponent {
           leftMode="json"
           rightMode="javascript"
           url={this.props.url}
+          prettifyRightPanel={false}
         />
       </Layout>
     );

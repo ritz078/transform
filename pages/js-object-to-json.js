@@ -6,7 +6,7 @@ import text from "../utils/dummy-object-json"
 
 const defaultText = stringify(eval(`(${text})`))
 
-export default class Main extends PureComponent {
+export default class extends PureComponent {
 
   getTransformedValue = newValue => {
     return JSON.stringify(eval('(' + newValue + ')'), null ,2)
@@ -24,6 +24,7 @@ export default class Main extends PureComponent {
           getTransformedValue={this.getTransformedValue}
           name={"js_to_json"}
           defaultText={defaultText}
+          prettifyRightPanel={false}
         />
       </Layout>
     );
