@@ -24,6 +24,10 @@ module.exports = {
       new webpack.DefinePlugin({IN_BROWSER: true})
     )
 
+    config.resolve.alias = {
+      'babel-core': 'babel-standalone'
+    }
+
     if (!dev) {
       config.plugins.push(
         new BabiliPlugin()
