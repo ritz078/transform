@@ -14,7 +14,18 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Ritesh Kumar",
+    "email": "rkritesh078@gmail.com",
+    "url": "https://github.com/ritz078"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/transform-it/transform-www"
+  },
+  "bugs": {
+    "url": "https://github.com/transform-it/transform-www/issues"
+  },
   "license": "MIT",
   "dependencies": {
     "@tsuyoshiwada/htmltojsx": "^0.0.4",
