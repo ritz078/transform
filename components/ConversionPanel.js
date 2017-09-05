@@ -169,9 +169,13 @@ export default class ConversionPanel extends PureComponent {
   copyCode = () => {
     const { rightMode } = this.props;
     const { resultValue } = this.state;
+    const parser = prettierParsers[rightMode]
+
     copy(
-      rightMode !== "rust"
-        ? js_beautify(resultValue, { e4x: true })
+      parser
+        ? prettier.format(resultValue, {
+          parser
+        })
         : resultValue
     );
     this.setState({
