@@ -5418,16 +5418,16 @@ transform-graphql-type-annotations@^0.1.1:
     apollo-codegen "0.17.0-alpha.1"
     graphql "^0.10.5"
 
-transform-json-types@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/transform-json-types/-/transform-json-types-0.2.3.tgz#04b68084033cd5511c06007cf4c66019868d1321"
+transform-json-types@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/transform-json-types/-/transform-json-types-0.2.5.tgz#c1d5b6cd1e7b5229a6efea844dca07b9564861a5"
   dependencies:
     lodash "^4.17.4"
     sha1 "^1.1.1"
 
-transform-svg-to-native@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/transform-svg-to-native/-/transform-svg-to-native-0.1.1.tgz#6d890603af21b0cca24ebb8e0a3b3f8b5c26a233"
+transform-svg-to-native@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/transform-svg-to-native/-/transform-svg-to-native-0.1.3.tgz#53c0b0d57921417b7df6ea4170c6e385c2a39261"
   dependencies:
     "@tsuyoshiwada/htmltojsx" "^0.0.4"
     all-contributors-cli "^4.4.0"
@@ -5440,6 +5440,7 @@ transform-svg-to-native@^0.1.1:
     is-capitalized "^1.0.0"
     js-beautify "^1.6.14"
     lodash "^4.17.4"
+    prettier "^1.6.1"
     prettydiff "^99.0.1"
     svgo "^0.7.2"
 
