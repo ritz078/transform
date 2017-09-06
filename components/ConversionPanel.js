@@ -97,9 +97,16 @@ export default class ConversionPanel extends PureComponent {
   fetchJSON = async () => {
     const url = window.prompt('Enter URL to fetch JSON from a remote server.')
     if (!url) return
-    const res = await unfetch(url)
-    const json = await res.json()
-    this.onChange(JSON.stringify(json, null, 2))
+    try {
+      const res = await unfetch(url)
+      const json = await res.json()
+      this.onChange(JSON.stringify(json, null, 2))
+    } catch (e) {
+      this.setState({
+        info: e.message,
+        infoType: "error"
+      });
+    }
   }
 
   onChange = async (newValue, leftSplitValue) => {
@@ -190,8 +197,7 @@ export default class ConversionPanel extends PureComponent {
     const codeMirrorOptions = {
       lineNumbers: true,
       theme: "chrome-devtools",
-      lineWrapping: true,
-      scrollbarStyle: null
+      lineWrapping: true
     };
 
     return (

@@ -5414,9 +5414,9 @@ transform-graphql-type-annotations@^0.1.1:
     apollo-codegen "0.17.0-alpha.1"
     graphql "^0.10.5"
 
-transform-json-types@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/transform-json-types/-/transform-json-types-0.2.2.tgz#c1f9e2fc827522edbaa6f2b92f689c91b3a35ad7"
+transform-json-types@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/transform-json-types/-/transform-json-types-0.2.3.tgz#04b68084033cd5511c06007cf4c66019868d1321"
   dependencies:
     lodash "^4.17.4"
     sha1 "^1.1.1"
