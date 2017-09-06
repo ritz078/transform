@@ -201,6 +201,15 @@ export default class ConversionPanel extends PureComponent {
       scrollbarStyle: null
     };
 
+    // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
+    clearTimeout(this.footerTimeout);
+    if (infoType === "success") {
+      this.footerTimeout = setTimeout(() => this.setState({
+        info: "",
+        infoType: ""
+      }), 2000);
+    }
+
     return (
       <div className="wrapper">
         <style jsx>{`
