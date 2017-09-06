@@ -197,7 +197,8 @@ export default class ConversionPanel extends PureComponent {
     const codeMirrorOptions = {
       lineNumbers: true,
       theme: "chrome-devtools",
-      lineWrapping: true
+      lineWrapping: true,
+      scrollbarStyle: null
     };
 
     return (
@@ -242,7 +243,8 @@ export default class ConversionPanel extends PureComponent {
           .section {
             flex: 1;
             position: relative;
-            height: calc(100vh - 50px);
+                display: flex;
+    flex-direction: column;
           }
 
           .right {
@@ -291,6 +293,13 @@ export default class ConversionPanel extends PureComponent {
             color: #666;
             font-weight: normal;
           }
+
+          .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+          }
         `}</style>
 
         <style global jsx>{`
@@ -304,37 +313,37 @@ export default class ConversionPanel extends PureComponent {
             overflow: hidden;
           }
 
+          .react-codemirror2 {
+            overflow: scroll
+          }
+
           .react-codemirror2,
           .CodeMirror {
             display: flex;
             flex: 1;
             width: 100%;
-            height: calc(100% - 50px);
+            height: 100%;
           }
 
           .CodeMirror {
-            height: calc(100%);
-          }
-
-          .right .CodeMirror-scroll {
-            width: 100%;
+            min-height: 500px;
           }
 
           .CodeMirror-scroll {
             width: 100%;
+            min-height: 500px;
           }
 
           .split #code,
           .split .CodeMirror {
-            height: calc(100%);
           }
-          .split .react-codemirror2 {
-            height: calc(50% - 52px);
+          .right .react-codemirror2 {
+              background-color: #fafafa;
           }
 
           .right .CodeMirror {
-            background-color: #fafafa;
             padding-left: 20px;
+            background-color: #fafafa;
           }
 
           .right .ace_scroller {
@@ -359,7 +368,7 @@ export default class ConversionPanel extends PureComponent {
 
         <div className="content-wrapper">
           <div className={leftClass}>
-            <div style={{ display: "contents" }}>
+            <div className="panel">
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
                 {leftMode === 'json' && showFetchButton && <button className="btn" onClick={this.fetchJSON}>{fetchButtonText}</button>}
@@ -380,7 +389,7 @@ export default class ConversionPanel extends PureComponent {
             </div>
             {splitLeft &&
             isBrowser && (
-              <div style={{ display: "contents" }}>
+              <div className="panel">
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
                 </div>
@@ -397,6 +406,7 @@ export default class ConversionPanel extends PureComponent {
             )}
           </div>
           <div className="section right">
+            <div className="panel">
             <div className="header">
               <h4 className="title">{rightTitle}</h4>
               {onCheckboxChange && (
@@ -431,6 +441,7 @@ export default class ConversionPanel extends PureComponent {
                 }}
               />
             )}
+          </div>
           </div>
         </div>
         <div className={`footer${infoType ? " has-" + infoType : ""}`}>
