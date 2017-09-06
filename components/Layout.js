@@ -171,9 +171,8 @@ export default class Layout extends PureComponent {
           }
 
           .nav {
-            padding: 20px 0;
             flex: 1;
-            overflow-y: scroll;
+            overflow-y: auto;
           }
 
           .twitter {
@@ -187,16 +186,10 @@ export default class Layout extends PureComponent {
           }
 
           .footer {
-            height: 70px;
+            padding: 10px 5px;
             text-align: center;
             color: #fff;
             font-family: "Lato", sans-serif;
-          }
-
-          .footer svg {
-            height: 36px;
-            width: 30px;
-            color: #fff;
           }
 
           .badge {
@@ -296,9 +289,8 @@ export default class Layout extends PureComponent {
           <div className="logo">
             <Logo />
           </div>
+          <div className="info">Use Ctrl/Cmd + P for quick search</div>
           <div className="nav">
-            <div className="info">Use Ctrl/Cmd + P for quick search</div>
-
             <Collapse
               onChange={this.onChange}
               accordion
@@ -333,7 +325,7 @@ export default class Layout extends PureComponent {
           </div>
 
           <div className="footer">
-            <br />Created by{" "}
+            Created by{" "}
             <a
               target="_blank"
               className="twitter"

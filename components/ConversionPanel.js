@@ -450,9 +450,13 @@ export default class ConversionPanel extends PureComponent {
             </div>
           </div>
         </div>
-        <div className={`footer${infoType ? " has-" + infoType : ""}`}>
-          <span className="info">{info}</span>
-        </div>
+        {
+          infoType !== "" && (
+            <div className={`footer has-${infoType}`}>
+              <span className="info">{info}</span>
+            </div>
+          )
+        }
       </div>
     );
   }
