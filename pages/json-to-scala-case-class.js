@@ -2,11 +2,12 @@ import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
-import transform from "transform-json-types"
+import transform from "transform-json-types";
 export default class extends PureComponent {
-  getTransformedValue = code => transform(code, {
-    lang: "scala"
-  })
+  getTransformedValue = code =>
+    transform(code, {
+      lang: "scala"
+    });
 
   render() {
     return (

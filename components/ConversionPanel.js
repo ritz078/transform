@@ -20,14 +20,14 @@ if (isBrowser) {
 }
 
 const prettierParsers = {
-  css: 'postcss',
-  javascript: 'babylon',
-  jsx: 'babylon',
-  graphql: 'graphql',
-  json: 'json',
-  typescript: 'typescript',
-  flow: 'flow'
-}
+  css: "postcss",
+  javascript: "babylon",
+  jsx: "babylon",
+  graphql: "graphql",
+  json: "json",
+  typescript: "typescript",
+  flow: "flow"
+};
 
 const modeMapping = {
   javascript: {
@@ -46,7 +46,7 @@ const modeMapping = {
     htmlMode: true
   },
   flow: {
-    name: 'javascript',
+    name: "javascript",
     typescript: true
   },
   mysql: "text/x-mysql",
@@ -83,7 +83,7 @@ export default class ConversionPanel extends PureComponent {
     prettifyRightPanel: true,
     splitLeft: false,
     showFetchButton: true,
-    fetchButtonText: 'Fetch JSON from URL'
+    fetchButtonText: "Fetch JSON from URL"
   };
 
   state = {
@@ -97,16 +97,16 @@ export default class ConversionPanel extends PureComponent {
   componentDidMount() {
     const { defaultText, splitValue } = this.props;
 
-    this.onChange(defaultText, splitValue)
+    this.onChange(defaultText, splitValue);
   }
 
   fetchJSON = async () => {
-    const url = window.prompt('Enter URL to fetch JSON from a remote server.')
-    if (!url) return
-    const res = await unfetch(url)
-    const json = await res.json()
-    this.onChange(JSON.stringify(json, null, 2))
-  }
+    const url = window.prompt("Enter URL to fetch JSON from a remote server.");
+    if (!url) return;
+    const res = await unfetch(url);
+    const json = await res.json();
+    this.onChange(JSON.stringify(json, null, 2));
+  };
 
   onChange = async (newValue, leftSplitValue) => {
     const nValue = newValue || this.state.value;
@@ -139,7 +139,7 @@ export default class ConversionPanel extends PureComponent {
     const checked = e.currentTarget.checked;
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
-        this.onChange()
+        this.onChange();
       });
     }
   };
@@ -150,32 +150,36 @@ export default class ConversionPanel extends PureComponent {
     });
   };
 
-  setSplitValue = splitValue => this.setState({splitValue})
+  setSplitValue = splitValue => this.setState({ splitValue });
 
   prettifyCode = () => {
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.setResult(prettier.format(value, {parser: prettierParsers[leftMode]}));
+    this.setResult(
+      prettier.format(value, { parser: prettierParsers[leftMode] })
+    );
   };
 
   prettifySplitCode = () => {
     const { splitMode } = this.props;
     const { splitValue } = this.state;
 
-    this.setSplitValue(prettier.format(splitValue, {parser: prettierParsers[splitMode]}));
-  }
+    this.setSplitValue(
+      prettier.format(splitValue, { parser: prettierParsers[splitMode] })
+    );
+  };
 
   copyCode = () => {
     const { rightMode } = this.props;
     const { resultValue } = this.state;
-    const parser = prettierParsers[rightMode]
+    const parser = prettierParsers[rightMode];
 
     copy(
       parser
         ? prettier.format(resultValue, {
-          parser
-        })
+            parser
+          })
         : resultValue
     );
     this.setState({
@@ -376,10 +380,17 @@ export default class ConversionPanel extends PureComponent {
             <div style={{ display: "contents" }}>
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
-                {leftMode === 'json' && showFetchButton && <button className="btn" onClick={this.fetchJSON}>{fetchButtonText}</button>}
-                {prettierParsers[leftMode] && <button className="btn" onClick={this.prettifyCode}>
-                  Prettify
-                </button>}
+                {leftMode === "json" &&
+                showFetchButton && (
+                  <button className="btn" onClick={this.fetchJSON}>
+                    {fetchButtonText}
+                  </button>
+                )}
+                {prettierParsers[leftMode] && (
+                  <button className="btn" onClick={this.prettifyCode}>
+                    Prettify
+                  </button>
+                )}
               </div>
               {isBrowser && (
                 <CodeMirror
@@ -397,9 +408,11 @@ export default class ConversionPanel extends PureComponent {
               <div style={{ display: "contents" }}>
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
-                  {prettierParsers[splitMode] && <button className="btn" onClick={this.prettifySplitCode}>
-                    Prettify
-                  </button>}
+                  {prettierParsers[splitMode] && (
+                    <button className="btn" onClick={this.prettifySplitCode}>
+                      Prettify
+                    </button>
+                  )}
                 </div>
                 <CodeMirror
                   onChange={(editor, metadata, value) =>
@@ -434,8 +447,13 @@ export default class ConversionPanel extends PureComponent {
             {isBrowser && (
               <CodeMirror
                 value={
-                  prettifyRightPanel && prettierParsers[rightMode] && resultValue ? (
-                    prettier.format(resultValue, {parser:prettierParsers[rightMode], printWidth: 70})
+                  prettifyRightPanel &&
+                  prettierParsers[rightMode] &&
+                  resultValue ? (
+                    prettier.format(resultValue, {
+                      parser: prettierParsers[rightMode],
+                      printWidth: 70
+                    })
                   ) : (
                     resultValue
                   )

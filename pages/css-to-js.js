@@ -30,8 +30,8 @@ export default class Css2Js extends PureComponent {
     isRn: false
   };
 
-  getTransformedValue = (newValue) => {
-    return `const styles = ${cssToJS(newValue, this.state.isRn)}`
+  getTransformedValue = newValue => {
+    return `const styles = ${cssToJS(newValue, this.state.isRn)}`;
   };
 
   render() {

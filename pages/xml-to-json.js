@@ -17,9 +17,13 @@ export default class extends PureComponent {
   };
 
   getTransformedValue = newValue => {
-    return JSON.stringify(JSON.parse(xml2json(newValue, {
-      compact: this.state.isCompactMode
-    })));
+    return JSON.stringify(
+      JSON.parse(
+        xml2json(newValue, {
+          compact: this.state.isCompactMode
+        })
+      )
+    );
   };
 
   render() {
