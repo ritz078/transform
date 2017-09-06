@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
-import { compile } from "json-schema-to-typescript"
+import { compile } from "json-schema-to-typescript";
 
 const json = `{
   title: 'Example Schema',
@@ -29,10 +29,10 @@ const json = `{
     }
   },
   required: ['firstName', 'lastName']
-}`
+}`;
 
 export default class Json2Ts extends PureComponent {
-  getTransformedValue = code => compile(eval('(' + code + ')'))
+  getTransformedValue = code => compile(eval("(" + code + ")"));
 
   render() {
     return (

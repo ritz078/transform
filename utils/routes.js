@@ -41,7 +41,7 @@ export const categorizedRoutes = [
       {
         label: "JSON to React PropTypes",
         path: "/",
-        title: 'Transform | All important transforms at one place.',
+        title: "Transform | All important transforms at one place.",
         desc:
           "An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
       },
@@ -87,7 +87,8 @@ export const categorizedRoutes = [
       {
         label: "JSON Schema to TypeScript",
         path: "/json-schema-to-ts",
-        desc: "An online REPL for converting JSON Schema to TypeScript Interface."
+        desc:
+          "An online REPL for converting JSON Schema to TypeScript Interface."
       }
     ]
   },
@@ -156,11 +157,13 @@ export const categorizedRoutes = [
   {
     category: "Go",
     iconName: "icon-go",
-    content: [{
-      label: "JSON to Go Struct",
-      path: "/json-to-go",
-      desc: "An online REPL to generate Go Struct from JSON."
-    }]
+    content: [
+      {
+        label: "JSON to Go Struct",
+        path: "/json-to-go",
+        desc: "An online REPL to generate Go Struct from JSON."
+      }
+    ]
   },
   {
     category: "XML",

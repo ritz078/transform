@@ -77,7 +77,7 @@ export default class ConversionPanel extends PureComponent {
     prettifyRightPanel: true,
     splitLeft: false,
     showFetchButton: true,
-    fetchButtonText: 'Fetch JSON from URL'
+    fetchButtonText: "Fetch JSON from URL"
   };
 
   state = {
@@ -91,23 +91,23 @@ export default class ConversionPanel extends PureComponent {
   componentDidMount() {
     const { defaultText, splitValue } = this.props;
 
-    this.onChange(defaultText, splitValue)
+    this.onChange(defaultText, splitValue);
   }
 
   fetchJSON = async () => {
-    const url = window.prompt('Enter URL to fetch JSON from a remote server.')
-    if (!url) return
+    const url = window.prompt("Enter URL to fetch JSON from a remote server.");
+    if (!url) return;
     try {
-      const res = await unfetch(url)
-      const json = await res.json()
-      this.onChange(JSON.stringify(json, null, 2))
+      const res = await unfetch(url);
+      const json = await res.json();
+      this.onChange(JSON.stringify(json, null, 2));
     } catch (e) {
       this.setState({
         info: e.message,
         infoType: "error"
       });
     }
-  }
+  };
 
   onChange = async (newValue, leftSplitValue) => {
     const nValue = newValue || this.state.value;
@@ -140,7 +140,7 @@ export default class ConversionPanel extends PureComponent {
     const checked = e.currentTarget.checked;
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
-        this.onChange()
+        this.onChange();
       });
     }
   };
@@ -238,13 +238,14 @@ export default class ConversionPanel extends PureComponent {
             flex: 1;
             display: flex;
             flex-direction: row;
+            overflow: hidden;
           }
 
           .section {
             flex: 1;
             position: relative;
-                display: flex;
-    flex-direction: column;
+            display: flex;
+            flex-direction: column;
           }
 
           .right {
@@ -314,7 +315,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           .react-codemirror2 {
-            overflow: scroll
+            overflow: scroll;
           }
 
           .react-codemirror2,
@@ -338,7 +339,7 @@ export default class ConversionPanel extends PureComponent {
           .split .CodeMirror {
           }
           .right .react-codemirror2 {
-              background-color: #fafafa;
+            background-color: #fafafa;
           }
 
           .right .CodeMirror {
@@ -371,7 +372,12 @@ export default class ConversionPanel extends PureComponent {
             <div className="panel">
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
-                {leftMode === 'json' && showFetchButton && <button className="btn" onClick={this.fetchJSON}>{fetchButtonText}</button>}
+                {leftMode === "json" &&
+                showFetchButton && (
+                  <button className="btn" onClick={this.fetchJSON}>
+                    {fetchButtonText}
+                  </button>
+                )}
                 <button className="btn" onClick={this.prettifyCode}>
                   Prettify
                 </button>
@@ -407,41 +413,41 @@ export default class ConversionPanel extends PureComponent {
           </div>
           <div className="section right">
             <div className="panel">
-            <div className="header">
-              <h4 className="title">{rightTitle}</h4>
-              {onCheckboxChange && (
-                <label htmlFor="#text">
-                  <input
-                    type="checkbox"
-                    id="#text"
-                    defaultChecked={initialCheckboxValue}
-                    onChange={this.toggleCheckbox}
-                  />{" "}
-                  {checkboxText}
-                </label>
+              <div className="header">
+                <h4 className="title">{rightTitle}</h4>
+                {onCheckboxChange && (
+                  <label htmlFor="#text">
+                    <input
+                      type="checkbox"
+                      id="#text"
+                      defaultChecked={initialCheckboxValue}
+                      onChange={this.toggleCheckbox}
+                    />{" "}
+                    {checkboxText}
+                  </label>
+                )}
+                <button className="btn" onClick={this.copyCode}>
+                  Copy
+                </button>
+              </div>
+              {isBrowser && (
+                <CodeMirror
+                  value={
+                    prettifyRightPanel ? (
+                      js_beautify(resultValue, { e4x: true })
+                    ) : (
+                      resultValue
+                    )
+                  }
+                  options={{
+                    readOnly: true,
+                    mode: modeMapping[rightMode] || rightMode,
+                    ...codeMirrorOptions,
+                    lineNumbers: false
+                  }}
+                />
               )}
-              <button className="btn" onClick={this.copyCode}>
-                Copy
-              </button>
             </div>
-            {isBrowser && (
-              <CodeMirror
-                value={
-                  prettifyRightPanel ? (
-                    js_beautify(resultValue, { e4x: true })
-                  ) : (
-                    resultValue
-                  )
-                }
-                options={{
-                  readOnly: true,
-                  mode: modeMapping[rightMode] || rightMode,
-                  ...codeMirrorOptions,
-                  lineNumbers: false
-                }}
-              />
-            )}
-          </div>
           </div>
         </div>
         <div className={`footer${infoType ? " has-" + infoType : ""}`}>

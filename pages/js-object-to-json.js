@@ -1,15 +1,14 @@
 import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
-import stringify from "stringify-object"
+import stringify from "stringify-object";
 import ConversionPanel from "../components/ConversionPanel";
-import text from "../utils/dummy-object-json"
+import text from "../utils/dummy-object-json";
 
-const defaultText = stringify(eval(`(${text})`))
+const defaultText = stringify(eval(`(${text})`));
 
 export default class Main extends PureComponent {
-
   getTransformedValue = newValue => {
-    return JSON.stringify(eval('(' + newValue + ')'), null ,2)
+    return JSON.stringify(eval("(" + newValue + ")"), null, 2);
   };
 
   render() {

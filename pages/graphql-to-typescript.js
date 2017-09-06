@@ -6,7 +6,7 @@ import { dummySchema, dummyQuery } from "../utils/graphql-schema";
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue, splitValue) => {
-    return transform(newValue, splitValue, 'typescript');
+    return transform(newValue, splitValue, "typescript");
   };
 
   render() {
