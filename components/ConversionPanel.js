@@ -103,9 +103,16 @@ export default class ConversionPanel extends PureComponent {
   fetchJSON = async () => {
     const url = window.prompt("Enter URL to fetch JSON from a remote server.");
     if (!url) return;
-    const res = await unfetch(url);
-    const json = await res.json();
-    this.onChange(JSON.stringify(json, null, 2));
+    try {
+      const res = await unfetch(url);
+      const json = await res.json();
+      this.onChange(JSON.stringify(json, null, 2));
+    } catch (e) {
+      this.setState({
+        info: e.message,
+        infoType: "error"
+      });
+    }
   };
 
   onChange = async (newValue, leftSplitValue) => {
@@ -255,12 +262,14 @@ export default class ConversionPanel extends PureComponent {
             flex: 1;
             display: flex;
             flex-direction: row;
+            overflow: hidden;
           }
 
           .section {
             flex: 1;
             position: relative;
-            height: calc(100vh - 50px);
+            display: flex;
+            flex-direction: column;
           }
 
           .right {
@@ -309,6 +318,13 @@ export default class ConversionPanel extends PureComponent {
             color: #666;
             font-weight: normal;
           }
+
+          .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+          }
         `}</style>
 
         <style global jsx>{`
@@ -322,37 +338,37 @@ export default class ConversionPanel extends PureComponent {
             overflow: hidden;
           }
 
+          .react-codemirror2 {
+            overflow: scroll;
+          }
+
           .react-codemirror2,
           .CodeMirror {
             display: flex;
             flex: 1;
             width: 100%;
-            height: calc(100% - 50px);
+            height: 100%;
           }
 
           .CodeMirror {
-            height: calc(100%);
-          }
-
-          .right .CodeMirror-scroll {
-            width: 100%;
+            min-height: 500px;
           }
 
           .CodeMirror-scroll {
             width: 100%;
+            min-height: 500px;
           }
 
           .split #code,
           .split .CodeMirror {
-            height: calc(100%);
           }
-          .split .react-codemirror2 {
-            height: calc(50% - 52px);
+          .right .react-codemirror2 {
+            background-color: #fafafa;
           }
 
           .right .CodeMirror {
-            background-color: #fafafa;
             padding-left: 20px;
+            background-color: #fafafa;
           }
 
           .right .ace_scroller {
@@ -377,9 +393,18 @@ export default class ConversionPanel extends PureComponent {
 
         <div className="content-wrapper">
           <div className={leftClass}>
-            <div style={{ display: "contents" }}>
+            <div className="panel">
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
+                {leftMode === "json" &&
+                showFetchButton && (
+                  <button className="btn" onClick={this.fetchJSON}>
+                    {fetchButtonText}
+                  </button>
+                )}
+                <button className="btn" onClick={this.prettifyCode}>
+                  Prettify
+                </button>
                 {leftMode === "json" &&
                 showFetchButton && (
                   <button className="btn" onClick={this.fetchJSON}>
@@ -405,7 +430,7 @@ export default class ConversionPanel extends PureComponent {
             </div>
             {splitLeft &&
             isBrowser && (
-              <div style={{ display: "contents" }}>
+              <div className="panel">
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
                   {prettierParsers[splitMode] && (
@@ -466,6 +491,42 @@ export default class ConversionPanel extends PureComponent {
                 }}
               />
             )}
+            <div className="panel">
+              <div className="header">
+                <h4 className="title">{rightTitle}</h4>
+                {onCheckboxChange && (
+                  <label htmlFor="#text">
+                    <input
+                      type="checkbox"
+                      id="#text"
+                      defaultChecked={initialCheckboxValue}
+                      onChange={this.toggleCheckbox}
+                    />{" "}
+                    {checkboxText}
+                  </label>
+                )}
+                <button className="btn" onClick={this.copyCode}>
+                  Copy
+                </button>
+              </div>
+              {isBrowser && (
+                <CodeMirror
+                  value={
+                    prettifyRightPanel ? (
+                      js_beautify(resultValue, { e4x: true })
+                    ) : (
+                      resultValue
+                    )
+                  }
+                  options={{
+                    readOnly: true,
+                    mode: modeMapping[rightMode] || rightMode,
+                    ...codeMirrorOptions,
+                    lineNumbers: false
+                  }}
+                />
+              )}
+            </div>
           </div>
         </div>
         <div className={`footer${infoType ? " has-" + infoType : ""}`}>
