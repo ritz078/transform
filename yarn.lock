@@ -2602,6 +2602,10 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
+gofmt.js@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/gofmt.js/-/gofmt.js-0.0.2.tgz#94818cea0db4f633589db805d0d7cb1b7ac02df8"
+
 got@^5.0.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/got/-/got-5.7.1.tgz#5f81635a61e4a6589f180569ea4e381680a51f35"
