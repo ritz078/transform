@@ -164,6 +164,7 @@ export default class ConversionPanel extends PureComponent {
   setSplitValue = splitValue => this.setState({ splitValue });
 
   prettifyCode = () => {
+    if (!this.isPrettierAvailable()) return
     const { leftMode } = this.props;
     const { value } = this.state;
 
@@ -173,6 +174,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   prettifySplitCode = () => {
+    if(!this.isPrettierAvailable()) return
     const { splitMode } = this.props;
     const { splitValue } = this.state;
 
@@ -237,6 +239,9 @@ export default class ConversionPanel extends PureComponent {
       }), 2000);
     }
 
+    const prettifyClass = cn('btn', {
+      disabled: this.isPrettierAvailable()
+    })
     return (
       <div className="wrapper">
         <script src="https://bundle.run/prettier@1.6.1" />
@@ -307,6 +312,13 @@ export default class ConversionPanel extends PureComponent {
             color: #fff;
             line-height: 16px;
             height: 32px;
+          }
+
+          .btn.disabled {
+            background-color: #e0e0e0;
+    pointer-events: none;
+    color: #7b7b7b;
+    cursor: not-allowed;
           }
 
           .btn:hover {
@@ -415,8 +427,8 @@ export default class ConversionPanel extends PureComponent {
                     {fetchButtonText}
                   </button>
                 )}
-                {this.isPrettierAvailable() && prettierParsers[leftMode] && (
-                  <button className="btn" onClick={this.prettifyCode}>
+                {prettierParsers[leftMode] && (
+                  <button className={prettifyClass} onClick={this.prettifyCode}>
                     Prettify
                   </button>
                 )}
@@ -437,8 +449,8 @@ export default class ConversionPanel extends PureComponent {
               <div className="panel">
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
-                  {this.isPrettierAvailable() && prettierParsers[splitMode] && (
-                    <button className="btn" onClick={this.prettifySplitCode}>
+                  {prettierParsers[splitMode] && (
+                    <button className={prettifyClass} onClick={this.prettifySplitCode}>
                       Prettify
                     </button>
                   )}
