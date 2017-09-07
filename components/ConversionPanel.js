@@ -411,15 +411,6 @@ export default class ConversionPanel extends PureComponent {
                     {fetchButtonText}
                   </button>
                 )}
-                <button className="btn" onClick={this.prettifyCode}>
-                  Prettify
-                </button>
-                {leftMode === "json" &&
-                showFetchButton && (
-                  <button className="btn" onClick={this.fetchJSON}>
-                    {fetchButtonText}
-                  </button>
-                )}
                 {prettierParsers[leftMode] && (
                   <button className="btn" onClick={this.prettifyCode}>
                     Prettify
@@ -461,45 +452,6 @@ export default class ConversionPanel extends PureComponent {
             )}
           </div>
           <div className="section right">
-            <div className="header">
-              <h4 className="title">{rightTitle}</h4>
-              {onCheckboxChange && (
-                <label htmlFor="#text">
-                  <input
-                    type="checkbox"
-                    id="#text"
-                    defaultChecked={initialCheckboxValue}
-                    onChange={this.toggleCheckbox}
-                  />{" "}
-                  {checkboxText}
-                </label>
-              )}
-              <button className="btn" onClick={this.copyCode}>
-                Copy
-              </button>
-            </div>
-            {isBrowser && (
-              <CodeMirror
-                value={
-                  prettifyRightPanel &&
-                  prettierParsers[rightMode] &&
-                  resultValue ? (
-                    prettier.format(resultValue, {
-                      parser: prettierParsers[rightMode],
-                      printWidth: 70
-                    })
-                  ) : (
-                    resultValue
-                  )
-                }
-                options={{
-                  readOnly: true,
-                  mode: modeMapping[rightMode] || rightMode,
-                  ...codeMirrorOptions,
-                  lineNumbers: false
-                }}
-              />
-            )}
             <div className="panel">
               <div className="header">
                 <h4 className="title">{rightTitle}</h4>
@@ -521,8 +473,13 @@ export default class ConversionPanel extends PureComponent {
               {isBrowser && (
                 <CodeMirror
                   value={
-                    prettifyRightPanel ? (
-                      js_beautify(resultValue, { e4x: true })
+                    prettifyRightPanel &&
+                    prettierParsers[rightMode] &&
+                    resultValue ? (
+                      prettier.format(resultValue, {
+                        parser: prettierParsers[rightMode],
+                        printWidth: 70
+                      })
                     ) : (
                       resultValue
                     )

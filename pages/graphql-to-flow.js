@@ -25,6 +25,7 @@ export default class Json2Ts extends PureComponent {
           splitMode={"graphql"}
           splitTitle={"Query"}
           splitValue={dummyQuery}
+          prettifyRightPanel={false}
         />
       </Layout>
     );
