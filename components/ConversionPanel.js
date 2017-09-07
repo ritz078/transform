@@ -100,6 +100,10 @@ export default class ConversionPanel extends PureComponent {
     this.onChange(defaultText, splitValue);
   }
 
+  isPrettierAvailable () {
+    return isBrowser && window.prettier
+  }
+
   fetchJSON = async () => {
     const url = window.prompt("Enter URL to fetch JSON from a remote server.");
     if (!url) return;
@@ -164,7 +168,7 @@ export default class ConversionPanel extends PureComponent {
     const { value } = this.state;
 
     this.setResult(
-      prettier.format(value, { parser: prettierParsers[leftMode] })
+      window.prettier.format(value, { parser: prettierParsers[leftMode] })
     );
   };
 
@@ -173,7 +177,7 @@ export default class ConversionPanel extends PureComponent {
     const { splitValue } = this.state;
 
     this.setSplitValue(
-      prettier.format(splitValue, { parser: prettierParsers[splitMode] })
+      window.prettier.format(splitValue, { parser: prettierParsers[splitMode] })
     );
   };
 
@@ -184,7 +188,7 @@ export default class ConversionPanel extends PureComponent {
 
     copy(
       parser
-        ? prettier.format(resultValue, {
+        ? window.prettier.format(resultValue, {
             parser
           })
         : resultValue
@@ -411,7 +415,7 @@ export default class ConversionPanel extends PureComponent {
                     {fetchButtonText}
                   </button>
                 )}
-                {prettierParsers[leftMode] && (
+                {this.isPrettierAvailable() && prettierParsers[leftMode] && (
                   <button className="btn" onClick={this.prettifyCode}>
                     Prettify
                   </button>
@@ -433,7 +437,7 @@ export default class ConversionPanel extends PureComponent {
               <div className="panel">
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
-                  {prettierParsers[splitMode] && (
+                  {this.isPrettierAvailable() && prettierParsers[splitMode] && (
                     <button className="btn" onClick={this.prettifySplitCode}>
                       Prettify
                     </button>
@@ -473,10 +477,11 @@ export default class ConversionPanel extends PureComponent {
               {isBrowser && (
                 <CodeMirror
                   value={
+                    this.isPrettierAvailable() &&
                     prettifyRightPanel &&
                     prettierParsers[rightMode] &&
                     resultValue ? (
-                      prettier.format(resultValue, {
+                      window.prettier.format(resultValue, {
                         parser: prettierParsers[rightMode],
                         printWidth: 70
                       })
