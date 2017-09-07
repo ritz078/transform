@@ -2,7 +2,7 @@ const x = `{
   "hello": [
     {
       "_id": "5988946e45e52d60b33a25c7",
-      "latitude": 50.087977,
+      "type": 50.087977,
       "longitude": 72.167197,
       "tags": [
         "nulla",
@@ -22,7 +22,7 @@ const x = `{
     {
       "optionalField": "hello",
       "_id": "5988946ef6090217857d7b0f",
-      "latitude": 47.460772,
+      "type": 47.460772,
       "longitude": 85.95137,
       "tags": [
         "aliqua",
