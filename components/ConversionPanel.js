@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import cn from "classnames";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
-import { html_beautify, css_beautify, js_beautify } from "js-beautify";
 import unfetch from "unfetch";
 
 let CodeMirror;
@@ -20,11 +19,14 @@ if (isBrowser) {
   require("codemirror/mode/go/go");
 }
 
-const prettifyMap = {
-  css: css_beautify,
-  json: js_beautify,
-  html: html_beautify,
-  typescript: js_beautify
+const prettierParsers = {
+  css: "postcss",
+  javascript: "babylon",
+  jsx: "babylon",
+  graphql: "graphql",
+  json: "json",
+  typescript: "typescript",
+  flow: "flow"
 };
 
 const modeMapping = {
@@ -42,6 +44,10 @@ const modeMapping = {
   html: {
     name: "xml",
     htmlMode: true
+  },
+  flow: {
+    name: "javascript",
+    typescript: true
   },
   mysql: "text/x-mysql",
   scala: "text/x-scala"
@@ -92,6 +98,10 @@ export default class ConversionPanel extends PureComponent {
     const { defaultText, splitValue } = this.props;
 
     this.onChange(defaultText, splitValue);
+  }
+
+  isPrettierAvailable() {
+    return isBrowser && !!window.prettier;
   }
 
   fetchJSON = async () => {
@@ -151,19 +161,38 @@ export default class ConversionPanel extends PureComponent {
     });
   };
 
+  setSplitValue = splitValue => this.setState({ splitValue });
+
   prettifyCode = () => {
+    if (!this.isPrettierAvailable()) return;
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.setResult(prettifyMap[leftMode](value, { indent_size: 2 }));
+    this.setResult(
+      window.prettier.format(value, { parser: prettierParsers[leftMode] })
+    );
+  };
+
+  prettifySplitCode = () => {
+    if (!this.isPrettierAvailable()) return;
+    const { splitMode } = this.props;
+    const { splitValue } = this.state;
+
+    this.setSplitValue(
+      window.prettier.format(splitValue, { parser: prettierParsers[splitMode] })
+    );
   };
 
   copyCode = () => {
     const { rightMode } = this.props;
     const { resultValue } = this.state;
+    const parser = prettierParsers[rightMode];
+
     copy(
-      rightMode !== "rust"
-        ? js_beautify(resultValue, { e4x: true })
+      parser
+        ? window.prettier.format(resultValue, {
+            parser
+          })
         : resultValue
     );
     this.setState({
@@ -171,6 +200,12 @@ export default class ConversionPanel extends PureComponent {
       infoType: "success"
     });
   };
+
+  getPrettifyClass = () => {
+    return cn("btn", {
+      disabled: !this.isPrettierAvailable()
+    })
+  }
 
   render() {
     const {
@@ -204,14 +239,19 @@ export default class ConversionPanel extends PureComponent {
     // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
     clearTimeout(this.footerTimeout);
     if (infoType === "success") {
-      this.footerTimeout = setTimeout(() => this.setState({
-        info: "",
-        infoType: ""
-      }), 2000);
+      this.footerTimeout = setTimeout(
+        () =>
+          this.setState({
+            info: "",
+            infoType: ""
+          }),
+        2000
+      );
     }
 
     return (
       <div className="wrapper">
+        <script src="https://bundle.run/prettier@1.6.1" />
         <style jsx>{`
           .wrapper {
             display: flex;
@@ -279,6 +319,13 @@ export default class ConversionPanel extends PureComponent {
             color: #fff;
             line-height: 16px;
             height: 32px;
+          }
+
+          .btn.disabled {
+            background-color: #e0e0e0;
+            pointer-events: none;
+            color: #7b7b7b;
+            cursor: not-allowed;
           }
 
           .btn:hover {
@@ -387,9 +434,11 @@ export default class ConversionPanel extends PureComponent {
                     {fetchButtonText}
                   </button>
                 )}
-                <button className="btn" onClick={this.prettifyCode}>
-                  Prettify
-                </button>
+                {prettierParsers[leftMode] && (
+                  <button className={this.getPrettifyClass()} onClick={this.prettifyCode}>
+                    Prettify
+                  </button>
+                )}
               </div>
               {isBrowser && (
                 <CodeMirror
@@ -407,6 +456,14 @@ export default class ConversionPanel extends PureComponent {
               <div className="panel">
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
+                  {prettierParsers[splitMode] && (
+                    <button
+                      className={this.getPrettifyClass()}
+                      onClick={this.prettifySplitCode}
+                    >
+                      Prettify
+                    </button>
+                  )}
                 </div>
                 <CodeMirror
                   onChange={(editor, metadata, value) =>
@@ -442,8 +499,14 @@ export default class ConversionPanel extends PureComponent {
               {isBrowser && (
                 <CodeMirror
                   value={
-                    prettifyRightPanel ? (
-                      js_beautify(resultValue, { e4x: true })
+                    this.isPrettierAvailable() &&
+                    prettifyRightPanel &&
+                    prettierParsers[rightMode] &&
+                    resultValue ? (
+                      window.prettier.format(resultValue, {
+                        parser: prettierParsers[rightMode],
+                        printWidth: 70
+                      })
                     ) : (
                       resultValue
                     )
@@ -459,13 +522,11 @@ export default class ConversionPanel extends PureComponent {
             </div>
           </div>
         </div>
-        {
-          infoType !== "" && (
-            <div className={`footer has-${infoType}`}>
-              <span className="info">{info}</span>
-            </div>
-          )
-        }
+        {infoType !== "" && (
+          <div className={`footer has-${infoType}`}>
+            <span className="info">{info}</span>
+          </div>
+        )}
       </div>
     );
   }

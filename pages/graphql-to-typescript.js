@@ -18,14 +18,14 @@ export default class Json2Ts extends PureComponent {
           getTransformedValue={this.getTransformedValue}
           name={"graphql_to_typescript"}
           defaultText={dummySchema}
-          leftMode="typescript"
+          leftMode="json"
           rightMode="typescript"
           url={this.props.url}
-          prettifyRightPanel={false}
           splitLeft={true}
           splitMode={"graphql"}
           splitTitle={"Query"}
           splitValue={dummyQuery}
+          prettifyRightPanel={false}
         />
       </Layout>
     );

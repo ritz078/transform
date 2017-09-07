@@ -18,7 +18,7 @@ export default class Json2Ts extends PureComponent {
           name={"ts_interface"}
           defaultText={defaultText}
           leftMode="json"
-          rightMode="typescript"
+          rightMode="flow"
           url={this.props.url}
           prettifyRightPanel={false}
         />

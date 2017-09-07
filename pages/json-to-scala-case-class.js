@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
 import transform from "transform-json-types";
-export default class Json2Ts extends PureComponent {
+export default class extends PureComponent {
   getTransformedValue = code =>
     transform(code, {
       lang: "scala"
@@ -21,6 +21,7 @@ export default class Json2Ts extends PureComponent {
           leftMode="json"
           rightMode="scala"
           url={this.props.url}
+          prettifyRightPanel={false}
         />
       </Layout>
     );

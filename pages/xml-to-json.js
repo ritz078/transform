@@ -11,15 +11,19 @@ const text = `<note>
 </note>
 `;
 
-export default class Json2Ts extends PureComponent {
+export default class extends PureComponent {
   state = {
     isCompactMode: true
   };
 
   getTransformedValue = newValue => {
-    return xml2json(newValue, {
-      compact: this.state.isCompactMode
-    });
+    return JSON.stringify(
+      JSON.parse(
+        xml2json(newValue, {
+          compact: this.state.isCompactMode
+        })
+      )
+    );
   };
 
   render() {

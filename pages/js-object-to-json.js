@@ -6,7 +6,7 @@ import text from "../utils/dummy-object-json";
 
 const defaultText = stringify(eval(`(${text})`));
 
-export default class Main extends PureComponent {
+export default class extends PureComponent {
   getTransformedValue = newValue => {
     return JSON.stringify(eval("(" + newValue + ")"), null, 2);
   };

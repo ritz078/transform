@@ -31,7 +31,7 @@ export default class Css2Js extends PureComponent {
   };
 
   getTransformedValue = newValue => {
-    return cssToJS(newValue, this.state.isRn);
+    return `const styles = ${cssToJS(newValue, this.state.isRn)}`;
   };
 
   render() {
@@ -41,6 +41,7 @@ export default class Css2Js extends PureComponent {
           leftTitle="CSS"
           rightTitle="JavaScript"
           leftMode="css"
+          rightMode="javascript"
           getTransformedValue={this.getTransformedValue}
           name={"css_to_js"}
           defaultText={defaultText}
