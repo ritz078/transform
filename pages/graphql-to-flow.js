@@ -2,7 +2,7 @@ import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import { dummySchema, dummyQuery } from "../utils/graphql-schema";
-import transform from "transform-graphql-type-annotations"
+import transform from "transform-graphql-type-annotations";
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue, splitValue) => {

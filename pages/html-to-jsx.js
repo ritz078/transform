@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react";
 import HTMLtoJSX from "@tsuyoshiwada/htmltojsx";
-import convertSvgString from "transform-svg-to-native"
+import convertSvgString from "transform-svg-to-native";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
-import isSvg from "is-svg"
+import isSvg from "is-svg";
 
 const converter = new HTMLtoJSX({
   createClass: false
@@ -20,10 +20,16 @@ export default class Css2Js extends PureComponent {
 
   getTransformedValue = async (newValue: string) => {
     if (this.state.native && !isSvg(newValue)) {
-      throw new Error('You can only convert an SVG in this mode. Try turning off the react-native-svg checkbox.')
+      throw new Error(
+        "You can only convert an SVG in this mode. Try turning off the react-native-svg checkbox."
+      );
     }
 
-    return this.state.native ? new Promise(resolve => convertSvgString(newValue, (code) => resolve(code))) : converter.convert(newValue)
+    return this.state.native
+      ? new Promise(resolve =>
+          convertSvgString(newValue, code => resolve(code))
+        )
+      : converter.convert(newValue);
   };
 
   render() {

@@ -207,6 +207,7 @@
   height: 300px;
   color: black;
   direction: ltr;
+  overflow: hidden;
 }
 
 /* PADDING */
