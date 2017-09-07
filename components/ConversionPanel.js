@@ -101,7 +101,7 @@ export default class ConversionPanel extends PureComponent {
   }
 
   isPrettierAvailable() {
-    return isBrowser && window.prettier;
+    return isBrowser && !!window.prettier;
   }
 
   fetchJSON = async () => {
@@ -201,6 +201,12 @@ export default class ConversionPanel extends PureComponent {
     });
   };
 
+  getPrettifyClass = () => {
+    return cn("btn", {
+      disabled: !this.isPrettierAvailable()
+    })
+  }
+
   render() {
     const {
       leftMode,
@@ -243,9 +249,6 @@ export default class ConversionPanel extends PureComponent {
       );
     }
 
-    const prettifyClass = cn("btn", {
-      disabled: this.isPrettierAvailable()
-    });
     return (
       <div className="wrapper">
         <script src="https://bundle.run/prettier@1.6.1" />
@@ -432,7 +435,7 @@ export default class ConversionPanel extends PureComponent {
                   </button>
                 )}
                 {prettierParsers[leftMode] && (
-                  <button className={prettifyClass} onClick={this.prettifyCode}>
+                  <button className={this.getPrettifyClass()} onClick={this.prettifyCode}>
                     Prettify
                   </button>
                 )}
@@ -455,7 +458,7 @@ export default class ConversionPanel extends PureComponent {
                   <h4 className="title">{splitTitle}</h4>
                   {prettierParsers[splitMode] && (
                     <button
-                      className={prettifyClass}
+                      className={this.getPrettifyClass()}
                       onClick={this.prettifySplitCode}
                     >
                       Prettify
