@@ -100,8 +100,8 @@ export default class ConversionPanel extends PureComponent {
     this.onChange(defaultText, splitValue);
   }
 
-  isPrettierAvailable () {
-    return isBrowser && window.prettier
+  isPrettierAvailable() {
+    return isBrowser && window.prettier;
   }
 
   fetchJSON = async () => {
@@ -164,7 +164,7 @@ export default class ConversionPanel extends PureComponent {
   setSplitValue = splitValue => this.setState({ splitValue });
 
   prettifyCode = () => {
-    if (!this.isPrettierAvailable()) return
+    if (!this.isPrettierAvailable()) return;
     const { leftMode } = this.props;
     const { value } = this.state;
 
@@ -174,7 +174,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   prettifySplitCode = () => {
-    if(!this.isPrettierAvailable()) return
+    if (!this.isPrettierAvailable()) return;
     const { splitMode } = this.props;
     const { splitValue } = this.state;
 
@@ -233,15 +233,19 @@ export default class ConversionPanel extends PureComponent {
     // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
     clearTimeout(this.footerTimeout);
     if (infoType === "success") {
-      this.footerTimeout = setTimeout(() => this.setState({
-        info: "",
-        infoType: ""
-      }), 2000);
+      this.footerTimeout = setTimeout(
+        () =>
+          this.setState({
+            info: "",
+            infoType: ""
+          }),
+        2000
+      );
     }
 
-    const prettifyClass = cn('btn', {
+    const prettifyClass = cn("btn", {
       disabled: this.isPrettierAvailable()
-    })
+    });
     return (
       <div className="wrapper">
         <script src="https://bundle.run/prettier@1.6.1" />
@@ -316,9 +320,9 @@ export default class ConversionPanel extends PureComponent {
 
           .btn.disabled {
             background-color: #e0e0e0;
-    pointer-events: none;
-    color: #7b7b7b;
-    cursor: not-allowed;
+            pointer-events: none;
+            color: #7b7b7b;
+            cursor: not-allowed;
           }
 
           .btn:hover {
@@ -450,7 +454,10 @@ export default class ConversionPanel extends PureComponent {
                 <div className="header">
                   <h4 className="title">{splitTitle}</h4>
                   {prettierParsers[splitMode] && (
-                    <button className={prettifyClass} onClick={this.prettifySplitCode}>
+                    <button
+                      className={prettifyClass}
+                      onClick={this.prettifySplitCode}
+                    >
                       Prettify
                     </button>
                   )}
@@ -512,13 +519,11 @@ export default class ConversionPanel extends PureComponent {
             </div>
           </div>
         </div>
-        {
-          infoType !== "" && (
-            <div className={`footer has-${infoType}`}>
-              <span className="info">{info}</span>
-            </div>
-          )
-        }
+        {infoType !== "" && (
+          <div className={`footer has-${infoType}`}>
+            <span className="info">{info}</span>
+          </div>
+        )}
       </div>
     );
   }
