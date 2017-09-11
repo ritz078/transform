@@ -91,17 +91,27 @@ export default class ConversionPanel extends PureComponent {
     value: "",
     splitValue: "",
     info: "",
-    infoType: ""
+    infoType: "",
+    isPrettierAvailable: false
   };
 
   componentDidMount() {
     const { defaultText, splitValue } = this.props;
 
     this.onChange(defaultText, splitValue);
+
+    const MyWorker = require('worker-loader!../utils/worker.js')
+    this.worker = new MyWorker()
+
+    this.worker.onmessage = this.setPrettyResult
   }
 
-  isPrettierAvailable() {
-    return isBrowser && !!window.prettier;
+  setPrettyResult = ({ data }) => {
+    const {available, prettyCode, section} = data
+    this.setState({
+      isPrettierAvailable: available,
+      [section]: prettyCode
+    })
   }
 
   fetchJSON = async () => {
@@ -119,7 +129,13 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
+  prettify = (code, mode, section) => {
+    this.worker.postMessage({ code, mode, section })
+  }
+
   onChange = async (newValue, leftSplitValue) => {
+    const { prettifyRightPanel } = this.props
+
     const nValue = newValue || this.state.value;
     const splitValue =
       leftSplitValue && typeof leftSplitValue === "string"
@@ -128,8 +144,18 @@ export default class ConversionPanel extends PureComponent {
 
     try {
       const code = await this.props.getTransformedValue(nValue, splitValue);
+      if (prettifyRightPanel) {
+        this.worker.postMessage({
+          code,
+          mode: this.props.rightMode,
+          section: 'resultValue'
+        })
+      } else {
+        this.setState({
+          resultValue: code
+        })
+      }
       this.setState({
-        resultValue: code,
         info: "",
         infoType: ""
       });
@@ -155,46 +181,35 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
-  setResult = result => {
-    this.setState({
-      value: result
-    });
-  };
-
-  setSplitValue = splitValue => this.setState({ splitValue });
-
   prettifyCode = () => {
-    if (!this.isPrettierAvailable()) return;
+    if (!this.state.isPrettierAvailable) return;
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.setResult(
-      window.prettier.format(value, { parser: prettierParsers[leftMode] })
-    );
+    this.worker.postMessage({
+      code: value,
+      mode: leftMode,
+      section: 'value'
+    })
   };
 
   prettifySplitCode = () => {
-    if (!this.isPrettierAvailable()) return;
+    if (!this.state.isPrettierAvailable) return;
     const { splitMode } = this.props;
     const { splitValue } = this.state;
 
-    this.setSplitValue(
-      window.prettier.format(splitValue, { parser: prettierParsers[splitMode] })
-    );
+    this.worker.postMessage({
+      code: splitValue,
+      mode: splitMode,
+      section: 'splitValue'
+    })
   };
 
   copyCode = () => {
-    const { rightMode } = this.props;
     const { resultValue } = this.state;
-    const parser = prettierParsers[rightMode];
 
-    copy(
-      parser
-        ? window.prettier.format(resultValue, {
-            parser
-          })
-        : resultValue
-    );
+    copy(resultValue);
+
     this.setState({
       info: "Code copied to clipboard.",
       infoType: "success"
@@ -203,7 +218,7 @@ export default class ConversionPanel extends PureComponent {
 
   getPrettifyClass = () => {
     return cn("btn", {
-      disabled: !this.isPrettierAvailable()
+      disabled: !this.state.isPrettierAvailable
     })
   }
 
@@ -216,7 +231,6 @@ export default class ConversionPanel extends PureComponent {
       initialCheckboxValue,
       leftTitle,
       rightTitle,
-      prettifyRightPanel,
       splitLeft,
       splitTitle,
       splitMode,
@@ -251,7 +265,6 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
-        <script src="https://bundle.run/prettier@1.6.1" />
         <style jsx>{`
           .wrapper {
             display: flex;
@@ -498,19 +511,7 @@ export default class ConversionPanel extends PureComponent {
               </div>
               {isBrowser && (
                 <CodeMirror
-                  value={
-                    this.isPrettierAvailable() &&
-                    prettifyRightPanel &&
-                    prettierParsers[rightMode] &&
-                    resultValue ? (
-                      window.prettier.format(resultValue, {
-                        parser: prettierParsers[rightMode],
-                        printWidth: 70
-                      })
-                    ) : (
-                      resultValue
-                    )
-                  }
+                  value={resultValue}
                   options={{
                     readOnly: true,
                     mode: modeMapping[rightMode] || rightMode,
