@@ -100,7 +100,7 @@ export default class ConversionPanel extends PureComponent {
 
     this.onChange(defaultText, splitValue);
 
-    const MyWorker = require('worker-loader!../utils/worker.js')
+    const MyWorker = require('worker-loader?inline!../workers/prettier.js')
     this.worker = new MyWorker()
 
     this.worker.onmessage = this.setPrettyResult
