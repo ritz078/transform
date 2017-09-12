@@ -1,3 +1,5 @@
+import registerPromiseWorker from 'promise-worker/register'
+
 try {
   importScripts('https://bundle.run/prettier@1.6.1')
 } catch (e) {
@@ -18,7 +20,7 @@ if (self.prettier) {
   postMessage({ available: true })
 }
 
-onmessage = function ({ data }) {
+function getPrettyCode (data) {
   const {code, mode, section } = data
 
   const prettyCode = self.prettier &&
@@ -28,9 +30,16 @@ onmessage = function ({ data }) {
       parser: prettierParsers[mode],
       printWidth: 70
     })
-  ) : (
-    code
-  )
+  ) : code
 
-  postMessage({ available: !!self.prettier, prettyCode, section })
+
+  return { available: !!self.prettier, prettyCode, section }
+}
+
+registerPromiseWorker(message => new Promise(resolve => {
+  resolve(getPrettyCode(message))
+}))
+
+onmessage = function ({ data }) {
+  postMessage(getPrettyCode(data))
 }

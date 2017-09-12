@@ -3,6 +3,7 @@ import cn from "classnames";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
 import unfetch from "unfetch";
+import loadWorker from '../utils/loadWorker'
 
 let CodeMirror;
 if (isBrowser) {
@@ -100,18 +101,28 @@ export default class ConversionPanel extends PureComponent {
 
     this.onChange(defaultText, splitValue);
 
-    const MyWorker = require('worker-loader?inline!../workers/prettier.js')
-    this.worker = new MyWorker()
+    const {worker, promiseWorker} = loadWorker('prettier.js')
+    this.worker = worker
+    this.promiseWorker = promiseWorker
 
-    this.worker.onmessage = this.setPrettyResult
+    this.worker.onmessage = this.setPrettierAvailability
   }
 
-  setPrettyResult = ({ data }) => {
-    const {available, prettyCode, section} = data
+  setPrettierAvailability = ({ data }) => {
     this.setState({
-      isPrettierAvailable: available,
-      [section]: prettyCode
+      isPrettierAvailable: data.available
     })
+  }
+
+  passCodeToWorker = (code, mode, section) => {
+    this.promiseWorker.postMessage({ code, mode, section })
+      .then(response => {
+        const {available, prettyCode, section} = response
+        this.setState({
+          isPrettierAvailable: available,
+          [section]: prettyCode
+        })
+      })
   }
 
   fetchJSON = async () => {
@@ -129,12 +140,8 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
-  prettify = (code, mode, section) => {
-    this.worker.postMessage({ code, mode, section })
-  }
-
   onChange = async (newValue, leftSplitValue) => {
-    const { prettifyRightPanel } = this.props
+    const { prettifyRightPanel, rightMode } = this.props
 
     const nValue = newValue || this.state.value;
     const splitValue =
@@ -145,11 +152,7 @@ export default class ConversionPanel extends PureComponent {
     try {
       const code = await this.props.getTransformedValue(nValue, splitValue);
       if (prettifyRightPanel) {
-        this.worker.postMessage({
-          code,
-          mode: this.props.rightMode,
-          section: 'resultValue'
-        })
+        this.passCodeToWorker(code, rightMode, 'resultValue')
       } else {
         this.setState({
           resultValue: code
@@ -186,11 +189,7 @@ export default class ConversionPanel extends PureComponent {
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.worker.postMessage({
-      code: value,
-      mode: leftMode,
-      section: 'value'
-    })
+    this.passCodeToWorker(value, leftMode, 'value')
   };
 
   prettifySplitCode = () => {
@@ -198,11 +197,7 @@ export default class ConversionPanel extends PureComponent {
     const { splitMode } = this.props;
     const { splitValue } = this.state;
 
-    this.worker.postMessage({
-      code: splitValue,
-      mode: splitMode,
-      section: 'splitValue'
-    })
+    this.passCodeToWorker(splitValue, splitMode, 'splitValue')
   };
 
   copyCode = () => {
