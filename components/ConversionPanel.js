@@ -3,7 +3,7 @@ import cn from "classnames";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
 import unfetch from "unfetch";
-import loadWorker from '../utils/loadWorker'
+import loadWorker from "../utils/loadWorker";
 
 let CodeMirror;
 if (isBrowser) {
@@ -77,6 +77,19 @@ type Props = {
 export default class ConversionPanel extends PureComponent {
   props: Props;
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      resultValue: "",
+      value: props.defaultText,
+      splitValue: "",
+      info: "",
+      infoType: "",
+      isPrettierAvailable: true
+    };
+  }
+
   static defaultProps = {
     leftMode: "javascript",
     rightMode: "javascript",
@@ -87,43 +100,35 @@ export default class ConversionPanel extends PureComponent {
     fetchButtonText: "Fetch JSON from URL"
   };
 
-  state = {
-    resultValue: "",
-    value: "",
-    splitValue: "",
-    info: "",
-    infoType: "",
-    isPrettierAvailable: false
-  };
-
   componentDidMount() {
     const { defaultText, splitValue } = this.props;
 
     this.onChange(defaultText, splitValue);
 
-    const {worker, promiseWorker} = loadWorker('prettier.js')
-    this.worker = worker
-    this.promiseWorker = promiseWorker
+    const { worker, promiseWorker } = loadWorker("prettier.js");
+    this.worker = worker;
+    this.promiseWorker = promiseWorker;
 
-    this.worker.onmessage = this.setPrettierAvailability
+    this.worker.onmessage = this.setPrettierAvailability;
   }
 
   setPrettierAvailability = ({ data }) => {
+    if (!data.available || this.state.isPrettierAvailable === data.available)
+      return;
     this.setState({
       isPrettierAvailable: data.available
-    })
-  }
+    });
+  };
 
   passCodeToWorker = (code, mode, section) => {
-    this.promiseWorker.postMessage({ code, mode, section })
-      .then(response => {
-        const {available, prettyCode, section} = response
-        this.setState({
-          isPrettierAvailable: available,
-          [section]: prettyCode
-        })
-      })
-  }
+    this.promiseWorker.postMessage({ code, mode, section }).then(response => {
+      const { available, prettyCode, section } = response;
+      this.setState({
+        isPrettierAvailable: available,
+        [section]: prettyCode
+      });
+    });
+  };
 
   fetchJSON = async () => {
     const url = window.prompt("Enter URL to fetch JSON from a remote server.");
@@ -141,7 +146,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   onChange = async (newValue, leftSplitValue) => {
-    const { prettifyRightPanel, rightMode } = this.props
+    const { prettifyRightPanel, rightMode } = this.props;
 
     const nValue = newValue || this.state.value;
     const splitValue =
@@ -150,13 +155,14 @@ export default class ConversionPanel extends PureComponent {
         : this.state.splitValue;
 
     try {
-      const code = await this.props.getTransformedValue(nValue, splitValue);
+      let code = await this.props.getTransformedValue(nValue, splitValue);
+      code = code.prettyCode || code;
       if (prettifyRightPanel) {
-        this.passCodeToWorker(code, rightMode, 'resultValue')
+        this.passCodeToWorker(code, rightMode, "resultValue");
       } else {
         this.setState({
           resultValue: code
-        })
+        });
       }
       this.setState({
         info: "",
@@ -189,7 +195,7 @@ export default class ConversionPanel extends PureComponent {
     const { leftMode } = this.props;
     const { value } = this.state;
 
-    this.passCodeToWorker(value, leftMode, 'value')
+    this.passCodeToWorker(value, leftMode, "value");
   };
 
   prettifySplitCode = () => {
@@ -197,7 +203,7 @@ export default class ConversionPanel extends PureComponent {
     const { splitMode } = this.props;
     const { splitValue } = this.state;
 
-    this.passCodeToWorker(splitValue, splitMode, 'splitValue')
+    this.passCodeToWorker(splitValue, splitMode, "splitValue");
   };
 
   copyCode = () => {
@@ -214,8 +220,8 @@ export default class ConversionPanel extends PureComponent {
   getPrettifyClass = () => {
     return cn("btn", {
       disabled: !this.state.isPrettierAvailable
-    })
-  }
+    });
+  };
 
   render() {
     const {
@@ -443,7 +449,10 @@ export default class ConversionPanel extends PureComponent {
                   </button>
                 )}
                 {prettierParsers[leftMode] && (
-                  <button className={this.getPrettifyClass()} onClick={this.prettifyCode}>
+                  <button
+                    className={this.getPrettifyClass()}
+                    onClick={this.prettifyCode}
+                  >
                     Prettify
                   </button>
                 )}
