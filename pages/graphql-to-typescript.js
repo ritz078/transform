@@ -1,12 +1,20 @@
 import React, { PureComponent } from "react";
-import transform from "transform-graphql-type-annotations";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import { dummySchema, dummyQuery } from "../utils/graphql-schema";
+import loadWorker from "../utils/loadWorker";
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue, splitValue) => {
-    return transform(newValue, splitValue, "typescript");
+    this.promiseWorker = loadWorker(
+      "graphql-to-flow-ts.js",
+      this
+    ).promiseWorker;
+    return this.promiseWorker.postMessage({
+      schema: newValue,
+      query: splitValue,
+      convertTo: "typescript"
+    });
   };
 
   render() {

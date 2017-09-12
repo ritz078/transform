@@ -1,9 +1,9 @@
-import registerPromiseWorker from 'promise-worker/register'
+import registerPromiseWorker from "promise-worker/register";
 
 try {
-  importScripts('https://bundle.run/prettier@1.6.1')
+  importScripts("https://bundle.run/prettier@1.6.1");
 } catch (e) {
-  self.postMessage({ available: false })
+  self.postMessage({ available: false });
 }
 
 const prettierParsers = {
@@ -17,29 +17,30 @@ const prettierParsers = {
 };
 
 if (self.prettier) {
-  postMessage({ available: true })
+  postMessage({ available: true });
 }
 
-function getPrettyCode (data) {
-  const {code, mode, section } = data
+function getPrettyCode(data) {
+  const { code, mode, section } = data;
 
-  const prettyCode = self.prettier &&
-  prettierParsers[mode] &&
-  code ? (
-    self.prettier.format(code, {
-      parser: prettierParsers[mode],
-      printWidth: 70
+  const prettyCode =
+    self.prettier && prettierParsers[mode] && code
+      ? self.prettier.format(code, {
+          parser: prettierParsers[mode],
+          printWidth: 70
+        })
+      : code;
+
+  return { available: !!self.prettier, prettyCode, section };
+}
+
+registerPromiseWorker(
+  message =>
+    new Promise(resolve => {
+      resolve(getPrettyCode(message));
     })
-  ) : code
+);
 
-
-  return { available: !!self.prettier, prettyCode, section }
-}
-
-registerPromiseWorker(message => new Promise(resolve => {
-  resolve(getPrettyCode(message))
-}))
-
-onmessage = function ({ data }) {
-  postMessage(getPrettyCode(data))
-}
+onmessage = function({ data }) {
+  postMessage(getPrettyCode(data));
+};
