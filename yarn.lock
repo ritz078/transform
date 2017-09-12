@@ -5559,6 +5559,10 @@ ultron@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.0.tgz#b07a2e6a541a815fc6a34ccd4533baec307ca864"
 
+undom@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/undom/-/undom-0.3.3.tgz#58d1a2b0ce065975f7fc369c180a0131b625c1c3"
+
 unfetch@3.0.0, unfetch@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-3.0.0.tgz#8d1e0513a4ecd0e5ff2d41a6ba77771aae8b6482"

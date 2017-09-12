@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
-import cssToJS from "transform-css-to-js";
+import loadWorker from "../utils/loadWorker";
 
 const defaultText = `.main-wrapper {
   flex-direction: row;
@@ -25,13 +25,14 @@ li {
 }
 `;
 
-export default class Css2Js extends PureComponent {
+export default class extends PureComponent {
   state = {
     isRn: false
   };
 
-  getTransformedValue = newValue => {
-    return `const styles = ${cssToJS(newValue, this.state.isRn)}`;
+  getTransformedValue = code => {
+    this.promiseWorker = loadWorker("css-to-js.js", this).promiseWorker;
+    return this.promiseWorker.postMessage({ code, isRn: this.state.isRn });
   };
 
   render() {
