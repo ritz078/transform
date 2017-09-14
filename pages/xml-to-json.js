@@ -30,8 +30,8 @@ export default class extends PureComponent {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
-          leftTitle='JSON'
-          rightTitle='XML'
+          leftTitle='XML'
+          rightTitle='JSON'
           getTransformedValue={this.getTransformedValue}
           name={'big-query'}
           defaultText={text}
