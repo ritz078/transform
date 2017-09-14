@@ -333,6 +333,7 @@ export default class ConversionPanel extends PureComponent {
             display: flex;
             flex-direction: row;
             overflow: hidden;
+            width: calc(100vw - 250px);
           }
 
           .section {
@@ -340,6 +341,7 @@ export default class ConversionPanel extends PureComponent {
             position: relative;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
           }
 
           .right {
