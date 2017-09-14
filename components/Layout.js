@@ -186,7 +186,7 @@ export default class Layout extends PureComponent {
           }
 
           .footer {
-            padding: 10px 5px;
+            padding: 20px 5px;
             text-align: center;
             color: #fff;
             font-family: "Lato", sans-serif;
