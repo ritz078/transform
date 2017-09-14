@@ -31,6 +31,7 @@ export default class Json2Ts extends PureComponent {
           splitTitle={'Query'}
           splitValue={dummyQuery}
           prettifyRightPanel={false}
+          extensions={null}
         />
       </Layout>
     )

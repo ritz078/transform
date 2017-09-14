@@ -71,7 +71,27 @@ type Props = {
   splitMode: ?string,
   showFetchButton: boolean,
   fetchButtonText: ?string,
-  getTransformedValue: Function
+  getTransformedValue: Function,
+  extensions: ?(string[])
+}
+
+function UploadIcon () {
+  return (
+    <svg
+      fill='#ffffff'
+      height={24}
+      width={24}
+      xmlns='http://www.w3.org/2000/svg'
+    >
+      <style>{`
+        svg {
+          vertical-align: sub;
+        }
+      `}</style>
+      <path d='M0 0h24v24H0z' fill='none' />
+      <path d='M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z' />
+    </svg>
+  )
 }
 
 export default class ConversionPanel extends PureComponent {
@@ -97,7 +117,8 @@ export default class ConversionPanel extends PureComponent {
     prettifyRightPanel: true,
     splitLeft: false,
     showFetchButton: true,
-    fetchButtonText: 'Fetch JSON from URL'
+    fetchButtonText: 'Fetch JSON from URL',
+    extensions: ['.json']
   }
 
   componentDidMount () {
@@ -224,6 +245,15 @@ export default class ConversionPanel extends PureComponent {
     })
   }
 
+  loadFile = e => {
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.readAsText(file, 'utf-8')
+    reader.onload = () => {
+      this.onChange(reader.result)
+    }
+  }
+
   render () {
     const {
       leftMode,
@@ -237,7 +267,8 @@ export default class ConversionPanel extends PureComponent {
       splitTitle,
       splitMode,
       showFetchButton,
-      fetchButtonText
+      fetchButtonText,
+      extensions
     } = this.props
     const { infoType, resultValue, value, info, splitValue } = this.state
 
@@ -303,6 +334,7 @@ export default class ConversionPanel extends PureComponent {
             display: flex;
             flex-direction: row;
             overflow: hidden;
+            width: calc(100vw - 250px);
           }
 
           .section {
@@ -310,6 +342,7 @@ export default class ConversionPanel extends PureComponent {
             position: relative;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
           }
 
           .right {
@@ -332,8 +365,7 @@ export default class ConversionPanel extends PureComponent {
             cursor: pointer;
             outline: none;
             color: #fff;
-            line-height: 16px;
-            height: 32px;
+            line-height: 20px;
           }
 
           .btn.disabled {
@@ -371,6 +403,43 @@ export default class ConversionPanel extends PureComponent {
             display: flex;
             flex-direction: column;
             overflow: hidden;
+          }
+
+          #upload {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+          }
+
+          .upload-wrapper {
+            position: absolute;
+            bottom: 30px;
+            right: 20px;
+            align-items: center;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            padding: 0;
+            display: flex;
+            margin: 0px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            background-color: #5a5a5a;
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            padding-left: 12px;
+            box-sizing: border-box;
+            transition: all 0.2s;
+          }
+
+          .upload-wrapper:hover {
+            background-color: #444;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+          }
+
+          #upload svg {
+            vertical-align: sub;
           }
         `}</style>
 
@@ -443,12 +512,14 @@ export default class ConversionPanel extends PureComponent {
             <div className='panel'>
               <div className='header'>
                 <h4 className='title'>{leftTitle}</h4>
+
                 {leftMode === 'json' &&
                 showFetchButton && (
                   <button className='btn' onClick={this.fetchJSON}>
                     {fetchButtonText}
                   </button>
                 )}
+
                 {prettierParsers[leftMode] && (
                   <button
                     className={this.getPrettifyClass()}
@@ -467,6 +538,19 @@ export default class ConversionPanel extends PureComponent {
                     ...codeMirrorOptions
                   }}
                 />
+              )}
+
+              {extensions &&
+              extensions.length > 0 && (
+                <label htmlFor='upload' className='btn upload-wrapper'>
+                  <input
+                    id='upload'
+                    accept={extensions.join(',')}
+                    onChange={this.loadFile}
+                    type='file'
+                  />
+                  <UploadIcon />
+                </label>
               )}
             </div>
             {splitLeft &&

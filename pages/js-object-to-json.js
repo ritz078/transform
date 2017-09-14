@@ -23,6 +23,7 @@ export default class extends PureComponent {
           getTransformedValue={this.getTransformedValue}
           name={'js_to_json'}
           defaultText={defaultText}
+          extensions={null}
         />
       </Layout>
     )

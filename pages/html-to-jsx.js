@@ -45,6 +45,7 @@ export default class Css2Js extends PureComponent {
           name={'html_to_jsx'}
           defaultText={defaultText}
           checkboxText='react-native-svg'
+          extensions={['.svg', '.html']}
           initialCheckboxValue={this.state.native}
           onCheckboxChange={(checked: boolean, cb: Function) =>
             this.setState({ native: checked }, cb)}
