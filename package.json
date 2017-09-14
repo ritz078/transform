@@ -67,7 +67,7 @@
     "css-loader": "^0.28.7",
     "deep-diff": "^0.3.8",
     "glob": "^7.1.2",
-    "prettier": "^1.6.1",
+    "prettier": "^1.7.0",
     "style-loader": "^0.18.2",
     "sw-precache-webpack-plugin": "^0.11.4",
     "webpack-bundle-analyzer": "^2.9.0",

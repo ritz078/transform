@@ -34,6 +34,7 @@ export default class extends PureComponent {
           splitTitle={"Query"}
           splitValue={dummyQuery}
           prettifyRightPanel={false}
+          extensions={null}
         />
       </Layout>
     );

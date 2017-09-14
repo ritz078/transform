@@ -42,6 +42,7 @@ export default class extends PureComponent {
             this.setState({ isCompactMode: checked }, cb)}
           checkboxText="Compact Mode"
           initialCheckboxValue={this.state.isCompactMode}
+          extensions={null}
         />
       </Layout>
     );
