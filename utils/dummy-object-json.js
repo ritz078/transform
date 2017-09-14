@@ -16,6 +16,6 @@ const y = `{
     "index": true,
     "required": true
   }
-}`;
+}`
 
-export default y;
+export default y

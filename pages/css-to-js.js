@@ -1,7 +1,7 @@
-import React, { PureComponent } from "react";
-import Layout from "../components/Layout";
-import ConversionPanel from "../components/ConversionPanel";
-import loadWorker from "../utils/loadWorker";
+import React, { PureComponent } from 'react'
+import Layout from '../components/Layout'
+import ConversionPanel from '../components/ConversionPanel'
+import loadWorker from '../utils/loadWorker'
 
 const defaultText = `.main-wrapper {
   flex-direction: row;
@@ -23,34 +23,34 @@ li {
   color: whitesmoke;
   line-height: 44px;
 }
-`;
+`
 
 export default class extends PureComponent {
   state = {
     isRn: false
-  };
+  }
 
   getTransformedValue = code => {
-    this.promiseWorker = loadWorker("css-to-js.js", this).promiseWorker;
-    return this.promiseWorker.postMessage({ code, isRn: this.state.isRn });
-  };
+    this.promiseWorker = loadWorker('css-to-js.js', this).promiseWorker
+    return this.promiseWorker.postMessage({ code, isRn: this.state.isRn })
+  }
 
-  render() {
+  render () {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
-          leftTitle="CSS"
-          rightTitle="JavaScript"
-          leftMode="css"
-          rightMode="javascript"
+          leftTitle='CSS'
+          rightTitle='JavaScript'
+          leftMode='css'
+          rightMode='javascript'
           getTransformedValue={this.getTransformedValue}
-          name={"css_to_js"}
+          name={'css_to_js'}
           defaultText={defaultText}
           onCheckboxChange={(checked, cb) =>
             this.setState({ isRn: checked }, cb)}
-          checkboxText="React Native"
+          checkboxText='React Native'
         />
       </Layout>
-    );
+    )
   }
 }
