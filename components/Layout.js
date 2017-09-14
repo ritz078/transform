@@ -153,11 +153,11 @@ export default class Layout extends PureComponent {
         <style jsx>{`
           .sidebar {
             height: 100vh;
-            width: 250px;
             background-color: #424242;
             font-size: 15px;
             display: flex;
             flex-direction: column;
+            min-width: 250px;
           }
 
           .main-wrapper {
@@ -186,7 +186,7 @@ export default class Layout extends PureComponent {
           }
 
           .footer {
-            padding: 10px 5px;
+            padding: 20px 5px;
             text-align: center;
             color: #fff;
             font-family: "Lato", sans-serif;
