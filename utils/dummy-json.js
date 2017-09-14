@@ -41,6 +41,6 @@ const x = `{
     }
   ]
 }
-  `;
+  `
 
-export default x;
+export default x

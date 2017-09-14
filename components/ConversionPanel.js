@@ -1,58 +1,58 @@
-import React, { PureComponent } from "react";
-import cn from "classnames";
-import isBrowser from "is-in-browser";
-import copy from "copy-text-to-clipboard";
-import unfetch from "unfetch";
-import loadWorker from "../utils/loadWorker";
+import React, { PureComponent } from 'react'
+import cn from 'classnames'
+import isBrowser from 'is-in-browser'
+import copy from 'copy-text-to-clipboard'
+import unfetch from 'unfetch'
+import loadWorker from '../utils/loadWorker'
 
-let CodeMirror;
+let CodeMirror
 if (isBrowser) {
-  CodeMirror = require("react-codemirror2").default;
+  CodeMirror = require('react-codemirror2').default
 
-  require("codemirror-graphql/mode");
-  require("codemirror/mode/javascript/javascript");
-  require("codemirror/mode/xml/xml");
-  require("codemirror/mode/jsx/jsx");
-  require("codemirror/mode/css/css");
-  require("codemirror/mode/rust/rust");
-  require("codemirror/mode/sql/sql");
-  require("codemirror/mode/clike/clike");
-  require("codemirror/mode/go/go");
+  require('codemirror-graphql/mode')
+  require('codemirror/mode/javascript/javascript')
+  require('codemirror/mode/xml/xml')
+  require('codemirror/mode/jsx/jsx')
+  require('codemirror/mode/css/css')
+  require('codemirror/mode/rust/rust')
+  require('codemirror/mode/sql/sql')
+  require('codemirror/mode/clike/clike')
+  require('codemirror/mode/go/go')
 }
 
 const prettierParsers = {
-  css: "postcss",
-  javascript: "babylon",
-  jsx: "babylon",
-  graphql: "graphql",
-  json: "json",
-  typescript: "typescript",
-  flow: "flow"
-};
+  css: 'postcss',
+  javascript: 'babylon',
+  jsx: 'babylon',
+  graphql: 'graphql',
+  json: 'json',
+  typescript: 'typescript',
+  flow: 'flow'
+}
 
 const modeMapping = {
   javascript: {
-    name: "javascript"
+    name: 'javascript'
   },
   json: {
-    name: "javascript",
+    name: 'javascript',
     json: true
   },
   typescript: {
-    name: "javascript",
+    name: 'javascript',
     typescript: true
   },
   html: {
-    name: "xml",
+    name: 'xml',
     htmlMode: true
   },
   flow: {
-    name: "javascript",
+    name: 'javascript',
     typescript: true
   },
-  mysql: "text/x-mysql",
-  scala: "text/x-scala"
-};
+  mysql: 'text/x-mysql',
+  scala: 'text/x-scala'
+}
 
 type Props = {
   leftMode: ?string,
@@ -72,158 +72,159 @@ type Props = {
   showFetchButton: boolean,
   fetchButtonText: ?string,
   getTransformedValue: Function
-};
+}
 
 export default class ConversionPanel extends PureComponent {
-  props: Props;
+  props: Props
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      resultValue: "",
+      resultValue: '',
       value: props.defaultText,
-      splitValue: "",
-      info: "",
-      infoType: "",
+      splitValue: '',
+      info: '',
+      infoType: '',
       isPrettierAvailable: true
-    };
+    }
   }
 
   static defaultProps = {
-    leftMode: "javascript",
-    rightMode: "javascript",
-    pathname: "/",
+    leftMode: 'javascript',
+    rightMode: 'javascript',
+    pathname: '/',
     prettifyRightPanel: true,
     splitLeft: false,
     showFetchButton: true,
-    fetchButtonText: "Fetch JSON from URL"
-  };
+    fetchButtonText: 'Fetch JSON from URL'
+  }
 
-  componentDidMount() {
-    const { defaultText, splitValue } = this.props;
+  componentDidMount () {
+    const { defaultText, splitValue } = this.props
 
-    this.onChange(defaultText, splitValue);
+    this.onChange(defaultText, splitValue)
 
-    const { worker, promiseWorker } = loadWorker("prettier.js");
-    this.worker = worker;
-    this.promiseWorker = promiseWorker;
+    const { worker, promiseWorker } = loadWorker('prettier.js')
+    this.worker = worker
+    this.promiseWorker = promiseWorker
 
-    this.worker.onmessage = this.setPrettierAvailability;
+    this.worker.onmessage = this.setPrettierAvailability
   }
 
   setPrettierAvailability = ({ data }) => {
-    if (!data.available || this.state.isPrettierAvailable === data.available)
-      return;
+    if (!data.available || this.state.isPrettierAvailable === data.available) {
+      return
+    }
     this.setState({
       isPrettierAvailable: data.available
-    });
-  };
+    })
+  }
 
   passCodeToWorker = (code, mode, section) => {
     this.promiseWorker.postMessage({ code, mode, section }).then(response => {
-      const { available, prettyCode, section } = response;
+      const { available, prettyCode, section } = response
       this.setState({
         isPrettierAvailable: available,
         [section]: prettyCode
-      });
-    });
-  };
+      })
+    })
+  }
 
   fetchJSON = async () => {
-    const url = window.prompt("Enter URL to fetch JSON from a remote server.");
-    if (!url) return;
+    const url = window.prompt('Enter URL to fetch JSON from a remote server.')
+    if (!url) return
     try {
-      const res = await unfetch(url);
-      const json = await res.json();
-      this.onChange(JSON.stringify(json, null, 2));
+      const res = await unfetch(url)
+      const json = await res.json()
+      this.onChange(JSON.stringify(json, null, 2))
     } catch (e) {
       this.setState({
         info: e.message,
-        infoType: "error"
-      });
+        infoType: 'error'
+      })
     }
-  };
+  }
 
   onChange = async (newValue, leftSplitValue) => {
-    const { prettifyRightPanel, rightMode } = this.props;
+    const { prettifyRightPanel, rightMode } = this.props
 
-    const nValue = newValue || this.state.value;
+    const nValue = newValue || this.state.value
     const splitValue =
-      leftSplitValue && typeof leftSplitValue === "string"
+      leftSplitValue && typeof leftSplitValue === 'string'
         ? leftSplitValue
-        : this.state.splitValue;
+        : this.state.splitValue
 
     try {
-      let code = await this.props.getTransformedValue(nValue, splitValue);
-      code = code.prettyCode || code;
+      let code = await this.props.getTransformedValue(nValue, splitValue)
+      code = code.prettyCode || code
       if (prettifyRightPanel) {
-        this.passCodeToWorker(code, rightMode, "resultValue");
+        this.passCodeToWorker(code, rightMode, 'resultValue')
       } else {
         this.setState({
           resultValue: code
-        });
+        })
       }
       this.setState({
-        info: "",
-        infoType: ""
-      });
+        info: '',
+        infoType: ''
+      })
     } catch (e) {
       this.setState({
         info: e.message,
-        infoType: "error"
-      });
+        infoType: 'error'
+      })
     }
 
     this.setState({
       value: nValue,
       splitValue: splitValue
-    });
-  };
+    })
+  }
 
   toggleCheckbox = e => {
-    const checked = e.currentTarget.checked;
+    const checked = e.currentTarget.checked
     if (this.props.onCheckboxChange) {
       this.props.onCheckboxChange(checked, () => {
-        this.onChange();
-      });
+        this.onChange()
+      })
     }
-  };
+  }
 
   prettifyCode = () => {
-    if (!this.state.isPrettierAvailable) return;
-    const { leftMode } = this.props;
-    const { value } = this.state;
+    if (!this.state.isPrettierAvailable) return
+    const { leftMode } = this.props
+    const { value } = this.state
 
-    this.passCodeToWorker(value, leftMode, "value");
-  };
+    this.passCodeToWorker(value, leftMode, 'value')
+  }
 
   prettifySplitCode = () => {
-    if (!this.state.isPrettierAvailable) return;
-    const { splitMode } = this.props;
-    const { splitValue } = this.state;
+    if (!this.state.isPrettierAvailable) return
+    const { splitMode } = this.props
+    const { splitValue } = this.state
 
-    this.passCodeToWorker(splitValue, splitMode, "splitValue");
-  };
+    this.passCodeToWorker(splitValue, splitMode, 'splitValue')
+  }
 
   copyCode = () => {
-    const { resultValue } = this.state;
+    const { resultValue } = this.state
 
-    copy(resultValue);
+    copy(resultValue)
 
     this.setState({
-      info: "Code copied to clipboard.",
-      infoType: "success"
-    });
-  };
+      info: 'Code copied to clipboard.',
+      infoType: 'success'
+    })
+  }
 
   getPrettifyClass = () => {
-    return cn("btn", {
+    return cn('btn', {
       disabled: !this.state.isPrettierAvailable
-    });
-  };
+    })
+  }
 
-  render() {
+  render () {
     const {
       leftMode,
       rightMode,
@@ -237,35 +238,35 @@ export default class ConversionPanel extends PureComponent {
       splitMode,
       showFetchButton,
       fetchButtonText
-    } = this.props;
-    const { infoType, resultValue, value, info, splitValue } = this.state;
+    } = this.props
+    const { infoType, resultValue, value, info, splitValue } = this.state
 
-    const leftClass = cn("section left", {
+    const leftClass = cn('section left', {
       split: splitLeft
-    });
+    })
 
     const codeMirrorOptions = {
       lineNumbers: true,
-      theme: "chrome-devtools",
+      theme: 'chrome-devtools',
       lineWrapping: true,
       scrollbarStyle: null
-    };
+    }
 
     // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
-    clearTimeout(this.footerTimeout);
-    if (infoType === "success") {
+    clearTimeout(this.footerTimeout)
+    if (infoType === 'success') {
       this.footerTimeout = setTimeout(
         () =>
           this.setState({
-            info: "",
-            infoType: ""
+            info: '',
+            infoType: ''
           }),
         2000
-      );
+      )
     }
 
     return (
-      <div className="wrapper">
+      <div className='wrapper'>
         <style jsx>{`
           .wrapper {
             display: flex;
@@ -277,7 +278,7 @@ export default class ConversionPanel extends PureComponent {
           .footer {
             height: 50px;
             width: 100%;
-            font-family: "Lato";
+            font-family: 'Lato';
             background-color: white;
             box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.2);
             z-index: 99;
@@ -317,8 +318,8 @@ export default class ConversionPanel extends PureComponent {
 
           .info {
             color: white;
-            font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
-              "source-code-pro", monospace;
+            font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas',
+              'source-code-pro', monospace;
           }
 
           .btn {
@@ -356,7 +357,7 @@ export default class ConversionPanel extends PureComponent {
             padding: 0 10px;
             position: relative;
             justify-content: space-between;
-            font-family: "Lato";
+            font-family: 'Lato';
           }
 
           .title {
@@ -426,7 +427,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           label {
-            font-family: "Lato";
+            font-family: 'Lato';
             padding: 0 12px;
             cursor: pointer;
           }
@@ -437,14 +438,14 @@ export default class ConversionPanel extends PureComponent {
           }
         `}</style>
 
-        <div className="content-wrapper">
+        <div className='content-wrapper'>
           <div className={leftClass}>
-            <div className="panel">
-              <div className="header">
-                <h4 className="title">{leftTitle}</h4>
-                {leftMode === "json" &&
+            <div className='panel'>
+              <div className='header'>
+                <h4 className='title'>{leftTitle}</h4>
+                {leftMode === 'json' &&
                 showFetchButton && (
-                  <button className="btn" onClick={this.fetchJSON}>
+                  <button className='btn' onClick={this.fetchJSON}>
                     {fetchButtonText}
                   </button>
                 )}
@@ -470,9 +471,9 @@ export default class ConversionPanel extends PureComponent {
             </div>
             {splitLeft &&
             isBrowser && (
-              <div className="panel">
-                <div className="header">
-                  <h4 className="title">{splitTitle}</h4>
+              <div className='panel'>
+                <div className='header'>
+                  <h4 className='title'>{splitTitle}</h4>
                   {prettierParsers[splitMode] && (
                     <button
                       className={this.getPrettifyClass()}
@@ -494,22 +495,22 @@ export default class ConversionPanel extends PureComponent {
               </div>
             )}
           </div>
-          <div className="section right">
-            <div className="panel">
-              <div className="header">
-                <h4 className="title">{rightTitle}</h4>
+          <div className='section right'>
+            <div className='panel'>
+              <div className='header'>
+                <h4 className='title'>{rightTitle}</h4>
                 {onCheckboxChange && (
-                  <label htmlFor="#text">
+                  <label htmlFor='#text'>
                     <input
-                      type="checkbox"
-                      id="#text"
+                      type='checkbox'
+                      id='#text'
                       defaultChecked={initialCheckboxValue}
                       onChange={this.toggleCheckbox}
-                    />{" "}
+                    />{' '}
                     {checkboxText}
                   </label>
                 )}
-                <button className="btn" onClick={this.copyCode}>
+                <button className='btn' onClick={this.copyCode}>
                   Copy
                 </button>
               </div>
@@ -527,12 +528,12 @@ export default class ConversionPanel extends PureComponent {
             </div>
           </div>
         </div>
-        {infoType !== "" && (
+        {infoType !== '' && (
           <div className={`footer has-${infoType}`}>
-            <span className="info">{info}</span>
+            <span className='info'>{info}</span>
           </div>
         )}
       </div>
-    );
+    )
   }
 }

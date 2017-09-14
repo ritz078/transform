@@ -1,41 +1,38 @@
-import React, { PureComponent } from "react";
-import Layout from "../components/Layout";
-import ConversionPanel from "../components/ConversionPanel";
-import { dummySchema, dummyQuery } from "../utils/graphql-schema";
-import loadWorker from "../utils/loadWorker";
+import React, { PureComponent } from 'react'
+import Layout from '../components/Layout'
+import ConversionPanel from '../components/ConversionPanel'
+import { dummySchema, dummyQuery } from '../utils/graphql-schema'
+import loadWorker from '../utils/loadWorker'
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = (newValue, splitValue) => {
-    this.promiseWorker = loadWorker(
-      "graphql-to-flow-ts.js",
-      this
-    ).promiseWorker;
+    this.promiseWorker = loadWorker('graphql-to-flow-ts.js', this).promiseWorker
     return this.promiseWorker.postMessage({
       schema: newValue,
       query: splitValue,
-      convertTo: "typescript"
-    });
-  };
+      convertTo: 'typescript'
+    })
+  }
 
-  render() {
+  render () {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
-          leftTitle="Schema"
-          rightTitle="TypeScript Definition"
+          leftTitle='Schema'
+          rightTitle='TypeScript Definition'
           getTransformedValue={this.getTransformedValue}
-          name={"graphql_to_typescript"}
+          name={'graphql_to_typescript'}
           defaultText={dummySchema}
-          leftMode="json"
-          rightMode="typescript"
+          leftMode='json'
+          rightMode='typescript'
           url={this.props.url}
           splitLeft={true}
-          splitMode={"graphql"}
-          splitTitle={"Query"}
+          splitMode={'graphql'}
+          splitTitle={'Query'}
           splitValue={dummyQuery}
           prettifyRightPanel={false}
         />
       </Layout>
-    );
+    )
   }
 }
