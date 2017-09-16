@@ -17,7 +17,12 @@ const json = `{
       "type": "number"
     },
     "favoriteFoods": {
-      "type": "array"
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 2,
+      "items": {
+        "type": "string"
+      }
     },
     "likesDogs": {
       "type": "boolean"
