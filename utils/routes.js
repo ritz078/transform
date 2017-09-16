@@ -100,6 +100,11 @@ export const categorizedRoutes = [
         label: 'JSON to Rust Serde',
         path: '/json-to-rust-serde',
         desc: 'An online REPL for converting JSON to Rust Serde Structs.'
+      },
+      {
+        label: 'JSON Schema to Rust Serde',
+        path: '/json-schema-to-rust-serde',
+        desc: 'An online REPL for converting JSON Schema to Rust Serde Structs.'
       }
     ]
   },

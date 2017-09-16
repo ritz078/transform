@@ -1,23 +1,28 @@
 import React, { PureComponent } from 'react'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
-import { compile } from 'json-schema-to-typescript'
 import json from '../utils/dummy-json-schema'
+import loadWorker from '../utils/loadWorker'
 
 export default class Json2Ts extends PureComponent {
-  getTransformedValue = code => compile(eval('(' + code + ')'))
+  getTransformedValue = code => {
+    this.promiseWorker = loadWorker(
+      'json-schema-to-rust-serde.js',
+      this
+    ).promiseWorker
+    return this.promiseWorker.postMessage(code)
+  }
 
   render () {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
           leftTitle='JSON Schema'
-          rightTitle='TypeScript Interface'
+          rightTitle='Rust Serde'
           getTransformedValue={this.getTransformedValue}
-          name={'ts_interface'}
           defaultText={json}
           leftMode='javascript'
-          rightMode='typescript'
+          rightMode='rust'
           url={this.props.url}
           prettifyRightPanel={false}
         />
