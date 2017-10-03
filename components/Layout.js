@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Component } from 'react'
 import isBrowser from 'is-in-browser'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -38,6 +38,24 @@ function Logo () {
   )
 }
 
+class CodeSponsor extends Component {
+  shouldComponentUpdate () {
+    return false
+  }
+
+  render () {
+    return (
+      <div>
+        <div id='code-sponsor-widget' />
+        <script
+          type='text/javascript'
+          src='https://app.codesponsor.io/scripts/mR5byaXd82L2zTVHo9eWvA?theme=dark&width=240&height=140&image=hide'
+        />
+      </div>
+    )
+  }
+}
+
 function trackingScript () {
   ;(function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r
@@ -46,7 +64,7 @@ function trackingScript () {
       function () {
         ;(i[r].q = i[r].q || []).push(arguments)
       }),
-      (i[r].l = 1 * new Date())
+    (i[r].l = 1 * new Date())
     ;(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0])
     a.async = 1
     a.src = g
@@ -330,11 +348,7 @@ export default class Layout extends PureComponent {
           </div>
 
           <div className='footer'>
-            <div id='code-sponsor-widget' />
-            <script
-              type='text/javascript'
-              src='https://app.codesponsor.io/scripts/mR5byaXd82L2zTVHo9eWvA?theme=dark&width=240&height=140&image=hide'
-            />
+            <CodeSponsor />
             Created by{' '}
             <a
               target='_blank'

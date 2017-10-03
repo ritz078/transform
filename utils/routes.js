@@ -56,6 +56,11 @@ export const categorizedRoutes = [
         path: '/css-to-js',
         desc:
           'An online REPL for converting CSS to JS object. It also gives style optimized for React Native.'
+      },
+      {
+        label: 'CSS to Emotion',
+        path: '/css-to-emotion',
+        desc: 'An online REPL for converting CSS to Emotion compatible code.'
       }
     ]
   },
