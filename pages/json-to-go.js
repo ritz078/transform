@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react'
-import dynamic from 'next/dynamic'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 import defaultText from '../utils/dummy-json'
 import json2go from '../utils/json-to-go'
 import gofmt from 'gofmt.js'
+import PoweredBy from '../components/PoweredBy'
 
 export default class extends PureComponent {
   getTransformedValue = code => gofmt(json2go(code).go)
@@ -23,6 +23,7 @@ export default class extends PureComponent {
           url={this.props.url}
           prettifyRightPanel={false}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     )
   }

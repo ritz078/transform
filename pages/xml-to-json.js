@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { xml2json } from 'xml-js'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
+import PoweredBy from '../components/PoweredBy'
 
 const text = `<note>
     <to>Tove</to>
@@ -44,6 +45,7 @@ export default class extends PureComponent {
           initialCheckboxValue={this.state.isCompactMode}
           extensions={null}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     )
   }

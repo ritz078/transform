@@ -3,6 +3,7 @@ import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 import { compile } from 'json-schema-to-typescript'
 import json from '../utils/dummy-json-schema'
+import PoweredBy from '../components/PoweredBy'
 
 export default class Json2Ts extends PureComponent {
   getTransformedValue = code => compile(eval('(' + code + ')'))
@@ -21,6 +22,7 @@ export default class Json2Ts extends PureComponent {
           url={this.props.url}
           prettifyRightPanel={false}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     )
   }

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 import loadWorker from '../utils/loadWorker'
+import PoweredBy from '../components/PoweredBy'
 
 const defaultText = `.main-wrapper {
   flex-direction: row;
@@ -51,6 +52,7 @@ export default class extends PureComponent {
           checkboxText='React Native'
           extensions={null}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     )
   }

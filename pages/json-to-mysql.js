@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { mysql } from 'generate-schema'
-import stringify from 'stringify-object'
 import Layout from '../components/Layout'
+import PoweredBy from '../components/PoweredBy'
 import ConversionPanel from '../components/ConversionPanel'
 import defaultText from '../utils/dummy-json'
 
@@ -25,6 +25,7 @@ export default class Json2Ts extends PureComponent {
           url={this.props.url}
           prettifyRightPanel={false}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     )
   }

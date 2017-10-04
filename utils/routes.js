@@ -55,12 +55,17 @@ export const categorizedRoutes = [
         label: 'CSS to JS Objects',
         path: '/css-to-js',
         desc:
-          'An online REPL for converting CSS to JS object. It also gives style optimized for React Native.'
+          'An online REPL for converting CSS to JS object. It also gives style optimized for React Native.',
+        packageName: 'transform-css-to-js',
+        packageUrl: 'https://github.com/transform-it/transform-css-to-js'
       },
       {
         label: 'CSS to Emotion',
         path: '/css-to-emotion',
-        desc: 'An online REPL for converting CSS to Emotion compatible code.'
+        desc: 'An online REPL for converting CSS to Emotion compatible code.',
+        packageName: 'css-in-js-generator',
+        packageUrl: 'https://github.com/brikou/CSS-in-JS-generator',
+        beta: true
       }
     ]
   },
@@ -93,7 +98,9 @@ export const categorizedRoutes = [
         label: 'JSON Schema to TypeScript',
         path: '/json-schema-to-ts',
         desc:
-          'An online REPL for converting JSON Schema to TypeScript Interface.'
+          'An online REPL for converting JSON Schema to TypeScript Interface.',
+        packageName: 'json-schema-to-typescript',
+        packageUrl: 'https://github.com/bcherny/json-schema-to-typescript'
       }
     ]
   },
@@ -120,18 +127,24 @@ export const categorizedRoutes = [
       {
         label: 'JSON to Mongoose Schema',
         path: '/json-to-mongoose',
-        desc: 'An online REPL to generate Mongoose Schema from JSON.'
+        desc: 'An online REPL to generate Mongoose Schema from JSON.',
+        packageName: 'generate-schema',
+        packageUrl: 'https://github.com/nijikokun/generate-schema'
       },
       {
         label: 'JSON to Big Query Schema',
         path: '/json-to-big-query',
-        desc: 'An online REPL to generate Big Query Schema from JSON.'
+        desc: 'An online REPL to generate Big Query Schema from JSON.',
+        packageName: 'generate-schema',
+        packageUrl: 'https://github.com/nijikokun/generate-schema'
       },
       {
         label: 'JSON to MySQL',
         path: '/json-to-mysql',
         desc:
-          'An online REPL to generate MySQL table generation code from JSON.'
+          'An online REPL to generate MySQL table generation code from JSON.',
+        packageName: 'generate-schema',
+        packageUrl: 'https://github.com/nijikokun/generate-schema'
       }
     ]
   },
@@ -171,7 +184,9 @@ export const categorizedRoutes = [
       {
         label: 'JSON to Go Struct',
         path: '/json-to-go',
-        desc: 'An online REPL to generate Go Struct from JSON.'
+        desc: 'An online REPL to generate Go Struct from JSON.',
+        packageName: 'json-to-go',
+        packageUrl: 'https://github.com/mholt/json-to-go'
       }
     ]
   },
@@ -182,7 +197,9 @@ export const categorizedRoutes = [
       {
         label: 'XML to JSON',
         path: '/xml-to-json',
-        desc: 'An online REPL to generate basic JSON from a XML.'
+        desc: 'An online REPL to generate basic JSON from a XML.',
+        packageName: 'xml-js',
+        packageUrl: 'https://github.com/nashwaan/xml-js'
       }
     ]
   }

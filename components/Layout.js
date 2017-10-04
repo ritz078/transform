@@ -251,6 +251,15 @@ export default class Layout extends PureComponent {
             font-size: 13px;
             text-align: center;
           }
+
+          .beta {
+            background-color: #fff;
+            border-radius: 2px;
+            margin-left: 10px;
+            color: #666;
+            font-size: 12px;
+            padding: 2px 6px;
+          }
         `}</style>
 
         <style jsx global>{`
@@ -338,7 +347,10 @@ export default class Layout extends PureComponent {
                   >
                     {route.content.map(a => (
                       <Link key={a.path} href={a.path}>
-                        <a className={this.getClass(a.path)}>{a.label}</a>
+                        <a className={this.getClass(a.path)}>
+                          {a.label}{' '}
+                          {a.beta && <span className='beta'>Beta</span>}
+                        </a>
                       </Link>
                     ))}
                   </Panel>

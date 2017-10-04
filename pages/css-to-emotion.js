@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
+import PoweredBy from '../components/PoweredBy'
 import { convertCssForEmotion } from 'css-in-js-generator/lib/convertCssForEmotion'
 
 const defaultText = `
@@ -136,6 +137,7 @@ export default class extends PureComponent {
           defaultText={defaultText}
           extensions={null}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     )
   }
