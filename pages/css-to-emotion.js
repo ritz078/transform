@@ -104,24 +104,16 @@ export default class extends PureComponent {
     isRn: false
   }
 
-  getCode = code => {
-    let finalCode = ''
-    code.forEach((source, name) => {
-      source =
-        name === 'index.js' ? source.replace('css', 'injectGlobal') : source
-
-      finalCode += `
-      
-      
-      // ${name}
-      ${source}`
-    })
-
-    return finalCode
-  }
-
   getTransformedValue = code => {
-    return this.getCode(convertCssForEmotion(code))
+    const emotionCode = convertCssForEmotion(code)
+    return emotionCode.replace(
+      /injectGlobal`([\n\w\W]*)`/gi,
+      (match, group) => {
+        return `injectGlobal\`
+${group.replace(/[\r\n]+/g, '\n\n')}
+      \``
+      }
+    )
   }
 
   render () {
