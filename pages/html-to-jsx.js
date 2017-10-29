@@ -4,6 +4,7 @@ import convertSvgString from 'transform-svg-to-native'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 import isSvg from 'is-svg'
+import svgo from 'transform-svg-to-native/dist/svgo'
 
 const converter = new HTMLtoJSX({
   createClass: false
@@ -18,6 +19,17 @@ export default class Css2Js extends PureComponent {
     native: false
   }
 
+  convertHtmlToJsx = html => {
+    if (isSvg(html)) {
+      return new Promise(resolve => {
+        svgo.optimize(html, result => {
+          resolve(result.data)
+        })
+      })
+    }
+    return converter.convert(html)
+  }
+
   getTransformedValue = async (newValue: string) => {
     if (this.state.native && !isSvg(newValue)) {
       throw new Error(
@@ -27,9 +39,9 @@ export default class Css2Js extends PureComponent {
 
     return this.state.native
       ? new Promise(resolve =>
-          convertSvgString(newValue, code => resolve(code))
-        )
-      : converter.convert(newValue)
+        convertSvgString(newValue, code => resolve(code))
+      )
+      : this.convertHtmlToJsx(newValue)
   }
 
   render () {

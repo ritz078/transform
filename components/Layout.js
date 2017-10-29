@@ -5,7 +5,7 @@ import Head from 'next/head'
 import NProgress from 'nprogress'
 import Router from 'next/router'
 import GithubCorner from 'react-github-corner'
-import FuzzyPicker, { FuzzyWrapper } from 'react-fuzzy-picker'
+// import FuzzyPicker, { FuzzyWrapper } from 'react-fuzzy-picker'
 import Collapse, { Panel } from 'rc-collapse'
 import findIndex from 'lodash/findIndex'
 import { categorizedRoutes, routes, activeRouteData } from '../utils/routes'
@@ -81,24 +81,24 @@ function trackingScript () {
   ga('send', 'pageview')
 }
 
-function renderFuzzyPicker (isOpen, onClose) {
-  return (
-    <FuzzyPicker
-      isOpen={isOpen}
-      onClose={onClose}
-      onChange={choice => Router.push(choice.path)}
-      items={routes}
-      itemValue={item => item.label}
-      renderItem={item => <span>{item.label}</span>}
-    />
-  )
-}
-
-// Here, we check what key must be pressed to open the fuzzy picker
-// We'll use the '/' key for this example.
-function isCorrectKeyPressed (event) {
-  return event.metaKey && event.key === 'p'
-}
+// function renderFuzzyPicker (isOpen, onClose) {
+//   return (
+//     <FuzzyPicker
+//       isOpen={isOpen}
+//       onClose={onClose}
+//       onChange={choice => Router.push(choice.path)}
+//       items={routes}
+//       itemValue={item => item.label}
+//       renderItem={item => <span>{item.label}</span>}
+//     />
+//   )
+// }
+//
+// // Here, we check what key must be pressed to open the fuzzy picker
+// // We'll use the '/' key for this example.
+// function isCorrectKeyPressed (event) {
+//   return event.metaKey && event.key === 'p'
+// }
 
 export default class Layout extends PureComponent {
   state = {}
@@ -307,10 +307,6 @@ export default class Layout extends PureComponent {
           }
         `}</style>
 
-        <FuzzyWrapper
-          isKeyPressed={isCorrectKeyPressed}
-          popup={renderFuzzyPicker}
-        />
         <div className='sidebar'>
           <GithubCorner
             href='https://github.com/ritz078/transform-www'
