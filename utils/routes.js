@@ -52,6 +52,12 @@ export const categorizedRoutes = [
           'An online REPL for converting HTML to JSX with proper support for SVG.'
       },
       {
+        label: 'SVG to React Native',
+        path: '/svg-to-react-native',
+        desc:
+          'An online REPL for converting SVG to React Native compatible equivalent.'
+      },
+      {
         label: 'CSS to JS Objects',
         path: '/css-to-js',
         desc:
