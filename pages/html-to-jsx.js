@@ -23,7 +23,7 @@ export default class Css2Js extends PureComponent {
     if (isSvg(html)) {
       return new Promise(resolve => {
         svgo.optimize(html, result => {
-          resolve(result.data)
+          resolve(converter.convert(result.data))
         })
       })
     }
@@ -49,7 +49,7 @@ export default class Css2Js extends PureComponent {
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
           url={this.props.url}
-          leftTitle='HTML'
+          leftTitle='HTML/SVG'
           rightTitle='JSX'
           leftMode='html'
           rightMode='jsx'
