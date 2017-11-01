@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
 import HTMLtoJSX from '@tsuyoshiwada/htmltojsx'
-import convertSvgString from 'transform-svg-to-native'
 import Layout from '../components/Layout'
 import ConversionPanel from '../components/ConversionPanel'
 import isSvg from 'is-svg'
@@ -16,11 +15,11 @@ const defaultText = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height=
 
 export default class Css2Js extends PureComponent {
   state = {
-    native: false
+    shouldOptimize: true
   }
 
   convertHtmlToJsx = html => {
-    if (isSvg(html)) {
+    if (isSvg(html) && this.state.shouldOptimize) {
       return new Promise(resolve => {
         svgo.optimize(html, result => {
           resolve(converter.convert(result.data))
@@ -31,17 +30,7 @@ export default class Css2Js extends PureComponent {
   }
 
   getTransformedValue = async (newValue: string) => {
-    if (this.state.native && !isSvg(newValue)) {
-      throw new Error(
-        'You can only convert an SVG in this mode. Try turning off the react-native-svg checkbox.'
-      )
-    }
-
-    return this.state.native
-      ? new Promise(resolve =>
-        convertSvgString(newValue, code => resolve(code))
-      )
-      : this.convertHtmlToJsx(newValue)
+    return this.convertHtmlToJsx(newValue)
   }
 
   render () {
@@ -56,11 +45,11 @@ export default class Css2Js extends PureComponent {
           getTransformedValue={this.getTransformedValue}
           name={'html_to_jsx'}
           defaultText={defaultText}
-          checkboxText='react-native-svg'
+          checkboxText='Optimize SVG'
           extensions={['.svg', '.html']}
-          initialCheckboxValue={this.state.native}
+          initialCheckboxValue={this.state.shouldOptimize}
           onCheckboxChange={(checked: boolean, cb: Function) =>
-            this.setState({ native: checked }, cb)}
+            this.setState({ shouldOptimize: checked }, cb)}
         />
       </Layout>
     )
