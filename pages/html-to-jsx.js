@@ -49,7 +49,8 @@ export default class Css2Js extends PureComponent {
           extensions={['.svg', '.html']}
           initialCheckboxValue={this.state.shouldOptimize}
           onCheckboxChange={(checked: boolean, cb: Function) =>
-            this.setState({ shouldOptimize: checked }, cb)}
+            this.setState({ shouldOptimize: checked }, cb)
+          }
         />
       </Layout>
     )

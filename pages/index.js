@@ -48,7 +48,8 @@ export default class Main extends PureComponent {
           name={'prop_types'}
           defaultText={defaultText}
           onCheckboxChange={(checked, cb) =>
-            this.setState({ isImmutable: checked }, cb)}
+            this.setState({ isImmutable: checked }, cb)
+          }
           checkboxText='Immutable Proptypes'
         />
       </Layout>

@@ -48,7 +48,8 @@ export default class extends PureComponent {
           name={'css_to_js'}
           defaultText={defaultText}
           onCheckboxChange={(checked, cb) =>
-            this.setState({ isRn: checked }, cb)}
+            this.setState({ isRn: checked }, cb)
+          }
           checkboxText='React Native'
           extensions={null}
         />

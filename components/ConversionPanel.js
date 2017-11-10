@@ -514,11 +514,11 @@ export default class ConversionPanel extends PureComponent {
                 <h4 className='title'>{leftTitle}</h4>
 
                 {leftMode === 'json' &&
-                showFetchButton && (
-                  <button className='btn' onClick={this.fetchJSON}>
-                    {fetchButtonText}
-                  </button>
-                )}
+                  showFetchButton && (
+                    <button className='btn' onClick={this.fetchJSON}>
+                      {fetchButtonText}
+                    </button>
+                  )}
 
                 {prettierParsers[leftMode] && (
                   <button
@@ -541,43 +541,44 @@ export default class ConversionPanel extends PureComponent {
               )}
 
               {extensions &&
-              extensions.length > 0 && (
-                <label htmlFor='upload' className='btn upload-wrapper'>
-                  <input
-                    id='upload'
-                    accept={extensions.join(',')}
-                    onChange={this.loadFile}
-                    type='file'
-                  />
-                  <UploadIcon />
-                </label>
-              )}
+                extensions.length > 0 && (
+                  <label htmlFor='upload' className='btn upload-wrapper'>
+                    <input
+                      id='upload'
+                      accept={extensions.join(',')}
+                      onChange={this.loadFile}
+                      type='file'
+                    />
+                    <UploadIcon />
+                  </label>
+                )}
             </div>
             {splitLeft &&
-            isBrowser && (
-              <div className='panel'>
-                <div className='header'>
-                  <h4 className='title'>{splitTitle}</h4>
-                  {prettierParsers[splitMode] && (
-                    <button
-                      className={this.getPrettifyClass()}
-                      onClick={this.prettifySplitCode}
-                    >
-                      Prettify
-                    </button>
-                  )}
+              isBrowser && (
+                <div className='panel'>
+                  <div className='header'>
+                    <h4 className='title'>{splitTitle}</h4>
+                    {prettierParsers[splitMode] && (
+                      <button
+                        className={this.getPrettifyClass()}
+                        onClick={this.prettifySplitCode}
+                      >
+                        Prettify
+                      </button>
+                    )}
+                  </div>
+                  <CodeMirror
+                    onChange={(editor, metadata, value) =>
+                      this.onChange(this.state.value, value)
+                    }
+                    value={splitValue}
+                    options={{
+                      mode: modeMapping[splitMode] || splitMode,
+                      ...codeMirrorOptions
+                    }}
+                  />
                 </div>
-                <CodeMirror
-                  onChange={(editor, metadata, value) =>
-                    this.onChange(this.state.value, value)}
-                  value={splitValue}
-                  options={{
-                    mode: modeMapping[splitMode] || splitMode,
-                    ...codeMirrorOptions
-                  }}
-                />
-              </div>
-            )}
+              )}
           </div>
           <div className='section right'>
             <div className='panel'>

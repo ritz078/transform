@@ -40,7 +40,8 @@ export default class extends PureComponent {
           rightMode='json'
           url={this.props.url}
           onCheckboxChange={(checked, cb) =>
-            this.setState({ isCompactMode: checked }, cb)}
+            this.setState({ isCompactMode: checked }, cb)
+          }
           checkboxText='Compact Mode'
           initialCheckboxValue={this.state.isCompactMode}
           extensions={null}
