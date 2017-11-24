@@ -1,87 +1,87 @@
-import React, { PureComponent, Component } from 'react'
-import isBrowser from 'is-in-browser'
-import Link from 'next/link'
-import Head from 'next/head'
-import NProgress from 'nprogress'
-import Router from 'next/router'
-import GithubCorner from 'react-github-corner'
-import FuzzyPicker, { FuzzyWrapper } from 'react-fuzzy-picker'
-import Collapse, { Panel } from 'rc-collapse'
-import findIndex from 'lodash/findIndex'
-import { categorizedRoutes, routes, activeRouteData } from '../utils/routes'
+import React, { PureComponent, Component } from "react";
+import isBrowser from "is-in-browser";
+import Link from "next/link";
+import Head from "next/head";
+import NProgress from "nprogress";
+import Router from "next/router";
+import GithubCorner from "react-github-corner";
+import FuzzyPicker, { FuzzyWrapper } from "react-fuzzy-picker";
+import Collapse, { Panel } from "rc-collapse";
+import findIndex from "lodash/findIndex";
+import { categorizedRoutes, routes, activeRouteData } from "../utils/routes";
 
-NProgress.configure({ showSpinner: false })
+NProgress.configure({ showSpinner: false });
 
 Router.onRouteChangeStart = url => {
-  if (url.indexOf('code=') === -1) {
-    NProgress.start()
+  if (url.indexOf("code=") === -1) {
+    NProgress.start();
   }
-}
-Router.onRouteChangeComplete = () => NProgress.done()
-Router.onRouteChangeError = () => NProgress.done()
+};
+Router.onRouteChangeComplete = () => NProgress.done();
+Router.onRouteChangeError = () => NProgress.done();
 
-function Logo () {
+function Logo() {
   return (
     <svg
-      xmlns='http://www.w3.org/2000/svg'
-      viewBox='0 0 100 125'
-      fill='#ffffff'
-      width='190'
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 125"
+      fill="#ffffff"
+      width="190"
     >
       <style jsx>{`
         svg {
           height: 125px;
         }
       `}</style>
-      <path d='M68.6 34c-2.6 0-4.7 1.6-5.7 3.8l-25.4-6v-.4c0-3.4-2.8-6.2-6.2-6.2-3.4 0-6.2 2.8-6.2 6.2 0 3.1 2.2 5.6 5.2 6.1v25.1c-2.9.5-5.2 3-5.2 6.1 0 3.4 2.8 6.2 6.2 6.2 3.1 0 5.6-2.2 6.1-5.2h16.7c.5 2.9 3 5.2 6.1 5.2 3.4 0 6.2-2.8 6.2-6.2 0-2.4-1.4-4.4-3.3-5.5l4.8-16.9c.3 0 .6.1.9.1 3.4 0 6.2-2.8 6.2-6.2-.2-3.4-3-6.2-6.4-6.2zm0 10.3c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2c2.3 0 4.2 1.9 4.2 4.2s-1.9 4.2-4.2 4.2zM31.4 27.2c2.3 0 4.2 1.9 4.2 4.2s-1.9 4.2-4.2 4.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2zm4.1 41.4c0 2.3-1.9 4.2-4.2 4.2-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2c2.4.1 4.2 1.9 4.2 4.2zm24.7 4.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2 4.2 1.9 4.2 4.2-1.9 4.2-4.2 4.2zm.9-10.3c-.3 0-.6-.1-.9-.1-3.1 0-5.6 2.2-6.1 5.2H37.5C37 65 35 63 32.4 62.5v-25c2.1-.3 3.9-1.8 4.7-3.7l25.4 6v.4c0 2.4 1.4 4.5 3.4 5.5l-4.8 16.8z' />
+      <path d="M68.6 34c-2.6 0-4.7 1.6-5.7 3.8l-25.4-6v-.4c0-3.4-2.8-6.2-6.2-6.2-3.4 0-6.2 2.8-6.2 6.2 0 3.1 2.2 5.6 5.2 6.1v25.1c-2.9.5-5.2 3-5.2 6.1 0 3.4 2.8 6.2 6.2 6.2 3.1 0 5.6-2.2 6.1-5.2h16.7c.5 2.9 3 5.2 6.1 5.2 3.4 0 6.2-2.8 6.2-6.2 0-2.4-1.4-4.4-3.3-5.5l4.8-16.9c.3 0 .6.1.9.1 3.4 0 6.2-2.8 6.2-6.2-.2-3.4-3-6.2-6.4-6.2zm0 10.3c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2c2.3 0 4.2 1.9 4.2 4.2s-1.9 4.2-4.2 4.2zM31.4 27.2c2.3 0 4.2 1.9 4.2 4.2s-1.9 4.2-4.2 4.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2zm4.1 41.4c0 2.3-1.9 4.2-4.2 4.2-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2c2.4.1 4.2 1.9 4.2 4.2zm24.7 4.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2 4.2 1.9 4.2 4.2-1.9 4.2-4.2 4.2zm.9-10.3c-.3 0-.6-.1-.9-.1-3.1 0-5.6 2.2-6.1 5.2H37.5C37 65 35 63 32.4 62.5v-25c2.1-.3 3.9-1.8 4.7-3.7l25.4 6v.4c0 2.4 1.4 4.5 3.4 5.5l-4.8 16.8z" />
     </svg>
-  )
+  );
 }
 
 class CodeSponsor extends Component {
-  shouldComponentUpdate () {
-    return false
+  shouldComponentUpdate() {
+    return false;
   }
 
-  render () {
+  render() {
     return (
       <div>
-        <div id='code-sponsor-widget' />
+        <div id="code-sponsor-widget" />
         <script
-          type='text/javascript'
-          src='https://app.codesponsor.io/scripts/mR5byaXd82L2zTVHo9eWvA?theme=dark&width=240&height=140&image=hide'
+          type="text/javascript"
+          src="https://app.codesponsor.io/scripts/mR5byaXd82L2zTVHo9eWvA?theme=dark&width=240&height=140&image=hide"
         />
       </div>
-    )
+    );
   }
 }
 
-function trackingScript () {
-  ;(function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r
-    ;(i[r] =
+function trackingScript() {
+  (function(i, s, o, g, r, a, m) {
+    i["GoogleAnalyticsObject"] = r;
+    (i[r] =
       i[r] ||
-      function () {
-        ;(i[r].q = i[r].q || []).push(arguments)
+      function() {
+        (i[r].q = i[r].q || []).push(arguments);
       }),
-    (i[r].l = 1 * new Date())
-    ;(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0])
-    a.async = 1
-    a.src = g
-    m.parentNode.insertBefore(a, m)
+      (i[r].l = 1 * new Date());
+    (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m);
   })(
     window,
     document,
-    'script',
-    'https://www.google-analytics.com/analytics.js',
-    'ga'
-  )
+    "script",
+    "https://www.google-analytics.com/analytics.js",
+    "ga"
+  );
 
-  ga('create', 'UA-60624235-5', 'auto')
-  ga('send', 'pageview')
+  ga("create", "UA-60624235-5", "auto");
+  ga("send", "pageview");
 }
 
-function renderFuzzyPicker (isOpen, onClose) {
+function renderFuzzyPicker(isOpen, onClose) {
   return (
     <FuzzyPicker
       isOpen={isOpen}
@@ -91,32 +91,32 @@ function renderFuzzyPicker (isOpen, onClose) {
       itemValue={item => item.label}
       renderItem={item => <span>{item.label}</span>}
     />
-  )
+  );
 }
 
 // Here, we check what key must be pressed to open the fuzzy picker
 // We'll use the '/' key for this example.
-function isCorrectKeyPressed (event) {
-  return event.metaKey && event.key === 'p'
+function isCorrectKeyPressed(event) {
+  return event.metaKey && event.key === "p";
 }
 
 export default class Layout extends PureComponent {
-  state = {}
+  state = {};
 
-  getClass (path) {
-    return path === this.props.pathname ? 'active' : ''
+  getClass(path) {
+    return path === this.props.pathname ? "active" : "";
   }
 
-  componentWillMount () {
-    this.setKey(this.props.pathname)
+  componentWillMount() {
+    this.setKey(this.props.pathname);
   }
 
-  componentDidMount () {
-    routes.forEach(({ path }) => Router.prefetch(path))
+  componentDidMount() {
+    routes.forEach(({ path }) => Router.prefetch(path));
   }
 
-  componentWillReceiveProps ({ pathname }) {
-    this.setKey(pathname)
+  componentWillReceiveProps({ pathname }) {
+    this.setKey(pathname);
   }
 
   setKey = pathname => {
@@ -125,52 +125,52 @@ export default class Layout extends PureComponent {
         categorizedRoutes,
         o => o.content.filter(a => a.path === pathname).length
       ) + 1}`
-    })
-  }
+    });
+  };
 
   onChange = activeKey => {
     this.setState({
       activeKey
-    })
-  }
+    });
+  };
 
-  render () {
-    const { label, desc, title } = activeRouteData(this.props.pathname)
+  render() {
+    const { label, desc, title } = activeRouteData(this.props.pathname);
 
     return (
-      <div className='main-wrapper'>
+      <div className="main-wrapper">
         <Head>
           <title>{title || label}</title>
-          <meta name='viewport' content='width=device-width, initial-scale=1' />
-          <link rel='icon' type='image/png' href='/static/favicon.png' />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" type="image/png" href="/static/favicon.png" />
           <meta
-            name='google-site-verification'
-            content='bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0'
+            name="google-site-verification"
+            content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0"
           />
-          <meta name='description' content={desc} />
+          <meta name="description" content={desc} />
           <link
-            rel='stylesheet'
-            type='text/css'
-            href='https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css'
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css"
           />
-          <link rel='stylesheet' href='/static/styles.css' />
-          <link rel='manifest' href='/static/manifest.json' />
-          <meta name='theme-color' content='#2196f3' />
-          <meta name='mobile-web-app-capable' content='yes' />
-          <meta name='apple-mobile-web-app-capable' content='yes' />
-          <meta name='application-name' content='Transform' />
-          <meta name='apple-mobile-web-app-title' content='Transform' />
-          <meta name='theme-color' content='#2196f3' />
-          <meta name='msapplication-navbutton-color' content='#2196f3' />
+          <link rel="stylesheet" href="/static/styles.css" />
+          <link rel="manifest" href="/static/manifest.json" />
+          <meta name="theme-color" content="#2196f3" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="application-name" content="Transform" />
+          <meta name="apple-mobile-web-app-title" content="Transform" />
+          <meta name="theme-color" content="#2196f3" />
+          <meta name="msapplication-navbutton-color" content="#2196f3" />
           <meta
-            name='apple-mobile-web-app-status-bar-style'
-            content='black-translucent'
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
           />
-          <meta name='msapplication-starturl' content='./' />
-          <meta name='msapplication-TileColor' content='#2196f3' />
+          <meta name="msapplication-starturl" content="./" />
+          <meta name="msapplication-TileColor" content="#2196f3" />
           <meta
-            name='msapplication-TileImage'
-            content='/static/images/icons/icon-144x144.png'
+            name="msapplication-TileImage"
+            content="/static/images/icons/icon-144x144.png"
           />
         </Head>
         <style jsx>{`
@@ -212,7 +212,7 @@ export default class Layout extends PureComponent {
             padding: 20px 5px 30px;
             text-align: center;
             color: #fff;
-            font-family: 'Lato', sans-serif;
+            font-family: "Lato", sans-serif;
           }
 
           .badge {
@@ -242,7 +242,7 @@ export default class Layout extends PureComponent {
           }
 
           .info {
-            font-family: 'Lato';
+            font-family: "Lato";
             color: white;
             border: 1px solid #7b7b7b;
             padding: 8px;
@@ -265,7 +265,7 @@ export default class Layout extends PureComponent {
         <style jsx global>{`
           .Collapsible__trigger {
             color: whitesmoke;
-            font-family: 'Lato', sans-serif;
+            font-family: "Lato", sans-serif;
             line-height: 44px;
             cursor: pointer;
           }
@@ -298,7 +298,7 @@ export default class Layout extends PureComponent {
           .rc-collapse-content-box a {
             display: block;
             color: #fff;
-            font-family: 'Lato';
+            font-family: "Lato";
             line-height: 44px;
             padding-left: 20px;
             background-color: #3c3c3c;
@@ -312,18 +312,18 @@ export default class Layout extends PureComponent {
           popup={renderFuzzyPicker}
         />
 
-        <div className='sidebar'>
+        <div className="sidebar">
           <GithubCorner
-            href='https://github.com/ritz078/transform-www'
+            href="https://github.com/ritz078/transform-www"
             height={80}
             width={80}
-            direction='left'
+            direction="left"
           />
-          <div className='logo'>
+          <div className="logo">
             <Logo />
           </div>
-          <div className='info'>Use Ctrl/Cmd + P for quick search</div>
-          <div className='nav'>
+          <div className="info">Use Ctrl/Cmd + P for quick search</div>
+          <div className="nav">
             <Collapse
               onChange={this.onChange}
               accordion
@@ -334,14 +334,14 @@ export default class Layout extends PureComponent {
                 return (
                   <Panel
                     key={i + 1}
-                    headerClass='Collapsible__trigger'
+                    headerClass="Collapsible__trigger"
                     header={
                       <span>
                         {route.iconName ? (
                           <i className={route.iconName} />
                         ) : (
                           route.icon
-                        )}{' '}
+                        )}{" "}
                         &nbsp; {route.category}
                       </span>
                     }
@@ -349,32 +349,32 @@ export default class Layout extends PureComponent {
                     {route.content.map(a => (
                       <Link key={a.path} href={a.path}>
                         <a className={this.getClass(a.path)}>
-                          {a.label}{' '}
-                          {a.beta && <span className='beta'>Beta</span>}
+                          {a.label}{" "}
+                          {a.beta && <span className="beta">Beta</span>}
                         </a>
                       </Link>
                     ))}
                   </Panel>
-                )
+                );
               })}
             </Collapse>
           </div>
 
-          <div className='footer'>
+          <div className="footer">
             <CodeSponsor />
-            Created by{' '}
+            Created by{" "}
             <a
-              target='_blank'
-              className='twitter'
-              href='https://twitter.com/ritz078'
+              target="_blank"
+              className="twitter"
+              href="https://twitter.com/ritz078"
             >
               @ritz078
             </a>
           </div>
         </div>
-        <div className='content'>{this.props.children}</div>
+        <div className="content">{this.props.children}</div>
         <script>{isBrowser && trackingScript()}</script>
       </div>
-    )
+    );
   }
 }

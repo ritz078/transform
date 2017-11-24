@@ -1,8 +1,8 @@
-import React, { PureComponent } from 'react'
-import Layout from '../components/Layout'
-import ConversionPanel from '../components/ConversionPanel'
-import PoweredBy from '../components/PoweredBy'
-import { convertCssForEmotion } from 'css-in-js-generator/lib/convertCssForEmotion'
+import React, { PureComponent } from "react";
+import Layout from "../components/Layout";
+import ConversionPanel from "../components/ConversionPanel";
+import PoweredBy from "../components/PoweredBy";
+import { convertCssForEmotion } from "css-in-js-generator/lib/convertCssForEmotion";
 
 const defaultText = `
 *,
@@ -97,40 +97,40 @@ select.form-control:not([size]):not([multiple]) {
     color: #868e96;
     opacity: 1;
 }
-`
+`;
 
 export default class extends PureComponent {
   state = {
     isRn: false
-  }
+  };
 
   getTransformedValue = code => {
-    const emotionCode = convertCssForEmotion(code)
+    const emotionCode = convertCssForEmotion(code);
     return emotionCode.replace(
       /injectGlobal`([\n\w\W]*)`/gi,
       (match, group) => {
         return `injectGlobal\`
-${group.replace(/[\r\n]+/g, '\n\n')}
-      \``
+${group.replace(/[\r\n]+/g, "\n\n")}
+      \``;
       }
-    )
-  }
+    );
+  };
 
-  render () {
+  render() {
     return (
       <Layout pathname={this.props.url.pathname}>
         <ConversionPanel
-          leftTitle='CSS'
-          rightTitle='Emotion'
-          leftMode='css'
-          rightMode='typescript'
+          leftTitle="CSS"
+          rightTitle="Emotion"
+          leftMode="css"
+          rightMode="typescript"
           getTransformedValue={this.getTransformedValue}
-          name={'css_to_js'}
+          name={"css_to_js"}
           defaultText={defaultText}
           extensions={null}
         />
         <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
-    )
+    );
   }
 }

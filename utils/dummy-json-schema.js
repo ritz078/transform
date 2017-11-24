@@ -29,6 +29,6 @@ const json = `{
     }
   },
   "required": ["firstName", "lastName"]
-}`
+}`;
 
-export default json
+export default json;
