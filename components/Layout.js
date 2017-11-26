@@ -38,24 +38,6 @@ function Logo() {
   );
 }
 
-class CodeSponsor extends Component {
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  render() {
-    return (
-      <div>
-        <div id="code-sponsor-widget" />
-        <script
-          type="text/javascript"
-          src="https://app.codesponsor.io/scripts/mR5byaXd82L2zTVHo9eWvA?theme=dark&width=240&height=140&image=hide"
-        />
-      </div>
-    );
-  }
-}
-
 function trackingScript() {
   (function(i, s, o, g, r, a, m) {
     i["GoogleAnalyticsObject"] = r;
@@ -361,7 +343,6 @@ export default class Layout extends PureComponent {
           </div>
 
           <div className="footer">
-            <CodeSponsor />
             Created by{" "}
             <a
               target="_blank"

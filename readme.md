@@ -35,8 +35,6 @@
 - Add yourself to the contributors list using `yarn addContributor -- githubusername code`
 - Make a pull request.
 
-<a href="https://app.codesponsor.io/link/8CBegPnJTnjtddvd2E18Su4F/ritz078/transform-www" rel="nofollow"><img src="https://app.codesponsor.io/embed/8CBegPnJTnjtddvd2E18Su4F/ritz078/transform-www.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
-
 ## Credits
 The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
 
