@@ -35,6 +35,7 @@
   "dependencies": {
     "@tsuyoshiwada/htmltojsx": "^0.0.5",
     "babel-plugin-json-to-proptypes": "^0.1.0",
+    "babel-plugin-object-styles-to-template": "^0.1.2",
     "babel-standalone": "^6.26.0",
     "classnames": "^2.2.5",
     "codemirror": "^5.30.0",

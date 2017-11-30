@@ -72,6 +72,14 @@ export const categorizedRoutes = [
         packageName: "css-in-js-generator",
         packageUrl: "https://github.com/brikou/CSS-in-JS-generator",
         beta: true
+      },
+      {
+        label: "Object Styles to template literal",
+        path: "/object-styles-to-template-literal",
+        desc: "An online REPL to convert object styles to template literal.",
+        packageUrl:
+          "https://github.com/satya164/babel-plugin-object-styles-to-template",
+        packageName: "babel-plugin-object-styles-to-template"
       }
     ]
   },
