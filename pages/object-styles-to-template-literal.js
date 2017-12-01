@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
 import merge from "lodash/merge";
 import loadWorker from "../utils/loadWorker";
+import PoweredBy from "../components/PoweredBy";
 
 import ConversionPanel from "../components/ConversionPanel";
 
@@ -41,6 +42,7 @@ export default class Main extends PureComponent {
           name={"template_literal"}
           defaultText={defaultText}
         />
+        <PoweredBy pathname={this.props.url.pathname} />
       </Layout>
     );
   }
