@@ -7,12 +7,13 @@ jsf.option({
 });
 
 registerPromiseWorker(
-  code =>
+  ({ code, rustCase }) =>
     new Promise(resolve => {
       jsf.resolve(JSON.parse(code)).then(_json => {
         resolve(
           transform(_json, {
-            lang: "rust-serde"
+            lang: "rust-serde",
+            rustCase
           })
         );
       });

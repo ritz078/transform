@@ -4,9 +4,14 @@ import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
 import transform from "transform-json-types";
 export default class Json2Ts extends PureComponent {
+  state = {
+    snakeCase: false
+  };
+
   getTransformedValue = code =>
     transform(code, {
-      lang: "rust-serde"
+      lang: "rust-serde",
+      rustCase: this.state.snakeCase ? "snakeCase" : "camelCase"
     });
 
   render() {
@@ -22,6 +27,11 @@ export default class Json2Ts extends PureComponent {
           rightMode="rust"
           url={this.props.url}
           prettifyRightPanel={false}
+          checkboxText="Snake Case"
+          initialCheckboxValue={this.state.snakeCase}
+          onCheckboxChange={(checked: boolean, cb: Function) =>
+            this.setState({ snakeCase: checked }, cb)
+          }
         />
       </Layout>
     );

@@ -7,7 +7,7 @@ import loadWorker from "../utils/loadWorker";
 
 let CodeMirror;
 if (isBrowser) {
-  CodeMirror = require("react-codemirror2").default;
+  CodeMirror = require("react-codemirror2").UnControlled;
 
   require("codemirror-graphql/mode");
   require("codemirror/mode/javascript/javascript");
@@ -656,6 +656,7 @@ export default class ConversionPanel extends PureComponent {
                     ...codeMirrorOptions,
                     lineNumbers: false
                   }}
+                  onChange={() => {}}
                 />
               )}
             </div>
