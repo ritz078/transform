@@ -185,7 +185,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   onChange = async (newValue, leftSplitValue) => {
-    const { prettifyRightPanel, rightMode } = this.props;
+    const { prettifyRightPanel, rightMode, leftMode } = this.props;
 
     const nValue = newValue || this.state.value;
     const splitValue =
@@ -194,7 +194,12 @@ export default class ConversionPanel extends PureComponent {
         : this.state.splitValue;
 
     try {
-      let code = await this.props.getTransformedValue(nValue, splitValue);
+      // Convert JS to JSON
+      const json =
+        leftMode === "json"
+          ? JSON.stringify(eval("(" + nValue + ")", null, 2))
+          : nValue;
+      let code = await this.props.getTransformedValue(json, splitValue);
       code = code.prettyCode || code;
       if (prettifyRightPanel) {
         this.passCodeToWorker(code, rightMode, "resultValue");

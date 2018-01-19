@@ -4598,9 +4598,9 @@ next-tick@1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
 
-next@4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/next/-/next-4.2.1.tgz#37b5637050235b92a487ca484e20088ace7e37fe"
+next@4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/next/-/next-4.2.3.tgz#6f85f9bd6df2c420b4f6425f9f158e82515b7bc8"
   dependencies:
     ansi-html "0.0.7"
     babel-core "6.26.0"
@@ -5714,9 +5714,9 @@ react-fuzzy-picker@0.6.0:
     fuzzysearch "^1.0.3"
     prop-types "^15.6.0"
 
-react-github-corner@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-github-corner/-/react-github-corner-2.0.0.tgz#e248f9110afdc03a5e1168f95714795459b1b380"
+react-github-corner@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-github-corner/-/react-github-corner-2.1.0.tgz#559363f5407e932db47e942f639d165e81827be4"
 
 react-hot-loader@3.1.1:
   version "3.1.1"
@@ -7275,9 +7275,9 @@ xdg-basedir@^2.0.0:
   dependencies:
     os-homedir "^1.0.0"
 
-xml-js@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.1.tgz#e94121bf73acf54126241fe7d913508f4cf49e90"
+xml-js@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.2.tgz#4c4cb8413998f73701a202a1b8b2f17c985a72c5"
   dependencies:
     sax "^1.2.4"
 
