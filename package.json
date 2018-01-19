@@ -48,6 +48,7 @@
     "is-svg": "^2.1.0",
     "json-schema-faker": "^0.5.0-rc11",
     "json-schema-to-typescript": "^4.6.5",
+    "json-ts": "^1.6.4",
     "lodash": "^4.17.4",
     "next": "4.2.3",
     "nprogress": "^0.2.0",
