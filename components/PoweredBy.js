@@ -26,7 +26,7 @@ export default function({ pathname }) {
   const { packageName, packageUrl } = activeRouteData(pathname);
 
   return (
-    <a className="powered-by">
+    <div className="powered-by">
       <style jsx>{`
         a {
           display: inline-block;
@@ -66,6 +66,6 @@ export default function({ pathname }) {
         <i className="icon-npm" />
         <span>{packageName}</span>
       </a>
-    </a>
+    </div>
   );
 }

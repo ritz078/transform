@@ -214,7 +214,7 @@
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
-  font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
+  font: 14px / normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
     "source-code-pro", monospace;
   height: 300px;
   color: black;
@@ -750,6 +750,7 @@ span.CodeMirror-selectedtext {
   text-align: center;
   font-family: Verdana, "Helvetica Neue", Helvetica, sans-serif;
   line-height: 1.5;
+  border-bottom: 1px solid #313131;
 }
 
 #carbonads a {
@@ -764,6 +765,8 @@ span.CodeMirror-selectedtext {
   display: block;
   overflow: hidden;
   color: #fff;
+  max-width: 200px;
+  margin: 0 auto;
 }
 
 .carbon-img {
@@ -774,12 +777,13 @@ span.CodeMirror-selectedtext {
 .carbon-text {
   display: block;
   margin-bottom: 8px;
+  font-size: 12px;
 }
 
 .carbon-poweredby {
   display: block;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.8em;
+  font-size: 10px;
   line-height: 1;
 }
