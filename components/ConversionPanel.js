@@ -7,7 +7,7 @@ import loadWorker from "../utils/loadWorker";
 
 let CodeMirror;
 if (isBrowser) {
-  CodeMirror = require("react-codemirror2").UnControlled;
+  CodeMirror = require("react-codemirror2").Controlled;
 
   require("codemirror-graphql/mode");
   require("codemirror/mode/javascript/javascript");
@@ -73,6 +73,13 @@ type Props = {
   fetchButtonText: ?string,
   getTransformedValue: Function,
   extensions: ?(string[])
+};
+
+const codeMirrorOptions = {
+  lineNumbers: true,
+  theme: "chrome-devtools",
+  lineWrapping: true,
+  scrollbarStyle: null
 };
 
 function UploadIcon() {
@@ -298,13 +305,6 @@ export default class ConversionPanel extends PureComponent {
       split: splitLeft
     });
 
-    const codeMirrorOptions = {
-      lineNumbers: true,
-      theme: "chrome-devtools",
-      lineWrapping: true,
-      scrollbarStyle: null
-    };
-
     // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
     clearTimeout(this.footerTimeout);
     if (infoType === "success") {
@@ -377,7 +377,7 @@ export default class ConversionPanel extends PureComponent {
 
           .info {
             color: white;
-            font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
+            font: 14px / normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
               "source-code-pro", monospace;
           }
 
@@ -588,7 +588,9 @@ export default class ConversionPanel extends PureComponent {
 
               {isBrowser && (
                 <CodeMirror
-                  onChange={(editor, metadata, value) => this.onChange(value)}
+                  onBeforeChange={(editor, metadata, value) =>
+                    this.onChange(value)
+                  }
                   value={value}
                   options={{
                     mode: modeMapping[leftMode] || leftMode,
@@ -625,7 +627,7 @@ export default class ConversionPanel extends PureComponent {
                     )}
                   </div>
                   <CodeMirror
-                    onChange={(editor, metadata, value) =>
+                    onBeforeChange={(editor, metadata, value) =>
                       this.onChange(this.state.value, value)
                     }
                     value={splitValue}

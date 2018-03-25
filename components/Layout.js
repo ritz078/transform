@@ -95,10 +95,22 @@ export default class Layout extends PureComponent {
 
   componentDidMount() {
     routes.forEach(({ path }) => Router.prefetch(path));
+    Layout.loadCarbonAds();
   }
 
   componentWillReceiveProps({ pathname }) {
     this.setKey(pathname);
+  }
+
+  static loadCarbonAds() {
+    const script = document.createElement("script");
+
+    script.src =
+      "//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=transformnowsh";
+    script.async = true;
+    script.id = "_carbonads_js";
+
+    document.getElementById("carbonads_nav").appendChild(script);
   }
 
   setKey = pathname => {
@@ -341,6 +353,8 @@ export default class Layout extends PureComponent {
               })}
             </Collapse>
           </div>
+
+          <div id="carbonads_nav" />
 
           <div className="footer">
             Created by{" "}
