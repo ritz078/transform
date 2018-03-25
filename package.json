@@ -50,7 +50,7 @@
     "json-schema-to-typescript": "^4.6.5",
     "json-ts": "^1.6.4",
     "lodash": "^4.17.4",
-    "next": "4.2.3",
+    "next": "5.0.1-canary.17",
     "nprogress": "^0.2.0",
     "promise-worker": "^1.1.1",
     "prop-types": "^15.6.0",

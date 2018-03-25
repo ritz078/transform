@@ -340,6 +340,11 @@ export default class Layout extends PureComponent {
                 );
               })}
             </Collapse>
+            <script
+              type="text/javascript"
+              src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=transformnowsh"
+              id="_carbonads_js"
+            />
           </div>
 
           <div className="footer">
