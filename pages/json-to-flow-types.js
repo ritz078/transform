@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import dynamic from "next/dynamic";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";

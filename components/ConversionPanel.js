@@ -320,6 +320,10 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
+        <script
+          async
+          src="https://unpkg.com/json-ts@1.6.4/dist/json-ts.min.js"
+        />
         <style jsx>{`
           .wrapper {
             display: flex;
