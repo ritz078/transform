@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "next start",
-    "build":
-      "rm -rf out && next build && next export -o transform && cp ./.next/service-worker.js ./transform/service-worker.js",
+    "build": "rm -rf out && next build && next export -o transform",
     "dev": "next dev",
     "addContributor": "all-contributors add",
     "analyze": "cross-env ANALYZE=1 next build",
