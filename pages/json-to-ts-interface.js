@@ -7,7 +7,10 @@ import { json2ts } from "json-ts";
 import PoweredBy from "../components/PoweredBy";
 
 export default class Json2Ts extends PureComponent {
-  getTransformedValue = code => json2ts(code);
+  getTransformedValue = code =>
+    json2ts(code, {
+      prefix: ""
+    });
 
   render() {
     return (

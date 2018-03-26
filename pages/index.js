@@ -26,14 +26,20 @@ export default class Main extends PureComponent {
 
   componentDidMount() {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then(registration => {
-          console.log("service worker registration successful");
-        })
-        .catch(err => {
-          console.warn("service worker registration failed");
-        });
+      // navigator.serviceWorker
+      //   .register("/service-worker.js")
+      //   .then(registration => {
+      //     console.log("service worker registration successful");
+      //   })
+      //   .catch(err => {
+      //     console.warn("service worker registration failed");
+      //   });
+
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
     }
   }
 
