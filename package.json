@@ -67,7 +67,6 @@
     "transform-json-types": "^0.3.0",
     "transform-svg-to-native": "^0.1.3",
     "unfetch": "^3.0.0",
-    "workerize": "^0.1.7",
     "xml-js": "^1.6.2"
   },
   "devDependencies": {
