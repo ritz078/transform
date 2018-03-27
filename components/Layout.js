@@ -242,7 +242,7 @@ export default class Layout extends PureComponent {
             padding: 8px;
             margin: 0 15px 15px;
             border-radius: 2px;
-            font-size: 13px;
+            font-size: 14px;
             text-align: center;
           }
 
@@ -260,7 +260,7 @@ export default class Layout extends PureComponent {
           .Collapsible__trigger {
             color: whitesmoke;
             font-family: "Lato", sans-serif;
-            line-height: 44px;
+            line-height: 34px;
             cursor: pointer;
           }
 
@@ -293,10 +293,10 @@ export default class Layout extends PureComponent {
             display: block;
             color: #fff;
             font-family: "Lato";
-            line-height: 44px;
+            line-height: 34px;
             padding-left: 20px;
             background-color: #3c3c3c;
-            font-size: 14px;
+            font-size: 13px;
             text-decoration: none;
           }
         `}</style>

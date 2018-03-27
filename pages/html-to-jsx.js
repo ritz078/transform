@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import HTMLtoJSX from "@tsuyoshiwada/htmltojsx";
+import HTMLtoJSX from "htmltojsx";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import isSvg from "is-svg";

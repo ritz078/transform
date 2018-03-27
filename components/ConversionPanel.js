@@ -192,7 +192,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   onChange = async (newValue, leftSplitValue) => {
-    const { prettifyRightPanel, rightMode, leftMode } = this.props;
+    const { leftMode } = this.props;
 
     const nValue = newValue || this.state.value;
     const splitValue =
@@ -208,14 +208,9 @@ export default class ConversionPanel extends PureComponent {
           : nValue;
       let code = await this.props.getTransformedValue(json, splitValue);
       code = code.prettyCode || code;
-      if (prettifyRightPanel) {
-        this.passCodeToWorker(code, rightMode, "resultValue");
-      } else {
-        this.setState({
-          resultValue: code
-        });
-      }
+
       this.setState({
+        resultValue: code,
         info: "",
         infoType: ""
       });
@@ -241,36 +236,13 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
-  prettifyCode = () => {
-    if (!this.state.isPrettierAvailable) return;
-    const { leftMode } = this.props;
-    const { value } = this.state;
-
-    this.passCodeToWorker(value, leftMode, "value");
-  };
-
-  prettifySplitCode = () => {
-    if (!this.state.isPrettierAvailable) return;
-    const { splitMode } = this.props;
-    const { splitValue } = this.state;
-
-    this.passCodeToWorker(splitValue, splitMode, "splitValue");
-  };
-
   copyCode = () => {
     const { resultValue } = this.state;
-
     copy(resultValue);
 
     this.setState({
       info: "Code copied to clipboard.",
       infoType: "success"
-    });
-  };
-
-  getPrettifyClass = () => {
-    return cn("btn", {
-      disabled: !this.state.isPrettierAvailable
     });
   };
 
@@ -297,7 +269,8 @@ export default class ConversionPanel extends PureComponent {
       splitMode,
       showFetchButton,
       fetchButtonText,
-      extensions
+      extensions,
+      prettifyRightPanel
     } = this.props;
     const { infoType, resultValue, value, info, splitValue } = this.state;
 
@@ -305,7 +278,7 @@ export default class ConversionPanel extends PureComponent {
       split: splitLeft
     });
 
-    // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
+    // hide success footer banner after 2 seconds. Let other types be visible until fixed.
     clearTimeout(this.footerTimeout);
     if (infoType === "success") {
       this.footerTimeout = setTimeout(
@@ -375,30 +348,6 @@ export default class ConversionPanel extends PureComponent {
             color: white;
             font: 14px / normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
               "source-code-pro", monospace;
-          }
-
-          .btn {
-            background-color: #2196f3;
-            font-size: 14px;
-            padding: 7px 14px;
-            z-index: 9;
-            border: 0;
-            border-radius: 2px;
-            cursor: pointer;
-            outline: none;
-            color: #fff;
-            line-height: 20px;
-          }
-
-          .btn.disabled {
-            background-color: #e0e0e0;
-            pointer-events: none;
-            color: #7b7b7b;
-            cursor: not-allowed;
-          }
-
-          .btn:hover {
-            background-color: #0490ff;
           }
 
           .header {
@@ -552,6 +501,30 @@ export default class ConversionPanel extends PureComponent {
             margin-right: 4px;
             font-size: 16px;
           }
+
+          .btn {
+            background-color: #2196f3;
+            font-size: 14px;
+            padding: 7px 14px;
+            z-index: 9;
+            border: 0;
+            border-radius: 2px;
+            cursor: pointer;
+            outline: none;
+            color: #fff;
+            line-height: 20px;
+          }
+
+          .btn.disabled {
+            background-color: #e0e0e0;
+            pointer-events: none;
+            color: #7b7b7b;
+            cursor: not-allowed;
+          }
+
+          .btn:hover {
+            background-color: #0490ff;
+          }
         `}</style>
 
         <div className="content-wrapper">
@@ -567,18 +540,10 @@ export default class ConversionPanel extends PureComponent {
                     </button>
                   )}
 
-                {prettierParsers[leftMode] && (
-                  <button
-                    className={this.getPrettifyClass()}
-                    onClick={this.prettifyCode}
-                  >
-                    Prettify
-                  </button>
-                )}
+                <div />
               </div>
 
               <div className="clear" onClick={this.clearText}>
-                {" "}
                 <ClearIcon />
               </div>
 
@@ -591,6 +556,8 @@ export default class ConversionPanel extends PureComponent {
                   mode: modeMapping[leftMode] || leftMode,
                   ...codeMirrorOptions
                 }}
+                mode={leftMode}
+                autoPrettify={false}
               />
 
               {extensions &&
@@ -611,14 +578,6 @@ export default class ConversionPanel extends PureComponent {
                 <div className="panel">
                   <div className="header">
                     <h4 className="title">{splitTitle}</h4>
-                    {prettierParsers[splitMode] && (
-                      <button
-                        className={this.getPrettifyClass()}
-                        onClick={this.prettifySplitCode}
-                      >
-                        Prettify
-                      </button>
-                    )}
                   </div>
                   <CodeMirror
                     onBeforeChange={(editor, metadata, value) =>
@@ -629,6 +588,7 @@ export default class ConversionPanel extends PureComponent {
                       mode: modeMapping[splitMode] || splitMode,
                       ...codeMirrorOptions
                     }}
+                    mode={splitMode}
                   />
                 </div>
               )}
@@ -660,6 +620,9 @@ export default class ConversionPanel extends PureComponent {
                   ...codeMirrorOptions,
                   lineNumbers: false
                 }}
+                mode={rightMode}
+                autoPrettify={prettifyRightPanel}
+                allowPrettify={false}
               />
             </div>
           </div>
