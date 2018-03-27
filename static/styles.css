@@ -9,8 +9,8 @@
 }
 
 .rc-collapse > .rc-collapse-item > .rc-collapse-header {
-  height: 38px;
-  line-height: 38px;
+  height: 34px;
+  line-height: 34px;
   cursor: pointer;
 }
 .rc-collapse > .rc-collapse-item > .rc-collapse-header .arrow {
@@ -34,7 +34,6 @@
 .rc-collapse-content {
   overflow: hidden;
   overflow-y: scroll;
-  max-height: 200px;
 }
 
 .rc-collapse-content-inactive {
