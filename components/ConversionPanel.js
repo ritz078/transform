@@ -3,19 +3,8 @@ import cn from "classnames";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
 import unfetch from "unfetch";
-import loadWorker from "../utils/loadWorker";
 import { List } from "react-content-loader";
 import dynamic from "next/dynamic";
-
-const prettierParsers = {
-  css: "postcss",
-  javascript: "babylon",
-  jsx: "babylon",
-  graphql: "graphql",
-  json: "json",
-  typescript: "typescript",
-  flow: "flow"
-};
 
 const modeMapping = {
   javascript: {
@@ -123,8 +112,7 @@ export default class ConversionPanel extends PureComponent {
       value: props.defaultText,
       splitValue: "",
       info: "",
-      infoType: "",
-      isPrettierAvailable: true
+      infoType: ""
     };
   }
 
@@ -143,32 +131,7 @@ export default class ConversionPanel extends PureComponent {
     const { defaultText, splitValue } = this.props;
 
     this.onChange(defaultText, splitValue);
-
-    const { worker, promiseWorker } = loadWorker("prettier.js");
-    this.worker = worker;
-    this.promiseWorker = promiseWorker;
-
-    this.worker.onmessage = this.setPrettierAvailability;
   }
-
-  setPrettierAvailability = ({ data }) => {
-    if (!data.available || this.state.isPrettierAvailable === data.available) {
-      return;
-    }
-    this.setState({
-      isPrettierAvailable: data.available
-    });
-  };
-
-  passCodeToWorker = (code, mode, section) => {
-    this.promiseWorker.postMessage({ code, mode, section }).then(response => {
-      const { available, prettyCode, section } = response;
-      this.setState({
-        isPrettierAvailable: available,
-        [section]: prettyCode
-      });
-    });
-  };
 
   clearText = () => {
     this.setState({
