@@ -4,21 +4,8 @@ import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
 import unfetch from "unfetch";
 import loadWorker from "../utils/loadWorker";
-
-let CodeMirror;
-if (isBrowser) {
-  CodeMirror = require("react-codemirror2").Controlled;
-
-  require("codemirror-graphql/mode");
-  require("codemirror/mode/javascript/javascript");
-  require("codemirror/mode/xml/xml");
-  require("codemirror/mode/jsx/jsx");
-  require("codemirror/mode/css/css");
-  require("codemirror/mode/rust/rust");
-  require("codemirror/mode/sql/sql");
-  require("codemirror/mode/clike/clike");
-  require("codemirror/mode/go/go");
-}
+import { List } from "react-content-loader";
+import dynamic from "next/dynamic";
 
 const prettierParsers = {
   css: "postcss",
@@ -111,6 +98,19 @@ function ClearIcon() {
     </svg>
   );
 }
+
+function Stubs({ numberOfStubs = 3 }) {
+  return (
+    <div style={{ padding: 30 }}>
+      {[...new Array(numberOfStubs)].map((x, i) => <List key={i} />)}
+    </div>
+  );
+}
+
+const CodeMirror = dynamic(import("./CodeMirror"), {
+  ssr: false,
+  loading: () => <Stubs />
+});
 
 export default class ConversionPanel extends PureComponent {
   props: Props;
@@ -320,10 +320,6 @@ export default class ConversionPanel extends PureComponent {
 
     return (
       <div className="wrapper">
-        <script
-          async
-          src="https://unpkg.com/json-ts@1.6.4/dist/json-ts.min.js"
-        />
         <style jsx>{`
           .wrapper {
             display: flex;
@@ -586,18 +582,16 @@ export default class ConversionPanel extends PureComponent {
                 <ClearIcon />
               </div>
 
-              {isBrowser && (
-                <CodeMirror
-                  onBeforeChange={(editor, metadata, value) =>
-                    this.onChange(value)
-                  }
-                  value={value}
-                  options={{
-                    mode: modeMapping[leftMode] || leftMode,
-                    ...codeMirrorOptions
-                  }}
-                />
-              )}
+              <CodeMirror
+                onBeforeChange={(editor, metadata, value) =>
+                  this.onChange(value)
+                }
+                value={value}
+                options={{
+                  mode: modeMapping[leftMode] || leftMode,
+                  ...codeMirrorOptions
+                }}
+              />
 
               {extensions &&
                 extensions.length > 0 && (
@@ -658,18 +652,15 @@ export default class ConversionPanel extends PureComponent {
                   Copy
                 </button>
               </div>
-              {isBrowser && (
-                <CodeMirror
-                  value={resultValue}
-                  options={{
-                    readOnly: true,
-                    mode: modeMapping[rightMode] || rightMode,
-                    ...codeMirrorOptions,
-                    lineNumbers: false
-                  }}
-                  onChange={() => {}}
-                />
-              )}
+              <CodeMirror
+                value={resultValue}
+                options={{
+                  readOnly: true,
+                  mode: modeMapping[rightMode] || rightMode,
+                  ...codeMirrorOptions,
+                  lineNumbers: false
+                }}
+              />
             </div>
           </div>
         </div>

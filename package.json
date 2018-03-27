@@ -56,6 +56,7 @@
     "rc-collapse": "^1.7.7",
     "react": "16.2.0",
     "react-codemirror2": "4.2.1",
+    "react-content-loader": "^3.1.1",
     "react-dom": "16.2.0",
     "react-fuzzy-picker": "0.6.0",
     "react-github-corner": "^2.1.0",
