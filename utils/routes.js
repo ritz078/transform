@@ -80,6 +80,13 @@ export const categorizedRoutes = [
         packageUrl:
           "https://github.com/satya164/babel-plugin-object-styles-to-template",
         packageName: "babel-plugin-object-styles-to-template"
+      },
+      {
+        label: "JSX to JS Object",
+        path: "/jsx-to-js-object",
+        desc: "An online REPL to convert JSX to Object representation.",
+        packageUrl: "https://www.npmjs.com/package/jsx-to-json",
+        packageName: "jsx-to-json"
       }
     ]
   },

@@ -169,7 +169,9 @@ export default class ConversionPanel extends PureComponent {
         leftMode === "json"
           ? JSON.stringify(eval("(" + nValue + ")", null, 2))
           : nValue;
-      let code = await this.props.getTransformedValue(json, splitValue);
+      let code = IN_BROWSER
+        ? await this.props.getTransformedValue(json, splitValue)
+        : "";
       code = code.prettyCode || code;
 
       this.setState({
