@@ -6,7 +6,7 @@ const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 
 module.exports = {
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer }) => {
     config.node = {
       fs: "empty"
     };
@@ -21,7 +21,7 @@ module.exports = {
         collections: true,
         shorthands: true
       }),
-      new webpack.DefinePlugin({ IN_BROWSER: true })
+      new webpack.DefinePlugin({ IN_BROWSER: !isServer })
     );
 
     config.resolve.alias = {

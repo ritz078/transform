@@ -5,28 +5,6 @@
 
 ![Demo](demo.png)
 
-## Features
-- [JSON to PropTypes](https://transform.now.sh)
-- [HTML to JSX](https://transform.now.sh/html-to-jsx)
-- [CSS to JS Objects](https://transform.now.sh/css-to-js)
-- [JSON to Flow Types](https://transform.now.sh/json-to-flow-types)
-- [JSON to TypeScript Interface](https://transform.now.sh/json-to-ts-interface)
-- [JSON to MobX-State-Tree Model](https://transform.now.sh/json-to-mobx-state-tree)
-- [JSON to Rust Serde](https://transform.now.sh/json-to-rust-serde)
-- [JSON to Mongoose Schema](https://transform.now.sh/json-to-mongoose)
-- [JSON to Big Query Schema](https://transform.now.sh/json-to-big-query)
-- [JSON to MySQL](https://transform.now.sh/json-to-mysql)
-- [JSON to Scala Case Class](https://transform.now.sh/json-to-scala-case-class)
-- [GraphQL to TypeScript](https://transform.now.sh/graphql-to-typescript)
-- [GraphQL to Flow](https://transform.now.sh/graphql-to-flow)
-- [XML to JSON](https://transform.now.sh/xml-to-json)
-- [Object Styles to template literal](https://transform.now.sh/object-styles-to-template-literal)
-
-## Code Structure
-- Create a new route - Add a file `new-pathname.js` in `pages` folder.
-- Update path info in `utils/routes.js`
-- Use ConversionPanel - This Component takes the conversionMethod and renders the Ace Editors.
-
 ## Development
 
 - Fork the repo
