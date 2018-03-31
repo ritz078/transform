@@ -4347,6 +4347,12 @@ json-ts@^1.6.4:
     transducers-js "^0.4.174"
     typescript "^2.3.2"
 
+json2yaml@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/json2yaml/-/json2yaml-1.1.0.tgz#5414d907f9816586b80c513ec2e3aeb2ab819a6c"
+  dependencies:
+    remedial "1.x"
+
 json5@^0.5.0, json5@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
@@ -4443,9 +4449,9 @@ lie@^3.0.2:
   dependencies:
     immediate "~3.0.5"
 
-lint-staged@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-7.0.0.tgz#57926c63201e7bd38ca0576d74391efa699b4a9d"
+lint-staged@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-7.0.1.tgz#064321d79c2ab55808602f84f4ff94f52d872fd5"
   dependencies:
     app-root-path "^2.0.1"
     chalk "^2.3.1"
@@ -4466,7 +4472,7 @@ lint-staged@^7.0.0:
     path-is-inside "^1.0.2"
     pify "^3.0.0"
     please-upgrade-node "^3.0.1"
-    staged-git-files "1.1.0"
+    staged-git-files "1.1.1"
     stringify-object "^3.2.2"
 
 listr-silent-renderer@^1.1.1:
@@ -6125,9 +6131,9 @@ react-dom@~15.4.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-fuzzy-picker@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/react-fuzzy-picker/-/react-fuzzy-picker-0.6.0.tgz#2d6855e345e7323f3e4e653d5584af3a3e36a348"
+react-fuzzy-picker@0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/react-fuzzy-picker/-/react-fuzzy-picker-0.7.0.tgz#8d7d2664762f5667e6652504b6015db76587c0d9"
   dependencies:
     classnames "^2.2.5"
     fuzzysearch "^1.0.3"
@@ -6334,6 +6340,10 @@ regjsparser@^0.1.4:
   resolved "https://registry.yarnpkg.com/regjsparser/-/regjsparser-0.1.5.tgz#7ee8f84dc6fa792d3fd0ae228d24bd949ead205c"
   dependencies:
     jsesc "~0.5.0"
+
+remedial@1.x:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/remedial/-/remedial-1.0.7.tgz#d6674413a65676007be00dd400980987b2c300c1"
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
@@ -6878,9 +6888,9 @@ stackframe@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-1.0.4.tgz#357b24a992f9427cba6b545d96a14ed2cbca187b"
 
-staged-git-files@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/staged-git-files/-/staged-git-files-1.1.0.tgz#1a9bb131c1885601023c7aaddd3d54c22142c526"
+staged-git-files@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/staged-git-files/-/staged-git-files-1.1.1.tgz#37c2218ef0d6d26178b1310719309a16a59f8f7b"
 
 static-extend@^0.1.1:
   version "0.1.2"
@@ -7901,6 +7911,10 @@ y18n@^4.0.0:
 yallist@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
+
+yaml@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/yaml/-/yaml-0.3.0.tgz#c31a616d07acdbc2012d73a6ba5b1b0bdd185a7f"
 
 yargs-parser@^2.4.0, yargs-parser@^2.4.1:
   version "2.4.1"

@@ -27,7 +27,9 @@ const modeMapping = {
     typescript: true
   },
   mysql: "text/x-mysql",
-  scala: "text/x-scala"
+  scala: "text/x-scala",
+  jsx: "text/jsx",
+  yaml: "text/x-yaml"
 };
 
 type Props = {

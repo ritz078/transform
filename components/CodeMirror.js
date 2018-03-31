@@ -12,6 +12,7 @@ require("codemirror/mode/rust/rust");
 require("codemirror/mode/sql/sql");
 require("codemirror/mode/clike/clike");
 require("codemirror/mode/go/go");
+require("codemirror/mode/yaml/yaml");
 
 function noop() {}
 
