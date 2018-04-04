@@ -242,7 +242,7 @@ export default class Layout extends PureComponent {
             padding: 8px;
             margin: 0 15px 15px;
             border-radius: 2px;
-            font-size: 14px;
+            font-size: 13px;
             text-align: center;
           }
 

@@ -2,11 +2,11 @@ import React, { PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
-import { json2ts } from "json-ts";
+import transform from "transform-json-types";
 import PoweredBy from "../components/PoweredBy";
 
 export default class Json2Ts extends PureComponent {
-  getTransformedValue = code => json2ts(code, { flow: true, prefix: "" });
+  getTransformedValue = code => transform(code, { mode: "flow" });
 
   render() {
     return (
