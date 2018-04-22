@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
@@ -11,7 +11,7 @@ export default class extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSON"
           rightTitle="Go Struct"
@@ -24,7 +24,7 @@ export default class extends PureComponent {
           prettifyRightPanel={false}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

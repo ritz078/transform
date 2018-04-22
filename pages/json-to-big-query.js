@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import { bigquery } from "generate-schema";
 import stringify from "stringify-object";
 import Layout from "../components/Layout";
@@ -14,7 +14,7 @@ export default class Json2Ts extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSON"
           rightTitle="Big Query Schema"
@@ -26,7 +26,7 @@ export default class Json2Ts extends PureComponent {
           url={this.props.url}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

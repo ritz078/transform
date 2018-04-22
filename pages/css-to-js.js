@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import loadWorker from "../utils/loadWorker";
@@ -38,7 +38,7 @@ export default class extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="CSS"
           rightTitle="JavaScript"
@@ -54,7 +54,7 @@ export default class extends PureComponent {
           extensions={null}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

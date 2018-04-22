@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
@@ -13,7 +13,7 @@ export default class Json2Ts extends PureComponent {
 
   render() {
     return (
-      <Layout key="layout" pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSON"
           rightTitle="TypeScript Interface"
@@ -26,7 +26,7 @@ export default class Json2Ts extends PureComponent {
           prettifyRightPanel={false}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

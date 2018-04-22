@@ -1,5 +1,4 @@
 import React, { PureComponent } from "react";
-import Layout from "../components/Layout";
 import defaultText from "../utils/dummy-json";
 import merge from "lodash/merge";
 import loadWorker from "../utils/loadWorker";
@@ -45,20 +44,18 @@ export default class Main extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
-        <ConversionPanel
-          leftTitle="JSON"
-          rightTitle="PropTypes"
-          leftMode="json"
-          getTransformedValue={this.getTransformedValue}
-          name={"prop_types"}
-          defaultText={defaultText}
-          onCheckboxChange={(checked, cb) =>
-            this.setState({ isImmutable: checked }, cb)
-          }
-          checkboxText="Immutable Proptypes"
-        />
-      </Layout>
+      <ConversionPanel
+        leftTitle="JSON"
+        rightTitle="PropTypes"
+        leftMode="json"
+        getTransformedValue={this.getTransformedValue}
+        name={"prop_types"}
+        defaultText={defaultText}
+        onCheckboxChange={(checked, cb) =>
+          this.setState({ isImmutable: checked }, cb)
+        }
+        checkboxText="Immutable Proptypes"
+      />
     );
   }
 }

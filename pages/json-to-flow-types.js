@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
@@ -10,7 +10,7 @@ export default class Json2Ts extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSON"
           rightTitle="Flow Types"
@@ -23,7 +23,7 @@ export default class Json2Ts extends PureComponent {
           prettifyRightPanel={false}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

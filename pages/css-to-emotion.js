@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import PoweredBy from "../components/PoweredBy";
@@ -118,7 +118,7 @@ ${group.replace(/[\r\n]+/g, "\n\n")}
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="CSS"
           rightTitle="Emotion"
@@ -130,7 +130,7 @@ ${group.replace(/[\r\n]+/g, "\n\n")}
           extensions={null}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

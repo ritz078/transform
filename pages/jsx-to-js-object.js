@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import PoweredBy from "../components/PoweredBy";
@@ -20,7 +20,7 @@ export default class extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSX"
           rightTitle="JS Object"
@@ -31,7 +31,7 @@ export default class extends PureComponent {
           url={this.props.url}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }
