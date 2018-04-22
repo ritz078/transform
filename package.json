@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "next start",
-    "build": "rm -rf out && next build && next export -o transform",
+    "build": "next build",
+    "export": "next export -o transform",
     "dev": "next dev",
     "addContributor": "all-contributors add",
     "analyze": "cross-env ANALYZE=1 next build",
     "format": "prettier --write **/*.js",
-    "deploy": "yarn build && cd transform && now",
+    "deploy": "yarn build && yarn export && cd transform && now",
     "test": "echo \"Error: no test specified\" && exit 1",
     "precommit": "lint-staged"
   },
