@@ -15,7 +15,6 @@ class MyApp extends App {
   }
 
   render() {
-    console.log(this.props);
     const { Component, pageProps, router } = this.props;
     return (
       <Layout pathname={router.pathname}>
