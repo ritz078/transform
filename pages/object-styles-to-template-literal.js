@@ -1,6 +1,4 @@
-import React, { PureComponent } from "react";
-import Layout from "../components/Layout";
-import merge from "lodash/merge";
+import React, { Fragment, PureComponent } from "react";
 import loadWorker from "../utils/loadWorker";
 import PoweredBy from "../components/PoweredBy";
 
@@ -33,7 +31,7 @@ export default class Main extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="Object Styles"
           rightTitle="Template Literal"
@@ -43,7 +41,7 @@ export default class Main extends PureComponent {
           defaultText={defaultText}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

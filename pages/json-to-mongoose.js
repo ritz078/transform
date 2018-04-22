@@ -1,7 +1,6 @@
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import { mongoose } from "generate-schema";
 import stringify from "stringify-object";
-import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import PoweredBy from "../components/PoweredBy";
 import defaultText from "../utils/dummy-object-json";
@@ -14,7 +13,7 @@ export default class Json2Ts extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSON"
           rightTitle="Mongoose Schema"
@@ -27,7 +26,7 @@ export default class Json2Ts extends PureComponent {
           prettifyRightPanel={false}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import { dummySchema, dummyQuery } from "../utils/graphql-schema";
@@ -19,7 +19,7 @@ export default class Json2Ts extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="Schema"
           rightTitle="TypeScript Definition"
@@ -36,7 +36,7 @@ export default class Json2Ts extends PureComponent {
           prettifyRightPanel={false}
           extensions={null}
         />
-      </Layout>
+      </Fragment>
     );
   }
 }
