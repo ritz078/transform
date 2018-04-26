@@ -97,17 +97,13 @@ export const categorizedRoutes = [
       {
         label: "JSON to Flow Types",
         path: "/json-to-flow-types",
-        desc: "An online REPL for converting JSON to generate Flow Types.",
-        packageName: "json-ts",
-        packageUrl: "https://github.com/shakyShane/json-ts"
+        desc: "An online REPL for converting JSON to generate Flow Types."
       },
       {
         label: "JSON to Typescript Interface",
         path: "/json-to-ts-interface",
         desc:
-          "An online REPL for converting JSON to generate TypeScript Interface.",
-        packageName: "json-ts",
-        packageUrl: "https://github.com/shakyShane/json-ts"
+          "An online REPL for converting JSON to generate TypeScript Interface."
       },
       {
         label: "JSON to MobX-State-Tree Model",

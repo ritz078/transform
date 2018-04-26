@@ -2,7 +2,6 @@ const webpack = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { ANALYZE } = process.env;
 const glob = require("glob");
-const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 
 module.exports = {
@@ -61,11 +60,15 @@ module.exports = {
 
   exportPathMap() {
     const pathMap = {};
-    glob.sync("pages/**/*.js", { ignore: "pages/_document.js" }).forEach(s => {
-      const path = s.split(/(pages|\.)/)[2].replace(/^\/index$/, "/");
-      console.log(path);
-      pathMap[path] = { page: path };
-    });
+    glob
+      .sync("pages/**/*.js", {
+        ignore: ["pages/_document.js", "pages/_app.js"]
+      })
+      .forEach(s => {
+        const path = s.split(/(pages|\.)/)[2].replace(/^\/index$/, "/");
+        console.log(path);
+        pathMap[path] = { page: path };
+      });
     return pathMap;
   }
 };

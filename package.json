@@ -53,7 +53,7 @@
     "json2yaml": "^1.1.0",
     "jsx-to-json": "^0.2.3",
     "lodash": "^4.17.4",
-    "next": "6.0.0-canary.4",
+    "next": "6.0.0-canary.6",
     "nprogress": "^0.2.0",
     "promise-worker": "^1.1.1",
     "prop-types": "^15.6.0",
