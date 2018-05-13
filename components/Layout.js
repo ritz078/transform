@@ -1,24 +1,12 @@
-import React, { PureComponent, Component } from "react";
+import React, { PureComponent } from "react";
 import isBrowser from "is-in-browser";
 import Link from "next/link";
-import Head from "next/head";
-import NProgress from "nprogress";
 import Router from "next/router";
 import GithubCorner from "react-github-corner";
 import FuzzyPicker, { FuzzyWrapper } from "react-fuzzy-picker";
 import Collapse, { Panel } from "rc-collapse";
 import findIndex from "lodash/findIndex";
-import { categorizedRoutes, routes, activeRouteData } from "../utils/routes";
-
-NProgress.configure({ showSpinner: false });
-
-Router.onRouteChangeStart = url => {
-  if (url.indexOf("code=") === -1) {
-    NProgress.start();
-  }
-};
-Router.onRouteChangeComplete = () => NProgress.done();
-Router.onRouteChangeError = () => NProgress.done();
+import { categorizedRoutes, routes } from "../utils/routes";
 
 function Logo() {
   return (
@@ -94,7 +82,6 @@ export default class Layout extends PureComponent {
   }
 
   componentDidMount() {
-    routes.forEach(({ path }) => Router.prefetch(path));
     Layout.loadCarbonAds();
   }
 
@@ -129,44 +116,8 @@ export default class Layout extends PureComponent {
   };
 
   render() {
-    const { label, desc, title } = activeRouteData(this.props.pathname);
-
     return (
       <div className="main-wrapper">
-        <Head>
-          <title>{title || label}</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" type="image/png" href="/static/favicon.png" />
-          <meta
-            name="google-site-verification"
-            content="bjJSOEahdert-7mwVScrwTTUVR3nSe0bEj5YjevUNn0"
-          />
-          <meta name="description" content={desc} />
-          <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css"
-          />
-          <link rel="stylesheet" href="/static/styles.css" />
-          <link rel="manifest" href="/static/manifest.json" />
-          <meta name="theme-color" content="#2196f3" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="application-name" content="Transform" />
-          <meta name="apple-mobile-web-app-title" content="Transform" />
-          <meta name="theme-color" content="#2196f3" />
-          <meta name="msapplication-navbutton-color" content="#2196f3" />
-          <meta
-            name="apple-mobile-web-app-status-bar-style"
-            content="black-translucent"
-          />
-          <meta name="msapplication-starturl" content="./" />
-          <meta name="msapplication-TileColor" content="#2196f3" />
-          <meta
-            name="msapplication-TileImage"
-            content="/static/images/icons/icon-144x144.png"
-          />
-        </Head>
         <style jsx>{`
           .sidebar {
             height: 100vh;
