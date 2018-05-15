@@ -90,14 +90,14 @@ export default class Layout extends PureComponent {
   }
 
   static loadCarbonAds() {
-    const script = document.createElement("script");
-
-    script.src =
-      "//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=transformnowsh";
-    script.async = true;
-    script.id = "_carbonads_js";
-
-    document.getElementById("carbonads_nav").appendChild(script);
+    // const script = document.createElement("script");
+    //
+    // script.src =
+    //   "//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=transformnowsh";
+    // script.async = true;
+    // script.id = "_carbonads_js";
+    //
+    // document.getElementById("carbonads_nav").appendChild(script);
   }
 
   setKey = pathname => {
