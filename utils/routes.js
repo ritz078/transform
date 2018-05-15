@@ -235,6 +235,13 @@ export const categorizedRoutes = [
         desc: "An online REPL to convert YAML to JSON.",
         packageName: "yaml",
         packageUrl: "https://github.com/tj/js-yaml"
+      },
+      {
+        label: "Markdown to HTML",
+        path: "/markdown-to-html",
+        desc: "An online REPL to convert Markdown to HTML.",
+        packageName: "markdown",
+        packageUrl: "https://github.com/evilstreak/markdown-js"
       }
     ]
   }
