@@ -213,6 +213,7 @@ export default class Layout extends PureComponent {
             font-family: "Lato", sans-serif;
             line-height: 34px;
             cursor: pointer;
+            outline: 0;
           }
 
           .Collapsible__trigger a:hover {
@@ -305,7 +306,7 @@ export default class Layout extends PureComponent {
             </Collapse>
           </div>
 
-          <div id="carbonads_nav" />
+          {/*<div id="carbonads_nav" />*/}
 
           <div className="footer">
             Created by{" "}
