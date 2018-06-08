@@ -1,4 +1,6 @@
 {
-  "presets": ["next/babel", "@babel/preset-flow"],
-  "plugins": ["transform-react-remove-prop-types", "lodash", "@babel/plugin-proposal-decorators"]
+  "presets": ["next/babel"],
+  "plugins": ["transform-flow-strip-types", "transform-react-remove-prop-types", "lodash", ["@babel/plugin-proposal-decorators", {
+    "legacy": true
+  }]]
 }
