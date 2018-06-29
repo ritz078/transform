@@ -1,27 +1,36 @@
 import React, { Fragment, PureComponent } from "react";
-import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
-import defaultText from "../utils/dummy-json";
-import json2go from "../utils/json-to-go";
-import gofmt from "gofmt.js";
 import PoweredBy from "../components/PoweredBy";
+import yaml from "yaml";
+
+const defaultText = `---
+  foo: "bar"
+  baz: 
+    - "qux"
+    - "quxx"
+  corge: null
+  grault: 1
+  garply: true
+  waldo: "false"
+  fred: "undefined"
+  emptyarr: []
+  emptyobj: {}
+`;
 
 export default class extends PureComponent {
-  getTransformedValue = code => gofmt(json2go(code).go);
+  getTransformedValue = code => JSON.stringify(yaml.eval(code));
 
   render() {
     return (
       <Fragment>
         <ConversionPanel
-          leftTitle="JSON"
-          rightTitle="Go Struct"
+          leftTitle="YAML"
+          rightTitle="JSON"
           getTransformedValue={this.getTransformedValue}
-          name={"ts_interface"}
           defaultText={defaultText}
-          leftMode="json"
-          rightMode="go"
+          leftMode="yaml"
+          rightMode="json"
           url={this.props.url}
-          prettifyRightPanel={false}
         />
         <PoweredBy pathname={this.props.url.pathname} />
       </Fragment>

@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
-import HTMLtoJSX from "@tsuyoshiwada/htmltojsx";
-import Layout from "../components/Layout";
+import HTMLtoJSX from "htmltojsx";
 import ConversionPanel from "../components/ConversionPanel";
 import isSvg from "is-svg";
 import svgo from "transform-svg-to-native/dist/svgo";
@@ -35,24 +34,22 @@ export default class Css2Js extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
-        <ConversionPanel
-          url={this.props.url}
-          leftTitle="HTML/SVG"
-          rightTitle="JSX"
-          leftMode="html"
-          rightMode="jsx"
-          getTransformedValue={this.getTransformedValue}
-          name={"html_to_jsx"}
-          defaultText={defaultText}
-          checkboxText="Optimize SVG"
-          extensions={[".svg", ".html"]}
-          initialCheckboxValue={this.state.shouldOptimize}
-          onCheckboxChange={(checked: boolean, cb: Function) =>
-            this.setState({ shouldOptimize: checked }, cb)
-          }
-        />
-      </Layout>
+      <ConversionPanel
+        url={this.props.url}
+        leftTitle="HTML/SVG"
+        rightTitle="JSX"
+        leftMode="html"
+        rightMode="jsx"
+        getTransformedValue={this.getTransformedValue}
+        name={"html_to_jsx"}
+        defaultText={defaultText}
+        checkboxText="Optimize SVG"
+        extensions={[".svg", ".html"]}
+        initialCheckboxValue={this.state.shouldOptimize}
+        onCheckboxChange={(checked: boolean, cb: Function) =>
+          this.setState({ shouldOptimize: checked }, cb)
+        }
+      />
     );
   }
 }

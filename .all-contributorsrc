@@ -136,6 +136,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "shakyShane",
+      "name": "Shane Osbourne",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1643522?v=4",
+      "profile": "https://medium.com/@shakyShane",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pd4d10",
+      "name": "Rongjian Zhang",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/9524411?v=4",
+      "profile": "https://github.com/pd4d10",
+      "contributions": [
+        "code"
+      ]
     }
-  ]
+  ],
+  "repoType": "github"
 }

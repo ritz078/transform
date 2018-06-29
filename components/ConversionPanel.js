@@ -3,32 +3,8 @@ import cn from "classnames";
 import isBrowser from "is-in-browser";
 import copy from "copy-text-to-clipboard";
 import unfetch from "unfetch";
-import loadWorker from "../utils/loadWorker";
-
-let CodeMirror;
-if (isBrowser) {
-  CodeMirror = require("react-codemirror2").UnControlled;
-
-  require("codemirror-graphql/mode");
-  require("codemirror/mode/javascript/javascript");
-  require("codemirror/mode/xml/xml");
-  require("codemirror/mode/jsx/jsx");
-  require("codemirror/mode/css/css");
-  require("codemirror/mode/rust/rust");
-  require("codemirror/mode/sql/sql");
-  require("codemirror/mode/clike/clike");
-  require("codemirror/mode/go/go");
-}
-
-const prettierParsers = {
-  css: "postcss",
-  javascript: "babylon",
-  jsx: "babylon",
-  graphql: "graphql",
-  json: "json",
-  typescript: "typescript",
-  flow: "flow"
-};
+import { List } from "react-content-loader";
+import dynamic from "next/dynamic";
 
 const modeMapping = {
   javascript: {
@@ -51,15 +27,17 @@ const modeMapping = {
     typescript: true
   },
   mysql: "text/x-mysql",
-  scala: "text/x-scala"
+  scala: "text/x-scala",
+  jsx: "text/jsx",
+  yaml: "text/x-yaml"
 };
 
 type Props = {
   leftMode: ?string,
   rightMode: ?string,
   resultValue: string,
-  onCheckboxChange: Function,
-  checkboxText: ?string,
+  onCheckboxChange?: Function,
+  checkboxText?: string,
   pathname: string,
   initialCheckboxValue: ?boolean,
   leftTitle: string,
@@ -73,6 +51,13 @@ type Props = {
   fetchButtonText: ?string,
   getTransformedValue: Function,
   extensions: ?(string[])
+};
+
+const codeMirrorOptions = {
+  lineNumbers: true,
+  theme: "chrome-devtools",
+  lineWrapping: true,
+  scrollbarStyle: null
 };
 
 function UploadIcon() {
@@ -105,6 +90,19 @@ function ClearIcon() {
   );
 }
 
+function Stubs({ numberOfStubs = 3 }) {
+  return (
+    <div style={{ padding: 30 }}>
+      {[...new Array(numberOfStubs)].map((x, i) => <List key={i} />)}
+    </div>
+  );
+}
+
+const CodeMirror = dynamic(import("./CodeMirror"), {
+  ssr: false,
+  loading: () => <Stubs />
+});
+
 export default class ConversionPanel extends PureComponent {
   props: Props;
 
@@ -116,8 +114,7 @@ export default class ConversionPanel extends PureComponent {
       value: props.defaultText,
       splitValue: "",
       info: "",
-      infoType: "",
-      isPrettierAvailable: true
+      infoType: ""
     };
   }
 
@@ -136,32 +133,7 @@ export default class ConversionPanel extends PureComponent {
     const { defaultText, splitValue } = this.props;
 
     this.onChange(defaultText, splitValue);
-
-    const { worker, promiseWorker } = loadWorker("prettier.js");
-    this.worker = worker;
-    this.promiseWorker = promiseWorker;
-
-    this.worker.onmessage = this.setPrettierAvailability;
   }
-
-  setPrettierAvailability = ({ data }) => {
-    if (!data.available || this.state.isPrettierAvailable === data.available) {
-      return;
-    }
-    this.setState({
-      isPrettierAvailable: data.available
-    });
-  };
-
-  passCodeToWorker = (code, mode, section) => {
-    this.promiseWorker.postMessage({ code, mode, section }).then(response => {
-      const { available, prettyCode, section } = response;
-      this.setState({
-        isPrettierAvailable: available,
-        [section]: prettyCode
-      });
-    });
-  };
 
   clearText = () => {
     this.setState({
@@ -185,7 +157,7 @@ export default class ConversionPanel extends PureComponent {
   };
 
   onChange = async (newValue, leftSplitValue) => {
-    const { prettifyRightPanel, rightMode } = this.props;
+    const { leftMode } = this.props;
 
     const nValue = newValue || this.state.value;
     const splitValue =
@@ -194,16 +166,18 @@ export default class ConversionPanel extends PureComponent {
         : this.state.splitValue;
 
     try {
-      let code = await this.props.getTransformedValue(nValue, splitValue);
+      // Convert JS to JSON
+      const json =
+        leftMode === "json"
+          ? JSON.stringify(eval("(" + nValue + ")", null, 2))
+          : nValue;
+      let code = IN_BROWSER
+        ? await this.props.getTransformedValue(json, splitValue)
+        : "";
       code = code.prettyCode || code;
-      if (prettifyRightPanel) {
-        this.passCodeToWorker(code, rightMode, "resultValue");
-      } else {
-        this.setState({
-          resultValue: code
-        });
-      }
+
       this.setState({
+        resultValue: code,
         info: "",
         infoType: ""
       });
@@ -229,36 +203,13 @@ export default class ConversionPanel extends PureComponent {
     }
   };
 
-  prettifyCode = () => {
-    if (!this.state.isPrettierAvailable) return;
-    const { leftMode } = this.props;
-    const { value } = this.state;
-
-    this.passCodeToWorker(value, leftMode, "value");
-  };
-
-  prettifySplitCode = () => {
-    if (!this.state.isPrettierAvailable) return;
-    const { splitMode } = this.props;
-    const { splitValue } = this.state;
-
-    this.passCodeToWorker(splitValue, splitMode, "splitValue");
-  };
-
   copyCode = () => {
     const { resultValue } = this.state;
-
     copy(resultValue);
 
     this.setState({
       info: "Code copied to clipboard.",
       infoType: "success"
-    });
-  };
-
-  getPrettifyClass = () => {
-    return cn("btn", {
-      disabled: !this.state.isPrettierAvailable
     });
   };
 
@@ -285,7 +236,8 @@ export default class ConversionPanel extends PureComponent {
       splitMode,
       showFetchButton,
       fetchButtonText,
-      extensions
+      extensions,
+      prettifyRightPanel
     } = this.props;
     const { infoType, resultValue, value, info, splitValue } = this.state;
 
@@ -293,14 +245,7 @@ export default class ConversionPanel extends PureComponent {
       split: splitLeft
     });
 
-    const codeMirrorOptions = {
-      lineNumbers: true,
-      theme: "chrome-devtools",
-      lineWrapping: true,
-      scrollbarStyle: null
-    };
-
-    // hide success footer bannner after 2 seconds. Let other types be visible until fixed.
+    // hide success footer banner after 2 seconds. Let other types be visible until fixed.
     clearTimeout(this.footerTimeout);
     if (infoType === "success") {
       this.footerTimeout = setTimeout(
@@ -368,32 +313,8 @@ export default class ConversionPanel extends PureComponent {
 
           .info {
             color: white;
-            font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
+            font: 14px / normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
               "source-code-pro", monospace;
-          }
-
-          .btn {
-            background-color: #2196f3;
-            font-size: 14px;
-            padding: 7px 14px;
-            z-index: 9;
-            border: 0;
-            border-radius: 2px;
-            cursor: pointer;
-            outline: none;
-            color: #fff;
-            line-height: 20px;
-          }
-
-          .btn.disabled {
-            background-color: #e0e0e0;
-            pointer-events: none;
-            color: #7b7b7b;
-            cursor: not-allowed;
-          }
-
-          .btn:hover {
-            background-color: #0490ff;
           }
 
           .header {
@@ -547,6 +468,30 @@ export default class ConversionPanel extends PureComponent {
             margin-right: 4px;
             font-size: 16px;
           }
+
+          .btn {
+            background-color: #2196f3;
+            font-size: 14px;
+            padding: 7px 14px;
+            z-index: 9;
+            border: 0;
+            border-radius: 2px;
+            cursor: pointer;
+            outline: none;
+            color: #fff;
+            line-height: 20px;
+          }
+
+          .btn.disabled {
+            background-color: #e0e0e0;
+            pointer-events: none;
+            color: #7b7b7b;
+            cursor: not-allowed;
+          }
+
+          .btn:hover {
+            background-color: #0490ff;
+          }
         `}</style>
 
         <div className="content-wrapper">
@@ -562,31 +507,25 @@ export default class ConversionPanel extends PureComponent {
                     </button>
                   )}
 
-                {prettierParsers[leftMode] && (
-                  <button
-                    className={this.getPrettifyClass()}
-                    onClick={this.prettifyCode}
-                  >
-                    Prettify
-                  </button>
-                )}
+                <div />
               </div>
 
               <div className="clear" onClick={this.clearText}>
-                {" "}
                 <ClearIcon />
               </div>
 
-              {isBrowser && (
-                <CodeMirror
-                  onChange={(editor, metadata, value) => this.onChange(value)}
-                  value={value}
-                  options={{
-                    mode: modeMapping[leftMode] || leftMode,
-                    ...codeMirrorOptions
-                  }}
-                />
-              )}
+              <CodeMirror
+                onBeforeChange={(editor, metadata, value) =>
+                  this.onChange(value)
+                }
+                value={value}
+                options={{
+                  mode: modeMapping[leftMode] || leftMode,
+                  ...codeMirrorOptions
+                }}
+                mode={leftMode}
+                autoPrettify={false}
+              />
 
               {extensions &&
                 extensions.length > 0 && (
@@ -606,17 +545,9 @@ export default class ConversionPanel extends PureComponent {
                 <div className="panel">
                   <div className="header">
                     <h4 className="title">{splitTitle}</h4>
-                    {prettierParsers[splitMode] && (
-                      <button
-                        className={this.getPrettifyClass()}
-                        onClick={this.prettifySplitCode}
-                      >
-                        Prettify
-                      </button>
-                    )}
                   </div>
                   <CodeMirror
-                    onChange={(editor, metadata, value) =>
+                    onBeforeChange={(editor, metadata, value) =>
                       this.onChange(this.state.value, value)
                     }
                     value={splitValue}
@@ -624,6 +555,7 @@ export default class ConversionPanel extends PureComponent {
                       mode: modeMapping[splitMode] || splitMode,
                       ...codeMirrorOptions
                     }}
+                    mode={splitMode}
                   />
                 </div>
               )}
@@ -647,18 +579,18 @@ export default class ConversionPanel extends PureComponent {
                   Copy
                 </button>
               </div>
-              {isBrowser && (
-                <CodeMirror
-                  value={resultValue}
-                  options={{
-                    readOnly: true,
-                    mode: modeMapping[rightMode] || rightMode,
-                    ...codeMirrorOptions,
-                    lineNumbers: false
-                  }}
-                  onChange={() => {}}
-                />
-              )}
+              <CodeMirror
+                value={resultValue}
+                options={{
+                  readOnly: true,
+                  mode: modeMapping[rightMode] || rightMode,
+                  ...codeMirrorOptions,
+                  lineNumbers: false
+                }}
+                mode={rightMode}
+                autoPrettify={prettifyRightPanel}
+                allowPrettify={false}
+              />
             </div>
           </div>
         </div>

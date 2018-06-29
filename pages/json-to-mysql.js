@@ -1,6 +1,5 @@
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import { mysql } from "generate-schema";
-import Layout from "../components/Layout";
 import PoweredBy from "../components/PoweredBy";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
@@ -13,7 +12,7 @@ export default class Json2Ts extends PureComponent {
 
   render() {
     return (
-      <Layout pathname={this.props.url.pathname}>
+      <Fragment>
         <ConversionPanel
           leftTitle="JSON"
           rightTitle="MySQL Table Schema"
@@ -26,7 +25,7 @@ export default class Json2Ts extends PureComponent {
           prettifyRightPanel={false}
         />
         <PoweredBy pathname={this.props.url.pathname} />
-      </Layout>
+      </Fragment>
     );
   }
 }

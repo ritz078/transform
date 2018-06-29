@@ -80,6 +80,13 @@ export const categorizedRoutes = [
         packageUrl:
           "https://github.com/satya164/babel-plugin-object-styles-to-template",
         packageName: "babel-plugin-object-styles-to-template"
+      },
+      {
+        label: "JSX to JS Object",
+        path: "/jsx-to-js-object",
+        desc: "An online REPL to convert JSX to Object representation.",
+        packageUrl: "https://www.npmjs.com/package/jsx-to-json",
+        packageName: "jsx-to-json"
       }
     ]
   },
@@ -205,8 +212,8 @@ export const categorizedRoutes = [
     ]
   },
   {
-    category: "XML",
-    iconName: "icon-html",
+    category: "Others",
+    iconName: "",
     content: [
       {
         label: "XML to JSON",
@@ -214,6 +221,27 @@ export const categorizedRoutes = [
         desc: "An online REPL to generate basic JSON from a XML.",
         packageName: "xml-js",
         packageUrl: "https://github.com/nashwaan/xml-js"
+      },
+      {
+        label: "JSON to YAML",
+        path: "/json-to-yaml",
+        desc: "An online REPL to convert JSON to YAML.",
+        packageName: "json2yaml",
+        packageUrl: "https://github.com/jeffsu/json2yaml"
+      },
+      {
+        label: "YAML to JSON",
+        path: "/yaml-to-json",
+        desc: "An online REPL to convert YAML to JSON.",
+        packageName: "yaml",
+        packageUrl: "https://github.com/tj/js-yaml"
+      },
+      {
+        label: "Markdown to HTML",
+        path: "/markdown-to-html",
+        desc: "An online REPL to convert Markdown to HTML.",
+        packageName: "markdown",
+        packageUrl: "https://github.com/evilstreak/markdown-js"
       }
     ]
   }
