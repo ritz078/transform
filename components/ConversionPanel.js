@@ -137,7 +137,8 @@ export default class ConversionPanel extends PureComponent {
 
   clearText = () => {
     this.setState({
-      value: ""
+      value: "",
+      resultValue: ""
     });
   };
 
