@@ -81,14 +81,23 @@ export default class Layout extends PureComponent {
     this.setKey(this.props.pathname);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.alertExistHandler);
+  }
+
   componentDidMount() {
     Layout.loadCarbonAds();
+    window.addEventListener("beforeunload", this.alertExistHandler);
   }
 
   componentWillReceiveProps({ pathname }) {
     this.setKey(pathname);
   }
 
+  alertExistHandler(event) {
+    event.preventDefault();
+    return (event.returnValue = "Are you sure you want to close?"); // currently newer version of chrome and other browsers deosn't support customized string so returning a string or empty string won't be of much impact
+  }
   static loadCarbonAds() {
     // const script = document.createElement("script");
     //
