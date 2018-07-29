@@ -18,7 +18,7 @@ export default class Json2Ts extends PureComponent {
       <>
         <ConversionPanel
           leftTitle="JSON"
-          rightTitle="Sarcastic"
+          rightTitle="io-ts"
           getTransformedValue={this.getTransformedValue}
           name={"io-ts"}
           defaultText={defaultText}
