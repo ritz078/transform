@@ -122,6 +122,20 @@ export const categorizedRoutes = [
           "An online REPL for converting JSON Schema to TypeScript Interface.",
         packageName: "json-schema-to-typescript",
         packageUrl: "https://github.com/bcherny/json-schema-to-typescript"
+      },
+      {
+        label: "JSON to Sarcastic",
+        path: "/json-to-sarcastic",
+        desc: "An online REPL for converting JSON to sarcastic.",
+        packageName: "transform-json-types",
+        packageUrl: "https://github.com/transform-it/transform-json-types"
+      },
+      {
+        label: "JSON to io-ts",
+        path: "/json-to-io-ts",
+        desc: "An online REPL for converting JSON to io-ts.",
+        packageName: "transform-json-types",
+        packageUrl: "https://github.com/transform-it/transform-json-types"
       }
     ]
   },
