@@ -1,5 +1,4 @@
 import React, { Fragment, PureComponent } from "react";
-import Layout from "../components/Layout";
 import ConversionPanel from "../components/ConversionPanel";
 import defaultText from "../utils/dummy-json";
 import { json2ts } from "json-ts";

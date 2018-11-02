@@ -27,24 +27,6 @@ module.exports = {
       "babel-core": "babel-standalone"
     };
 
-    // if (!dev) {
-    //   config.plugins.push(
-    //     new SWPrecacheWebpackPlugin({
-    //       minify: true,
-    //       staticFileGlobsIgnorePatterns: [/\.next\//],
-    //       staticFileGlobs: [
-    //         "static/**/*" // Precache all static files by default
-    //       ],
-    //       runtimeCaching: [
-    //         {
-    //           handler: "networkFirst",
-    //           urlPattern: /^https?.*/
-    //         }
-    //       ]
-    //     })
-    //   );
-    // }
-
     if (ANALYZE) {
       config.plugins.push(
         new BundleAnalyzerPlugin({
@@ -54,6 +36,8 @@ module.exports = {
         })
       );
     }
+
+    config.output.globalObject = `this`;
 
     return config;
   },
