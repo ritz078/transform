@@ -54,7 +54,6 @@
     "json-schema-to-typescript": "4.6.5",
     "json-ts": "^1.6.4",
     "json2yaml": "^1.1.0",
-    "jsx-to-json": "^0.2.3",
     "lodash": "^4.17.11",
     "markdown": "^0.5.0",
     "next": "7.0.2",
