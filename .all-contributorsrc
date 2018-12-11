@@ -172,6 +172,15 @@
       "contributions": [
         "KeshShan"
       ]
+    },
+    {
+      "login": "bastor",
+      "name": "Sebastian Maliszczak",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1881814?v=4",
+      "profile": "https://github.com/bastor",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoType": "github"
