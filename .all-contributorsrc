@@ -170,7 +170,16 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/7318?v=4",
       "profile": "http://www.codegent.com",
       "contributions": [
-        "KeshShan"
+        "code"
+      ]
+    },
+    {
+      "login": "bastor",
+      "name": "Sebastian Maliszczak",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1881814?v=4",
+      "profile": "https://github.com/bastor",
+      "contributions": [
+        "code"
       ]
     }
   ],

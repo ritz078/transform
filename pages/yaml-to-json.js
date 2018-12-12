@@ -5,7 +5,7 @@ import yaml from "yaml";
 
 const defaultText = `---
   foo: "bar"
-  baz: 
+  baz:
     - "qux"
     - "quxx"
   corge: null
@@ -18,7 +18,7 @@ const defaultText = `---
 `;
 
 export default class extends PureComponent {
-  getTransformedValue = code => JSON.stringify(yaml.eval(code));
+  getTransformedValue = code => JSON.stringify(yaml.parse(code));
 
   render() {
     return (
