@@ -5895,9 +5895,9 @@ run-queue@^1.0.0, run-queue@^1.0.3:
   dependencies:
     aproba "^1.1.1"
 
-rust-keywords@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/rust-keywords/-/rust-keywords-1.0.1.tgz#7a3def03f8ed79557e258ee8e96fe74792eced34"
+rust-keywords@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/rust-keywords/-/rust-keywords-1.1.0.tgz#680e933f63a0e5948cc9025d9e41797f0a5d4cc4"
 
 rx-lite-aggregates@^4.0.8:
   version "4.0.8"
@@ -6709,12 +6709,12 @@ transform-graphql-type-annotations@^0.1.1:
     apollo-codegen "0.17.0-alpha.1"
     graphql "^0.10.5"
 
-transform-json-types@^0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/transform-json-types/-/transform-json-types-0.5.2.tgz#8d31c55c9446d4bb2b8c8f4261b260b125487f75"
+transform-json-types@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/transform-json-types/-/transform-json-types-0.7.0.tgz#4d3c1f487112e955b7a80e90f132a99ae72d27e9"
   dependencies:
     lodash "^4.17.4"
-    rust-keywords "^1.0.1"
+    rust-keywords "^1.1.0"
     sha1 "^1.1.1"
 
 transform-svg-to-native@^0.1.3:
