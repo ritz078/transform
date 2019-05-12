@@ -12,8 +12,7 @@
     "analyze": "cross-env ANALYZE=1 next build",
     "format": "prettier --write **/*.js",
     "deploy": "yarn build && yarn export && cd transform && now",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "precommit": "lint-staged"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "lint-staged": {
     "**/*.{js,json,css}": [
@@ -94,5 +93,10 @@
     "sw-precache-webpack-plugin": "^0.11.4",
     "webpack-bundle-analyzer": "^3.3.2",
     "worker-loader": "^2.0.0"
+  },
+  "husky": {
+    "hooks":{
+      "precommit": "lint-staged"
+    }
   }
 }
