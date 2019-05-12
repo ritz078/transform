@@ -1,11 +1,11 @@
 const webpack = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { ANALYZE } = process.env;
-const glob = require("glob");
 const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
 module.exports = {
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config, { isServer }) => {
     config.node = {
       fs: "empty"
     };
@@ -20,10 +20,29 @@ module.exports = {
         collections: true,
         shorthands: true
       }),
-      new webpack.DefinePlugin({ IN_BROWSER: !isServer })
+      new webpack.DefinePlugin({ IN_BROWSER: !isServer }),
+      new MonacoWebpackPlugin({
+        output: "../../static",
+        languages: [
+          "json",
+          "typescript",
+          "css",
+          "javascript",
+          "html",
+          "sql",
+          "xml",
+          "yaml",
+          "rust",
+          "markdown",
+          "go",
+          "graphql"
+        ],
+        features: ["folding", "goToDefinitionMouse", "goToDefinitionCommands"]
+      })
     );
 
     config.resolve.alias = {
+      ...config.resolve.alias,
       "babel-core": "babel-standalone"
     };
 
@@ -42,17 +61,5 @@ module.exports = {
     return config;
   },
 
-  exportPathMap() {
-    const pathMap = {};
-    glob
-      .sync("pages/**/*.js", {
-        ignore: ["pages/_document.js", "pages/_app.js"]
-      })
-      .forEach(s => {
-        const path = s.split(/(pages|\.)/)[2].replace(/^\/index$/, "/");
-        console.log(path);
-        pathMap[path] = { page: path };
-      });
-    return pathMap;
-  }
+  transpileModules: ["monaco-editor"]
 };

@@ -25,7 +25,7 @@ export default class Svg2ReactNative extends PureComponent {
         leftTitle="SVG"
         rightTitle="JSX"
         leftMode="html"
-        rightMode="jsx"
+        rightMode="javascript"
         getTransformedValue={this.getTransformedValue}
         name={"svg_to_react_native"}
         defaultText={defaultText}

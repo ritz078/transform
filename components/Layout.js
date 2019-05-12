@@ -7,6 +7,8 @@ import FuzzyPicker, { FuzzyWrapper } from "react-fuzzy-picker";
 import Collapse, { Panel } from "rc-collapse";
 import findIndex from "lodash/findIndex";
 import { categorizedRoutes, routes } from "../utils/routes";
+import Switch from "react-switch";
+import store from "store2";
 
 function Logo() {
   return (
@@ -70,8 +72,12 @@ function isCorrectKeyPressed(event) {
   return event.metaKey && event.key === "p";
 }
 
+export const ThemeContext = React.createContext("mode");
+
 export default class Layout extends PureComponent {
-  state = {};
+  state = {
+    checked: false
+  };
 
   getClass(path) {
     return path === this.props.pathname ? "active" : "";
@@ -87,6 +93,11 @@ export default class Layout extends PureComponent {
 
   componentDidMount() {
     Layout.loadCarbonAds();
+
+    this.setState({
+      checked: store.get("mode") === "dark"
+    });
+
     window.addEventListener("beforeunload", this.alertExistHandler);
   }
 
@@ -214,6 +225,16 @@ export default class Layout extends PureComponent {
             font-size: 12px;
             padding: 2px 6px;
           }
+
+          .dark-mode {
+            background-color: #2f2f2f;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 10px;
+            font-family: Lato;
+          }
         `}</style>
 
         <style jsx global>{`
@@ -317,6 +338,32 @@ export default class Layout extends PureComponent {
 
           {/*<div id="carbonads_nav" />*/}
 
+          <div className="dark-mode">
+            Dark Mode{" "}
+            <Switch
+              checked={this.state.checked}
+              onChange={() =>
+                this.setState(
+                  {
+                    checked: !this.state.checked
+                  },
+                  () => store.set("mode", this.state.checked ? "dark" : "light")
+                )
+              }
+              onColor="#86d3ff"
+              onHandleColor="#2693e6"
+              handleDiameter={20}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+              activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+              height={10}
+              width={28}
+              className="react-switch"
+              id="material-switch"
+            />
+          </div>
+
           <div className="footer">
             Created by{" "}
             <a
@@ -328,7 +375,9 @@ export default class Layout extends PureComponent {
             </a>
           </div>
         </div>
-        <div className="content">{this.props.children}</div>
+        <ThemeContext.Provider value={this.state.checked}>
+          <div className="content">{this.props.children}</div>
+        </ThemeContext.Provider>
         <script>{isBrowser && trackingScript()}</script>
       </div>
     );

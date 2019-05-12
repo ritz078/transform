@@ -26,7 +26,7 @@ export default class Json2Ts extends PureComponent {
         rightTitle="Rust Serde"
         getTransformedValue={this.getTransformedValue}
         defaultText={json}
-        leftMode="javascript"
+        leftMode="json"
         rightMode="rust"
         url={this.props.url}
         prettifyRightPanel={false}

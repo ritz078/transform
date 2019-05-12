@@ -6,32 +6,6 @@ import unfetch from "unfetch";
 import { List } from "react-content-loader";
 import dynamic from "next/dynamic";
 
-const modeMapping = {
-  javascript: {
-    name: "javascript"
-  },
-  json: {
-    name: "javascript",
-    json: true
-  },
-  typescript: {
-    name: "javascript",
-    typescript: true
-  },
-  html: {
-    name: "xml",
-    htmlMode: true
-  },
-  flow: {
-    name: "javascript",
-    typescript: true
-  },
-  mysql: "text/x-mysql",
-  scala: "text/x-scala",
-  jsx: "text/jsx",
-  yaml: "text/x-yaml"
-};
-
 type Props = {
   leftMode: ?string,
   rightMode: ?string,
@@ -51,13 +25,6 @@ type Props = {
   fetchButtonText: ?string,
   getTransformedValue: Function,
   extensions: ?(string[])
-};
-
-const codeMirrorOptions = {
-  lineNumbers: true,
-  theme: "chrome-devtools",
-  lineWrapping: true,
-  scrollbarStyle: null
 };
 
 function UploadIcon() {
@@ -93,12 +60,14 @@ function ClearIcon() {
 function Stubs({ numberOfStubs = 3 }) {
   return (
     <div style={{ padding: 30 }}>
-      {[...new Array(numberOfStubs)].map((x, i) => <List key={i} />)}
+      {[...new Array(numberOfStubs)].map((x, i) => (
+        <List key={i} />
+      ))}
     </div>
   );
 }
 
-const CodeMirror = dynamic(import("./CodeMirror"), {
+const Monaco = dynamic(import("./Monaco"), {
   ssr: false,
   loading: () => <Stubs />
 });
@@ -280,6 +249,13 @@ export default class ConversionPanel extends PureComponent {
             align-items: center;
             text-align: center;
             justify-content: center;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+          }
+
+          #text {
+            color: #fff;
           }
 
           .has-error {
@@ -309,7 +285,7 @@ export default class ConversionPanel extends PureComponent {
           }
 
           .right {
-            border-left: 1px solid #eee;
+            border-left: 1px solid #808080;
           }
 
           .info {
@@ -320,9 +296,7 @@ export default class ConversionPanel extends PureComponent {
 
           .header {
             height: 50px;
-            background-color: white;
-            border-bottom: 1px solid #eee;
-            border-top: 1px solid #eee;
+            background-color: #424242;
             display: flex;
             align-items: center;
             padding: 0 10px;
@@ -333,7 +307,7 @@ export default class ConversionPanel extends PureComponent {
 
           .title {
             padding-left: 4px;
-            color: #666;
+            color: #fff;
             font-weight: normal;
           }
 
@@ -418,43 +392,6 @@ export default class ConversionPanel extends PureComponent {
             overflow: hidden;
           }
 
-          .react-codemirror2 {
-            overflow: scroll;
-          }
-
-          .react-codemirror2,
-          .CodeMirror {
-            display: flex;
-            flex: 1;
-            width: 100%;
-            height: 100%;
-          }
-
-          .CodeMirror {
-            min-height: 500px;
-          }
-
-          .CodeMirror-scroll {
-            width: 100%;
-            min-height: 500px;
-          }
-
-          .split #code,
-          .split .CodeMirror {
-          }
-          .right .react-codemirror2 {
-            background-color: #fafafa;
-          }
-
-          .right .CodeMirror {
-            padding-left: 20px;
-            background-color: #fafafa;
-          }
-
-          .right .ace_scroller {
-            padding: 0 20px;
-          }
-
           .right {
             box-sizing: border-box;
           }
@@ -472,8 +409,8 @@ export default class ConversionPanel extends PureComponent {
 
           .btn {
             background-color: #2196f3;
-            font-size: 14px;
-            padding: 7px 14px;
+            font-size: 13px;
+            padding: 5px 14px;
             z-index: 9;
             border: 0;
             border-radius: 2px;
@@ -501,12 +438,11 @@ export default class ConversionPanel extends PureComponent {
               <div className="header">
                 <h4 className="title">{leftTitle}</h4>
 
-                {leftMode === "json" &&
-                  showFetchButton && (
-                    <button className="btn" onClick={this.fetchJSON}>
-                      {fetchButtonText}
-                    </button>
-                  )}
+                {leftMode === "json" && showFetchButton && (
+                  <button className="btn" onClick={this.fetchJSON}>
+                    {fetchButtonText}
+                  </button>
+                )}
 
                 <div />
               </div>
@@ -515,58 +451,44 @@ export default class ConversionPanel extends PureComponent {
                 <ClearIcon />
               </div>
 
-              <CodeMirror
-                onBeforeChange={(editor, metadata, value) =>
-                  this.onChange(value)
-                }
+              <Monaco
                 value={value}
-                options={{
-                  mode: modeMapping[leftMode] || leftMode,
-                  ...codeMirrorOptions
-                }}
+                onChange={this.onChange}
                 mode={leftMode}
                 autoPrettify={false}
               />
 
-              {extensions &&
-                extensions.length > 0 && (
-                  <label htmlFor="upload" className="btn upload-wrapper">
-                    <input
-                      id="upload"
-                      accept={extensions.join(",")}
-                      onChange={this.loadFile}
-                      type="file"
-                    />
-                    <UploadIcon />
-                  </label>
-                )}
-            </div>
-            {splitLeft &&
-              isBrowser && (
-                <div className="panel">
-                  <div className="header">
-                    <h4 className="title">{splitTitle}</h4>
-                  </div>
-                  <CodeMirror
-                    onBeforeChange={(editor, metadata, value) =>
-                      this.onChange(this.state.value, value)
-                    }
-                    value={splitValue}
-                    options={{
-                      mode: modeMapping[splitMode] || splitMode,
-                      ...codeMirrorOptions
-                    }}
-                    mode={splitMode}
+              {extensions && extensions.length > 0 && (
+                <label htmlFor="upload" className="btn upload-wrapper">
+                  <input
+                    id="upload"
+                    accept={extensions.join(",")}
+                    onChange={this.loadFile}
+                    type="file"
                   />
-                </div>
+                  <UploadIcon />
+                </label>
               )}
+            </div>
+            {splitLeft && isBrowser && (
+              <div className="panel">
+                <div className="header">
+                  <h4 className="title">{splitTitle}</h4>
+                </div>
+                <Monaco
+                  onChange={value => this.onChange(this.state.value, value)}
+                  value={splitValue}
+                  mode={splitMode}
+                />
+              </div>
+            )}
           </div>
           <div className="section right">
             <div className="panel">
               <div className="header">
                 <h4 className="title">{rightTitle}</h4>
                 {onCheckboxChange && (
-                  <label htmlFor="#text">
+                  <label style={{ color: "#fff" }} htmlFor="#text">
                     <input
                       type="checkbox"
                       id="#text"
@@ -580,14 +502,8 @@ export default class ConversionPanel extends PureComponent {
                   Copy
                 </button>
               </div>
-              <CodeMirror
+              <Monaco
                 value={resultValue}
-                options={{
-                  readOnly: true,
-                  mode: modeMapping[rightMode] || rightMode,
-                  ...codeMirrorOptions,
-                  lineNumbers: false
-                }}
                 mode={rightMode}
                 autoPrettify={prettifyRightPanel}
                 allowPrettify={false}

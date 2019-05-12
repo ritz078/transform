@@ -39,7 +39,7 @@ export default class Css2Js extends PureComponent {
         leftTitle="HTML/SVG"
         rightTitle="JSX"
         leftMode="html"
-        rightMode="jsx"
+        rightMode="html"
         getTransformedValue={this.getTransformedValue}
         name={"html_to_jsx"}
         defaultText={defaultText}

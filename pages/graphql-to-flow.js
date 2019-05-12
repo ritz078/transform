@@ -27,7 +27,7 @@ export default class extends PureComponent {
           name={"graphql_to_typescript"}
           defaultText={dummySchema}
           leftMode="json"
-          rightMode="flow"
+          rightMode="typescript"
           url={this.props.url}
           splitLeft={true}
           splitMode={"graphql"}
