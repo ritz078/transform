@@ -8,3 +8,4 @@ yarn-error.log
 transform
 
 .vscode
+dist

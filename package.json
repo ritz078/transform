@@ -11,8 +11,8 @@
     "addContributor": "all-contributors add",
     "analyze": "cross-env ANALYZE=1 next build",
     "format": "prettier --write **/*.js",
-    "deploy": "yarn build && yarn export && cd transform && now",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "now-build": "next build && next export -o dist"
   },
   "lint-staged": {
     "**/*.{js,json,css}": [
@@ -35,6 +35,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@now/static-build": "^0.5.5",
     "@tsuyoshiwada/htmltojsx": "^0.0.5",
     "babel-plugin-json-to-proptypes": "^0.1.0",
     "babel-plugin-object-styles-to-template": "^0.2.2",
@@ -95,7 +96,7 @@
     "worker-loader": "^2.0.0"
   },
   "husky": {
-    "hooks":{
+    "hooks": {
       "precommit": "lint-staged"
     }
   }
