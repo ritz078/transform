@@ -6,7 +6,6 @@
   "scripts": {
     "start": "next start",
     "build": "next build",
-    "export": "next export -o transform",
     "dev": "next dev",
     "addContributor": "all-contributors add",
     "analyze": "cross-env ANALYZE=1 next build",
