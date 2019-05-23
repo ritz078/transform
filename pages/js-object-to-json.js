@@ -16,7 +16,7 @@ export default class extends PureComponent {
         leftTitle="JS Object"
         rightTitle="JSON"
         url={this.props.url}
-        leftMode="json"
+        leftMode="javascript"
         rightMode="json"
         getTransformedValue={this.getTransformedValue}
         name={"js_to_json"}

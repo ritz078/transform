@@ -35,7 +35,8 @@ module.exports = {
           "rust",
           "markdown",
           "go",
-          "graphql"
+          "graphql",
+          "scala"
         ],
         features: ["folding", "goToDefinitionMouse", "goToDefinitionCommands"]
       })
