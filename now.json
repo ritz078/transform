@@ -1,6 +1,9 @@
 {
   "version": 2,
-  "name": "transform",
-  "alias": ["transform"],
-  "builds": [{ "src": "package.json", "use": "@now/static-build" }]
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/next"
+    }
+  ]
 }

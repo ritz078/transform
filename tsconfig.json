@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "target": "es2015",
+    "jsx": "react",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@styles/*": ["./styles/*"],
+      "@components/*": ["./components/*"],
+      "@constants/*": ["./constants/*"],
+      "@workers/*": ["./workers/*"]
+    },
+    "lib": ["dom", "es2016", "webworker"],
+    "typeRoots": ["./node_modules/@types", "./typings/npm"],
+    "types": ["@emotion/core"]
+  },
+  "exclude": ["static", "public", ".next", "node_modules"]
+}

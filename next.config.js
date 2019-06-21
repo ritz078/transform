@@ -1,26 +1,23 @@
+const withTypescript = require("@zeit/next-typescript");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { ANALYZE } = process.env;
-const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const withTM = require("next-transpile-modules");
 
-module.exports = {
-  webpack: (config, { isServer }) => {
+const config = {
+  webpack(config, options) {
     config.node = {
       fs: "empty"
     };
 
-    config.module.rules.push({
-      test: /\.css$/,
-      use: ["style-loader", "css-loader"]
-    });
+    if (options.isServer && options.dev)
+      config.plugins.push(new ForkTsCheckerWebpackPlugin());
 
     config.plugins.push(
-      new LodashModuleReplacementPlugin({
-        collections: true,
-        shorthands: true
+      new webpack.DefinePlugin({
+        "process.env.DEV": JSON.stringify(options.dev)
       }),
-      new webpack.DefinePlugin({ IN_BROWSER: !isServer }),
       new MonacoWebpackPlugin({
         output: "../../static",
         languages: [
@@ -38,29 +35,34 @@ module.exports = {
           "graphql",
           "scala"
         ],
-        features: ["folding", "goToDefinitionMouse", "goToDefinitionCommands"]
+        features: [
+          "folding",
+          "goToDefinitionMouse",
+          "goToDefinitionCommands",
+          "contextmenu",
+          "coreCommands",
+          "hover",
+          "referenceSearch"
+        ]
       })
     );
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "babel-core": "babel-standalone"
-    };
-
-    if (ANALYZE) {
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: "server",
-          analyzerPort: 8888,
-          openAnalyzer: true
-        })
-      );
-    }
+    config.module.rules.unshift({
+      test: /\.worker\.ts/,
+      use: {
+        loader: "worker-loader",
+        options: { fallback: true, inline: true }
+      }
+    });
 
     config.output.globalObject = `this`;
 
     return config;
   },
 
+  target: "serverless",
+
   transpileModules: ["monaco-editor"]
 };
+
+module.exports = withTM(withCSS(withTypescript(config)));
