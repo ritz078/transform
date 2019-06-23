@@ -1,38 +1,23 @@
-import EditorPanel from "@components/EditorPanel";
 import * as React from "react";
+import { useCallback } from "react";
 import { json } from "@constants/data";
-import { Pane } from "evergreen-ui";
+import ConversionPanel, { Transformer } from "@components/ConversionPanel";
+import { getWorker } from "@utils/workerWrapper";
 
 export default function() {
+  const transformer = useCallback<Transformer>(async ({ value }) => {
+    const Worker = require("@workers/babel.worker");
+    return getWorker(Worker).send(value);
+  }, []);
+
   return (
-    <Pane
-      display="flex"
-      flexDirection="row"
-      height={"100vh"}
-      overflow="hidden"
-      flex={1}
-    >
-      <Pane display="flex" flex={1} borderRight>
-        <EditorPanel
-          title="JSON"
-          defaultValue={json}
-          language="json"
-          id={1}
-          onChange={console.log}
-          hasLoad
-          hasSettings
-          hasClear
-        />
-      </Pane>
-      <EditorPanel
-        title="Flow"
-        defaultValue={json}
-        language="json"
-        id={1}
-        onChange={console.log}
-        editable={false}
-        hasPrettier={false}
-      />
-    </Pane>
+    <ConversionPanel
+      transformer={transformer}
+      defaultEditorValue={json}
+      editorTitle="JSON"
+      resultLanguage="javascript"
+      resultTitle="PropTypes"
+      editorLanguage="json"
+    />
   );
 }

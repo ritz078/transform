@@ -19,7 +19,8 @@
       "@components/*": ["./components/*"],
       "@constants/*": ["./constants/*"],
       "@workers/*": ["./workers/*"],
-      "@utils/*": ["./utils/*"]
+      "@utils/*": ["./utils/*"],
+      "@modules/*": ["./modules/*"]
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],

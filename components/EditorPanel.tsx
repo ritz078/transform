@@ -17,11 +17,12 @@ import {
 } from "evergreen-ui";
 import copy from "clipboard-copy";
 import { ThemeContext } from "@utils/theme";
+import { getWorker, Wrapper } from "@utils/workerWrapper";
 
-let prettierWorker: Worker;
+let prettierWorker: Wrapper;
 if (typeof window !== "undefined") {
   const PrettierWorker = require("@workers/prettier.worker");
-  prettierWorker = new PrettierWorker();
+  prettierWorker = getWorker(PrettierWorker);
 }
 
 const Monaco = dynamic(() => import("../components/Monaco"), {
@@ -39,7 +40,7 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
   )
 });
 
-interface EditorPanelProps {
+export interface EditorPanelProps {
   editable?: boolean;
   language?: string;
   defaultValue: string;
@@ -57,6 +58,7 @@ interface EditorPanelState {
   value: string;
   showSettingsDialogue: boolean;
   fetchingUrl: string;
+  defaultValue: string;
 }
 
 export default class extends React.PureComponent<
@@ -76,7 +78,8 @@ export default class extends React.PureComponent<
   state = {
     value: this.props.defaultValue,
     showSettingsDialogue: false,
-    fetchingUrl: ""
+    fetchingUrl: "",
+    defaultValue: this.props.defaultValue
   };
 
   editorDidMount = editor => {
@@ -95,12 +98,6 @@ export default class extends React.PureComponent<
   componentDidMount() {
     // @ts-ignore
     window.__webpack_public_path__ = "/static/";
-
-    prettierWorker.onmessage = ({ data }) => {
-      return this.setState({
-        value: data.data
-      });
-    };
   }
 
   private copy = () => {
@@ -137,10 +134,12 @@ export default class extends React.PureComponent<
   };
 
   prettify = () => {
-    prettierWorker.postMessage({
-      language: this.props.language,
-      value: this.state.value
-    });
+    prettierWorker
+      .send({
+        language: this.props.language,
+        value: this.state.value
+      })
+      .then(value => this.setState({ value }));
   };
 
   private fetchFile = async close => {
@@ -160,6 +159,19 @@ export default class extends React.PureComponent<
     );
   };
 
+  static getDerivedStateFromProps(
+    props: EditorPanelProps,
+    prevState: EditorPanelState
+  ) {
+    if (props.defaultValue !== prevState.defaultValue) {
+      return {
+        defaultValue: props.defaultValue,
+        value: props.defaultValue
+      };
+    }
+    return null;
+  }
+
   private onFilePicked = (files, close) => {
     const file = files[0];
     const reader = new FileReader();
@@ -172,7 +184,6 @@ export default class extends React.PureComponent<
 
   render() {
     const {
-      defaultValue,
       editable,
       language,
       title,
@@ -195,7 +206,7 @@ export default class extends React.PureComponent<
     };
 
     return (
-      <Pane display="flex" flex={1} flexDirection="column">
+      <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
         <style>{`* {margin:0;padding:0;} body, html: {overflow: hidden}`}</style>
         <Pane
           display="flex"
@@ -300,7 +311,6 @@ export default class extends React.PureComponent<
           language={language}
           theme={this.context.theme}
           value={this.state.value}
-          defaultValue={defaultValue}
           options={options}
           onChange={this.onChange}
           editorDidMount={this.editorDidMount}

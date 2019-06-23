@@ -4,6 +4,7 @@ declare module "evergreen-ui" {
 
   export interface PaneProps extends EnhancerProps {
     elevation?: number;
+    className?: string;
   }
 
   export class Pane extends React.PureComponent<PaneProps> {}
@@ -182,4 +183,28 @@ declare module "evergreen-ui" {
   }
 
   export class Switch extends React.PureComponent<SwitchProps> {}
+
+  export interface IconProps extends EnhancerProps {
+    icon: string;
+    color?: string;
+    size?: number;
+    title?: string;
+    style?: any;
+    theme?: any;
+  }
+
+  export class Icon extends React.PureComponent<IconProps> {}
+
+  export interface SearchInputProps extends TextInputProps {
+    height?: number;
+    appearance?: Appearance;
+  }
+
+  export class SearchInput extends React.PureComponent<SearchInputProps> {}
+
+  export interface TextProps extends HeadingProps {}
+
+  export class Text extends React.PureComponent<TextProps> {}
+
+  export class Autocomplete extends React.PureComponent<any> {}
 }

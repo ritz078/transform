@@ -12,6 +12,8 @@
     "now-build": "next build"
   },
   "dependencies": {
+    "babel-plugin-json-to-proptypes": "^0.1.0",
+    "babel-standalone": "^6.26.0",
     "clipboard-copy": "^3.0.0",
     "emotion": "^10.0.9",
     "evergreen-ui": "^4.17.0",

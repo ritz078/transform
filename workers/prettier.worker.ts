@@ -1,43 +1,26 @@
-import prettier from "prettier/standalone";
-const plugins = [
-  require("prettier/parser-babylon"),
-  require("prettier/parser-html")
-];
-
 import { BuiltInParserName } from "prettier";
+import { prettify } from "@utils/prettify";
 
 interface Data {
   data: {
-    value: string;
-    language: BuiltInParserName;
+    payload: {
+      value: string;
+      language: BuiltInParserName;
+    };
+    id: string | number;
   };
 }
 
 const _self = self as any;
 
-const prettierParsers = {
-  css: "postcss",
-  javascript: "babel",
-  jsx: "babel",
-  graphql: "graphql",
-  json: "json",
-  typescript: "typescript",
-  flow: "flow"
-};
-
-_self.onmessage = ({ data: { value, language } }: Data) => {
-  let result;
-
-  if (language === "json") {
-    result = JSON.stringify(JSON.parse(value), null, 2);
-  } else {
-    result = prettier.format(value, {
-      parser: prettierParsers[language],
-      plugins
-    });
+_self.onmessage = ({
+  data: {
+    payload: { value, language },
+    id
   }
-
+}: Data) => {
   _self.postMessage({
-    data: result
+    id,
+    payload: prettify(language, value)
   });
 };

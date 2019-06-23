@@ -30,7 +30,6 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
     width: "100%",
     height: "100%",
     value: null,
-    defaultValue: "",
     language: "javascript",
     options: {},
     editorDidMount: noop
@@ -85,12 +84,11 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
   }
 
   initMonaco() {
-    const { value, defaultValue, language, theme, options } = this.props;
+    const { value, language, theme, options } = this.props;
 
-    const _value = value !== null ? value : defaultValue;
     if (this.containerElement.current) {
       this.editor = editor.create(this.containerElement.current, {
-        value: _value,
+        value,
         language,
         ...options
       });

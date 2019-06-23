@@ -255,7 +255,13 @@ export const categorizedRoutes = [
   }
 ];
 
-export const routes = flatten(categorizedRoutes.map(a => a.content));
+export interface Route {
+  path: string;
+  label: string;
+  desc: string;
+}
+
+export const routes: Route[] = flatten(categorizedRoutes.map(a => a.content));
 
 export function activeRouteData(pathname) {
   return find(routes, o => o.path === pathname);

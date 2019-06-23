@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   Heading,
   Pane,
@@ -10,8 +10,9 @@ import {
 } from "evergreen-ui";
 import { ThemeContext } from "@utils/theme";
 import Collapse, { Panel } from "rc-collapse";
-import { categorizedRoutes, routes } from "@utils/routes";
+import { categorizedRoutes, Route, routes } from "@utils/routes";
 import Link from "next/link";
+import Router from "next/router";
 
 function Logo() {
   return (
@@ -31,6 +32,11 @@ export default function() {
   const [active, setActive] = useState([categorizedRoutes[0].category]);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
+  const onSearchSelect = useCallback(changedItem => {
+    const route = routes.find(route => changedItem === route.label);
+    Router.push(route.path);
+  }, []);
+
   return (
     <Pane
       width={250}
@@ -45,7 +51,7 @@ export default function() {
 
       <Pane paddingX={15}>
         <Autocomplete
-          onChange={changedItem => console.log(changedItem)}
+          onChange={onSearchSelect}
           items={routes.map(a => a.label)}
           width="100%"
         >
@@ -98,15 +104,22 @@ export default function() {
                   </Pane>
                 }
               >
-                {route.content.map(a => (
-                  <Link key={a.path} href={a.path}>
-                    <Pane
-                      className="rc-collapse-item-"
-                      paddingLeft={30}
-                      paddingY={10}
-                    >
-                      <Text size={400}>{a.label}</Text>
-                    </Pane>
+                {(route.content as Route[]).map((a: Route) => (
+                  <Link key={a.label} href={a.path}>
+                    <a>
+                      <Pane
+                        className="rc-collapse-item-"
+                        paddingLeft={30}
+                        paddingY={10}
+                        backgroundColor={
+                          active && active.includes(a.label)
+                            ? "aliceblue"
+                            : undefined
+                        }
+                      >
+                        <Text size={400}>{a.label}</Text>
+                      </Pane>
+                    </a>
                   </Link>
                 ))}
               </Panel>
@@ -124,7 +137,10 @@ export default function() {
 
       <Pane paddingY={15} background="#f6f6f6" borderTop>
         <Heading size={400} textAlign="center">
-          Created by <Link>@ritz078</Link>
+          Created by{" "}
+          <Link>
+            <a>@ritz078</a>
+          </Link>
         </Heading>
       </Pane>
     </Pane>
