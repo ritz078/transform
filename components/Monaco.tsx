@@ -1,5 +1,7 @@
 import React from "react";
 import { editor } from "monaco-editor";
+import { Pane } from "evergreen-ui";
+import { lightEditor, darkEditor } from "@utils/theme";
 
 function noop() {}
 
@@ -34,8 +36,14 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
     editorDidMount: noop
   };
 
+  private reLayout = () => {
+    this.editor.layout();
+  };
+
   componentDidMount() {
     this.initMonaco();
+
+    window.addEventListener("resize", this.reLayout);
   }
 
   componentDidUpdate(prevProps: MonacoProps) {
@@ -66,6 +74,8 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
 
   componentWillUnmount() {
     this.destroyMonaco();
+
+    window.removeEventListener("resize", this.reLayout);
   }
 
   destroyMonaco() {
@@ -84,6 +94,10 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
         language,
         ...options
       });
+
+      editor.defineTheme("light", lightEditor);
+      editor.defineTheme("dark", darkEditor);
+
       if (theme) {
         editor.setTheme(theme);
       }
@@ -114,11 +128,13 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
     };
 
     return (
-      <div
-        ref={this.containerElement}
-        style={style}
-        className="react-monaco-editor-container"
-      />
+      <Pane display={"flex"} flex={1} backgroundColor={"#fafafa"} marginTop={2}>
+        <div
+          ref={this.containerElement}
+          style={style}
+          className="react-monaco-editor-container"
+        />
+      </Pane>
     );
   }
 }

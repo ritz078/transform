@@ -10,13 +10,6 @@ interface DocumentProps {
 export default class MyDocument extends Document<DocumentProps> {
   static getInitialProps({ renderPage }) {
     const page = renderPage();
-    // `css` is a string with css from both glamor and ui-box.
-    // No need to get the glamor css manually if you are using it elsewhere in your app.
-    //
-    // `hydrationScript` is a script you should render on the server.
-    // It contains a stringified version of the glamor and ui-box caches.
-    // Evergreen will look for that script on the client and automatically hydrate
-    // both glamor and ui-box.
     const { css, hydrationScript } = extractStyles();
 
     return {
@@ -32,8 +25,21 @@ export default class MyDocument extends Document<DocumentProps> {
     return (
       <html>
         <Head>
-          <title>SSR in Next.js</title>
           <style dangerouslySetInnerHTML={{ __html: css }} />
+          <style>{`* {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.monaco-editor {
+    padding-top: 15px;
+}
+
+.rc-collapse {
+  width: 100%;
+}
+`}</style>
         </Head>
 
         <body>

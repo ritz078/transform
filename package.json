@@ -15,8 +15,10 @@
     "clipboard-copy": "^3.0.0",
     "emotion": "^10.0.9",
     "evergreen-ui": "^4.17.0",
+    "lodash": "^4.17.11",
     "monaco-editor": "^0.17.0",
     "next": "^8.1.0",
+    "rc-collapse": "^1.11.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
@@ -24,6 +26,7 @@
     "@emotion/babel-preset-css-prop": "^10.0.9",
     "@emotion/core": "^10.0.10",
     "@now/next": "^0.4.2",
+    "@types/lodash": "^4.14.134",
     "@types/next": "^8.0.5",
     "@types/prettier": "^1.16.4",
     "@types/react": "^16.8.21",

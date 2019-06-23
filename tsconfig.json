@@ -6,6 +6,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "removeComments": false,
@@ -17,7 +18,8 @@
       "@styles/*": ["./styles/*"],
       "@components/*": ["./components/*"],
       "@constants/*": ["./constants/*"],
-      "@workers/*": ["./workers/*"]
+      "@workers/*": ["./workers/*"],
+      "@utils/*": ["./utils/*"]
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],

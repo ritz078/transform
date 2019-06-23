@@ -1,8 +1,22 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { editor } from "monaco-editor";
-import { Button, Pane, Spinner, toaster, Dialog, Heading } from "evergreen-ui";
+import {
+  Button,
+  Pane,
+  Spinner,
+  toaster,
+  Dialog,
+  Heading,
+  Popover,
+  FilePicker,
+  TextInput,
+  HTMLInputEvent,
+  IconButton,
+  Tooltip
+} from "evergreen-ui";
 import copy from "clipboard-copy";
+import { ThemeContext } from "@utils/theme";
 
 let prettierWorker: Worker;
 if (typeof window !== "undefined") {
@@ -18,6 +32,7 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
       alignItems="center"
       justifyContent="center"
       height={400}
+      flex={1}
     >
       <Spinner />
     </Pane>
@@ -32,39 +47,49 @@ interface EditorPanelProps {
   hasCopy?: boolean;
   hasPrettier?: boolean;
   id: string | number;
-  onChange: (value: string, props: EditorPanelProps) => void;
+  onChange: (value: string) => void;
+  hasSettings?: boolean;
+  hasLoad?: boolean;
+  hasClear?: boolean;
 }
 
 interface EditorPanelState {
   value: string;
   showSettingsDialogue: boolean;
+  fetchingUrl: string;
 }
 
 export default class extends React.PureComponent<
   EditorPanelProps,
   EditorPanelState
 > {
+  static contextType = ThemeContext;
+
   static defaultProps: Partial<EditorPanelProps> = {
     language: "javascript",
     editable: true,
     hasCopy: true,
-    hasPrettier: true
+    hasPrettier: true,
+    hasSettings: false
   };
 
   state = {
     value: this.props.defaultValue,
-    showSettingsDialogue: false
+    showSettingsDialogue: false,
+    fetchingUrl: ""
   };
 
   editorDidMount = editor => {
-    console.log("editorDidMount", editor);
     editor.focus();
   };
 
   onChange = value => {
-    this.setState({
-      value
-    });
+    this.setState(
+      {
+        value
+      },
+      () => this.props.onChange(value)
+    );
   };
 
   componentDidMount() {
@@ -93,13 +118,13 @@ export default class extends React.PureComponent<
   private getSettingElements = () => {
     return (
       <>
-        <Button
-          marginRight={10}
-          iconBefore="cog"
-          onClick={this.toggleSettingsDialog}
-        >
-          Settings
-        </Button>
+        <Tooltip content="Settings">
+          <IconButton
+            marginRight={10}
+            icon="cog"
+            onClick={this.toggleSettingsDialog}
+          />
+        </Tooltip>
 
         <Dialog
           isShown={this.state.showSettingsDialogue}
@@ -113,9 +138,36 @@ export default class extends React.PureComponent<
 
   prettify = () => {
     prettierWorker.postMessage({
-      parser: this.props.language,
+      language: this.props.language,
       value: this.state.value
     });
+  };
+
+  private fetchFile = async close => {
+    const url = this.state.fetchingUrl;
+    if (!url) return;
+    const res = await fetch(url);
+    const value = await res.text();
+    this.setState(
+      {
+        value,
+        fetchingUrl: ""
+      },
+      () => {
+        close();
+        this.props.onChange(value);
+      }
+    );
+  };
+
+  private onFilePicked = (files, close) => {
+    const file = files[0];
+    const reader = new FileReader();
+    reader.readAsText(file, "utf-8");
+    reader.onload = () => {
+      this.onChange(reader.result);
+      close();
+    };
   };
 
   render() {
@@ -125,7 +177,10 @@ export default class extends React.PureComponent<
       language,
       title,
       hasCopy,
-      hasPrettier
+      hasPrettier,
+      hasSettings,
+      hasLoad,
+      hasClear
     } = this.props;
 
     const options: editor.IEditorOptions = {
@@ -135,15 +190,16 @@ export default class extends React.PureComponent<
       fontFamily: "Menlo",
       minimap: {
         enabled: false
-      }
+      },
+      lineNumbers: "off"
     };
 
     return (
-      <div>
-        <style>{`* {margin:0;padding:0}`}</style>
+      <Pane display="flex" flex={1} flexDirection="column">
+        <style>{`* {margin:0;padding:0;} body, html: {overflow: hidden}`}</style>
         <Pane
           display="flex"
-          height={55}
+          height={50}
           paddingLeft={20}
           paddingRight={20}
           alignItems={"center"}
@@ -155,7 +211,73 @@ export default class extends React.PureComponent<
             </Heading>
           </Pane>
 
-          {this.getSettingElements()}
+          {hasSettings && this.getSettingElements()}
+
+          {hasLoad && (
+            <Popover
+              content={({ close }) => (
+                <Pane
+                  paddingY={20}
+                  paddingX={20}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  flexDirection="column"
+                >
+                  <FilePicker
+                    width={"100%"}
+                    name="filepicker"
+                    onChange={files => this.onFilePicked(files, close)}
+                  />
+
+                  <Heading paddingY={10} size={200}>
+                    OR
+                  </Heading>
+
+                  <Pane display="flex" flexDirection="row">
+                    <TextInput
+                      borderBottomRightRadius={0}
+                      borderTopRightRadius={0}
+                      placeholder="Enter URL"
+                      onChange={(e: HTMLInputEvent) =>
+                        this.setState({
+                          fetchingUrl: e.target.value
+                        })
+                      }
+                    />
+                    <Button
+                      borderLeftWidth={0}
+                      borderBottomLeftRadius={0}
+                      borderTopLeftRadius={0}
+                      onClick={() => this.fetchFile(close)}
+                    >
+                      Fetch URL
+                    </Button>
+                  </Pane>
+                </Pane>
+              )}
+              shouldCloseOnExternalClick
+            >
+              <Tooltip content="Load File">
+                <IconButton marginRight={10} icon="upload" />
+              </Tooltip>
+            </Popover>
+          )}
+
+          {hasClear && (
+            <Tooltip content="Clear">
+              <IconButton
+                icon="trash"
+                intent="danger"
+                marginRight={10}
+                onClick={() =>
+                  this.setState({
+                    value: ""
+                  })
+                }
+              />
+            </Tooltip>
+          )}
 
           {hasCopy && (
             <Button
@@ -170,23 +292,20 @@ export default class extends React.PureComponent<
 
           {hasPrettier && (
             <Button appearance="primary" onClick={this.prettify}>
-              Run Prettier
+              Prettify
             </Button>
           )}
         </Pane>
-        <Pane paddingTop={20}>
-          <Monaco
-            height="100vh"
-            language={language}
-            theme="vs-light"
-            value={this.state.value}
-            defaultValue={defaultValue}
-            options={options}
-            onChange={this.onChange}
-            editorDidMount={this.editorDidMount}
-          />
-        </Pane>
-      </div>
+        <Monaco
+          language={language}
+          theme={this.context.theme}
+          value={this.state.value}
+          defaultValue={defaultValue}
+          options={options}
+          onChange={this.onChange}
+          editorDidMount={this.editorDidMount}
+        />
+      </Pane>
     );
   }
 }
