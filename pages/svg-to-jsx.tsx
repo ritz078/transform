@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import HtmlToJsx from "htmltojsx";
 import PrettierWorker from "@workers/prettier.worker";
@@ -10,6 +10,7 @@ import { EditorPanelProps } from "@components/EditorPanel";
 import Form, { InputType } from "@components/Form";
 import { useSettings } from "@hooks/useSettings";
 import { lowerCase } from "lodash";
+import { Alert } from "evergreen-ui";
 
 export interface Settings {
   cleanupAttrs: boolean;
@@ -49,6 +50,7 @@ export interface Settings {
 }
 
 const defaultSettings: Settings = {
+  optimizeSvg: true,
   cleanupAttrs: true,
   removeDoctype: true,
   removeXMLProcInst: false,
@@ -81,24 +83,22 @@ const defaultSettings: Settings = {
   mergePaths: true,
   convertShapeToPath: true,
   sortAttrs: true,
-  removeDimensions: true,
-  optimizeSvg: false
+  removeDimensions: true
 };
 
-const formFields = Object.keys({
-  optimizeSvg: false,
-  ...defaultSettings
-}).map((property: keyof Settings) => ({
-  label: lowerCase(property),
-  type: InputType.SWITCH,
-  key: property,
-  ...(property !== "optimizeSvg"
-    ? {
-        isDisabled: values => !values.optimizeSvg,
-        props: { paddingLeft: 20, borderLeft: "2px solid #FDF8F3" }
-      }
-    : {})
-}));
+const formFields = Object.keys(defaultSettings).map(
+  (property: keyof Settings) => ({
+    label: lowerCase(property),
+    type: InputType.SWITCH,
+    key: property,
+    ...(property !== "optimizeSvg"
+      ? {
+          isDisabled: values => !values.optimizeSvg,
+          props: { paddingLeft: 20, borderLeft: "2px solid #FDF8F3" }
+        }
+      : {})
+  })
+);
 
 let prettier, svgo;
 export default function() {
@@ -107,16 +107,18 @@ export default function() {
   const [settings, setSettings] = useSettings(name, defaultSettings);
 
   const getSettingsPanel = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => (
-      <Form<Settings>
-        initialValues={defaultSettings}
-        open={open}
-        toggle={toggle}
-        title={"SVGO Settings"}
-        onSubmit={setSettings}
-        formsFields={formFields}
-      />
-    ),
+    ({ open, toggle }) => {
+      return (
+        <Form<Settings>
+          initialValues={settings}
+          open={open}
+          toggle={toggle}
+          title={"SVGO Settings"}
+          onSubmit={setSettings}
+          formsFields={formFields}
+        />
+      );
+    },
     []
   );
 
@@ -155,6 +157,15 @@ export default function() {
       editorLanguage="svg"
       settings={settings}
       editorSettingsElement={getSettingsPanel}
+      resultEditorProps={{
+        topNotifications: settings.optimizeSvg && (
+          <Alert
+            intent="warning"
+            backgroundColor="#FEF8E7"
+            title="SVGO optimization is turned on. You can turn it off in settings."
+          />
+        )
+      }}
     />
   );
 }

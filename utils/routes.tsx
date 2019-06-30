@@ -73,14 +73,6 @@ export const categorizedRoutes = [
         packageUrl: "https://github.com/transform-it/transform-css-to-js"
       },
       {
-        label: "CSS to Emotion",
-        path: "/css-to-emotion",
-        desc: "An online REPL for converting CSS to Emotion compatible code.",
-        packageName: "css-in-js-generator",
-        packageUrl: "https://github.com/brikou/CSS-in-JS-generator",
-        beta: true
-      },
-      {
         label: "Object CSS to template literal",
         path: "/object-styles-to-template-literal",
         desc: "An online REPL to convert object styles to template literal.",

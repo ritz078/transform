@@ -88,6 +88,7 @@ const ConversionPanel: React.FunctionComponent<
             hasLoad
             defaultValue={value}
             id={1}
+            hasCopy={false}
             title={editorTitle}
             settingElement={editorSettingsElement}
             hasClear
@@ -100,6 +101,7 @@ const ConversionPanel: React.FunctionComponent<
               defaultValue={splitValue}
               language={getEditorLanguage(splitLanguage)}
               id={2}
+              hasCopy={false}
               onChange={setSplitValue}
               hasLoad
               hasClear
@@ -135,4 +137,4 @@ const ConversionPanel: React.FunctionComponent<
   );
 };
 
-export default ConversionPanel;
+export default React.memo(ConversionPanel);

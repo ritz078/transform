@@ -15,7 +15,6 @@ const prettierParsers = {
 export function prettify(language: string, value: string) {
   let result;
 
-  debugger;
   if (language === "json") {
     result = JSON.stringify(JSON.parse(value), null, 2);
   } else {

@@ -6,7 +6,6 @@ import {
   Pane,
   Spinner,
   toaster,
-  Dialog,
   Heading,
   Popover,
   FilePicker,
@@ -52,6 +51,8 @@ export interface EditorPanelProps {
   hasLoad?: boolean;
   hasClear?: boolean;
   settingElement?: (args: { toggle: () => void; open: boolean }) => JSX.Element;
+  alertMessage?: React.ReactNode;
+  topNotifications?: React.ReactNode;
 }
 
 interface EditorPanelState {
@@ -114,13 +115,13 @@ export default class extends React.PureComponent<
   private getSettingElements = () => {
     return (
       <>
-        <Tooltip content="Settings">
-          <IconButton
-            marginRight={10}
-            icon="cog"
-            onClick={this.toggleSettingsDialog}
-          />
-        </Tooltip>
+        <Button
+          marginRight={10}
+          iconBefore="cog"
+          onClick={this.toggleSettingsDialog}
+        >
+          Settings
+        </Button>
 
         {this.props.settingElement({
           toggle: this.toggleSettingsDialog,
@@ -188,7 +189,8 @@ export default class extends React.PureComponent<
       hasPrettier,
       hasLoad,
       hasClear,
-      settingElement
+      settingElement,
+      topNotifications
     } = this.props;
 
     const options: editor.IEditorOptions = {
@@ -304,6 +306,9 @@ export default class extends React.PureComponent<
             </Button>
           )}
         </Pane>
+
+        {topNotifications}
+
         <Monaco
           language={language}
           theme={this.context.theme}
