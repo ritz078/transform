@@ -16,7 +16,8 @@ const config = {
 
     config.plugins.push(
       new webpack.DefinePlugin({
-        "process.env.DEV": JSON.stringify(options.dev)
+        "process.env.DEV": JSON.stringify(options.dev),
+        IN_BROWSER: true
       }),
       new MonacoWebpackPlugin({
         output: "../../static",

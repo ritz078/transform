@@ -49,9 +49,9 @@ export interface EditorPanelProps {
   hasPrettier?: boolean;
   id: string | number;
   onChange: (value: string) => void;
-  hasSettings?: boolean;
   hasLoad?: boolean;
   hasClear?: boolean;
+  settingElement?: (args: { toggle: () => void; open: boolean }) => JSX.Element;
 }
 
 interface EditorPanelState {
@@ -71,8 +71,7 @@ export default class extends React.PureComponent<
     language: "javascript",
     editable: true,
     hasCopy: true,
-    hasPrettier: true,
-    hasSettings: false
+    hasPrettier: true
   };
 
   state = {
@@ -123,12 +122,10 @@ export default class extends React.PureComponent<
           />
         </Tooltip>
 
-        <Dialog
-          isShown={this.state.showSettingsDialogue}
-          onCloseComplete={this.toggleSettingsDialog}
-        >
-          Hello
-        </Dialog>
+        {this.props.settingElement({
+          toggle: this.toggleSettingsDialog,
+          open: this.state.showSettingsDialogue
+        })}
       </>
     );
   };
@@ -189,9 +186,9 @@ export default class extends React.PureComponent<
       title,
       hasCopy,
       hasPrettier,
-      hasSettings,
       hasLoad,
-      hasClear
+      hasClear,
+      settingElement
     } = this.props;
 
     const options: editor.IEditorOptions = {
@@ -222,7 +219,7 @@ export default class extends React.PureComponent<
             </Heading>
           </Pane>
 
-          {hasSettings && this.getSettingElements()}
+          {settingElement && this.getSettingElements()}
 
           {hasLoad && (
             <Popover

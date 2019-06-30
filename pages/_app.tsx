@@ -5,6 +5,9 @@ import Navigator from "@components/Navigator";
 import { ThemeContext } from "@utils/theme";
 import "@styles/main.css";
 
+import NProgress from "nprogress";
+import Router from "next/router";
+
 interface State {
   theme: string;
   toggleTheme: () => void;
@@ -19,6 +22,22 @@ class MyApp extends App {
     }
 
     return { pageProps };
+  }
+
+  componentDidMount(): void {
+    const startProgress = () => NProgress.start();
+    const stopProgress = timer => {
+      clearTimeout(timer);
+      NProgress.done();
+    };
+
+    const showProgressBar = delay => {
+      const timer = setTimeout(startProgress, delay);
+      Router.events.on("routeChangeComplete", () => stopProgress(timer));
+      Router.events.on("routeChangeError", () => stopProgress(timer));
+    };
+
+    Router.events.on("routeChangeStart", () => showProgressBar(300));
   }
 
   toggleTheme = () => {

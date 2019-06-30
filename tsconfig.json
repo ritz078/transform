@@ -20,7 +20,7 @@
       "@constants/*": ["./constants/*"],
       "@workers/*": ["./workers/*"],
       "@utils/*": ["./utils/*"],
-      "@modules/*": ["./modules/*"]
+      "@hooks/*": ["./hooks/*"]
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],

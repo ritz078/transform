@@ -1,6 +1,7 @@
 declare module "evergreen-ui" {
   import React from "react";
   import { EnhancerProps } from "ui-box/dist/types/enhancers";
+  import App from "next/app";
 
   export interface PaneProps extends EnhancerProps {
     elevation?: number;
@@ -69,7 +70,7 @@ declare module "evergreen-ui" {
     confirmLabel?: string;
     isConfirmLoading?: boolean;
     isConfirmDisabled?: boolean;
-    onCancel?: () => void;
+    onCancel?: (close: () => void) => void;
     cancelLabel?: string;
     shouldCloseOnOverlayClick?: boolean;
     shouldCloseOnEscapePress?: boolean;
@@ -155,12 +156,14 @@ declare module "evergreen-ui" {
     disabled?: boolean;
     isInvalid?: boolean;
     spellCheck?: boolean;
-    placeholder: string;
+    placeholder?: string;
     appearance?: Appearance;
     width?: string | number;
     theme?: any;
     className?: string;
     onChange: (e: HTMLInputEvent) => void;
+    name?: string;
+    value?: string;
   }
 
   export class TextInput extends React.PureComponent<TextInputProps> {}
@@ -180,6 +183,7 @@ declare module "evergreen-ui" {
   export interface SwitchProps extends EnhancerProps {
     checked?: boolean;
     onChange: (e: Event) => void;
+    name?: string;
   }
 
   export class Switch extends React.PureComponent<SwitchProps> {}
@@ -207,4 +211,17 @@ declare module "evergreen-ui" {
   export class Text extends React.PureComponent<TextProps> {}
 
   export class Autocomplete extends React.PureComponent<any> {}
+
+  export interface AlertProps extends EnhancerProps {
+    intent?: Intent;
+    title?: React.ReactNode;
+    hasTrim?: boolean;
+    hasIcon?: boolean;
+    isRemoveable?: boolean;
+    onRemove?: () => void;
+    appearance?: Appearance;
+    theme?: any;
+  }
+
+  export class Alert extends React.PureComponent<AlertProps> {}
 }

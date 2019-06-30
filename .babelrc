@@ -18,7 +18,8 @@
         "@typings": "./typings",
         "@assets":  "./assets",
         "@controllers": "./controllers",
-        "@constants": "./constants"
+        "@constants": "./constants",
+        "@hooks": "./hooks"
       }
     }]
   ]

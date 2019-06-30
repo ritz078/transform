@@ -47,10 +47,16 @@ export const categorizedRoutes = [
           "An online utility to convert a JSON object to prop-types, Typescript Interface, Rust serde or flow types. It also converts your CSS into JS and HTML into JSX."
       },
       {
-        label: "HTML/SVG to JSX",
+        label: "HTML to JSX",
         path: "/html-to-jsx",
         desc:
           "An online REPL for converting HTML to JSX with proper support for SVG."
+      },
+      {
+        label: "SVG to JSX",
+        path: "/svg-to-jsx",
+        desc:
+          "An online REPL for converting SVG to JSX with proper support for SVG."
       },
       {
         label: "SVG to React Native",
