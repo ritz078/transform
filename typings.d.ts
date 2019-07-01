@@ -13,3 +13,5 @@ declare module "@workers/svgo.worker" {
 
   export default WebpackWorker;
 }
+
+declare const IN_BROWSER: boolean;

@@ -10,7 +10,8 @@ import { EditorPanelProps } from "@components/EditorPanel";
 import Form, { InputType } from "@components/Form";
 import { useSettings } from "@hooks/useSettings";
 import { lowerCase } from "lodash";
-import { Alert } from "evergreen-ui";
+import { Alert, Pane, Badge } from "evergreen-ui";
+import svgToDataUrl from "svg-to-dataurl";
 
 export interface Settings {
   cleanupAttrs: boolean;
@@ -105,6 +106,7 @@ export default function() {
   const name = "SVG to JSX";
 
   const [settings, setSettings] = useSettings(name, defaultSettings);
+  const [optimizedValue, setOptimizedValue] = useState("");
 
   const getSettingsPanel = useCallback<EditorPanelProps["settingElement"]>(
     ({ open, toggle }) => {
@@ -140,6 +142,8 @@ export default function() {
         });
       }
 
+      setOptimizedValue(_value);
+
       return _prettier.send({
         value: converter.convert(_value),
         language: "jsx"
@@ -165,6 +169,35 @@ export default function() {
             title="SVGO optimization is turned on. You can turn it off in settings."
           />
         )
+      }}
+      editorProps={{
+        previewElement: value => (
+          <Pane display="flex" flexDirection="row" flex={1}>
+            <Pane display={"flex"} flex={1} position="relative">
+              <img
+                style={{ flex: 1, width: "100%" }}
+                src={svgToDataUrl(value)}
+                alt="original"
+              />
+
+              <Badge position="absolute" bottom={10} right={10} color="green">
+                Original
+              </Badge>
+            </Pane>
+            <Pane display={"flex"} flex={1} position="relative">
+              <img
+                style={{ flex: 1, borderLeft: "1px solid #eee", width: "100%" }}
+                src={svgToDataUrl(optimizedValue)}
+                alt="optimized"
+              />
+
+              <Badge position="absolute" bottom={10} right={10} color="green">
+                Result
+              </Badge>
+            </Pane>
+          </Pane>
+        ),
+        acceptFiles: "image/svg+xml"
       }}
     />
   );

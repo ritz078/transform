@@ -195,6 +195,7 @@ declare module "evergreen-ui" {
     title?: string;
     style?: any;
     theme?: any;
+    onClick?: () => void;
   }
 
   export class Icon extends React.PureComponent<IconProps> {}
@@ -224,4 +225,13 @@ declare module "evergreen-ui" {
   }
 
   export class Alert extends React.PureComponent<AlertProps> {}
+
+  export interface BadgeProps extends EnhancerProps {
+    color?: string;
+    isInteractive?: boolean;
+    theme?: any;
+    isSolid?: boolean;
+  }
+
+  export class Badge extends React.PureComponent<BadgeProps> {}
 }

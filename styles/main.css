@@ -1,3 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body,
+html {
+  overflow: hidden;
+}
+
 .rc-collapse-anim-active {
   transition: height 0.2s ease-out;
 }

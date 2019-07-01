@@ -12,11 +12,13 @@ import {
   TextInput,
   HTMLInputEvent,
   IconButton,
-  Tooltip
+  Tooltip,
+  Icon
 } from "evergreen-ui";
 import copy from "clipboard-copy";
 import { ThemeContext } from "@utils/theme";
 import { getWorker, Wrapper } from "@utils/workerWrapper";
+import { MonacoEditor } from "@components/Monaco";
 
 let prettierWorker: Wrapper;
 if (typeof window !== "undefined") {
@@ -53,6 +55,8 @@ export interface EditorPanelProps {
   settingElement?: (args: { toggle: () => void; open: boolean }) => JSX.Element;
   alertMessage?: React.ReactNode;
   topNotifications?: React.ReactNode;
+  previewElement?: (value: string) => React.ReactNode;
+  acceptFiles?: string | string[];
 }
 
 interface EditorPanelState {
@@ -60,12 +64,15 @@ interface EditorPanelState {
   showSettingsDialogue: boolean;
   fetchingUrl: string;
   defaultValue: string;
+  showPreview: boolean;
 }
 
 export default class extends React.PureComponent<
   EditorPanelProps,
   EditorPanelState
 > {
+  private editorRef: React.RefObject<MonacoEditor> = React.createRef();
+
   static contextType = ThemeContext;
 
   static defaultProps: Partial<EditorPanelProps> = {
@@ -79,7 +86,8 @@ export default class extends React.PureComponent<
     value: this.props.defaultValue,
     showSettingsDialogue: false,
     fetchingUrl: "",
-    defaultValue: this.props.defaultValue
+    defaultValue: this.props.defaultValue,
+    showPreview: !!this.props.previewElement
   };
 
   editorDidMount = editor => {
@@ -180,6 +188,15 @@ export default class extends React.PureComponent<
     };
   };
 
+  componentDidUpdate(
+    _prevProps: Readonly<EditorPanelProps>,
+    prevState: Readonly<EditorPanelState>
+  ): void {
+    if (prevState.showPreview !== this.state.showPreview) {
+      this.editorRef.current && this.editorRef.current.reLayout();
+    }
+  }
+
   render() {
     const {
       editable,
@@ -190,8 +207,12 @@ export default class extends React.PureComponent<
       hasLoad,
       hasClear,
       settingElement,
-      topNotifications
+      topNotifications,
+      previewElement,
+      acceptFiles
     } = this.props;
+
+    const { showPreview, value } = this.state;
 
     const options: editor.IEditorOptions = {
       fontSize: 14,
@@ -206,7 +227,6 @@ export default class extends React.PureComponent<
 
     return (
       <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
-        <style>{`* {margin:0;padding:0;} body, html: {overflow: hidden}`}</style>
         <Pane
           display="flex"
           height={50}
@@ -214,6 +234,7 @@ export default class extends React.PureComponent<
           paddingRight={20}
           alignItems={"center"}
           elevation={1}
+          zIndex={2}
         >
           <Pane flex={1}>
             <Heading size={500} marginTop={0}>
@@ -230,6 +251,7 @@ export default class extends React.PureComponent<
                   paddingY={20}
                   paddingX={20}
                   display="flex"
+                  flex={1}
                   alignItems="center"
                   justifyContent="center"
                   flexDirection="column"
@@ -238,6 +260,7 @@ export default class extends React.PureComponent<
                     width={"100%"}
                     name="filepicker"
                     onChange={files => this.onFilePicked(files, close)}
+                    accept={acceptFiles}
                   />
 
                   <Heading paddingY={10} size={200}>
@@ -289,6 +312,19 @@ export default class extends React.PureComponent<
             </Tooltip>
           )}
 
+          {previewElement && (
+            <IconButton
+              icon={"eye-open"}
+              marginRight={10}
+              isActive={showPreview}
+              onClick={() =>
+                this.setState({
+                  showPreview: !showPreview
+                })
+              }
+            />
+          )}
+
           {hasCopy && (
             <Button
               appearance="primary"
@@ -307,16 +343,57 @@ export default class extends React.PureComponent<
           )}
         </Pane>
 
-        {topNotifications}
+        {IN_BROWSER && topNotifications}
 
         <Monaco
           language={language}
           theme={this.context.theme}
-          value={this.state.value}
+          value={value}
           options={options}
           onChange={this.onChange}
           editorDidMount={this.editorDidMount}
+          innerRef={this.editorRef}
         />
+
+        {IN_BROWSER && showPreview && previewElement && (
+          <>
+            <Pane
+              height={50}
+              backgroundColor="#fff"
+              zIndex={2}
+              borderTop
+              position={"relative"}
+              alignItems={"center"}
+              display="flex"
+              paddingX={20}
+            >
+              <Heading size={500} flex={1}>
+                Preview
+              </Heading>
+              <Icon
+                size={20}
+                cursor="pointer"
+                icon="cross"
+                onClick={() =>
+                  this.setState({
+                    showPreview: false
+                  })
+                }
+              />
+            </Pane>
+            <Pane
+              height={"40vh"}
+              display="flex"
+              width={"100%"}
+              borderTop
+              backgroundColor="#fff"
+              zIndex={2}
+              overflow="hidden"
+            >
+              {previewElement(value)}
+            </Pane>
+          </>
+        )}
       </Pane>
     );
   }

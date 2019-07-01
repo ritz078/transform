@@ -21,7 +21,7 @@ interface MonacoProps {
   onChange: (value: string, event: editor.IModelContentChangedEvent) => void;
 }
 
-class MonacoEditor extends React.PureComponent<MonacoProps> {
+export class MonacoEditor extends React.PureComponent<MonacoProps> {
   private editor: editor.IStandaloneCodeEditor;
   private containerElement: React.RefObject<HTMLDivElement> = React.createRef();
   private __prevent_trigger_change_event: boolean;
@@ -35,8 +35,8 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
     editorDidMount: noop
   };
 
-  private reLayout = () => {
-    this.editor.layout();
+  public reLayout = () => {
+    this.editor && this.editor.layout();
   };
 
   componentDidMount() {
@@ -64,7 +64,7 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
       this.editor &&
       (width !== prevProps.width || height !== prevProps.height)
     ) {
-      this.editor.layout();
+      this.reLayout();
     }
     if (prevProps.options !== options) {
       this.editor.updateOptions(options);
@@ -126,7 +126,7 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
     };
 
     return (
-      <Pane display={"flex"} flex={1} backgroundColor={"#fafafa"} marginTop={2}>
+      <Pane display={"flex"} flex={1} backgroundColor={"#fafafa"}>
         <div
           ref={this.containerElement}
           style={style}
@@ -137,4 +137,11 @@ class MonacoEditor extends React.PureComponent<MonacoProps> {
   }
 }
 
-export default MonacoEditor;
+export default React.memo(
+  ({
+    innerRef,
+    ...props
+  }: MonacoProps & { innerRef: React.RefObject<MonacoEditor> }) => (
+    <MonacoEditor {...props} ref={innerRef} />
+  )
+);
