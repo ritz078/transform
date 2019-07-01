@@ -1,5 +1,5 @@
-import { useSessionStorage } from "@hooks/useSessionStorage";
+import { useLocalStorage } from "@hooks/useLocalStorage";
 
 export function useSettings(name: string, initialValue: object) {
-  return useSessionStorage(`settings:${name}`, initialValue);
+  return useLocalStorage(`settings:${name}`, initialValue);
 }
