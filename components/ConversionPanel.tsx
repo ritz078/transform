@@ -131,6 +131,7 @@ const ConversionPanel: React.FunctionComponent<
           bottom={0}
           title={message}
           backgroundColor="#FAE2E2"
+          zIndex={3}
         />
       )}
     </>

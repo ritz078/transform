@@ -1,5 +1,5 @@
 import SVGO, { PluginConfig } from "svgo";
-import { Settings } from "../pages/svg-to-jsx";
+import { Settings } from "@constants/svgoConfig";
 
 const _self: any = self;
 

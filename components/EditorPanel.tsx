@@ -343,7 +343,7 @@ export default class extends React.PureComponent<
           )}
         </Pane>
 
-        {IN_BROWSER && topNotifications}
+        {topNotifications}
 
         <Monaco
           language={language}

@@ -1,151 +1,51 @@
 import * as React from "react";
-import { useCallback, useRef, useState } from "react";
-import ConversionPanel, { Transformer } from "@components/ConversionPanel";
-import HtmlToJsx from "htmltojsx";
-import PrettierWorker from "@workers/prettier.worker";
-import { getWorker } from "@utils/workerWrapper";
+import { SvgConverter } from "@components/SvgConverter";
+import { useState } from "react";
+import { defaultSettings, formFields } from "@constants/svgoConfig";
+import { useCallback } from "react";
+import { Transformer } from "@components/ConversionPanel";
 import isSvg from "is-svg";
+import { getWorker } from "@utils/workerWrapper";
+import PrettierWorker from "@workers/prettier.worker";
 import SvgoWorker from "@workers/svgo.worker";
-import { EditorPanelProps } from "@components/EditorPanel";
-import Form, { InputType } from "@components/Form";
-import { useSettings } from "@hooks/useSettings";
-import { lowerCase } from "lodash";
-import { Alert, Pane, Badge } from "evergreen-ui";
-import svgToDataUrl from "svg-to-dataurl";
+import HTML from "htmltojsx";
 
-export interface Settings {
-  cleanupAttrs: boolean;
-  removeDoctype: boolean;
-  removeXMLProcInst: boolean;
-  removeComments: boolean;
-  removeMetadata: boolean;
-  removeTitle: boolean;
-  removeDesc: boolean;
-  removeUselessDefs: boolean;
-  removeEditorsNSData: boolean;
-  removeEmptyAttrs: boolean;
-  removeHiddenElems: boolean;
-  removeEmptyText: boolean;
-  removeEmptyContainers: boolean;
-  removeViewBox: boolean;
-  cleanupEnableBackground: boolean;
-  convertStyleToAttrs: boolean;
-  convertColors: boolean;
-  convertPathData: boolean;
-  convertTransform: boolean;
-  removeUnknownsAndDefaults: boolean;
-  removeNonInheritableGroupAttrs: boolean;
-  removeUselessStrokeAndFill: boolean;
-  removeUnusedNS: boolean;
-  cleanupIDs: boolean;
-  cleanupNumericValues: boolean;
-  moveElemsAttrsToGroup: boolean;
-  moveGroupAttrsToElems: boolean;
-  collapseGroups: boolean;
-  removeRasterImages: boolean;
-  mergePaths: boolean;
-  convertShapeToPath: boolean;
-  sortAttrs: boolean;
-  removeDimensions: boolean;
-  optimizeSvg: boolean;
-}
-
-const defaultSettings: Settings = {
-  optimizeSvg: true,
-  cleanupAttrs: true,
-  removeDoctype: true,
-  removeXMLProcInst: false,
-  removeComments: true,
-  removeMetadata: true,
-  removeTitle: true,
-  removeDesc: true,
-  removeUselessDefs: true,
-  removeEditorsNSData: true,
-  removeEmptyAttrs: true,
-  removeHiddenElems: true,
-  removeEmptyText: true,
-  removeEmptyContainers: true,
-  removeViewBox: true,
-  cleanupEnableBackground: true,
-  convertStyleToAttrs: true,
-  convertColors: true,
-  convertPathData: true,
-  convertTransform: true,
-  removeUnknownsAndDefaults: true,
-  removeNonInheritableGroupAttrs: true,
-  removeUselessStrokeAndFill: true,
-  removeUnusedNS: true,
-  cleanupIDs: true,
-  cleanupNumericValues: false,
-  moveElemsAttrsToGroup: true,
-  moveGroupAttrsToElems: true,
-  collapseGroups: true,
-  removeRasterImages: true,
-  mergePaths: true,
-  convertShapeToPath: true,
-  sortAttrs: true,
-  removeDimensions: true
-};
-
-const formFields = Object.keys(defaultSettings).map(
-  (property: keyof Settings) => ({
-    label: lowerCase(property),
-    type: InputType.SWITCH,
-    key: property,
-    ...(property !== "optimizeSvg"
-      ? {
-          isDisabled: values => !values.optimizeSvg,
-          props: { paddingLeft: 20, borderLeft: "2px solid #FDF8F3" }
-        }
-      : {})
-  })
-);
-
-let prettier, svgo;
+let prettier, svgo, converter;
 export default function() {
   const name = "SVG to JSX";
-
-  const [settings, setSettings] = useSettings(name, defaultSettings);
+  const [settings, setSettings] = useState(defaultSettings);
   const [optimizedValue, setOptimizedValue] = useState("");
-
-  const getSettingsPanel = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => {
-      return (
-        <Form<Settings>
-          initialValues={settings}
-          open={open}
-          toggle={toggle}
-          title={"SVGO Settings"}
-          onSubmit={setSettings}
-          formsFields={formFields}
-        />
-      );
-    },
-    []
-  );
 
   const transformer = useCallback<Transformer>(
     async ({ value }) => {
       if (!isSvg(value)) throw new Error("This is not a valid svg code.");
 
-      const converter = new HtmlToJsx({
-        createClass: false
-      });
-      const _prettier = prettier || getWorker(PrettierWorker);
+      prettier = prettier || getWorker(PrettierWorker);
+      svgo = svgo || getWorker(SvgoWorker);
 
       let _value = value;
+
       if (settings.optimizeSvg) {
-        svgo = svgo || getWorker(SvgoWorker);
         _value = await svgo.send({
           value,
           settings
         });
       }
 
+      // set optimized value in state to be used by preview.
       setOptimizedValue(_value);
 
-      return _prettier.send({
-        value: converter.convert(_value),
+      // Now that the svg has been properly optimized, we should convert it into JSX.
+      converter =
+        converter ||
+        new HTML({
+          createClass: false
+        });
+
+      _value = converter.convert(_value);
+
+      return prettier.send({
+        value: _value,
         language: "jsx"
       });
     },
@@ -153,52 +53,14 @@ export default function() {
   );
 
   return (
-    <ConversionPanel
+    <SvgConverter
       transformer={transformer}
-      editorTitle="SVG"
-      resultLanguage="javascript"
-      resultTitle="JSX"
-      editorLanguage="svg"
+      formFields={formFields(defaultSettings)}
+      setSettings={setSettings}
+      optimizedValue={optimizedValue}
       settings={settings}
-      editorSettingsElement={getSettingsPanel}
-      resultEditorProps={{
-        topNotifications: settings.optimizeSvg && (
-          <Alert
-            intent="warning"
-            backgroundColor="#FEF8E7"
-            title="SVGO optimization is turned on. You can turn it off in settings."
-          />
-        )
-      }}
-      editorProps={{
-        previewElement: value => (
-          <Pane display="flex" flexDirection="row" flex={1}>
-            <Pane display={"flex"} flex={1} position="relative">
-              <img
-                style={{ flex: 1, width: "100%" }}
-                src={svgToDataUrl(value)}
-                alt="original"
-              />
-
-              <Badge position="absolute" bottom={10} right={10} color="green">
-                Original
-              </Badge>
-            </Pane>
-            <Pane display={"flex"} flex={1} position="relative">
-              <img
-                style={{ flex: 1, borderLeft: "1px solid #eee", width: "100%" }}
-                src={svgToDataUrl(optimizedValue)}
-                alt="optimized"
-              />
-
-              <Badge position="absolute" bottom={10} right={10} color="green">
-                Result
-              </Badge>
-            </Pane>
-          </Pane>
-        ),
-        acceptFiles: "image/svg+xml"
-      }}
+      name={name}
+      resultTitle={"JSX"}
     />
   );
 }
