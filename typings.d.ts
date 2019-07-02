@@ -22,4 +22,12 @@ declare module "@workers/babel.worker" {
   export default WebpackWorker;
 }
 
+declare module "@workers/postcss.worker" {
+  class WebpackWorker extends Worker {
+    constructor();
+  }
+
+  export default WebpackWorker;
+}
+
 declare const IN_BROWSER: boolean;

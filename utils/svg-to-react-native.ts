@@ -3,20 +3,26 @@ import isCapitalized from "is-capitalized";
 
 const supportedElements = [
   "Svg",
+  "Rect",
   "Circle",
   "Ellipse",
-  "G",
-  "LinearGradient",
-  "RadialGradient",
   "Line",
-  "Path",
   "Polygon",
   "Polyline",
-  "Rect",
-  "Symbol",
+  "Path",
   "Text",
+  "TSpan",
+  "TextPath",
+  "G",
   "Use",
+  "Symbol",
   "Defs",
+  "Image",
+  "ClipPath",
+  "LinearGradient",
+  "RadialGradient",
+  "Mask",
+  "Pattern",
   "Stop"
 ];
 

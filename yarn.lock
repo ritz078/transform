@@ -864,10 +864,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.3.tgz#dfa0c92efe44a1d1a7974fb49ffeb40ef2da5a27"
   integrity sha512-zVgvPwGK7c1aVdUVc9Qv7SqepOGRDrqCw7KZPSZziWGxSlbII3gmvGLPzLX4d0n0BMbamBacUrN22zOMyFFEkQ==
 
-"@now/next@^0.5.1":
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/@now/next/-/next-0.5.1.tgz#aa87a7a0a4ae0a5573ebaef72cef0a017acf9154"
-  integrity sha512-MqNzV1o/A/IbJorGNlgo7Bh4HE5tnmYZu0FwHKyYiCTumtYvjtGZcuibVtXGNw62wnkN++a9RG8dQ7qEtqc3Lw==
+"@now/next@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@now/next/-/next-0.5.2.tgz#8e16e3dd6b41562fe1f17788fc4a253e34c482f2"
+  integrity sha512-OjrGxK6tQgmWo7zvIVJrSdHk/f8ioTE58o9nmjdrZPU2I4HPYQHxp5aO94lQ3r96KJUbPpyXNqHdVJIVUI+J0A==
   dependencies:
     "@now/node-bridge" "1.2.2"
     fs-extra "^7.0.0"
@@ -1740,6 +1740,11 @@ babel-plugin-module-resolver@^3.2.0:
     reselect "^3.0.1"
     resolve "^1.4.0"
 
+babel-plugin-object-styles-to-template@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-object-styles-to-template/-/babel-plugin-object-styles-to-template-0.2.2.tgz#bf54348618557f47313398e3ad601d95aad738aa"
+  integrity sha512-IQEFNqfR5+rz5zCOdC6vCCMSOjlSo67DswnToje943roNqkvEKK5sLDGyaqoABCh7RRU1HD/T6DZss4/tTuXyQ==
+
 babel-plugin-react-require@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-react-require/-/babel-plugin-react-require-3.0.0.tgz#2e4e7b4496b93a654a1c80042276de4e4eeb20e3"
@@ -2144,6 +2149,11 @@ callsites@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-2.0.0.tgz#06eb84f00eea413da86affefacbffb36093b3c50"
   integrity sha1-BuuE8A7qQT2oav/vrL/7Ngk7PFA=
+
+camelcase-css@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/camelcase-css/-/camelcase-css-2.0.1.tgz#ee978f6947914cc30c6b44741b6ed1df7f043fd5"
+  integrity sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==
 
 camelcase-keys@^2.0.0:
   version "2.1.0"
@@ -6457,6 +6467,14 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
+postcss-js@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-js/-/postcss-js-2.0.1.tgz#4154e906ff410930afab63a24210be1b831e89a9"
+  integrity sha512-8XQGohCbj6+kq8e3w6WlexkGaSjb5S8zoXnH49eB8JC6+qN2kQW+ib6fTjRgCpRRN9eeFOhMlD0NDjThW1DCBg==
+  dependencies:
+    camelcase-css "^2.0.1"
+    postcss "^7.0.14"
+
 postcss-load-config@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/postcss-load-config/-/postcss-load-config-2.1.0.tgz#c84d692b7bb7b41ddced94ee62e8ab31b417b003"
@@ -6520,7 +6538,7 @@ postcss@^6.0.1, postcss@^6.0.23:
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postcss@^7.0.0:
+postcss@^7.0.0, postcss@^7.0.14, postcss@^7.0.17:
   version "7.0.17"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.17.tgz#4da1bdff5322d4a0acaab4d87f3e782436bad31f"
   integrity sha512-546ZowA+KZ3OasvQZHsbuEpysvwTZNGJv9EfyCQdsIDltPSWHAeTQ5fQy/Npi2ZDtLI3zs7Ps/p6wThErhm9fQ==
@@ -8577,10 +8595,10 @@ webpack@4.29.0:
     watchpack "^1.5.0"
     webpack-sources "^1.3.0"
 
-webpack@^4.35.0:
-  version "4.35.0"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.35.0.tgz#ad3f0f8190876328806ccb7a36f3ce6e764b8378"
-  integrity sha512-M5hL3qpVvtr8d4YaJANbAQBc4uT01G33eDpl/psRTBCfjxFTihdhin1NtAKB1ruDwzeVdcsHHV3NX+QsAgOosw==
+webpack@^4.35.2:
+  version "4.35.2"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-4.35.2.tgz#5c8b8a66602cbbd6ec65c6e6747914a61c1449b1"
+  integrity sha512-TZAmorNymV4q66gAM/h90cEjG+N3627Q2MnkSgKlX/z3DlNVKUtqy57lz1WmZU2+FUZwzM+qm7cGaO95PyrX5A==
   dependencies:
     "@webassemblyjs/ast" "1.8.5"
     "@webassemblyjs/helper-module-context" "1.8.5"

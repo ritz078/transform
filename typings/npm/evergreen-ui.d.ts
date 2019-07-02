@@ -234,4 +234,8 @@ declare module "evergreen-ui" {
   }
 
   export class Badge extends React.PureComponent<BadgeProps> {}
+
+  export class Link extends React.PureComponent<
+    HeadingProps & { href: string; target?: string }
+  > {}
 }

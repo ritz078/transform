@@ -76,3 +76,8 @@ html {
 .nprogress-custom-parent #nprogress .bar {
   position: absolute;
 }
+
+.react-monaco-editor-container {
+  display: flex;
+  flex: 1;
+}

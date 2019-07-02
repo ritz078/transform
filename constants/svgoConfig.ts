@@ -8,6 +8,7 @@ export interface NativeSettingsRequired {
   removeXMLProcInst: boolean;
   removeComments: boolean;
   removeMetadata: boolean;
+  removeDimensions: boolean;
 }
 
 export interface Settings {
@@ -37,7 +38,6 @@ export interface Settings {
   mergePaths: boolean;
   convertShapeToPath: boolean;
   sortAttrs: boolean;
-  removeDimensions: boolean;
   optimizeSvg: boolean;
 }
 
@@ -47,7 +47,8 @@ export const nativeRequiredSettings: NativeSettingsRequired = {
   removeDoctype: true,
   removeXMLProcInst: false,
   removeComments: true,
-  removeMetadata: true
+  removeMetadata: true,
+  removeDimensions: false
 };
 
 export const defaultSettings: Settings & NativeSettingsRequired = {
@@ -62,7 +63,7 @@ export const defaultSettings: Settings & NativeSettingsRequired = {
   removeHiddenElems: true,
   removeEmptyText: true,
   removeEmptyContainers: true,
-  removeViewBox: true,
+  removeViewBox: false,
   cleanupEnableBackground: true,
   convertStyleToAttrs: true,
   convertColors: true,
@@ -81,7 +82,6 @@ export const defaultSettings: Settings & NativeSettingsRequired = {
   mergePaths: true,
   convertShapeToPath: true,
   sortAttrs: true,
-  removeDimensions: true,
   ...nativeRequiredSettings
 };
 

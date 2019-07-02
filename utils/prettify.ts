@@ -2,7 +2,8 @@ import prettier from "prettier/standalone";
 
 const plugins = [
   require("prettier/parser-babylon"),
-  require("prettier/parser-html")
+  require("prettier/parser-html"),
+  require("prettier/parser-postcss")
 ];
 
 const prettierParsers = {

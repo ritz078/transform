@@ -4,7 +4,7 @@ import { SvgConverter } from "@components/SvgConverter";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SnackSession } from "snack-sdk";
 import QRCode from "qrcode.react";
-import { Pane } from "evergreen-ui";
+import { Pane, Button, Heading, Link } from "evergreen-ui";
 import {
   defaultNativeSettings,
   formFields,
@@ -107,9 +107,28 @@ export default function() {
         formFields={formFields(defaultNativeSettings)}
         optimizedValue={optimizedValue}
       />
-      <Pane padding={20}>
-        <QRCode value={url} />
-      </Pane>
+
+      {url && (
+        <Pane
+          display={"flex"}
+          flexDirection="column"
+          padding={10}
+          position="absolute"
+          backgroundColor="#fff"
+          elevation={2}
+          right={20}
+          bottom={20}
+          borderRadius={2}
+        >
+          <QRCode value={url} />
+          <Heading size={400} marginTop={10}>
+            Powered by{" "}
+            <Link is="a" href="https://expo.io/" size={400} target="_blank">
+              expo
+            </Link>
+          </Heading>
+        </Pane>
+      )}
     </>
   );
 }

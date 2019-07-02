@@ -5,6 +5,7 @@ import { prettify } from "@utils/prettify";
 import { BabelTransforms } from "@constants/babelTransforms";
 import { plugin as babelRnSvg, template } from "@utils/svg-to-react-native";
 import babelSyntaxJsx from "@babel/plugin-syntax-jsx";
+import objStylesToTemplate from "babel-plugin-object-styles-to-template";
 
 const _self: any = self;
 
@@ -34,7 +35,6 @@ function handleJsonToProptypes(value, id) {
 }
 
 function handleSvgToReactNative(value, id) {
-  debugger;
   const result = transform(value, {
     plugins: [babelSyntaxJsx, babelRnSvg]
   }).code;
@@ -45,6 +45,15 @@ function handleSvgToReactNative(value, id) {
   });
 }
 
+function objectStylesToTemplate(value, id) {
+  _self.postMessage({
+    id,
+    payload: transform(value, {
+      plugins: [objStylesToTemplate]
+    }).code
+  });
+}
+
 _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   const { value, type } = payload;
 
@@ -52,5 +61,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
     handleJsonToProptypes(value, id);
   } else if (type === BabelTransforms.SVG_TO_REACT_NATIVE_SVG) {
     handleSvgToReactNative(value, id);
+  } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
+    objectStylesToTemplate(value, id);
   }
 };
