@@ -51,3 +51,49 @@ export const javascript = `const container = css({
     backgroundColor: 'tomato',
   },
 });`;
+
+export const yaml = `---
+  foo: "bar"
+  baz:
+    - "qux"
+    - "quxx"
+  corge: null
+  grault: 1
+  garply: true
+  waldo: "false"
+  fred: "undefined"
+  emptyarr: []
+  emptyobj: {}
+`;
+
+export const xml = `<note>
+    <to>Tove</to>
+    <from>Jani</from>
+    <heading>Reminder</heading>
+    <body>Don't forget me this weekend!</body>
+</note>
+`;
+
+export const markdown = `Heading
+=======
+## Sub-heading
+Paragraphs are separated
+by a blank line.
+Two spaces at the end of a line
+produces a line break.
+Text attributes _italic_,
+**bold**, \`monospace\`.
+Horizontal rule:
+---
+Bullet list:
+  * apples
+  * oranges
+  * pears
+Numbered list:
+  1. wash
+  2. rinse
+  3. repeat
+A [link](http://example.com).
+![Image](https://via.placeholder.com/150)
+> Markdown uses email-style > characters for blockquoting.
+`;

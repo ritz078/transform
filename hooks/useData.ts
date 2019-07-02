@@ -8,7 +8,10 @@ export type Language =
   | "javascript"
   | "css"
   | "plaintext"
-  | "sql";
+  | "sql"
+  | "yaml"
+  | "xml"
+  | "markdown";
 
 export function useData(type: Language) {
   return type ? useSessionStorage(`data:${type}`, data[type]) : [,];
