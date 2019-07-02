@@ -24,6 +24,7 @@
     "evergreen-ui": "^4.17.0",
     "formik": "^1.5.7",
     "formik-persist": "^1.1.0",
+    "generate-schema": "^2.6.0",
     "htmltojsx": "^0.3.0",
     "is-capitalized": "^1.0.0",
     "is-svg": "^4.2.0",
@@ -40,6 +41,7 @@
     "react-compare-image": "^1.3.0",
     "react-dom": "^16.8.6",
     "snack-sdk": "^2.2.1",
+    "stringify-object": "^3.3.0",
     "svg-to-dataurl": "^1.0.0",
     "svgo": "^1.2.2"
   },

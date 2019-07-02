@@ -34,7 +34,8 @@ const config = {
           "markdown",
           "go",
           "graphql",
-          "scala"
+          "scala",
+          "plaintext"
         ],
         features: [
           "folding",

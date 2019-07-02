@@ -14,6 +14,7 @@ interface Data {
   payload: {
     value: string;
     type: BabelTransforms;
+    settings?: any;
   };
 }
 
@@ -45,23 +46,24 @@ function handleSvgToReactNative(value, id) {
   });
 }
 
-function objectStylesToTemplate(value, id) {
+function objectStylesToTemplate(value, id, settings) {
+  debugger;
   _self.postMessage({
     id,
     payload: transform(value, {
-      plugins: [objStylesToTemplate]
+      plugins: [[objStylesToTemplate, settings]]
     }).code
   });
 }
 
 _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
-  const { value, type } = payload;
+  const { value, type, settings } = payload;
 
   if (type === BabelTransforms.JSON_TO_PROPTYPES) {
     handleJsonToProptypes(value, id);
   } else if (type === BabelTransforms.SVG_TO_REACT_NATIVE_SVG) {
     handleSvgToReactNative(value, id);
   } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
-    objectStylesToTemplate(value, id);
+    objectStylesToTemplate(value, id, settings);
   }
 };
