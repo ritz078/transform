@@ -25,6 +25,7 @@ export default class MyDocument extends Document<DocumentProps> {
     return (
       <html>
         <Head>
+          <meta charSet="utf-8" />
           <style dangerouslySetInnerHTML={{ __html: css }} />
           <style>{`* {
     margin: 0;

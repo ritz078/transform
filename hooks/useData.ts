@@ -11,7 +11,9 @@ export type Language =
   | "sql"
   | "yaml"
   | "xml"
-  | "markdown";
+  | "markdown"
+  | "flow"
+  | "typescript";
 
 export function useData(type: Language) {
   return type ? useSessionStorage(`data:${type}`, data[type]) : [,];

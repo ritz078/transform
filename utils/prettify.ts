@@ -11,7 +11,8 @@ const prettierParsers = {
   javascript: "babel",
   jsx: "babel",
   svg: "html",
-  xml: "html"
+  xml: "html",
+  typescript: "babel"
 };
 
 export function prettify(language: string, value: string) {

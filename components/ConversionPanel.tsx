@@ -6,7 +6,8 @@ import { Language, useData } from "@hooks/useData";
 
 function getEditorLanguage(lang: Language) {
   const mapping = {
-    svg: "html"
+    svg: "html",
+    flow: "plaintext"
   };
 
   return mapping[lang] || lang;

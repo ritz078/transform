@@ -6,6 +6,7 @@ import { BabelTransforms } from "@constants/babelTransforms";
 import { plugin as babelRnSvg, template } from "@utils/svg-to-react-native";
 import babelSyntaxJsx from "@babel/plugin-syntax-jsx";
 import objStylesToTemplate from "babel-plugin-object-styles-to-template";
+import babelFlowToTs from "babel-plugin-flow-to-typescript";
 
 const _self: any = self;
 
@@ -47,11 +48,19 @@ function handleSvgToReactNative(value, id) {
 }
 
 function objectStylesToTemplate(value, id, settings) {
-  debugger;
   _self.postMessage({
     id,
     payload: transform(value, {
       plugins: [[objStylesToTemplate, settings]]
+    }).code
+  });
+}
+
+function flowToTS(value, id) {
+  _self.postMessage({
+    id,
+    payload: transform(value, {
+      plugins: [babelFlowToTs]
     }).code
   });
 }
@@ -65,5 +74,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
     handleSvgToReactNative(value, id);
   } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
     objectStylesToTemplate(value, id, settings);
+  } else if (type === BabelTransforms.FLOW_TO_TYPESCRIPT) {
+    flowToTS(value, id);
   }
 };

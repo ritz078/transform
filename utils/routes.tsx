@@ -98,6 +98,11 @@ export const categorizedRoutes = [
           "An online REPL for converting JSON to generate TypeScript Interface."
       },
       {
+        label: "Flow to Typescript",
+        path: "/flow-to-typescript",
+        desc: "An online REPL for converting Flow to TypeScript Interface."
+      },
+      {
         label: "JSON to MobX-State-Tree Model",
         path: "/json-to-mobx-state-tree",
         desc: "An online REPL for converting JSON to generate Mobx State Tree."

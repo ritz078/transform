@@ -97,3 +97,30 @@ A [link](http://example.com).
 ![Image](https://via.placeholder.com/150)
 > Markdown uses email-style > characters for blockquoting.
 `;
+
+export const flow = `export type AlertType = 'success'
+
+export type AlertProps = {
+  type: AlertType,
+  text: string,
+  testId: string,
+}
+
+type AlertTypeIconMap = {
+  +[AlertType]: IconType,
+}
+
+const Alert = ({ type, text, testId }: AlertProps) => {
+  const alertTypeIconMap: AlertTypeIconMap = {
+    success: 'tick',
+  }
+  const styles = getStyles({ type })
+
+  return (
+      <View style={styles.iconContainer}>
+        <Icon type={alertTypeIconMap[type]} />
+      </View>
+  )
+}
+
+export default Alert`;
