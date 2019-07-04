@@ -15,18 +15,24 @@ interface Payload {
 
 _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   delete payload.settings.optimizeSvg;
+  try {
+    const svgo = new SVGO({
+      full: true,
+      plugins: Object.keys(payload.settings).map(_s => ({
+        [_s]: payload.settings[_s]
+      })) as PluginConfig[]
+    });
 
-  const svgo = new SVGO({
-    full: true,
-    plugins: Object.keys(payload.settings).map(_s => ({
-      [_s]: payload.settings[_s]
-    })) as PluginConfig[]
-  });
-
-  svgo.optimize(payload.value).then(result => {
+    svgo.optimize(payload.value).then(result => {
+      _self.postMessage({
+        id,
+        payload: result.data
+      });
+    });
+  } catch (e) {
     _self.postMessage({
       id,
-      payload: result.data
+      err: e.message
     });
-  });
+  }
 };

@@ -124,3 +124,28 @@ const Alert = ({ type, text, testId }: AlertProps) => {
 }
 
 export default Alert`;
+
+export const graphql = `type Query {
+	user: User!
+}
+type User {
+	id: ID!
+	profile: Profile!
+	email: String!
+	username: String!
+}
+type Profile {
+	name: String!
+	age: Int!
+}`;
+
+export const graphqlDocument = `query {
+	user {
+		...UserFields
+	}
+}
+
+fragment UserFields on User {
+	id
+	username
+}`;

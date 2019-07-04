@@ -90,6 +90,7 @@ declare module "evergreen-ui" {
   export interface HeadingProps extends EnhancerProps {
     size: TextSize;
     is?: string;
+    onClick?: () => void;
   }
 
   export class Heading extends React.PureComponent<HeadingProps> {}

@@ -85,7 +85,7 @@ export default function() {
                 headerClass="Collapsible__trigger"
                 header={
                   <Pane
-                    paddingY={8}
+                    paddingY={5}
                     paddingX={10}
                     display="flex"
                     flexDirection="row"
@@ -110,7 +110,7 @@ export default function() {
                       <Pane
                         className="rc-collapse-item-"
                         paddingLeft={30}
-                        paddingY={10}
+                        paddingY={5}
                         backgroundColor={
                           active && active.includes(a.label)
                             ? "aliceblue"

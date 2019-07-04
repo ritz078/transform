@@ -38,7 +38,10 @@ export interface EditorPanelProps {
   hasClear?: boolean;
   settingElement?: (args: { toggle: () => void; open: boolean }) => JSX.Element;
   alertMessage?: React.ReactNode;
-  topNotifications?: React.ReactNode;
+  topNotifications?: (args: {
+    toggleSettings: () => void;
+    isSettingsOpen: boolean;
+  }) => React.ReactNode;
   previewElement?: (value: string) => React.ReactNode;
   acceptFiles?: string | string[];
 }
@@ -95,7 +98,8 @@ export default function({
     minimap: {
       enabled: false
     },
-    quickSuggestions: false
+    quickSuggestions: false,
+    lineNumbers: "off"
   };
 
   const _toggleSettingsDialog = useCallback(
@@ -288,7 +292,11 @@ export default function({
         )}
       </Pane>
 
-      {topNotifications}
+      {topNotifications &&
+        topNotifications({
+          isSettingsOpen: showSettingsDialogue,
+          toggleSettings: _toggleSettingsDialog
+        })}
 
       <Monaco
         language={language}

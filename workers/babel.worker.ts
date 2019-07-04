@@ -68,13 +68,20 @@ function flowToTS(value, id) {
 _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   const { value, type, settings } = payload;
 
-  if (type === BabelTransforms.JSON_TO_PROPTYPES) {
-    handleJsonToProptypes(value, id);
-  } else if (type === BabelTransforms.SVG_TO_REACT_NATIVE_SVG) {
-    handleSvgToReactNative(value, id);
-  } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
-    objectStylesToTemplate(value, id, settings);
-  } else if (type === BabelTransforms.FLOW_TO_TYPESCRIPT) {
-    flowToTS(value, id);
+  try {
+    if (type === BabelTransforms.JSON_TO_PROPTYPES) {
+      handleJsonToProptypes(value, id);
+    } else if (type === BabelTransforms.SVG_TO_REACT_NATIVE_SVG) {
+      handleSvgToReactNative(value, id);
+    } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
+      objectStylesToTemplate(value, id, settings);
+    } else if (type === BabelTransforms.FLOW_TO_TYPESCRIPT) {
+      flowToTS(value, id);
+    }
+  } catch (e) {
+    _self.postMessage({
+      id,
+      err: e.message
+    });
   }
 };

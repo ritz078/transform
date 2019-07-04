@@ -7,7 +7,8 @@ import { Language, useData } from "@hooks/useData";
 function getEditorLanguage(lang: Language) {
   const mapping = {
     svg: "html",
-    flow: "plaintext"
+    flow: "plaintext",
+    graphqlDocument: "graphql"
   };
 
   return mapping[lang] || lang;
@@ -97,17 +98,19 @@ const ConversionPanel: React.FunctionComponent<
           />
 
           {splitTitle && (
-            <EditorPanel
-              title={splitTitle}
-              defaultValue={splitValue}
-              language={getEditorLanguage(splitLanguage)}
-              id={2}
-              hasCopy={false}
-              onChange={setSplitValue}
-              hasLoad
-              hasClear
-              {...splitEditorProps}
-            />
+            <Pane display="flex" flex={1} borderTop>
+              <EditorPanel
+                title={splitTitle}
+                defaultValue={splitValue}
+                language={getEditorLanguage(splitLanguage)}
+                id={2}
+                hasCopy={false}
+                onChange={setSplitValue}
+                hasLoad
+                hasClear
+                {...splitEditorProps}
+              />
+            </Pane>
           )}
         </Pane>
         <EditorPanel

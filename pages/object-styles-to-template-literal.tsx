@@ -70,15 +70,16 @@ export default function() {
       transformer={transformer}
       editorSettingsElement={getSettingsPanel}
       resultEditorProps={{
-        topNotifications: (!settings.css || !settings.styled) && (
-          <Alert
-            intent="warning"
-            backgroundColor="#FEF8E7"
-            title={`You have turned off ${settings.css ? "" : "css"}${
-              settings.styled ? "" : ",styled"
-            } tags transpilation. Change it in settings.`}
-          />
-        )
+        topNotifications: () =>
+          (!settings.css || !settings.styled) && (
+            <Alert
+              intent="warning"
+              backgroundColor="#FEF8E7"
+              title={`You have turned off ${settings.css ? "" : "css"}${
+                settings.styled ? "" : ",styled"
+              } tags transpilation. Change it in settings.`}
+            />
+          )
       }}
       settings={settings}
     />

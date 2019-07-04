@@ -5,7 +5,7 @@ const rejects = {};
 let globalMsgId = 0;
 
 // Activate calculation in the worker, returning a promise
-function sendMsg(payload, worker) {
+function sendMsg(payload, worker: Worker) {
   const msgId = globalMsgId++;
   const msg = {
     id: msgId,
@@ -16,6 +16,8 @@ function sendMsg(payload, worker) {
     resolves[msgId] = resolve;
     rejects[msgId] = reject;
     worker.postMessage(msg);
+
+    // TODO: CHECK FOR MEMORY LEAK
   });
 }
 // Handle incoming calculation result
@@ -31,7 +33,7 @@ function handleMsg(msg) {
     const reject = rejects[id];
     if (reject) {
       if (err) {
-        reject(err);
+        reject(new Error(err));
       } else {
         reject("Got nothing");
       }

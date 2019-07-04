@@ -19,8 +19,15 @@ _self.onmessage = ({
     id
   }
 }: Data) => {
-  _self.postMessage({
-    id,
-    payload: prettify(language, value)
-  });
+  try {
+    _self.postMessage({
+      id,
+      payload: prettify(language, value)
+    });
+  } catch (e) {
+    _self.postMessage({
+      id,
+      err: e.message
+    });
+  }
 };

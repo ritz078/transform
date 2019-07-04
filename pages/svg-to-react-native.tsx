@@ -4,7 +4,7 @@ import { SvgConverter } from "@components/SvgConverter";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SnackSession } from "snack-sdk";
 import QRCode from "qrcode.react";
-import { Pane, Button, Heading, Link } from "evergreen-ui";
+import { Pane, Heading, Link } from "evergreen-ui";
 import {
   defaultNativeSettings,
   formFields,

@@ -3,7 +3,7 @@ import { default as React, useCallback } from "react";
 import { EditorPanelProps } from "@components/EditorPanel";
 import Form from "@components/Form";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
-import { Alert, Badge, Pane } from "evergreen-ui";
+import { Alert, Badge, Heading, Pane } from "evergreen-ui";
 import svgToDataUrl from "svg-to-dataurl";
 
 interface SvgConverterProps {
@@ -49,15 +49,28 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
       resultTitle={resultTitle}
       editorLanguage="svg"
       settings={settings}
-      editorSettingsElement={getSettingsPanel}
       resultEditorProps={{
-        topNotifications: settings.optimizeSvg && (
-          <Alert
-            intent="warning"
-            backgroundColor="#FEF8E7"
-            title="SVGO optimization is turned on. You can turn it off in settings."
-          />
-        )
+        settingElement: getSettingsPanel,
+        topNotifications: ({ toggleSettings }) =>
+          settings.optimizeSvg && (
+            <Alert
+              intent="warning"
+              backgroundColor="#FEF8E7"
+              title={
+                <>
+                  SVGO optimization is turned on. You can modify it in{" "}
+                  <Heading
+                    size={400}
+                    is="a"
+                    color={"blue"}
+                    onClick={toggleSettings}
+                  >
+                    settings
+                  </Heading>
+                </>
+              }
+            />
+          )
       }}
       editorProps={{
         previewElement: value => (

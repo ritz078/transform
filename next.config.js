@@ -8,7 +8,10 @@ const withTM = require("next-transpile-modules");
 const config = {
   webpack(config, options) {
     config.node = {
-      fs: "empty"
+      fs: "empty",
+      module: "empty",
+      net: "mock",
+      tls: "mock"
     };
 
     if (options.isServer && options.dev)
