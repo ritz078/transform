@@ -13,36 +13,29 @@ const props = {
 };
 
 export default function() {
-  const transformer = useCallback<Transformer>(
-    async ({ value, splitEditorValue }) => {
-      graphqlWorker = graphqlWorker || getWorker(GrapqlWorker);
-      prettierWorker = prettierWorker || getWorker(PrettierWorker);
+  const transformer = useCallback<Transformer>(async ({ value }) => {
+    graphqlWorker = graphqlWorker || getWorker(GrapqlWorker);
+    prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
-      const result = await graphqlWorker.send({
-        type: GraphqlTransforms.TO_TYPESCRIPT,
-        value,
-        document: splitEditorValue
-      });
+    const result = await graphqlWorker.send({
+      type: GraphqlTransforms.TO_FRAGMENT_MATCHER,
+      value
+    });
 
-      return prettierWorker.send({
-        language: "typescript",
-        value: result
-      });
-    },
-    []
-  );
+    return prettierWorker.send({
+      language: "typescript",
+      value: result
+    });
+  }, []);
 
   return (
     <ConversionPanel
       transformer={transformer}
-      resultTitle="TypeScript"
+      resultTitle="Fragment Matcher"
       editorTitle="GraphQL Schema"
       editorLanguage="graphql"
       resultLanguage="typescript"
       editorProps={props}
-      splitEditorProps={props}
-      splitTitle="Document"
-      splitLanguage="graphqlDocument"
     />
   );
 }

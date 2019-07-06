@@ -15,7 +15,8 @@ export type Language =
   | "flow"
   | "typescript"
   | "graphql"
-  | "graphqlDocument";
+  | "graphqlDocument"
+  | "java";
 
 export function useData(type: Language) {
   return type ? useSessionStorage(`data:${type}`, data[type]) : [,];

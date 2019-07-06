@@ -1,0 +1,8 @@
+export enum GraphqlTransforms {
+  TO_TYPESCRIPT = 1,
+  TO_FLOW,
+  TO_INTROSPECTION_JSON,
+  TO_FRAGMENT_MATCHER,
+  TO_SCHEMA_AST,
+  TO_JAVA
+}

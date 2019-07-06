@@ -19,13 +19,13 @@ export default function() {
       prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
       const result = await graphqlWorker.send({
-        type: GraphqlTransforms.TO_TYPESCRIPT,
+        type: GraphqlTransforms.TO_FLOW,
         value,
         document: splitEditorValue
       });
 
       return prettierWorker.send({
-        language: "typescript",
+        language: "flow",
         value: result
       });
     },
@@ -35,10 +35,10 @@ export default function() {
   return (
     <ConversionPanel
       transformer={transformer}
-      resultTitle="TypeScript"
+      resultTitle="Flow"
       editorTitle="GraphQL Schema"
       editorLanguage="graphql"
-      resultLanguage="typescript"
+      resultLanguage="flow"
       editorProps={props}
       splitEditorProps={props}
       splitTitle="Document"

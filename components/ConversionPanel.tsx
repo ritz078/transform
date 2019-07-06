@@ -7,7 +7,7 @@ import { Language, useData } from "@hooks/useData";
 function getEditorLanguage(lang: Language) {
   const mapping = {
     svg: "html",
-    flow: "plaintext",
+    flow: "typescript",
     graphqlDocument: "graphql"
   };
 
@@ -83,7 +83,13 @@ const ConversionPanel: React.FunctionComponent<
         overflow="hidden"
         flex={1}
       >
-        <Pane display="flex" flex={1} borderRight flexDirection="column">
+        <Pane
+          display="flex"
+          flex={1}
+          borderRight
+          flexDirection="column"
+          overflow="hidden"
+        >
           <EditorPanel
             language={getEditorLanguage(editorLanguage)}
             onChange={setValue}

@@ -6,7 +6,9 @@ const plugins = [
   require("prettier/parser-postcss"),
   require("prettier/parser-graphql"),
   require("prettier/parser-markdown"),
-  require("prettier/parser-yaml")
+  require("prettier/parser-yaml"),
+  require("prettier/parser-flow"),
+  require("prettier/parser-typescript")
 ];
 
 const prettierParsers = {
@@ -15,7 +17,7 @@ const prettierParsers = {
   jsx: "babel",
   svg: "html",
   xml: "html",
-  typescript: "babel"
+  typescript: "typescript"
 };
 
 export function prettify(language: string, value: string) {

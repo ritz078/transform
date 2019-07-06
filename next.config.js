@@ -14,8 +14,10 @@ const config = {
       tls: "mock"
     };
 
-    if (options.isServer && options.dev)
-      config.plugins.push(new ForkTsCheckerWebpackPlugin());
+    // if (options.isServer && options.dev)
+    //   config.plugins.push(new ForkTsCheckerWebpackPlugin({
+    //     memoryLimit: 8000
+    //   }));
 
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -38,15 +40,13 @@ const config = {
           "go",
           "graphql",
           "scala",
-          "plaintext"
+          "plaintext",
+          "java"
         ],
         features: [
           "folding",
           "goToDefinitionMouse",
           "goToDefinitionCommands",
-          "contextmenu",
-          "coreCommands",
-          "hover",
           "referenceSearch"
         ]
       })

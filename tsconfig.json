@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "es2015",
+    "target": "esnext",
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -24,7 +24,8 @@
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],
-    "types": ["@emotion/core"]
+    "types": ["@emotion/core"],
+    "skipDefaultLibCheck": true
   },
   "exclude": ["static", "public", ".next", "node_modules"]
 }
