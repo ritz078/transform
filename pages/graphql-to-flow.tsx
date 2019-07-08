@@ -9,7 +9,7 @@ import { GraphqlTransforms } from "@constants/graphqlTransforms";
 let graphqlWorker, prettierWorker;
 
 const props = {
-  acceptFiles: ".graphql"
+  acceptFiles: ".graphql, .gql"
 };
 
 export default function() {
@@ -38,11 +38,13 @@ export default function() {
       resultTitle="Flow"
       editorTitle="GraphQL Schema"
       editorLanguage="graphql"
+      editorDefaultValue="graphql1"
       resultLanguage="flow"
       editorProps={props}
       splitEditorProps={props}
       splitTitle="Document"
-      splitLanguage="graphqlDocument"
+      splitLanguage="graphql"
+      splitEditorDefaultValue={"graphqlDocument"}
     />
   );
 }

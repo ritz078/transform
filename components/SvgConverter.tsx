@@ -47,7 +47,8 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
       editorTitle="SVG"
       resultLanguage="javascript"
       resultTitle={resultTitle}
-      editorLanguage="svg"
+      editorLanguage="html"
+      editorDefaultValue="svg"
       settings={settings}
       resultEditorProps={{
         settingElement: getSettingsPanel,

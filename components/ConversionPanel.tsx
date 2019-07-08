@@ -6,9 +6,7 @@ import { Language, useData } from "@hooks/useData";
 
 function getEditorLanguage(lang: Language) {
   const mapping = {
-    svg: "html",
-    flow: "typescript",
-    graphqlDocument: "graphql"
+    flow: "typescript"
   };
 
   return mapping[lang] || lang;
@@ -24,9 +22,11 @@ export interface ConversionPanelProps {
   splitLanguage?: Language;
   editorTitle: string;
   editorLanguage: Language;
+  editorDefaultValue?: string;
   resultTitle: string;
   resultLanguage: Language;
   splitEditorProps?: Partial<EditorPanelProps>;
+  splitEditorDefaultValue?: string;
   editorProps?: Partial<EditorPanelProps>;
   resultEditorProps?: Partial<EditorPanelProps>;
   transformer: Transformer;
@@ -49,10 +49,14 @@ const ConversionPanel: React.FunctionComponent<
   resultLanguage,
   resultTitle,
   editorSettingsElement,
-  settings
+  settings,
+  editorDefaultValue,
+  splitEditorDefaultValue
 }) {
-  const [value, setValue] = useData(editorLanguage);
-  const [splitValue, setSplitValue] = useData(splitLanguage);
+  const [value, setValue] = useData(editorDefaultValue || editorLanguage);
+  const [splitValue, setSplitValue] = useData(
+    splitEditorDefaultValue || splitLanguage
+  );
   const [result, setResult] = useState("");
   const [message, setMessage] = useState("");
 

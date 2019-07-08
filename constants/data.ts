@@ -139,6 +139,20 @@ type Profile {
 	age: Int!
 }`;
 
+export const graphql1 = `type Query {
+	user: User!
+}
+type User {
+	id: ID!
+	profile: Profile!
+	email: String!
+	username: String!
+}
+type Profile {
+	name: String!
+	age: Int!
+}`;
+
 export const graphqlDocument = `query {
 	user {
 		...UserFields

@@ -9,7 +9,7 @@ import { GraphqlTransforms } from "@constants/graphqlTransforms";
 let graphqlWorker, prettierWorker;
 
 const props = {
-  acceptFiles: ".graphql"
+  acceptFiles: ".graphql, .gql"
 };
 
 export default function() {
