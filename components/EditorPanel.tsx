@@ -29,7 +29,7 @@ export interface EditorPanelProps {
   editable?: boolean;
   language?: string;
   defaultValue: string;
-  title: string;
+  title: React.ReactNode;
   hasCopy?: boolean;
   hasPrettier?: boolean;
   id: string | number;
@@ -99,7 +99,7 @@ export default function({
       enabled: false
     },
     quickSuggestions: false,
-    lineNumbers: "off"
+    lineNumbers: "on"
   };
 
   const _toggleSettingsDialog = useCallback(

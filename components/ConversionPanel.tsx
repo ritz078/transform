@@ -1,4 +1,4 @@
-import { Pane, Alert, Intent } from "evergreen-ui";
+import { Pane, Alert } from "evergreen-ui";
 import EditorPanel, { EditorPanelProps } from "@components/EditorPanel";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -23,7 +23,7 @@ export interface ConversionPanelProps {
   editorTitle: string;
   editorLanguage: Language;
   editorDefaultValue?: string;
-  resultTitle: string;
+  resultTitle: React.ReactNode;
   resultLanguage: Language;
   splitEditorProps?: Partial<EditorPanelProps>;
   splitEditorDefaultValue?: string;

@@ -56,7 +56,7 @@ const config = {
       test: /\.worker\.ts/,
       use: {
         loader: "worker-loader",
-        options: { fallback: true, inline: true }
+        options: { fallback: false, inline: true }
       }
     });
 
@@ -65,9 +65,9 @@ const config = {
     return config;
   },
 
-  target: "serverless",
+  target: "serverless"
 
-  transpileModules: ["monaco-editor"]
+  // transpileModules: ["monaco-editor"]
 };
 
 module.exports = withTM(withCSS(withTypescript(config)));

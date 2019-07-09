@@ -239,4 +239,11 @@ declare module "evergreen-ui" {
   export class Link extends React.PureComponent<
     HeadingProps & { href: string; target?: string }
   > {}
+
+  export interface SelectProps extends EnhancerProps {
+    value: string;
+    onChange: (e) => void;
+  }
+
+  export class Select extends React.PureComponent<SelectProps> {}
 }

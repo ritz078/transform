@@ -139,27 +139,91 @@ type Profile {
 	age: Int!
 }`;
 
-export const graphql1 = `type Query {
-	user: User!
-}
-type User {
-	id: ID!
-	profile: Profile!
-	email: String!
-	username: String!
-}
-type Profile {
-	name: String!
-	age: Int!
-}`;
+export const graphql1 = `scalar Date
 
-export const graphqlDocument = `query {
-	user {
-		...UserFields
-	}
+schema {
+  query: Query
+}
+
+type Query {
+  me: User!
+  user(id: ID!): User
+  allUsers: [User]
+  search(term: String!): [SearchResult!]!
+  myChats: [Chat!]!
+}
+
+enum Role {
+  USER,
+  ADMIN,
+}
+
+interface Node {
+  id: ID!
+}
+
+union SearchResult = User | Chat | ChatMessage
+
+type User implements Node {
+  id: ID!
+  username: String!
+  email: String!
+  role: Role!
+}
+
+type Chat implements Node {
+  id: ID!
+  users: [User!]!
+  messages: [ChatMessage!]!
+}
+
+type ChatMessage implements Node {
+  id: ID!
+  content: String!
+  time: Date!
+  user: User!
+}
+`;
+
+export const graphqlDocument = `query findUser($userId: ID!) {
+  user(id: $userId) {
+    ...UserFields
+  }
 }
 
 fragment UserFields on User {
-	id
-	username
+  id
+  username
+  role
+}`;
+
+export const graphqlMongodb = `type User @entity {
+  id: ID! @id
+  username: String! @column
+  email: String! @column @map(
+    path: "login.email"
+  )
+  profile: Profile! @column
+  chats: [Chat!]! @link
+}
+
+type Profile @entity(embedded: true, 
+  additionalFields: [
+    { path: "dateOfBirth", type: "string" }
+  ]) {
+  name: String! @column
+  age: Int
+}
+
+type Chat @entity {
+  id: ID! @id
+  users: [User!]! @link
+  messages: [ChatMessage!]!
+}
+
+type ChatMessage @entity {
+  id: ID! @id
+  chat: Chat! @link
+  content: String! @column
+  author: User! @link
 }`;

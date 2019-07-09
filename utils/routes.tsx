@@ -202,31 +202,25 @@ export const categorizedRoutes = [
           "An online REPL to generate TypeScript type annotations based on a GraphQL schema and query documents."
       },
       {
-        label: "GraphQL to Typescript Resolvers Signature",
-        path: "/graphql-to-typescript-resolvers-signature"
-      },
-      {
         label: "GraphQL to Flow",
         path: "/graphql-to-flow",
         desc:
           "An online REPL to generate Flow type annotations based on a GraphQL schema and query documents."
       },
       {
-        label: "GraphQL to Flow Resolvers Signature",
-        path: "/graphql-to-flow-resolvers-signature"
-      },
-      {
-        label: "GraphQL to Introspection JSON",
-        path: "/graphql-to-introspection-json"
-      },
-      {
         label: "GraphQL to JAVA",
         path: "/graphql-to-java"
       },
       {
-        label: "GraphQL to JAVA Resolvers Signature",
-        path: "/graphql-to-java-resolvers-signature"
+        label: "GraphQL to Resolvers Signature",
+        path: "/graphql-to-resolvers-signature"
       },
+
+      {
+        label: "GraphQL to Introspection JSON",
+        path: "/graphql-to-introspection-json"
+      },
+
       {
         label: "GraphQL to Schema AST",
         path: "/graphql-to-schema-ast"
@@ -240,12 +234,8 @@ export const categorizedRoutes = [
         path: "/graphql-to-components"
       },
       {
-        label: "GraphQL to urql",
-        path: "/graphql-to-urql"
-      },
-      {
-        label: "GraphQL to MongoDB (TS)",
-        path: "/graphql-to-mongodb"
+        label: "GraphQL to TypeScript MongoDB",
+        path: "/graphql-to-typescript-mongodb"
       }
     ]
   },
