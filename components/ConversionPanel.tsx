@@ -32,6 +32,7 @@ export interface ConversionPanelProps {
   transformer: Transformer;
   defaultSplitValue?: string;
   editorSettingsElement?: EditorPanelProps["settingElement"];
+  resultSettingsElement?: EditorPanelProps["settingElement"];
   settings?: any;
 }
 
@@ -51,7 +52,8 @@ const ConversionPanel: React.FunctionComponent<
   editorSettingsElement,
   settings,
   editorDefaultValue,
-  splitEditorDefaultValue
+  splitEditorDefaultValue,
+  resultSettingsElement
 }) {
   const [value, setValue] = useData(editorDefaultValue || editorLanguage);
   const [splitValue, setSplitValue] = useData(
@@ -130,6 +132,7 @@ const ConversionPanel: React.FunctionComponent<
           id={3}
           editable={false}
           hasPrettier={false}
+          settingElement={resultSettingsElement}
           {...resultEditorProps}
         />
       </Pane>

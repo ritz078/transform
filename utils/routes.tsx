@@ -87,13 +87,13 @@ export const categorizedRoutes = [
     iconName: "icon-javascript",
     content: [
       {
-        label: "JSON to Flow Types",
-        path: "/json-to-flow-types",
+        label: "JSON to Flow",
+        path: "/json-to-flow",
         desc: "An online REPL for converting JSON to generate Flow Types."
       },
       {
-        label: "JSON to Typescript Interface",
-        path: "/json-to-ts-interface",
+        label: "JSON to Typescript",
+        path: "/json-to-typescript",
         desc:
           "An online REPL for converting JSON to generate TypeScript Interface."
       },
