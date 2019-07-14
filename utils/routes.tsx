@@ -114,7 +114,7 @@ export const categorizedRoutes = [
       },
       {
         label: "JSON Schema to TypeScript",
-        path: "/json-schema-to-ts",
+        path: "/json-schema-to-typescript",
         desc:
           "An online REPL for converting JSON Schema to TypeScript Interface.",
         packageName: "json-schema-to-typescript",
@@ -294,7 +294,7 @@ export interface Route {
   desc: string;
 }
 
-export const routes: Route[] = flatten(categorizedRoutes.map(a => a.content));
+export const routes = flatten(categorizedRoutes.map(a => a.content));
 
 export function activeRouteData(pathname) {
   return find(routes, o => o.path === pathname);

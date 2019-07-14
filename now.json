@@ -5,5 +5,19 @@
       "src": "package.json",
       "use": "@now/next"
     }
+  ],
+  "routes": [
+    {
+      "src": "/json-to-flow-types",
+      "dest": "/json-to-flow"
+    },
+    {
+      "src": "/json-to-ts-interface",
+      "dest": "/json-to-typescript"
+    },
+    {
+      "src": "/json-schema-to-ts",
+      "dest": "/json-schema-to-typescript"
+    }
   ]
 }
