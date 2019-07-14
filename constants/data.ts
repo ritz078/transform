@@ -249,6 +249,7 @@ export const jsObject = `{
 }`;
 
 export const jsonSchema = `{
+  "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Example Schema",
   "type": "object",
   "properties": {
@@ -264,7 +265,7 @@ export const jsonSchema = `{
       "minimum": 0
     },
     "height": {
-      "type": "number"
+      "type": ["number", "null"]
     },
     "favoriteFoods": {
       "type": "array",
