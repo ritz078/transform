@@ -14,10 +14,8 @@ const config = {
       tls: "mock"
     };
 
-    // if (options.isServer && options.dev)
-    //   config.plugins.push(new ForkTsCheckerWebpackPlugin({
-    //     memoryLimit: 8000
-    //   }));
+    if (options.isServer && options.dev)
+      config.plugins.push(new ForkTsCheckerWebpackPlugin());
 
     config.plugins.push(
       new webpack.DefinePlugin({
