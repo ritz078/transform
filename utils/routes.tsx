@@ -262,7 +262,19 @@ export interface Route {
   desc: string;
 }
 
-export const routes = flatten(categorizedRoutes.map(a => a.content));
+export const routes = flatten(
+  categorizedRoutes.map(a =>
+    // @ts-ignore
+    a.content.map(x => ({
+      ...x,
+      category: a.category,
+      searchTerm:
+        a.category.toLowerCase() !== "others"
+          ? `${a.category} to ${x.label}`
+          : x.label
+    }))
+  )
+);
 
 export function activeRouteData(pathname) {
   return find(routes, o => o.path === pathname);

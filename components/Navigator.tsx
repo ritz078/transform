@@ -3,7 +3,6 @@ import {
   Heading,
   Pane,
   Switch,
-  Icon,
   Text,
   Autocomplete,
   SearchInput
@@ -32,7 +31,7 @@ export default function() {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   const onSearchSelect = useCallback(changedItem => {
-    const route = routes.find(route => changedItem === route.label);
+    const route = routes.find(route => changedItem === route.searchTerm);
     Router.push(route.path);
   }, []);
 
@@ -51,7 +50,7 @@ export default function() {
       <Pane paddingX={15}>
         <Autocomplete
           onChange={onSearchSelect}
-          items={routes.map(a => a.label)}
+          items={routes.map(a => a.searchTerm)}
           width="100%"
         >
           {props => {
