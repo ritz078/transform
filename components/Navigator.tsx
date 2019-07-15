@@ -1,13 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
-import {
-  Heading,
-  Pane,
-  Switch,
-  Text,
-  Autocomplete,
-  SearchInput
-} from "evergreen-ui";
-import { ThemeContext } from "@utils/theme";
+import { Heading, Pane, Text, Autocomplete, SearchInput } from "evergreen-ui";
 import { categorizedRoutes, Route, routes } from "@utils/routes";
 import Link from "next/link";
 import Router from "next/router";
@@ -15,20 +7,23 @@ import Router from "next/router";
 function Logo() {
   return (
     <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 100 125"
-      fill="#888"
-      width="190"
-      height={125}
+      width="75px"
+      height="71px"
+      viewBox="0 0 75 71"
+      version="1.1"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
     >
-      <path d="M68.6 34c-2.6 0-4.7 1.6-5.7 3.8l-25.4-6v-.4c0-3.4-2.8-6.2-6.2-6.2-3.4 0-6.2 2.8-6.2 6.2 0 3.1 2.2 5.6 5.2 6.1v25.1c-2.9.5-5.2 3-5.2 6.1 0 3.4 2.8 6.2 6.2 6.2 3.1 0 5.6-2.2 6.1-5.2h16.7c.5 2.9 3 5.2 6.1 5.2 3.4 0 6.2-2.8 6.2-6.2 0-2.4-1.4-4.4-3.3-5.5l4.8-16.9c.3 0 .6.1.9.1 3.4 0 6.2-2.8 6.2-6.2-.2-3.4-3-6.2-6.4-6.2zm0 10.3c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2c2.3 0 4.2 1.9 4.2 4.2s-1.9 4.2-4.2 4.2zM31.4 27.2c2.3 0 4.2 1.9 4.2 4.2s-1.9 4.2-4.2 4.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2zm4.1 41.4c0 2.3-1.9 4.2-4.2 4.2-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2c2.4.1 4.2 1.9 4.2 4.2zm24.7 4.2c-2.3 0-4.2-1.9-4.2-4.2s1.9-4.2 4.2-4.2 4.2 1.9 4.2 4.2-1.9 4.2-4.2 4.2zm.9-10.3c-.3 0-.6-.1-.9-.1-3.1 0-5.6 2.2-6.1 5.2H37.5C37 65 35 63 32.4 62.5v-25c2.1-.3 3.9-1.8 4.7-3.7l25.4 6v.4c0 2.4 1.4 4.5 3.4 5.5l-4.8 16.8z" />
+      <path
+        d="M65.38 12.571c-3.907 0-7.063 2.286-8.566 5.429L18.637 9.429v-.572C18.637 4 14.43 0 9.32 0 4.209 0 0 4 0 8.857c0 4.429 3.307 8 7.816 8.714V53.43C3.456 54.143 0 57.714 0 62.143 0 67 4.208 71 9.319 71c4.659 0 8.416-3.143 9.168-7.429h25.1C44.34 67.714 48.097 71 52.756 71c5.11 0 9.318-4 9.318-8.857 0-3.429-2.104-6.286-4.96-7.857l7.215-24.143c.45 0 .901.143 1.352.143 5.11 0 9.319-4 9.319-8.857-.3-4.858-4.509-8.858-9.62-8.858zm0 14.715c-3.456 0-6.312-2.715-6.312-6 0-3.286 2.856-6 6.313-6s6.312 2.714 6.312 6c0 3.285-2.855 6-6.312 6zM9.47 2.857c3.457 0 6.313 2.714 6.313 6s-2.856 6-6.313 6-6.313-2.714-6.313-6 2.856-6 6.313-6zM15.63 62c0 3.286-2.855 6-6.312 6-3.457 0-6.313-2.714-6.313-6s2.856-6 6.313-6c3.607.143 6.312 2.714 6.312 6zm37.125 6c-3.457 0-6.313-2.714-6.313-6s2.856-6 6.313-6c3.456 0 6.312 2.714 6.312 6s-2.856 6-6.312 6zm1.352-14.714c-.45 0-.902-.143-1.352-.143-4.66 0-8.417 3.143-9.169 7.428h-24.95c-.751-3.714-3.757-6.571-7.665-7.285V17.57c3.156-.428 5.862-2.571 7.064-5.285l38.176 8.571v.572c0 3.428 2.105 6.428 5.11 7.857l-7.214 24z"
+        fill="#888"
+        fillRule="nonzero"
+      />
     </svg>
   );
 }
 
 export default function() {
   const [active, setActive] = useState([categorizedRoutes[0].category]);
-  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const onSearchSelect = useCallback(changedItem => {
     const route = routes.find(route => changedItem === route.searchTerm);
@@ -43,8 +38,14 @@ export default function() {
       display="flex"
       flexDirection="column"
     >
-      <Pane display="flex" alignItems="center" justifyContent="center">
-        <Logo />
+      <Pane
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        paddingX={20}
+        paddingY={20}
+      >
+        <Heading size={900}>Transform</Heading>
       </Pane>
 
       <Pane paddingX={15}>
@@ -69,16 +70,23 @@ export default function() {
         </Autocomplete>
       </Pane>
 
-      <Pane display="flex" flex={1} overflowY="scroll" flexDirection="column">
+      <Pane
+        display="flex"
+        flex={1}
+        overflowY="scroll"
+        flexDirection="column"
+        paddingBottom={10}
+      >
         {categorizedRoutes.map(route => {
           return (
             <>
               <Pane
-                paddingY={5}
                 paddingX={10}
                 display="flex"
                 flexDirection="row"
                 alignItems="center"
+                marginTop={15}
+                marginBottom={2}
               >
                 <Heading marginLeft={5} size={400}>
                   {route.category}
@@ -106,13 +114,6 @@ export default function() {
             </>
           );
         })}
-      </Pane>
-
-      <Pane display="flex" alignItems="center" paddingX={20} paddingY={20}>
-        <Heading flex={1} size={400}>
-          Dark Mode
-        </Heading>
-        <Switch height={20} onChange={toggleTheme} />
       </Pane>
 
       <Pane paddingY={15} background="#f6f6f6" borderTop>

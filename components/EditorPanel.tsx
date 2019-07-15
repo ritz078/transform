@@ -13,17 +13,10 @@ import {
   toaster,
   Tooltip
 } from "evergreen-ui";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next-server/dynamic";
 import copy from "clipboard-copy";
 import { getWorker, Wrapper } from "@utils/workerWrapper";
-import { ThemeContext } from "@utils/theme";
 
 export interface EditorPanelProps {
   editable?: boolean;
@@ -87,7 +80,6 @@ export default function({
   const [showPreview, setPreviewVisibility] = useState(false);
   const [value, setValue] = useState(defaultValue);
   const editorRef = useRef(null);
-  const context = useContext(ThemeContext);
   const [fetchingUrl, setFetchingUrl] = useState("");
 
   const options: editor.IEditorOptions = {
@@ -191,7 +183,7 @@ export default function({
         paddingLeft={20}
         paddingRight={20}
         alignItems={"center"}
-        elevation={1}
+        borderBottom
         zIndex={2}
         flexShrink={0}
       >
@@ -301,7 +293,6 @@ export default function({
       <Monaco
         language={language}
         value={value}
-        theme={context.theme}
         options={options}
         onChange={value => {
           setValue(value);

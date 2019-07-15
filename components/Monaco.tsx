@@ -1,7 +1,7 @@
 import React from "react";
 import { editor } from "monaco-editor";
 import { Pane } from "evergreen-ui";
-import { lightEditor, darkEditor } from "@utils/theme";
+import { lightEditor } from "@utils/theme";
 
 function noop() {}
 
@@ -32,7 +32,8 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
     value: null,
     language: "javascript",
     options: {},
-    editorDidMount: noop
+    editorDidMount: noop,
+    theme: "light"
   };
 
   public reLayout = () => {
@@ -94,7 +95,6 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
       });
 
       editor.defineTheme("light", lightEditor);
-      editor.defineTheme("dark", darkEditor);
 
       if (theme) {
         editor.setTheme(theme);
