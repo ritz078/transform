@@ -61,7 +61,6 @@
     "postcss": "^7.0.17",
     "postcss-js": "^2.0.2",
     "qrcode.react": "^0.9.3",
-    "rc-collapse": "^1.11.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "snack-sdk": "^2.2.1",

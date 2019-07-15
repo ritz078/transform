@@ -9,7 +9,6 @@ import {
   SearchInput
 } from "evergreen-ui";
 import { ThemeContext } from "@utils/theme";
-import Collapse, { Panel } from "rc-collapse";
 import { categorizedRoutes, Route, routes } from "@utils/routes";
 import Link from "next/link";
 import Router from "next/router";
@@ -39,7 +38,7 @@ export default function() {
 
   return (
     <Pane
-      width={250}
+      width={240}
       height={"100vh"}
       borderRight
       display="flex"
@@ -71,61 +70,43 @@ export default function() {
         </Autocomplete>
       </Pane>
 
-      <Pane display="flex" flex={1} overflowY="scroll">
-        <Collapse
-          accordion
-          activeKey={active}
-          onChange={activeKey => setActive(activeKey)}
-          defaultActiveKey={categorizedRoutes[0].category}
-        >
-          {categorizedRoutes.map(route => {
-            return (
-              <Panel
-                key={route.category}
-                headerClass="Collapsible__trigger"
-                header={
-                  <Pane
-                    paddingY={5}
-                    paddingX={10}
-                    display="flex"
-                    flexDirection="row"
-                    alignItems="center"
-                  >
-                    <Icon
-                      size={14}
-                      icon={
-                        active && active.includes(route.category)
-                          ? "chevron-down"
-                          : "chevron-right"
-                      }
-                      marginRight={8}
-                    />
-                    <Heading size={400}>{route.category}</Heading>
-                  </Pane>
-                }
+      <Pane display="flex" flex={1} overflowY="scroll" flexDirection="column">
+        {categorizedRoutes.map(route => {
+          return (
+            <>
+              <Pane
+                paddingY={5}
+                paddingX={10}
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
               >
-                {(route.content as Route[]).map((a: Route) => (
-                  <Link key={a.label} href={a.path}>
-                    <a>
-                      <Pane
-                        className="rc-collapse-item-"
-                        paddingLeft={30}
-                        paddingY={5}
-                        backgroundColor={
-                          active && active.includes(a.label)
-                            ? "aliceblue"
-                            : undefined
-                        }
-                      >
-                        <Text size={400}>{a.label}</Text>
-                      </Pane>
-                    </a>
-                  </Link>
-                ))}
-              </Panel>
-            );
-          })}
-        </Collapse>
+                <Heading marginLeft={5} size={400}>
+                  {route.category}
+                </Heading>
+              </Pane>
+
+              {(route.content as Route[]).map((a: Route) => (
+                <Link key={a.label} href={a.path}>
+                  <a>
+                    <Pane
+                      className="rc-collapse-item-"
+                      paddingLeft={25}
+                      paddingY={3}
+                      backgroundColor={
+                        active && active.includes(a.label)
+                          ? "aliceblue"
+                          : undefined
+                      }
+                    >
+                      <Text fontSize={13}>{a.label}</Text>
+                    </Pane>
+                  </a>
+                </Link>
+              ))}
+            </>
+          );
+        })}
       </Pane>
 
       <Pane display="flex" alignItems="center" paddingX={20} paddingY={20}>

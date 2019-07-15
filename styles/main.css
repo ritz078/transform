@@ -8,41 +8,6 @@ html {
   overflow: hidden;
 }
 
-.rc-collapse-anim-active {
-  transition: height 0.2s ease-out;
-}
-
-.rc-collapse > .rc-collapse-item-disabled > .rc-collapse-header {
-  cursor: not-allowed;
-  color: #999;
-  background-color: #f3f3f3;
-}
-
-.rc-collapse-header:hover {
-  background-color: #f7f7f7;
-  cursor: pointer;
-}
-
-.rc-collapse-item-:hover {
-  cursor: pointer;
-  background-color: #efefef;
-}
-
-.arrow {
-  display: none;
-}
-
-.rc-collapse-content-inactive {
-  display: none;
-}
-.rc-collapse-item:last-child > .rc-collapse-content {
-  border-radius: 0 0 3px 3px;
-}
-
-.rc-collapse-item {
-  overflow: hidden;
-}
-
 /* Make clicks pass-through */
 #nprogress {
   pointer-events: none;
