@@ -54,7 +54,10 @@ const config = {
       test: /\.worker\.ts/,
       use: {
         loader: "worker-loader",
-        options: { fallback: false, inline: true }
+        options: {
+          name: "static/[hash].worker.js",
+          publicPath: "/_next/"
+        }
       }
     });
 

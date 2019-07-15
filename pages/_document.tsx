@@ -27,20 +27,6 @@ export default class MyDocument extends Document<DocumentProps> {
         <Head>
           <meta charSet="utf-8" />
           <style dangerouslySetInnerHTML={{ __html: css }} />
-          <style>{`* {
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-}
-
-.monaco-editor {
-    padding-top: 15px;
-}
-
-.rc-collapse {
-  width: 100%;
-}
-`}</style>
         </Head>
 
         <body>
