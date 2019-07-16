@@ -19,15 +19,19 @@ _self.onmessage = ({
     id
   }
 }: Data) => {
-  try {
-    _self.postMessage({
-      id,
-      payload: prettify(language, value)
-    });
-  } catch (e) {
-    _self.postMessage({
-      id,
-      err: e.message
-    });
-  }
+  (async function() {
+    try {
+      const payload = await prettify(language, value);
+
+      _self.postMessage({
+        id,
+        payload
+      });
+    } catch (e) {
+      _self.postMessage({
+        id,
+        err: e.message
+      });
+    }
+  })();
 };

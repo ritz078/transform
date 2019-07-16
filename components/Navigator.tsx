@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback } from "react";
 import { Heading, Pane, Text, Autocomplete, SearchInput } from "evergreen-ui";
 import { categorizedRoutes, Route, routes } from "@utils/routes";
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 function Logo() {
   return (
@@ -10,7 +10,6 @@ function Logo() {
       width="75px"
       height="71px"
       viewBox="0 0 75 71"
-      version="1.1"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     >
       <path
@@ -23,11 +22,11 @@ function Logo() {
 }
 
 export default function() {
-  const [active, setActive] = useState([categorizedRoutes[0].category]);
+  const router = useRouter();
 
   const onSearchSelect = useCallback(changedItem => {
     const route = routes.find(route => changedItem === route.searchTerm);
-    Router.push(route.path);
+    router.push(route.path);
   }, []);
 
   return (
@@ -93,24 +92,27 @@ export default function() {
                 </Heading>
               </Pane>
 
-              {(route.content as Route[]).map((a: Route) => (
-                <Link key={a.label} href={a.path}>
-                  <a>
-                    <Pane
-                      className="rc-collapse-item-"
-                      paddingLeft={25}
-                      paddingY={3}
-                      backgroundColor={
-                        active && active.includes(a.label)
-                          ? "aliceblue"
-                          : undefined
-                      }
-                    >
-                      <Text fontSize={13}>{a.label}</Text>
-                    </Pane>
-                  </a>
-                </Link>
-              ))}
+              {(route.content as Route[]).map((a: Route) => {
+                const isActive = router.pathname === a.path;
+                return (
+                  <Link key={a.label} href={a.path} prefetch>
+                    <a>
+                      <Pane
+                        paddingLeft={20}
+                        paddingY={3}
+                        backgroundColor={isActive ? "#f3f3f3" : undefined}
+                        borderLeft={
+                          isActive
+                            ? "4px solid #e91e63"
+                            : "4px solid transparent"
+                        }
+                      >
+                        <Text fontSize={13}>{a.label}</Text>
+                      </Pane>
+                    </a>
+                  </Link>
+                );
+              })}
             </>
           );
         })}

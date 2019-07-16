@@ -19,7 +19,7 @@ interface Data {
   };
 }
 
-function handleJsonToProptypes(value, id) {
+async function handleJsonToProptypes(value, id) {
   let code = JSON.parse(value);
 
   if (typeof code !== "object" || Array.isArray(code)) {
@@ -30,9 +30,11 @@ function handleJsonToProptypes(value, id) {
     plugins: [jsonToProptypes]
   }).code;
 
+  const prettyCode = await prettify("javascript", result);
+
   _self.postMessage({
     id,
-    payload: prettify("javascript", result)
+    payload: prettyCode
   });
 }
 
