@@ -98,13 +98,13 @@ export default function() {
                   <Link key={a.label} href={a.path} prefetch>
                     <a>
                       <Pane
-                        paddingLeft={20}
+                        paddingLeft={16}
                         paddingY={3}
                         backgroundColor={isActive ? "#f3f3f3" : undefined}
                         borderLeft={
                           isActive
-                            ? "4px solid #e91e63"
-                            : "4px solid transparent"
+                            ? "3px solid #009688"
+                            : "3px solid transparent"
                         }
                       >
                         <Text fontSize={13}>{a.label}</Text>
