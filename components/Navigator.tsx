@@ -62,14 +62,7 @@ export default function() {
         {categorizedRoutes.map(route => {
           return (
             <Fragment key={route.category}>
-              <Pane
-                paddingX={10}
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-                marginTop={15}
-                marginBottom={2}
-              >
+              <Pane paddingX={10} marginTop={15} marginBottom={2}>
                 <Heading marginLeft={5} size={400}>
                   {route.category}
                 </Heading>
@@ -79,7 +72,11 @@ export default function() {
                 const isActive = router.pathname === a.path;
                 return (
                   <Link key={a.label} href={a.path} prefetch>
-                    <a>
+                    <a
+                      style={{
+                        textDecoration: "none"
+                      }}
+                    >
                       <Pane
                         paddingLeft={16}
                         paddingY={3}
@@ -89,6 +86,11 @@ export default function() {
                             ? "3px solid #009688"
                             : "3px solid transparent"
                         }
+                        css={{
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5"
+                          }
+                        }}
                       >
                         <Text fontSize={13}>{a.label}</Text>
                       </Pane>

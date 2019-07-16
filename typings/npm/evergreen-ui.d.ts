@@ -6,6 +6,7 @@ declare module "evergreen-ui" {
   export interface PaneProps extends EnhancerProps {
     elevation?: number;
     className?: string;
+    css?: any;
   }
 
   export class Pane extends React.PureComponent<PaneProps> {}
