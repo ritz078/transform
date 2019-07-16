@@ -19,7 +19,7 @@ import { Transformer } from "@components/ConversionPanel";
 
 let SnackSession;
 if (IN_BROWSER) {
-  SnackSession = require("@assets/vendor/snack-sdk");
+  SnackSession = require("@assets/vendor/snack-sdk").SnackSession;
 }
 
 let prettier, svgo, _babelWorker, converter;
