@@ -77,7 +77,7 @@ export default function({
   id
 }: EditorPanelProps) {
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
-  const [showPreview, setPreviewVisibility] = useState(false);
+  const [showPreview, setPreviewVisibility] = useState(true);
   const [value, setValue] = useState(defaultValue);
   const editorRef = useRef(null);
   const [fetchingUrl, setFetchingUrl] = useState("");
