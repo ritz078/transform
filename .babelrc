@@ -10,13 +10,9 @@
         "@components": "./components",
         "@styles": "./styles",
         "@utils": "./utils",
-        "@config": "./config",
         "@workers": "./workers",
-        "@enums": "./enums",
-        "@reducers": "./reducers",
         "@typings": "./typings",
         "@assets":  "./assets",
-        "@controllers": "./controllers",
         "@constants": "./constants",
         "@hooks": "./hooks"
       }

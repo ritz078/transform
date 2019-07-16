@@ -1018,22 +1018,6 @@
     graphql-tag "2.10.1"
     tslib "1.10.0"
 
-"@now/next@^0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@now/next/-/next-0.5.2.tgz#8e16e3dd6b41562fe1f17788fc4a253e34c482f2"
-  integrity sha512-OjrGxK6tQgmWo7zvIVJrSdHk/f8ioTE58o9nmjdrZPU2I4HPYQHxp5aO94lQ3r96KJUbPpyXNqHdVJIVUI+J0A==
-  dependencies:
-    "@now/node-bridge" "1.2.2"
-    fs-extra "^7.0.0"
-    get-port "^5.0.0"
-    resolve-from "^5.0.0"
-    semver "^5.6.0"
-
-"@now/node-bridge@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@now/node-bridge/-/node-bridge-1.2.2.tgz#b4740d8806227b8dd1d4d8481e21b3b30ad299b4"
-  integrity sha512-E5xqal3QRN8RvcQ4Q82vtg/hvWmQWaIYp2bJHd550Ps/kemGabcwAAQsP/TUM/4b5oYlOmjrfuYPq9AhMvFqkQ==
-
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -4126,7 +4110,7 @@ fs-extra@^4.0.3:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-extra@^7.0.0, fs-extra@^7.0.1:
+fs-extra@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
   integrity sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==
@@ -4201,13 +4185,6 @@ get-own-enumerable-property-symbols@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-3.0.0.tgz#b877b49a5c16aefac3655f2ed2ea5b684df8d203"
   integrity sha512-CIJYJC4GGF06TakLg8z4GQKvDsx9EMspVxOYih7LerEL/WosUnFIww45CGfxfeKHqlg3twgUrYRT1O3WQqjGCg==
-
-get-port@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/get-port/-/get-port-5.0.0.tgz#aa22b6b86fd926dd7884de3e23332c9f70c031a6"
-  integrity sha512-imzMU0FjsZqNa6BqOjbbW6w5BivHIuQKopjpPqcnx0AVHJQKCxK1O+Ab3OrVXhrekqfVMjwA9ZYu062R+KcIsQ==
-  dependencies:
-    type-fest "^0.3.0"
 
 get-proxy@^2.0.0:
   version "2.1.0"
@@ -8773,11 +8750,6 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
-
-type-fest@^0.3.0:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.3.1.tgz#63d00d204e059474fe5e1b7c011112bbd1dc29e1"
-  integrity sha512-cUGJnCdr4STbePCgqNFbpVNCepa+kAVohJs1sLhxzdH+gnEoOd8VhbYa7pD3zZYGiURWM2xzEII3fQcRizDkYQ==
 
 type-fest@^0.4.1:
   version "0.4.1"

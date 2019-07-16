@@ -20,7 +20,8 @@
       "@constants/*": ["./constants/*"],
       "@workers/*": ["./workers/*"],
       "@utils/*": ["./utils/*"],
-      "@hooks/*": ["./hooks/*"]
+      "@hooks/*": ["./hooks/*"],
+      "@assets/*": ["./assets/*"]
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],
