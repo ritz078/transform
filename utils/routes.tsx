@@ -107,11 +107,6 @@ export const categorizedRoutes = [
         path: "json-schema-to-openapi-schema",
         packageName: "json-schema-to-openapi-schema",
         packageUrl: "https://github.com/wework/json-schema-to-openapi-schema"
-      },
-      {
-        label: "to Rust Serde",
-        path: "/json-schema-to-rust-serde",
-        desc: "An online REPL for converting JSON Schema to Rust Serde Structs."
       }
     ]
   },
