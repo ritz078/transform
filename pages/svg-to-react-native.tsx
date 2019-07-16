@@ -2,7 +2,6 @@ import * as React from "react";
 import BabelWorker from "@workers/babel.worker";
 import { SvgConverter } from "@components/SvgConverter";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SnackSession } from "snack-sdk";
 import QRCode from "qrcode.react";
 import { Pane, Heading, Link } from "evergreen-ui";
 import {
@@ -17,6 +16,11 @@ import SvgoWorker from "@workers/svgo.worker";
 import { BabelTransforms } from "@constants/babelTransforms";
 import HTML from "htmltojsx";
 import { Transformer } from "@components/ConversionPanel";
+
+let SnackSession;
+if (IN_BROWSER) {
+  SnackSession = require("../assets/vendor/snack-sdk");
+}
 
 let prettier, svgo, _babelWorker, converter;
 export default function() {
@@ -41,6 +45,10 @@ export default function() {
       const url = await snackSession.current.getUrlAsync();
       setUrl(url);
     })();
+
+    return () => {
+      snackSession.current && snackSession.current.stopAsync();
+    };
   }, []);
 
   useEffect(() => {

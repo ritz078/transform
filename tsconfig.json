@@ -24,7 +24,6 @@
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],
-    "types": ["@emotion/core"],
     "skipDefaultLibCheck": true
   },
   "exclude": ["static", "public", ".next", "node_modules"]

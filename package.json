@@ -63,7 +63,6 @@
     "qrcode.react": "^0.9.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "snack-sdk": "^2.2.1",
     "stringify-object": "^3.3.0",
     "svg-to-dataurl": "^1.0.0",
     "svgo": "^1.2.2",
@@ -72,8 +71,6 @@
     "yaml": "^1.6.0"
   },
   "devDependencies": {
-    "@emotion/babel-preset-css-prop": "^10.0.14",
-    "@emotion/core": "^10.0.14",
     "@now/next": "^0.5.2",
     "@types/lodash": "^4.14.135",
     "@types/next": "^8.0.5",
