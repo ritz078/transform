@@ -1,5 +1,6 @@
 import { transform } from "@babel/standalone";
 import jsonToProptypes from "babel-plugin-json-to-proptypes";
+import jsonToMobxTree from "@assets/vendor/babel-plugin-js-to-mobx-state-tree";
 import { merge } from "lodash";
 import { prettify } from "@utils/prettify";
 import { BabelTransforms } from "@constants/babelTransforms";
@@ -67,6 +68,15 @@ function flowToTS(value, id) {
   });
 }
 
+function jsonToMobx(value, id) {
+  _self.postMessage({
+    id,
+    payload: transform(`const myModel = ${value}`, {
+      plugins: [jsonToMobxTree]
+    }).code
+  });
+}
+
 _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   const { value, type, settings } = payload;
 
@@ -79,6 +89,8 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
       objectStylesToTemplate(value, id, settings);
     } else if (type === BabelTransforms.FLOW_TO_TYPESCRIPT) {
       flowToTS(value, id);
+    } else if (type === BabelTransforms.JSON_TO_MOBX_TREE) {
+      jsonToMobx(value, id);
     }
   } catch (e) {
     _self.postMessage({
