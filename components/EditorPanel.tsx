@@ -111,6 +111,7 @@ export default function({
           marginRight={10}
           iconBefore="cog"
           onClick={_toggleSettingsDialog}
+          height={28}
         >
           Settings
         </Button>
@@ -179,9 +180,8 @@ export default function({
     <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
       <Pane
         display="flex"
-        height={50}
-        paddingLeft={20}
-        paddingRight={20}
+        height={40}
+        paddingX={10}
         alignItems={"center"}
         borderBottom
         zIndex={2}
@@ -241,7 +241,7 @@ export default function({
             shouldCloseOnExternalClick
           >
             <Tooltip content="Load File">
-              <IconButton marginRight={10} icon="upload" />
+              <IconButton height={28} marginRight={10} icon="upload" />
             </Tooltip>
           </Popover>
         )}
@@ -249,6 +249,7 @@ export default function({
         {hasClear && (
           <Tooltip content="Clear">
             <IconButton
+              height={28}
               icon="trash"
               intent="danger"
               marginRight={10}
@@ -259,6 +260,7 @@ export default function({
 
         {previewElement && (
           <IconButton
+            height={28}
             icon={"eye-open"}
             marginRight={10}
             isActive={showPreview}
@@ -272,13 +274,14 @@ export default function({
             marginRight={10}
             iconBefore="duplicate"
             onClick={copyValue}
+            height={28}
           >
             Copy
           </Button>
         )}
 
         {hasPrettier && (
-          <Button appearance="primary" onClick={prettify}>
+          <Button appearance="primary" onClick={prettify} height={28}>
             Prettify
           </Button>
         )}

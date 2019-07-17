@@ -65,7 +65,7 @@ const config = {
     return config;
   },
 
-  target: "serverless"
+  target: "server"
 };
 
 module.exports = withCSS(withTypescript(config));

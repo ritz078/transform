@@ -7,6 +7,7 @@ declare module "evergreen-ui" {
     elevation?: number;
     className?: string;
     css?: any;
+    is?: any;
   }
 
   export class Pane extends React.PureComponent<PaneProps> {}

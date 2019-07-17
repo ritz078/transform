@@ -4,6 +4,34 @@ import find from "lodash/find";
 
 export const categorizedRoutes = [
   {
+    category: "SVG",
+    content: [
+      {
+        label: "to JSX",
+        path: "/svg-to-jsx",
+        desc:
+          "An online REPL for converting SVG to JSX with proper support for SVG."
+      },
+      {
+        label: "to React Native",
+        path: "/svg-to-react-native",
+        desc:
+          "An online REPL for converting SVG to React Native compatible equivalent."
+      }
+    ]
+  },
+  {
+    category: "HTML",
+    content: [
+      {
+        label: "to JSX",
+        path: "/html-to-jsx",
+        desc:
+          "An online REPL for converting HTML to JSX with proper support for SVG."
+      }
+    ]
+  },
+  {
     category: "JSON",
     content: [
       {
@@ -107,34 +135,6 @@ export const categorizedRoutes = [
         path: "json-schema-to-openapi-schema",
         packageName: "json-schema-to-openapi-schema",
         packageUrl: "https://github.com/wework/json-schema-to-openapi-schema"
-      }
-    ]
-  },
-  {
-    category: "SVG",
-    content: [
-      {
-        label: "to JSX",
-        path: "/svg-to-jsx",
-        desc:
-          "An online REPL for converting SVG to JSX with proper support for SVG."
-      },
-      {
-        label: "to React Native",
-        path: "/svg-to-react-native",
-        desc:
-          "An online REPL for converting SVG to React Native compatible equivalent."
-      }
-    ]
-  },
-  {
-    category: "HTML",
-    content: [
-      {
-        label: "to JSX",
-        path: "/html-to-jsx",
-        desc:
-          "An online REPL for converting HTML to JSX with proper support for SVG."
       }
     ]
   },
