@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import App, { Container } from "next/app";
 import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
 import NProgress from "nprogress";
-import Router from "next/router";
+import { useRouter } from "next/router";
+import { Head } from "next/document";
+import { activeRouteData } from "@utils/routes";
 
 const logo = (
   <svg
@@ -28,113 +30,106 @@ const logo = (
   </svg>
 );
 
-class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
+App.getInitialProps = async ({ Component, ctx }) => {
+  let pageProps = {};
 
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-
-    return { pageProps };
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
   }
 
-  componentDidMount(): void {
+  return { pageProps };
+};
+
+function renderHeadWay() {
+  if (!IN_BROWSER) return;
+
+  const HW_config = {
+    selector: ".transform-changelog", // CSS selector where to inject the badge
+    account: "J0B24x",
+    trigger: ".transform-changelog"
+  };
+
+  (function(src) {
+    const tag = document.createElement("script");
+    tag.async = false;
+    tag.src = src;
+    document.getElementsByTagName("body")[0].appendChild(tag);
+
+    tag.onload = () => {
+      // @ts-ignore
+      window.Headway.init(HW_config);
+    };
+  })("https://cdn.headwayapp.co/widget.js");
+}
+
+export default function({ Component, pageProps }) {
+  const router = useRouter();
+
+  useEffect(() => {
     const startProgress = () => NProgress.start();
     const stopProgress = timer => {
       clearTimeout(timer);
       NProgress.done();
     };
 
-    this.renderHeadWay();
-
     const showProgressBar = delay => {
       const timer = setTimeout(startProgress, delay);
-      Router.events.on("routeChangeComplete", () => stopProgress(timer));
-      Router.events.on("routeChangeError", () => stopProgress(timer));
+      router.events.on("routeChangeComplete", () => stopProgress(timer));
+      router.events.on("routeChangeError", () => stopProgress(timer));
     };
 
-    Router.events.on("routeChangeStart", () => showProgressBar(300));
-  }
+    router.events.on("routeChangeStart", () => showProgressBar(300));
+  }, []);
 
-  private renderHeadWay = () => {
-    const HW_config = {
-      selector: ".transform-changelog", // CSS selector where to inject the badge
-      account: "J0B24x",
-      trigger: ".transform-changelog"
-    };
+  renderHeadWay();
 
-    (function(src) {
-      const tag = document.createElement("script");
-      tag.async = false;
-      tag.src = src;
-      document.getElementsByTagName("body")[0].appendChild(tag);
+  const activeRoute = activeRouteData(router.pathname);
 
-      tag.onload = () => {
-        // @ts-ignore
-        window.Headway.init(HW_config);
-      };
-    })("https://cdn.headwayapp.co/widget.js");
-  };
+  return (
+    <Container>
+      <title>{activeRoute.searchTerm}</title>
+      <meta name="description" content={activeRoute.desc} />
+      <Pane
+        display="flex"
+        alignItems="center"
+        flexDirection="row"
+        is="header"
+        height={40}
+        backgroundColor="#0e7ccf"
+        paddingRight={20}
+      >
+        <Pane flex={1} display="flex" paddingX={20} className="logo-transform">
+          {logo}
+        </Pane>
 
-  componentDidUpdate() {
-    this.renderHeadWay();
-  }
-
-  render() {
-    const { Component, pageProps } = this.props;
-
-    return (
-      <Container>
-        <Pane
-          display="flex"
-          alignItems="center"
-          flexDirection="row"
-          is="header"
-          height={40}
-          backgroundColor="#0e7ccf"
-          paddingRight={20}
-        >
-          <Pane
-            flex={1}
-            display="flex"
-            paddingX={20}
-            className="logo-transform"
+        <Pane>
+          <Button
+            appearance="minimal"
+            height={40}
+            className="transform-changelog"
+            css={{
+              color: "#fff !important"
+            }}
           >
-            {logo}
-          </Pane>
-
-          <Pane>
+            Changelog
+          </Button>
+          <a href="https://github.com/ritz078/transform" target="_blank">
             <Button
               appearance="minimal"
               height={40}
-              className="transform-changelog"
               css={{
                 color: "#fff !important"
               }}
             >
-              Changelog
+              GitHub
             </Button>
-            <a href="https://github.com/ritz078/transform" target="_blank">
-              <Button
-                appearance="minimal"
-                height={40}
-                css={{
-                  color: "#fff !important"
-                }}
-              >
-                GitHub
-              </Button>
-            </a>
-          </Pane>
+          </a>
         </Pane>
-        <Pane display="flex" flexDirection="row">
-          <Navigator />
-          <Component {...pageProps} />
-        </Pane>
-      </Container>
-    );
-  }
+      </Pane>
+      <Pane display="flex" flexDirection="row">
+        <Navigator />
+        <Component {...pageProps} />
+      </Pane>
+    </Container>
+  );
 }
-
-export default MyApp;
