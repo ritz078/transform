@@ -66,7 +66,7 @@ export default function() {
       editorLanguage="json"
       resultTitle="TypeScript"
       resultLanguage={"typescript"}
-      resultSettingsElement={getSettingsElement}
+      editorSettingsElement={getSettingsElement}
       settings={settings}
     />
   );

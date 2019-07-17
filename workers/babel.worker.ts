@@ -93,6 +93,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
       jsonToMobx(value, id);
     }
   } catch (e) {
+    debugger;
     _self.postMessage({
       id,
       err: e.message

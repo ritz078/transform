@@ -56,7 +56,7 @@ export default function() {
       editorLanguage="json"
       resultTitle="Rust Serde"
       resultLanguage={"rust"}
-      resultSettingsElement={getSettingsElement}
+      editorSettingsElement={getSettingsElement}
       settings={settings}
     />
   );

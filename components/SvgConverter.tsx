@@ -50,7 +50,7 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
       editorLanguage="html"
       editorDefaultValue="svg"
       settings={settings}
-      resultEditorProps={{
+      editorProps={{
         settingElement: getSettingsPanel,
         topNotifications: ({ toggleSettings }) =>
           settings.optimizeSvg && (
@@ -71,9 +71,7 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
                 </>
               }
             />
-          )
-      }}
-      editorProps={{
+          ),
         previewElement: value => (
           <Pane display="flex" flexDirection="row" flex={1}>
             <Pane display={"flex"} flex={1} position="relative">
