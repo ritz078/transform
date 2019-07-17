@@ -59,7 +59,8 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
               backgroundColor="#FEF8E7"
               title={
                 <>
-                  SVGO optimization is turned on. You can modify it in{" "}
+                  SVGO optimization is turned on. You can turn it off or
+                  configure it in{" "}
                   <Heading
                     size={400}
                     is="a"
