@@ -37,6 +37,10 @@ export interface EditorPanelProps {
   }) => React.ReactNode;
   previewElement?: (value: string) => React.ReactNode;
   acceptFiles?: string | string[];
+  packageDetails?: {
+    name: string;
+    url: string;
+  };
 }
 
 let prettierWorker: Wrapper;
@@ -74,7 +78,8 @@ export default function({
   language,
   defaultValue,
   onChange,
-  id
+  id,
+  packageDetails
 }: EditorPanelProps) {
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
   const [showPreview, setPreviewVisibility] = useState(true);
@@ -266,6 +271,32 @@ export default function({
             isActive={showPreview}
             onClick={() => setPreviewVisibility(!showPreview)}
           />
+        )}
+
+        {packageDetails && (
+          <a href={packageDetails.url}>
+            <svg
+              style={{
+                borderRadius: 2,
+                marginRight: 10
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              id="n"
+              width={28}
+              height={28}
+              viewBox="0 0 16 16"
+            >
+              <defs>
+                <style
+                  dangerouslySetInnerHTML={{
+                    __html: ".cls-1{fill:#c12127;}.cls-2{fill:#fff;}"
+                  }}
+                />
+              </defs>
+              <path d="M0 16V0h16v16zM3 3v10h5V5h3v8h2V3z" className="cls-1" />
+              <path d="M3 3h10v10h-2V5H8v8H3z" className="cls-2" />
+            </svg>
+          </a>
         )}
 
         {hasCopy && (

@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import App, { Container } from "next/app";
+import { Container } from "next/app";
 import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
 import NProgress from "nprogress";
-import { useRouter } from "next/router";
-import { Head } from "next/document";
+import Router, { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
 
 const logo = (
@@ -30,16 +29,6 @@ const logo = (
   </svg>
 );
 
-App.getInitialProps = async ({ Component, ctx }) => {
-  let pageProps = {};
-
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
-  }
-
-  return { pageProps };
-};
-
 function renderHeadWay() {
   if (!IN_BROWSER) return;
 
@@ -62,23 +51,32 @@ function renderHeadWay() {
   })("https://cdn.headwayapp.co/widget.js");
 }
 
-export default function({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
     const startProgress = () => NProgress.start();
-    const stopProgress = timer => {
+
+    let timer;
+    const stopProgress = () => {
       clearTimeout(timer);
       NProgress.done();
     };
 
-    const showProgressBar = delay => {
-      const timer = setTimeout(startProgress, delay);
-      router.events.on("routeChangeComplete", () => stopProgress(timer));
-      router.events.on("routeChangeError", () => stopProgress(timer));
+    const showProgressBar = () => {
+      timer = setTimeout(startProgress, 300);
+      router.events.on("routeChangeComplete", stopProgress);
+      router.events.on("routeChangeError", stopProgress);
     };
 
-    router.events.on("routeChangeStart", () => showProgressBar(300));
+    router.events.on("routeChangeStart", showProgressBar);
+
+    return () => {
+      router.events.off("routeChangeComplete", stopProgress);
+      router.events.off("routeChangeError", stopProgress);
+      router.events.off("routeChangeStart", showProgressBar);
+      timer && clearTimeout(timer);
+    };
   }, []);
 
   renderHeadWay();
@@ -87,8 +85,8 @@ export default function({ Component, pageProps }) {
 
   return (
     <Container>
-      <title>{activeRoute.searchTerm}</title>
-      <meta name="description" content={activeRoute.desc} />
+      <title>{activeRoute && activeRoute.searchTerm}</title>
+      <meta name="description" content={activeRoute && activeRoute.desc} />
       <Pane
         display="flex"
         alignItems="center"
@@ -133,3 +131,13 @@ export default function({ Component, pageProps }) {
     </Container>
   );
 }
+
+App.getInitialProps = async ({ Component, ctx }) => {
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps };
+};

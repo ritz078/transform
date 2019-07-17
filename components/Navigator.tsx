@@ -3,14 +3,10 @@ import { Heading, Pane, Text, Autocomplete, SearchInput } from "evergreen-ui";
 import { categorizedRoutes, Route, routes } from "@utils/routes";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import SearchBox from "@components/Searchbox";
 
 export default function() {
   const router = useRouter();
-
-  const onSearchSelect = useCallback(changedItem => {
-    const route = routes.find(route => changedItem === route.searchTerm);
-    router.push(route.path);
-  }, []);
 
   return (
     <Pane
@@ -22,25 +18,7 @@ export default function() {
       paddingTop={20}
     >
       <Pane paddingX={15}>
-        <Autocomplete
-          onChange={onSearchSelect}
-          items={routes.map(a => a.searchTerm)}
-          width="100%"
-        >
-          {props => {
-            const { getInputProps, getRef, inputValue } = props;
-            return (
-              <SearchInput
-                width="100%"
-                marginBottom={10}
-                placeholder="Search"
-                value={inputValue}
-                innerRef={getRef}
-                {...getInputProps()}
-              />
-            );
-          }}
-        </Autocomplete>
+        <SearchBox />
       </Pane>
 
       <Pane

@@ -3,6 +3,8 @@ import EditorPanel, { EditorPanelProps } from "@components/EditorPanel";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Language, useData } from "@hooks/useData";
+import { useRouter } from "next/router";
+import { activeRouteData } from "@utils/routes";
 
 function getEditorLanguage(lang: Language) {
   const mapping = {
@@ -61,6 +63,17 @@ const ConversionPanel: React.FunctionComponent<
   );
   const [result, setResult] = useState("");
   const [message, setMessage] = useState("");
+
+  const router = useRouter();
+  const { packageUrl, packageName } = activeRouteData(router.pathname);
+
+  const packageDetails =
+    packageName && packageUrl
+      ? {
+          name: packageName,
+          url: packageUrl
+        }
+      : undefined;
 
   useEffect(() => {
     async function transform() {
@@ -127,6 +140,7 @@ const ConversionPanel: React.FunctionComponent<
           editable={false}
           hasPrettier={false}
           settingElement={resultSettingsElement}
+          packageDetails={packageDetails}
           {...resultEditorProps}
         />
       </Pane>
@@ -135,7 +149,7 @@ const ConversionPanel: React.FunctionComponent<
         <Alert
           paddingY={15}
           paddingX={20}
-          left={250}
+          left={240}
           right={0}
           position="absolute"
           intent="danger"

@@ -8,7 +8,7 @@ export const categorizedRoutes = [
     content: [
       {
         label: "to JSX",
-        path: "/svg-to-jsx"
+        path: "/"
       },
       {
         label: "to React Native",

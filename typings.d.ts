@@ -39,3 +39,4 @@ declare module "@workers/graphql.worker" {
 }
 
 declare const IN_BROWSER: boolean;
+declare const IS_DEV: boolean;
