@@ -29,6 +29,7 @@ declare module "evergreen-ui" {
     is?: string;
     href?: string;
     onClick?: () => void;
+    css?: any;
   }
   export class Button extends React.PureComponent<ButtonProps> {}
 

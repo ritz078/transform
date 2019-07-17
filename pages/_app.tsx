@@ -10,15 +10,15 @@ import Router from "next/router";
 const logo = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="100px"
-    height="20px"
+    width="90px"
+    height="19px"
     viewBox="0 0 306 62"
     style={{
       marginTop: -4
     }}
   >
     <path
-      fill="#eee"
+      fill="#fff"
       fillRule="nonzero"
       stroke="none"
       strokeWidth={1}
@@ -60,7 +60,8 @@ class MyApp extends App {
   private renderHeadWay = () => {
     const HW_config = {
       selector: ".transform-changelog", // CSS selector where to inject the badge
-      account: "J0B24x"
+      account: "J0B24x",
+      trigger: ".transform-changelog"
     };
 
     (function(src) {
@@ -105,16 +106,26 @@ class MyApp extends App {
 
           <Pane>
             <Button
-              color={"#fff"}
               appearance="minimal"
               height={40}
               className="transform-changelog"
+              css={{
+                color: "#fff !important"
+              }}
             >
               Changelog
             </Button>
-            <Button color={"#fff"} appearance="minimal" height={40}>
-              GitHub
-            </Button>
+            <a href="https://github.com/ritz078/transform" target="_blank">
+              <Button
+                appearance="minimal"
+                height={40}
+                css={{
+                  color: "#fff !important"
+                }}
+              >
+                GitHub
+              </Button>
+            </a>
           </Pane>
         </Pane>
         <Pane display="flex" flexDirection="row">

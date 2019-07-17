@@ -3,6 +3,10 @@
   "builds": [{ "src": "package.json", "use": "@now/static-build" }],
   "routes": [
     {
+      "src": "/",
+      "dest": "/svg-to-jsx"
+    },
+    {
       "src": "/json-to-flow-types",
       "dest": "/json-to-flow"
     },
