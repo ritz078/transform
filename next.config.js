@@ -1,26 +1,27 @@
+const withTypescript = require("@zeit/next-typescript");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const { ANALYZE } = process.env;
-const LodashModuleReplacementPlugin = require("lodash-webpack-plugin");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
-module.exports = {
-  webpack: (config, { isServer }) => {
+const config = {
+  webpack(config, options) {
     config.node = {
-      fs: "empty"
+      fs: "empty",
+      module: "empty",
+      net: "mock",
+      tls: "mock"
     };
 
-    config.module.rules.push({
-      test: /\.css$/,
-      use: ["style-loader", "css-loader"]
-    });
+    if (options.isServer && options.dev)
+      config.plugins.push(new ForkTsCheckerWebpackPlugin());
 
     config.plugins.push(
-      new LodashModuleReplacementPlugin({
-        collections: true,
-        shorthands: true
+      new webpack.DefinePlugin({
+        "process.env.DEV": JSON.stringify(options.dev),
+        IN_BROWSER: !options.isServer,
+        IS_DEV: options.dev
       }),
-      new webpack.DefinePlugin({ IN_BROWSER: !isServer }),
       new MonacoWebpackPlugin({
         output: "../../static",
         languages: [
@@ -36,31 +37,36 @@ module.exports = {
           "markdown",
           "go",
           "graphql",
-          "scala"
+          "scala",
+          "plaintext",
+          "java"
         ],
-        features: ["folding", "goToDefinitionMouse", "goToDefinitionCommands"]
+        features: [
+          "folding",
+          "goToDefinitionMouse",
+          "goToDefinitionCommands",
+          "referenceSearch"
+        ]
       })
     );
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "babel-core": "babel-standalone"
-    };
-
-    if (ANALYZE) {
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: "server",
-          analyzerPort: 8888,
-          openAnalyzer: true
-        })
-      );
-    }
+    config.module.rules.unshift({
+      test: /\.worker\.ts/,
+      use: {
+        loader: "worker-loader",
+        options: {
+          name: "static/[hash].worker.js",
+          publicPath: "/_next/"
+        }
+      }
+    });
 
     config.output.globalObject = `this`;
 
     return config;
   },
 
-  transpileModules: ["monaco-editor"]
+  target: "server"
 };
+
+module.exports = withCSS(withTypescript(config));

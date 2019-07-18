@@ -1,6 +1,21 @@
 {
-  "presets": ["next/babel"],
-  "plugins": ["transform-flow-strip-types", "transform-react-remove-prop-types", "lodash", ["@babel/plugin-proposal-decorators", {
-    "legacy": true
-  }]]
+  "presets": [
+    "next/babel",
+    "@zeit/next-typescript/babel"
+  ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["."],
+      "alias": {
+        "@components": "./components",
+        "@styles": "./styles",
+        "@utils": "./utils",
+        "@workers": "./workers",
+        "@typings": "./typings",
+        "@assets":  "./assets",
+        "@constants": "./constants",
+        "@hooks": "./hooks"
+      }
+    }]
+  ]
 }

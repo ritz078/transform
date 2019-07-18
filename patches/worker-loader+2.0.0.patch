@@ -1,0 +1,18 @@
+diff --git a/node_modules/worker-loader/dist/workers/InlineWorker.js b/node_modules/worker-loader/dist/workers/InlineWorker.js
+index b1e2185..384d1c6 100644
+--- a/node_modules/worker-loader/dist/workers/InlineWorker.js
++++ b/node_modules/worker-loader/dist/workers/InlineWorker.js
+@@ -23,7 +23,12 @@ module.exports = function (content, url) {
+         blob = new Blob([content]);
+       }
+ 
+-      return new Worker(URL.createObjectURL(blob));
++      var URL = window.URL || window.webkitURL;
++      var objectURL = URL.createObjectURL(blob);
++      var worker = new window.Worker(objectURL);
++      URL.revokeObjectURL(objectURL);
++
++      return worker;
+     } catch (e) {
+       return new Worker('data:application/javascript,' + encodeURIComponent(content));
+     }

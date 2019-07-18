@@ -1,11 +1,6 @@
-.next
-
-node_modules
-
 .idea
-out
+.next
+node_modules
 yarn-error.log
-transform
-
-.vscode
+static
 dist

@@ -1,6 +1,32 @@
 {
   "version": 2,
   "name": "transform",
-  "alias": ["transform"],
-  "builds": [{ "src": "package.json", "use": "@now/static-build" }]
+  "alias": ["transform.tools"],
+  "builds": [{ "src": "package.json", "use": "@now/static-build" }],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/svg-to-jsx"
+    },
+    {
+      "src": "/json-to-flow-types",
+      "dest": "/json-to-flow"
+    },
+    {
+      "src": "/json-to-ts-interface",
+      "dest": "/json-to-typescript"
+    },
+    {
+      "src": "/json-schema-to-ts",
+      "dest": "/json-schema-to-typescript"
+    },
+    {
+      "src": "^/service-worker.js$",
+      "dest": "/_next/static/service-worker.js",
+      "headers": {
+        "cache-control": "public, max-age=43200, immutable",
+        "Service-Worker-Allowed": "/"
+      }
+    }
+  ]
 }
