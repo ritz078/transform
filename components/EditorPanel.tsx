@@ -182,8 +182,6 @@ export default function({
     setValue(defaultValue);
   }, [defaultValue]);
 
-  console.log(showPreview);
-
   return (
     <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
       <Pane
