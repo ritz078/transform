@@ -8,11 +8,15 @@ export const categorizedRoutes = [
     content: [
       {
         label: "to JSX",
-        path: "/"
+        path: "/",
+        packageName: "@svgr/core",
+        packageUrl: "https://github.com/smooth-code/svgr"
       },
       {
         label: "to React Native",
-        path: "/svg-to-react-native"
+        path: "/svg-to-react-native",
+        packageName: "@svgr/core",
+        packageUrl: "https://github.com/smooth-code/svgr"
       }
     ]
   },
