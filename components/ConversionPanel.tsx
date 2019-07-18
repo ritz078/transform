@@ -101,7 +101,13 @@ const ConversionPanel: React.FunctionComponent<
 
   return (
     <>
-      <Pane display="flex" flexDirection="row" overflow="hidden" flex={1}>
+      <Pane
+        display="flex"
+        flexDirection="row"
+        overflow="hidden"
+        flex={1}
+        height={"calc(100vh - 40px)"}
+      >
         <Pane
           display="flex"
           flex={1}

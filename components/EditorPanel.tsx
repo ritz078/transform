@@ -182,6 +182,8 @@ export default function({
     setValue(defaultValue);
   }, [defaultValue]);
 
+  console.log(showPreview);
+
   return (
     <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
       <Pane
@@ -309,25 +311,27 @@ export default function({
         )}
       </Pane>
 
-      {topNotifications &&
-        topNotifications({
-          isSettingsOpen: showSettingsDialogue,
-          toggleSettings: _toggleSettingsDialog
-        })}
+      <Pane display="flex" flexDirection="column" flex={1} overflow="hidden">
+        {topNotifications &&
+          topNotifications({
+            isSettingsOpen: showSettingsDialogue,
+            toggleSettings: _toggleSettingsDialog
+          })}
 
-      <Monaco
-        language={language}
-        value={value}
-        options={options}
-        onChange={value => {
-          setValue(value);
-          onChange(value);
-        }}
-        innerRef={editorRef}
-      />
+        <Monaco
+          language={language}
+          value={value}
+          options={options}
+          onChange={value => {
+            setValue(value);
+            onChange(value);
+          }}
+          innerRef={editorRef}
+        />
+      </Pane>
 
       {IN_BROWSER && showPreview && previewElement && (
-        <>
+        <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
           <Pane
             height={50}
             backgroundColor="#fff"
@@ -359,7 +363,7 @@ export default function({
           >
             {previewElement(value)}
           </Pane>
-        </>
+        </Pane>
       )}
     </Pane>
   );
