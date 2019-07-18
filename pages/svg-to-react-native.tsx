@@ -121,10 +121,16 @@ export default function() {
         >
           <QRCode value={url} />
           <Heading size={400} marginTop={10}>
-            Powered by{" "}
-            <Link is="a" href="https://expo.io/" size={400} target="_blank">
+            Scan on{" "}
+            <Link
+              is="a"
+              href="https://expo.io/tools#client"
+              size={400}
+              target="_blank"
+            >
               expo
-            </Link>
+            </Link>{" "}
+            app.
           </Heading>
         </Pane>
       )}
