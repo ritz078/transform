@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Container } from "next/app";
-import { Button, Pane } from "evergreen-ui";
+import { Button, Text, Pane, Popover, Link, Heading } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
@@ -101,6 +101,34 @@ export default function App({ Component, pageProps }) {
         </Pane>
 
         <Pane>
+          <Popover
+            content={() => (
+              <Pane padding={20} width={400}>
+                <Heading marginBottom={10} size={400}>
+                  Your Data is always with you.
+                </Heading>
+
+                <Text size={400}>
+                  This website is static which means no data goes to the server.
+                  Everything is done on the client side. The code of this
+                  website is open source which you can find{" "}
+                  <Link size={400} href="https://github.com/ritz078/transform">
+                    on GitHub
+                  </Link>
+                </Text>
+              </Pane>
+            )}
+          >
+            <Button
+              appearance="minimal"
+              height={40}
+              css={{
+                color: "#fff !important"
+              }}
+            >
+              Privacy
+            </Button>
+          </Popover>
           <Button
             appearance="minimal"
             height={40}
