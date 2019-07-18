@@ -65,15 +65,21 @@ const ConversionPanel: React.FunctionComponent<
   const [message, setMessage] = useState("");
 
   const router = useRouter();
-  const { packageUrl, packageName } = activeRouteData(router.pathname);
+  const route = activeRouteData(router.pathname);
 
-  const packageDetails =
-    packageName && packageUrl
-      ? {
-          name: packageName,
-          url: packageUrl
-        }
-      : undefined;
+  let packageDetails;
+
+  if (route) {
+    const { packageUrl, packageName } = route;
+
+    packageDetails =
+      packageName && packageUrl
+        ? {
+            name: packageName,
+            url: packageUrl
+          }
+        : undefined;
+  }
 
   useEffect(() => {
     async function transform() {

@@ -66,7 +66,7 @@ _self.onmessage = async ({ data: { id, payload } }) => {
     });
 
     const result = await codegen({
-      filename: "a.ts",
+      filename: "a.tsx",
       schema: parse(value),
       // @ts-ignore
       plugins: plugins.map((_plugin, i) => ({

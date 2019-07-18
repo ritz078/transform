@@ -265,13 +265,15 @@ export default function({
         )}
 
         {previewElement && (
-          <IconButton
-            height={28}
-            icon={"eye-open"}
-            marginRight={10}
-            isActive={showPreview}
-            onClick={() => setPreviewVisibility(!showPreview)}
-          />
+          <Tooltip content="Preview">
+            <IconButton
+              height={28}
+              icon={"eye-open"}
+              marginRight={10}
+              isActive={showPreview}
+              onClick={() => setPreviewVisibility(!showPreview)}
+            />
+          </Tooltip>
         )}
 
         {packageDetails && (

@@ -50,7 +50,7 @@ export default function() {
       const result = converter.convert(value);
       return prettierWorker.send({
         value: result,
-        language: settings.createClass ? "javascript" : "html"
+        language: "javascript"
       });
     },
     [settings]
