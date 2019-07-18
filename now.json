@@ -5,8 +5,8 @@
   "builds": [{ "src": "next.config.js", "use": "@now/next" }],
   "routes": [
     {
-      "src": "/",
-      "dest": "/svg-to-jsx"
+      "src": "/svg-to-jsx",
+      "dest": "/"
     },
     {
       "src": "/json-to-flow-types",
