@@ -85,7 +85,9 @@ export default function App({ Component, pageProps }) {
 
   return (
     <Container>
-      <title>{activeRoute && activeRoute.searchTerm}</title>
+      <title>
+        {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
+      </title>
       <meta name="description" content={activeRoute && activeRoute.desc} />
       <Pane
         display="flex"

@@ -10,7 +10,8 @@ export const categorizedRoutes = [
         label: "to JSX",
         path: "/",
         packageName: "@svgr/core",
-        packageUrl: "https://github.com/smooth-code/svgr"
+        packageUrl: "https://github.com/smooth-code/svgr",
+        title: "Transform | A polyglot web converter."
       },
       {
         label: "to React Native",

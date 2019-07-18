@@ -77,7 +77,11 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
           <Pane display="flex" flexDirection="row" flex={1}>
             <Pane display={"flex"} flex={1} position="relative">
               <img
-                style={{ flex: 1, width: "100%" }}
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  borderRight: "1px solid #eee"
+                }}
                 src={svgToDataUrl(value)}
                 alt="original"
               />
@@ -97,7 +101,6 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
                 <img
                   style={{
                     flex: 1,
-                    borderLeft: "1px solid #eee",
                     width: "100%"
                   }}
                   src={svgToDataUrl(optimizedValue)}
