@@ -10,7 +10,7 @@
     "start": "next start",
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
     "build": "next build",
-    "now-build": "next build && next export -o dist",
+    "now-build": "next build",
     "postinstall": "patch-package"
   },
   "engines": {
