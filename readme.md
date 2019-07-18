@@ -1,14 +1,5 @@
 ![Demo](demo.png)
 
-## Development
-
-- Fork the repo
-- Create a new branch.
-- `yarn install`
-- `yarn dev` then fix issues or add features.
-- Add yourself to the contributors list using `yarn addContributor -- githubusername code`
-- Make a pull request.
-
 ## Credits
 The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
 
