@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "transform",
-  "alias": ["transform.tools"],
+  "alias": "https://transform.tools",
   "builds": [{ "src": "package.json", "use": "@now/static-build" }],
   "routes": [
     {

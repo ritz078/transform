@@ -93,11 +93,17 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
               </Badge>
             </Pane>
             <Pane display={"flex"} flex={1} position="relative">
-              <img
-                style={{ flex: 1, borderLeft: "1px solid #eee", width: "100%" }}
-                src={svgToDataUrl(optimizedValue)}
-                alt="optimized"
-              />
+              {optimizedValue && (
+                <img
+                  style={{
+                    flex: 1,
+                    borderLeft: "1px solid #eee",
+                    width: "100%"
+                  }}
+                  src={svgToDataUrl(optimizedValue)}
+                  alt="optimized"
+                />
+              )}
 
               <Badge
                 position="absolute"
