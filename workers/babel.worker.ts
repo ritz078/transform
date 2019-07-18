@@ -4,8 +4,6 @@ import jsonToMobxTree from "@assets/vendor/babel-plugin-js-to-mobx-state-tree";
 import { merge } from "lodash";
 import { prettify } from "@utils/prettify";
 import { BabelTransforms } from "@constants/babelTransforms";
-import { plugin as babelRnSvg, template } from "@utils/svg-to-react-native";
-import babelSyntaxJsx from "@babel/plugin-syntax-jsx";
 import objStylesToTemplate from "babel-plugin-object-styles-to-template";
 import babelFlowToTs from "babel-plugin-flow-to-typescript";
 
@@ -36,17 +34,6 @@ async function handleJsonToProptypes(value, id) {
   _self.postMessage({
     id,
     payload: prettyCode
-  });
-}
-
-function handleSvgToReactNative(value, id) {
-  const result = transform(value, {
-    plugins: [babelSyntaxJsx, babelRnSvg]
-  }).code;
-
-  _self.postMessage({
-    id,
-    payload: template(result)
   });
 }
 
@@ -83,8 +70,6 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   try {
     if (type === BabelTransforms.JSON_TO_PROPTYPES) {
       handleJsonToProptypes(value, id);
-    } else if (type === BabelTransforms.SVG_TO_REACT_NATIVE_SVG) {
-      handleSvgToReactNative(value, id);
     } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
       objectStylesToTemplate(value, id, settings);
     } else if (type === BabelTransforms.FLOW_TO_TYPESCRIPT) {

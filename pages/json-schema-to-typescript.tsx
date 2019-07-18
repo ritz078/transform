@@ -10,7 +10,9 @@ export default function() {
   const transformer = useCallback(async ({ value }) => {
     prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
-    const result = await compile(JSON.parse(value), "MySchema");
+    const result = await compile(JSON.parse(value), "MySchema", {
+      bannerComment: ""
+    });
     return prettierWorker.send({
       language: "typescript",
       value: result

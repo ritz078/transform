@@ -13,16 +13,15 @@ import isSvg from "is-svg";
 import { getWorker } from "@utils/workerWrapper";
 import PrettierWorker from "@workers/prettier.worker";
 import SvgoWorker from "@workers/svgo.worker";
-import { BabelTransforms } from "@constants/babelTransforms";
-import HTML from "htmltojsx";
 import { Transformer } from "@components/ConversionPanel";
+import SvgrWorker from "@workers/svgr.worker";
 
 let SnackSession;
 if (IN_BROWSER) {
   SnackSession = require("@assets/vendor/snack-sdk").SnackSession;
 }
 
-let prettier, svgo, _babelWorker, converter;
+let prettier, svgo, _babelWorker, svgr;
 export default function() {
   const name = "SVG to React Native";
   const [value, setValue] = useState("");
@@ -65,6 +64,7 @@ export default function() {
 
       prettier = prettier || getWorker(PrettierWorker);
       svgo = svgo || getWorker(SvgoWorker);
+      svgr = svgr || getWorker(SvgrWorker);
 
       let _value = await svgo.send({
         value,
@@ -77,19 +77,10 @@ export default function() {
       // set optimized value in state to be used by preview.
       setOptimizedValue(_value);
 
-      // Now that the svg has been properly optimized, we should convert it into JSX.
-      converter =
-        converter ||
-        new HTML({
-          createClass: false
-        });
-
-      _value = converter.convert(_value);
-
       _babelWorker = _babelWorker || getWorker(BabelWorker);
 
-      _value = await _babelWorker.send({
-        type: BabelTransforms.SVG_TO_REACT_NATIVE_SVG,
+      _value = await svgr.send({
+        native: true,
         value: _value
       });
 

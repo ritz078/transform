@@ -17,6 +17,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next-server/dynamic";
 import copy from "clipboard-copy";
 import { getWorker, Wrapper } from "@utils/workerWrapper";
+import Npm from "@assets/svgs/Npm";
 
 export interface EditorPanelProps {
   editable?: boolean;
@@ -274,28 +275,16 @@ export default function({
         )}
 
         {packageDetails && (
-          <a href={packageDetails.url}>
-            <svg
-              style={{
-                borderRadius: 2,
-                marginRight: 10
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-              id="n"
-              width={28}
-              height={28}
-              viewBox="0 0 16 16"
-            >
-              <defs>
-                <style
-                  dangerouslySetInnerHTML={{
-                    __html: ".cls-1{fill:#c12127;}.cls-2{fill:#fff;}"
-                  }}
-                />
-              </defs>
-              <path d="M0 16V0h16v16zM3 3v10h5V5h3v8h2V3z" className="cls-1" />
-              <path d="M3 3h10v10h-2V5H8v8H3z" className="cls-2" />
-            </svg>
+          <a
+            href={packageDetails.url}
+            style={{
+              display: "inline-flex"
+            }}
+            target="_blank"
+          >
+            <Tooltip content={packageDetails.name}>
+              <Npm />
+            </Tooltip>
           </a>
         )}
 

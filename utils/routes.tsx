@@ -148,41 +148,59 @@ export const categorizedRoutes = [
     content: [
       {
         label: "to TypeScript",
-        path: "/graphql-to-typescript"
+        path: "/graphql-to-typescript",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
       {
         label: "to Flow",
-        path: "/graphql-to-flow"
+        path: "/graphql-to-flow",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
       {
         label: "to JAVA",
-        path: "/graphql-to-java"
+        path: "/graphql-to-java",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
       {
         label: "to Resolvers Signature",
-        path: "/graphql-to-resolvers-signature"
+        path: "/graphql-to-resolvers-signature",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
 
       {
         label: "to Introspection JSON",
-        path: "/graphql-to-introspection-json"
+        path: "/graphql-to-introspection-json",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
 
       {
         label: "to Schema AST",
-        path: "/graphql-to-schema-ast"
+        path: "/graphql-to-schema-ast",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
       {
         label: "to Fragment Matcher",
-        path: "/graphql-to-fragment-matcher"
+        path: "/graphql-to-fragment-matcher",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
       {
         label: "to Components",
-        path: "/graphql-to-components"
+        path: "/graphql-to-components",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       },
       {
         label: "to TypeScript MongoDB",
-        path: "/graphql-to-typescript-mongodb"
+        path: "/graphql-to-typescript-mongodb",
+        packageUrl: "https://github.com/dotansimha/graphql-code-generator",
+        packageName: "graphql-code-generator"
       }
     ]
   },

@@ -1,16 +1,6 @@
 import { InputType } from "@components/Form";
 import { lowerCase, omit } from "lodash";
 
-export interface NativeSettingsRequired {
-  convertStyleToAttrs: boolean;
-  cleanupAttrs: boolean;
-  removeDoctype: boolean;
-  removeXMLProcInst: boolean;
-  removeComments: boolean;
-  removeMetadata: boolean;
-  removeDimensions: boolean;
-}
-
 export interface Settings {
   removeTitle: boolean;
   removeDesc: boolean;
@@ -41,9 +31,11 @@ export interface Settings {
   optimizeSvg: boolean;
 }
 
-export const nativeRequiredSettings: NativeSettingsRequired = {
-  convertStyleToAttrs: true,
+export const nativeRequiredSettings = {
   cleanupAttrs: true,
+  inlineStyles: true,
+  minifyStyles: true,
+  convertStyleToAttrs: true,
   removeDoctype: true,
   removeXMLProcInst: false,
   removeComments: true,
@@ -51,8 +43,9 @@ export const nativeRequiredSettings: NativeSettingsRequired = {
   removeDimensions: false
 };
 
-export const defaultSettings: Settings & NativeSettingsRequired = {
+export const defaultSettings = {
   optimizeSvg: true,
+  ...nativeRequiredSettings,
   removeComments: true,
   removeMetadata: true,
   removeTitle: true,
@@ -65,7 +58,6 @@ export const defaultSettings: Settings & NativeSettingsRequired = {
   removeEmptyContainers: true,
   removeViewBox: false,
   cleanupEnableBackground: true,
-  convertStyleToAttrs: true,
   convertColors: true,
   convertPathData: true,
   convertTransform: true,
@@ -81,8 +73,7 @@ export const defaultSettings: Settings & NativeSettingsRequired = {
   removeRasterImages: true,
   mergePaths: true,
   convertShapeToPath: true,
-  sortAttrs: true,
-  ...nativeRequiredSettings
+  sortAttrs: true
 };
 
 export const defaultNativeSettings = omit(
