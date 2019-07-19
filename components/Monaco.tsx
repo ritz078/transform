@@ -3,6 +3,27 @@ import { editor } from "monaco-editor";
 import { Pane } from "evergreen-ui";
 import { lightEditor } from "@utils/theme";
 
+const publicDest = IS_DEV ? "/static" : "/_next/static";
+
+// @ts-ignore
+self.MonacoEnvironment = {
+  getWorkerUrl: function(_moduleId, label) {
+    if (label === "json") {
+      return `.${publicDest}/json.worker.js`;
+    }
+    if (label === "css") {
+      return `.${publicDest}/css.worker.js`;
+    }
+    if (label === "html") {
+      return `.${publicDest}/html.worker.js`;
+    }
+    if (label === "typescript" || label === "javascript") {
+      return `.${publicDest}/typescript.worker.js`;
+    }
+    return `.${publicDest}/editor.worker.js`;
+  }
+};
+
 function noop() {}
 
 export function processSize(size) {

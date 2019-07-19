@@ -2,11 +2,11 @@
   "version": 2,
   "name": "transform",
   "alias": "transform.tools",
-  "builds": [{ "src": "package.json", "use": "@now/static-build" }],
+  "builds": [{ "src": "next.config.js", "use": "@now/next" }],
   "routes": [
     {
-      "src": "/",
-      "dest": "/svg-to-jsx"
+      "src": "/svg-to-jsx",
+      "dest": "/"
     },
     {
       "src": "/json-to-flow-types",
@@ -19,14 +19,6 @@
     {
       "src": "/json-schema-to-ts",
       "dest": "/json-schema-to-typescript"
-    },
-    {
-      "src": "^/service-worker.js$",
-      "dest": "/_next/static/service-worker.js",
-      "headers": {
-        "cache-control": "public, max-age=43200, immutable",
-        "Service-Worker-Allowed": "/"
-      }
     }
   ]
 }

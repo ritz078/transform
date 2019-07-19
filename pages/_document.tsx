@@ -8,31 +8,19 @@ interface DocumentProps {
 }
 
 function trackingScript() {
-  (function(i, s, o, g, r, a, m) {
-    i["GoogleAnalyticsObject"] = r;
-    (i[r] =
-      i[r] ||
-      function() {
-        (i[r].q = i[r].q || []).push(arguments);
-      }),
-      // @ts-ignore
-      (i[r].l = 1 * new Date());
-    (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m);
-  })(
-    window,
-    document,
-    "script",
-    "https://www.google-analytics.com/analytics.js",
-    "ga"
-  );
+  // @ts-ignore
+  if (window.dataLayer) return;
+  // @ts-ignore
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    // @ts-ignore
+    window.dataLayer.push(arguments);
+  }
+  // @ts-ignore
+  gtag("js", new Date());
 
   // @ts-ignore
-  window.ga("create", "UA-60624235-5", "auto");
-  // @ts-ignore
-  window.ga("send", "pageview");
+  gtag("config", "UA-60624235-8");
 }
 
 export default class MyDocument extends Document<DocumentProps> {
@@ -45,10 +33,6 @@ export default class MyDocument extends Document<DocumentProps> {
       css,
       hydrationScript
     };
-  }
-
-  componentDidMount(): void {
-    trackingScript();
   }
 
   render() {
@@ -69,6 +53,14 @@ export default class MyDocument extends Document<DocumentProps> {
           <Main />
           {hydrationScript}
           <NextScript />
+
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=UA-60624235-8"
+          />
+          <script>
+            <>{IN_BROWSER && trackingScript()}</>
+          </script>
         </body>
       </html>
     );
