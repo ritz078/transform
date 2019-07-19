@@ -8,15 +8,19 @@ interface DocumentProps {
 }
 
 function trackingScript() {
-  window["dataLayer"] = window["dataLayer"] || [];
+  // @ts-ignore
+  if (window.dataLayer) return;
+  // @ts-ignore
+  window.dataLayer = window.dataLayer || [];
   function gtag() {
-    window["dataLayer"].push(arguments);
+    // @ts-ignore
+    window.dataLayer.push(arguments);
   }
   // @ts-ignore
   gtag("js", new Date());
 
   // @ts-ignore
-  gtag("config", "UA-60624235-5");
+  gtag("config", "UA-60624235-8");
 }
 
 export default class MyDocument extends Document<DocumentProps> {
@@ -29,10 +33,6 @@ export default class MyDocument extends Document<DocumentProps> {
       css,
       hydrationScript
     };
-  }
-
-  componentDidMount(): void {
-    trackingScript();
   }
 
   render() {
@@ -56,8 +56,11 @@ export default class MyDocument extends Document<DocumentProps> {
 
           <script
             async
-            src="https://www.googletagmanager.com/gtag/js?id=UA-60624235-5"
+            src="https://www.googletagmanager.com/gtag/js?id=UA-60624235-8"
           />
+          <script>
+            <>{IN_BROWSER && trackingScript()}</>
+          </script>
         </body>
       </html>
     );
