@@ -107,12 +107,11 @@ export default function() {
         >
           <Twtr
             round
-            size={35}
             via="ritz078"
             title="Transform - A polyglot web converter to convert JSON, GraphQL, HTML, SVG, TypeScript and many more."
             url="https://transform.tools"
           >
-            <TwtrIcon size={40} round />
+            <TwtrIcon size={36} round />
           </Twtr>
         </a>
       </Pane>
