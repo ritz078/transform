@@ -1,6 +1,7 @@
 import { useState } from "react";
+import pkg from "../package.json";
 
-const prefix = "transform:";
+const prefix = `transform:${pkg.version}:`;
 
 export function useSessionStorage(key, initialValue) {
   // State to store our value

@@ -113,7 +113,7 @@ export default function App({ Component, pageProps }) {
           {logo}
         </Pane>
 
-        <Pane>
+        <Pane display="flex" alignItems={"center"}>
           <Popover
             content={() => (
               <Pane padding={20} width={400}>
