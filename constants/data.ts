@@ -281,3 +281,17 @@ export const jsonSchema = `{
   },
   "required": ["firstName", "lastName"]
 }`;
+
+export const jsonLd = `{
+  "@context": "https://schema.org/",
+  "@type": "Person",
+  "name": "Jane Doe",
+  "jobTitle": "Professor",
+  "telephone": "(425) 123-4567",
+  "url": "http://www.janedoe.com"
+}
+`;
+
+export const jsonLdContext = `{
+  "@context": "https://schema.org/"
+}`;
