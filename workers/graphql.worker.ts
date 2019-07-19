@@ -54,7 +54,7 @@ function getPlugins(type: GraphqlTransforms) {
 }
 
 _self.onmessage = async ({ data: { id, payload } }) => {
-  const { value, document = "", type } = payload;
+  const { value, document = "", type, extension = "tsx" } = payload;
 
   try {
     const plugins = getPlugins(type);
@@ -66,7 +66,7 @@ _self.onmessage = async ({ data: { id, payload } }) => {
     });
 
     const result = await codegen({
-      filename: "a.tsx",
+      filename: `a.${extension}`,
       schema: parse(value),
       // @ts-ignore
       plugins: plugins.map((_plugin, i) => ({
