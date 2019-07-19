@@ -92,7 +92,7 @@ export default function() {
           }}
         >
           <img
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=161868&theme=light"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=161868&theme=dark"
             alt="transform - A polyglot web converter. | Product Hunt Embed"
             style={{ width: 170, height: 40 }}
             width="250px"
