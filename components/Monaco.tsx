@@ -72,7 +72,7 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
 
     if (value !== prevProps.value) {
       this.__prevent_trigger_change_event = true;
-      this.editor.setValue(value);
+      this.editor.setValue(typeof value === "string" ? value : "");
       this.__prevent_trigger_change_event = false;
     }
 

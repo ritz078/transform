@@ -6,7 +6,6 @@ import { useCallback } from "react";
 import { Transformer } from "@components/ConversionPanel";
 import isSvg from "is-svg";
 import { getWorker } from "@utils/workerWrapper";
-import PrettierWorker from "@workers/prettier.worker";
 import SvgrWorker from "@workers/svgr.worker";
 import SvgoWorker from "@workers/svgo.worker";
 
@@ -20,7 +19,6 @@ export default function() {
     async ({ value }) => {
       if (!isSvg(value)) throw new Error("This is not a valid svg code.");
 
-      prettier = prettier || getWorker(PrettierWorker);
       svgr = svgr || getWorker(SvgrWorker);
       svgo = svgo || getWorker(SvgoWorker);
 
@@ -39,10 +37,7 @@ export default function() {
         value: _value
       });
 
-      return prettier.send({
-        value: _value,
-        language: "javascript"
-      });
+      return _value;
     },
     [settings]
   );

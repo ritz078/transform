@@ -43,6 +43,13 @@ export const categorizedRoutes = [
         path: "/json-to-flow"
       },
       {
+        label: "to GraphQL",
+        path: "/json-to-graphql",
+        packageName: "@walmartlabs/json-to-simple-graphql-schema",
+        packageUrl:
+          "https://github.com/walmartlabs/json-to-simple-graphql-schema"
+      },
+      {
         label: "to TypeScript",
         path: "/json-to-typescript"
       },
@@ -200,23 +207,23 @@ export const categorizedRoutes = [
     content: [
       {
         label: "to N-Quads",
-        path: "jsonld-to-nquads"
+        path: "/jsonld-to-nquads"
       },
       {
         label: "to Expanded",
-        path: "jsonld-to-expanded"
+        path: "/jsonld-to-expanded"
       },
       {
         label: "to Compacted",
-        path: "jsonld-to-compacted"
+        path: "/jsonld-to-compacted"
       },
       {
         label: "to Flattened",
-        path: "jsonld-to-flattened"
+        path: "/jsonld-to-flattened"
       },
       {
         label: "to Framed",
-        path: "jsonld-to-framed"
+        path: "/jsonld-to-framed"
       },
       {
         label: "to Normalized",

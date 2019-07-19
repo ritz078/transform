@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { Language, useData } from "@hooks/useData";
 import { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
+import PrettierWorker from "@workers/prettier.worker";
+import { getWorker } from "@utils/workerWrapper";
+
+let prettierWorker;
 
 function getEditorLanguage(lang: Language) {
   const mapping = {
@@ -84,12 +88,18 @@ const ConversionPanel: React.FunctionComponent<
   useEffect(() => {
     async function transform() {
       try {
+        prettierWorker = prettierWorker || getWorker(PrettierWorker);
+
         const result = await transformer({
           value,
           splitEditorValue: splitTitle ? splitValue : undefined
         });
 
-        setResult(result);
+        const prettyResult = await prettierWorker.send({
+          value: result,
+          language: resultLanguage
+        });
+        setResult(prettyResult);
         setMessage("");
       } catch (e) {
         setMessage(e.message);

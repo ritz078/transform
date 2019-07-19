@@ -38,6 +38,7 @@
     "@svgr/core": "^4.3.2",
     "@svgr/plugin-jsx": "^4.3.2",
     "@types/jsonld": "^1.5.0",
+    "@walmartlabs/json-to-simple-graphql-schema": "^2.0.0",
     "babel-plugin-flow-to-typescript": "^0.4.0",
     "babel-plugin-json-to-proptypes": "^0.1.0",
     "babel-plugin-object-styles-to-template": "^0.2.2",
