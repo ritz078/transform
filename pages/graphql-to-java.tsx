@@ -1,5 +1,5 @@
-import { useCallback } from "react";
 import * as React from "react";
+import { useCallback } from "react";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import { getWorker } from "@utils/workerWrapper";
 import GrapqlWorker from "@workers/graphql.worker";
@@ -17,12 +17,10 @@ export default function() {
     graphqlWorker = graphqlWorker || getWorker(GrapqlWorker);
     prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
-    const result = await graphqlWorker.send({
+    return graphqlWorker.send({
       type: GraphqlTransforms.TO_JAVA,
       value
     });
-
-    return result;
   }, []);
 
   return (

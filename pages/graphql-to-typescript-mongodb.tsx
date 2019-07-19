@@ -19,7 +19,8 @@ export default function() {
 
     const result = await graphqlWorker.send({
       type: GraphqlTransforms.TO_TYPESCRIPT_MONGODB,
-      value
+      value,
+      extension: "ts"
     });
 
     return prettierWorker.send({

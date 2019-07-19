@@ -19,7 +19,8 @@ export default function() {
 
     const result = await graphqlWorker.send({
       type: GraphqlTransforms.TO_INTROSPECTION_JSON,
-      value
+      value,
+      extension: "json"
     });
 
     return prettierWorker.send({

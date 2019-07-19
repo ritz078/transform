@@ -19,7 +19,8 @@ export default function() {
 
     const result = await graphqlWorker.send({
       type: GraphqlTransforms.TO_SCHEMA_AST,
-      value
+      value,
+      extension: "graphql"
     });
 
     return prettierWorker.send({

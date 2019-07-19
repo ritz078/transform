@@ -107,7 +107,7 @@ export default function({
 
   useEffect(() => {
     // @ts-ignore
-    window.__webpack_public_path__ = "/static/";
+    window.__webpack_public_path__ = "/_next/static/";
   }, []);
 
   const getSettings = useCallback(
@@ -181,8 +181,6 @@ export default function({
   useEffect(() => {
     setValue(defaultValue);
   }, [defaultValue]);
-
-  console.log(showPreview);
 
   return (
     <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
