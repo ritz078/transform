@@ -7,6 +7,7 @@ import "@styles/main.css";
 import NProgress from "nprogress";
 import { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
+import { Head } from "next/document";
 
 let reactGa;
 if (IN_BROWSER) {
@@ -99,8 +100,8 @@ export default function App({ Component, pageProps }) {
       <title>
         {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
       </title>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="description" content={activeRoute && activeRoute.desc} />
+      <meta name="viewport" content="width=1024" />
       <Pane
         display="flex"
         alignItems="center"
