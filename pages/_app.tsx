@@ -5,7 +5,7 @@ import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
 import NProgress from "nprogress";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
 
 const logo = (
