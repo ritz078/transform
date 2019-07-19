@@ -17,8 +17,6 @@ const config = {
     if (options.isServer && options.dev)
       config.plugins.push(new ForkTsCheckerWebpackPlugin());
 
-    config.optimization.minify = false;
-
     config.plugins.push(
       new webpack.DefinePlugin({
         "process.env.DEV": JSON.stringify(options.dev),
