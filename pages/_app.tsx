@@ -99,6 +99,7 @@ export default function App({ Component, pageProps }) {
       <title>
         {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
       </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="description" content={activeRoute && activeRoute.desc} />
       <Pane
         display="flex"
