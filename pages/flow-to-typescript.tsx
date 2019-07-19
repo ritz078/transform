@@ -4,16 +4,17 @@ import { useCallback } from "react";
 import BabelWorker from "@workers/babel.worker";
 import { getWorker } from "@utils/workerWrapper";
 import { BabelTransforms } from "@constants/babelTransforms";
+import babelFlowToTs from "babel-plugin-flow-to-typescript";
+import { transform } from "@babel/standalone";
 
 let babelWorker;
 export default function() {
   const transformer = useCallback(async ({ value }) => {
     babelWorker = babelWorker || getWorker(BabelWorker);
 
-    return babelWorker.send({
-      type: BabelTransforms.FLOW_TO_TYPESCRIPT,
-      value
-    });
+    return transform(value, {
+      plugins: [babelFlowToTs]
+    }).code;
   }, []);
 
   return (

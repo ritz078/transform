@@ -3,6 +3,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const withTM = require("next-transpile-modules");
 
 const config = {
   webpack(config, options) {
@@ -69,4 +70,4 @@ const config = {
   target: "serverless"
 };
 
-module.exports = withCSS(withTypescript(config));
+module.exports = withTM(withCSS(withTypescript(config)));
