@@ -7,6 +7,7 @@ import "@styles/main.css";
 import NProgress from "nprogress";
 import { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
+import { Head } from "next/document";
 
 let reactGa;
 if (IN_BROWSER) {
@@ -100,6 +101,7 @@ export default function App({ Component, pageProps }) {
         {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
       </title>
       <meta name="description" content={activeRoute && activeRoute.desc} />
+      <meta name="viewport" content="width=1024" />
       <Pane
         display="flex"
         alignItems="center"
@@ -113,7 +115,7 @@ export default function App({ Component, pageProps }) {
           {logo}
         </Pane>
 
-        <Pane>
+        <Pane display="flex" alignItems={"center"}>
           <Popover
             content={() => (
               <Pane padding={20} width={400}>
