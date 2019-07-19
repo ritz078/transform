@@ -107,6 +107,10 @@ export const categorizedRoutes = [
         path: "/json-to-yaml",
         packageName: "json2yaml",
         packageUrl: "https://github.com/jeffsu/json2yaml"
+      },
+      {
+        label: "to JSDoc",
+        path: "/json-to-jsdoc"
       }
     ]
   },
