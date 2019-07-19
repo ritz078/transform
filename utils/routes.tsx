@@ -44,7 +44,10 @@ export const categorizedRoutes = [
       },
       {
         label: "to GraphQL",
-        path: "/json-to-graphql"
+        path: "/json-to-graphql",
+        packageName: "@walmartlabs/json-to-simple-graphql-schema",
+        packageUrl:
+          "https://github.com/walmartlabs/json-to-simple-graphql-schema"
       },
       {
         label: "to TypeScript",
