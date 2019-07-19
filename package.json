@@ -37,6 +37,7 @@
     "@graphql-codegen/typescript-urql": "^1.4.0",
     "@svgr/core": "^4.3.2",
     "@svgr/plugin-jsx": "^4.3.2",
+    "@types/jsonld": "^1.5.0",
     "babel-plugin-flow-to-typescript": "^0.4.0",
     "babel-plugin-json-to-proptypes": "^0.1.0",
     "babel-plugin-object-styles-to-template": "^0.2.2",
@@ -55,6 +56,7 @@
     "json-schema-to-typescript": "^6.1.3",
     "json-to-go": "gist:0d0b8324131c80eeb7e1df20001be32f",
     "json-ts": "^1.6.4",
+    "jsonld": "^1.6.2",
     "lodash": "^4.17.14",
     "markdown": "^0.5.0",
     "monaco-editor": "^0.17.1",
@@ -75,6 +77,7 @@
     "yaml": "^1.6.0"
   },
   "devDependencies": {
+    "@now/node": "^0.12.0",
     "@types/lodash": "^4.14.135",
     "@types/next": "^8.0.5",
     "@types/prettier": "^1.16.4",
