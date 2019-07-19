@@ -11,7 +11,6 @@ import {
 } from "@constants/svgoConfig";
 import isSvg from "is-svg";
 import { getWorker } from "@utils/workerWrapper";
-import PrettierWorker from "@workers/prettier.worker";
 import SvgoWorker from "@workers/svgo.worker";
 import { Transformer } from "@components/ConversionPanel";
 import SvgrWorker from "@workers/svgr.worker";
@@ -21,7 +20,7 @@ if (IN_BROWSER) {
   SnackSession = require("@assets/vendor/snack-sdk").SnackSession;
 }
 
-let prettier, svgo, _babelWorker, svgr;
+let svgo, _babelWorker, svgr;
 export default function() {
   const name = "SVG to React Native";
   const [value, setValue] = useState("");
@@ -62,7 +61,6 @@ export default function() {
     async ({ value }) => {
       if (!isSvg(value)) throw new Error("This is not a valid svg code.");
 
-      prettier = prettier || getWorker(PrettierWorker);
       svgo = svgo || getWorker(SvgoWorker);
       svgr = svgr || getWorker(SvgrWorker);
 
@@ -86,10 +84,7 @@ export default function() {
 
       setValue(_value);
 
-      return prettier.send({
-        value: _value,
-        language: "jsx"
-      });
+      return _value;
     },
     [settings]
   );

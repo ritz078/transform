@@ -2,13 +2,13 @@ import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import React, { useCallback } from "react";
 import { getWorker } from "@utils/workerWrapper";
 import PostCssWorker from "@workers/postcss.worker";
-import PrettierWorker from "@workers/prettier.worker";
 import { useSettings } from "@hooks/useSettings";
 
-let postCssWorker, prettier;
+let postCssWorker;
 export default function() {
   const name = "CSS to JS";
 
+  // TODO
   const [settings, setSettings] = useSettings(name, {
     reactNativeCompatible: false,
     cleanPropertyNames: false
@@ -16,13 +16,9 @@ export default function() {
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
     postCssWorker = postCssWorker || getWorker(PostCssWorker);
-    prettier = prettier || getWorker(PrettierWorker);
 
     const _value = await postCssWorker.send(value);
-    return prettier.send({
-      value: `const converted = ${_value}`,
-      language: "javascript"
-    });
+    return `const converted = ${_value}`;
   }, []);
 
   return (

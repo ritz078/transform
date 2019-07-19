@@ -3,10 +3,9 @@ import { useCallback } from "react";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import { getWorker } from "@utils/workerWrapper";
 import GrapqlWorker from "@workers/graphql.worker";
-import PrettierWorker from "@workers/prettier.worker";
 import { GraphqlTransforms } from "@constants/graphqlTransforms";
 
-let graphqlWorker, prettierWorker;
+let graphqlWorker;
 
 const props = {
   acceptFiles: ".graphql, .gql"
@@ -15,7 +14,6 @@ const props = {
 export default function() {
   const transformer = useCallback<Transformer>(async ({ value }) => {
     graphqlWorker = graphqlWorker || getWorker(GrapqlWorker);
-    prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
     return graphqlWorker.send({
       type: GraphqlTransforms.TO_JAVA,

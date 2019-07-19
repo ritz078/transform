@@ -8,8 +8,6 @@ import { useSettings } from "@hooks/useSettings";
 import isSvg from "is-svg";
 import { Alert, Heading } from "evergreen-ui";
 import Router from "next/router";
-import PrettierWorker from "@workers/prettier.worker";
-import { getWorker } from "@utils/workerWrapper";
 
 interface Settings {
   createClass: boolean;
@@ -29,7 +27,6 @@ const formFields = [
   }
 ];
 
-let prettierWorker;
 export default function() {
   const name = "HTML to JSX";
 
@@ -45,13 +42,8 @@ export default function() {
       setSvg(isSvg(value));
 
       const converter = new HtmlToJsx(settings);
-      prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
-      const result = converter.convert(value);
-      return prettierWorker.send({
-        value: result,
-        language: "javascript"
-      });
+      return converter.convert(value);
     },
     [settings]
   );
