@@ -1,13 +1,5 @@
 import prettier from "prettier/standalone";
-
-const prettierParsers = {
-  css: "postcss",
-  javascript: "babel",
-  jsx: "babel",
-  svg: "html",
-  xml: "html",
-  typescript: "typescript"
-};
+import { prettierParsers, supportedLanguages } from "@utils/prettier";
 
 const plugins = [
   require("prettier/parser-babylon"),
@@ -18,19 +10,6 @@ const plugins = [
   require("prettier/parser-yaml"),
   require("prettier/parser-flow"),
   require("prettier/parser-typescript")
-];
-
-const supportedLanguages = [
-  "json",
-  "babylon",
-  "html",
-  "postcss",
-  "graphql",
-  "markdown",
-  "yaml",
-  "typescript",
-  "flow",
-  ...Object.keys(prettierParsers)
 ];
 
 export async function prettify(language: string, value: string) {
