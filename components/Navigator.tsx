@@ -4,8 +4,6 @@ import { categorizedRoutes, Route } from "@utils/routes";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SearchBox from "@components/Searchbox";
-import Twtr from "react-share/lib/TwitterShareButton";
-import TwtrIcon from "react-share/lib/TwitterIcon";
 
 export default function() {
   const router = useRouter();
@@ -72,48 +70,6 @@ export default function() {
             </Fragment>
           );
         })}
-      </Pane>
-
-      <Pane
-        backgroundColor="#fff"
-        borderTop
-        paddingY={10}
-        paddingX={10}
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <a
-          href="https://www.producthunt.com/posts/transform-3?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-transform-3"
-          target="_blank"
-          style={{
-            display: "inline-flex"
-          }}
-        >
-          <img
-            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=161868&theme=light"
-            alt="transform - A polyglot web converter. | Product Hunt Embed"
-            style={{ width: 170, height: 40 }}
-            width="250px"
-            height="54px"
-          />
-        </a>
-
-        <a
-          style={{
-            cursor: "pointer"
-          }}
-        >
-          <Twtr
-            round
-            via="ritz078"
-            title="Transform - A polyglot web converter to convert JSON, GraphQL, HTML, SVG, TypeScript and many more."
-            url="https://transform.tools"
-          >
-            <TwtrIcon size={36} round />
-          </Twtr>
-        </a>
       </Pane>
 
       <Pane paddingY={15} background="#f6f6f6" borderTop>
