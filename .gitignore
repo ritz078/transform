@@ -4,3 +4,4 @@ node_modules
 yarn-error.log
 static
 dist
+.DS_Store

@@ -5,7 +5,6 @@ import { merge } from "lodash";
 import { prettify } from "@utils/prettify";
 import { BabelTransforms } from "@constants/babelTransforms";
 import objStylesToTemplate from "babel-plugin-object-styles-to-template";
-import babelFlowToTs from "babel-plugin-flow-to-typescript";
 
 const _self: any = self;
 
@@ -46,15 +45,6 @@ function objectStylesToTemplate(value, id, settings) {
   });
 }
 
-function flowToTS(value, id) {
-  _self.postMessage({
-    id,
-    payload: transform(value, {
-      plugins: [babelFlowToTs]
-    }).code
-  });
-}
-
 function jsonToMobx(value, id) {
   _self.postMessage({
     id,
@@ -72,8 +62,6 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
       handleJsonToProptypes(value, id);
     } else if (type === BabelTransforms.OBJECT_STYLES_TO_TEMPLATE) {
       objectStylesToTemplate(value, id, settings);
-    } else if (type === BabelTransforms.FLOW_TO_TYPESCRIPT) {
-      flowToTS(value, id);
     } else if (type === BabelTransforms.JSON_TO_MOBX_TREE) {
       jsonToMobx(value, id);
     }
