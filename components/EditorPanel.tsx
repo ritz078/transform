@@ -18,6 +18,7 @@ import dynamic from "next-server/dynamic";
 import copy from "clipboard-copy";
 import { getWorker, Wrapper } from "@utils/workerWrapper";
 import Npm from "@assets/svgs/Npm";
+import { supportedLanguages } from "@utils/prettier";
 
 export interface EditorPanelProps {
   editable?: boolean;
@@ -302,7 +303,7 @@ export default function({
           </Button>
         )}
 
-        {hasPrettier && (
+        {hasPrettier && supportedLanguages.includes(language) && (
           <Button appearance="primary" onClick={prettify} height={28}>
             Prettify
           </Button>
