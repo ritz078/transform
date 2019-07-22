@@ -2,8 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "target": "esnext",
-    "jsx": "react",
-    "module": "commonjs",
+    "jsx": "preserve",
+    "module": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
@@ -25,7 +25,14 @@
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "allowJs": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
-  "exclude": ["static", "public", ".next", "node_modules"]
+  "exclude": ["static", "public", ".next", "node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
