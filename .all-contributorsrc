@@ -193,6 +193,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "timneutkens",
+      "name": "Tim Neutkens",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6324199?v=4",
+      "profile": "https://timn.tech",
+      "contributions": [
+        "plugin",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
