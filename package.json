@@ -13,6 +13,9 @@
     "now-build": "next build && cp -r ./static/* .next/static",
     "postinstall": "patch-package"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "dependencies": {
     "@babel/standalone": "^7.5.5",
     "@graphql-codegen/core": "^1.4.0",
