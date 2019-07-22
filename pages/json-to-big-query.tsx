@@ -14,7 +14,7 @@ export default function() {
       transformer={transformer}
       editorTitle="JSON"
       editorLanguage="json"
-      resultTitle="Mongoose Schema"
+      resultTitle="Big Query Schema"
       resultLanguage={"json"}
     />
   );
