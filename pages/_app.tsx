@@ -7,14 +7,11 @@ import "@styles/main.css";
 import NProgress from "nprogress";
 import { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
-import { Head } from "next/document";
 
 let reactGa;
-if (IN_BROWSER) {
+if (IN_BROWSER && !IS_DEV) {
   reactGa = require("react-ga");
-  reactGa.initialize("UA-60624235-8", {
-    debug: IS_DEV
-  });
+  reactGa.initialize("UA-60624235-8");
 }
 
 const logo = (
@@ -64,13 +61,13 @@ export default function App({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
-    reactGa.pageview(router.pathname);
+    reactGa && reactGa.pageview(router.pathname);
 
     const startProgress = () => NProgress.start();
 
     let timer;
     const stopProgress = pathname => {
-      reactGa.pageview(pathname);
+      reactGa && reactGa.pageview(pathname);
       clearTimeout(timer);
       NProgress.done();
     };
