@@ -56,7 +56,7 @@ const config = {
       }
     });
 
-    config.output.globalObject = `this`;
+    config.output.globalObject = 'typeof self !== "object" ? self : this';
 
     return config;
   },
