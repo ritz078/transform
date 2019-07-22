@@ -2,11 +2,10 @@ import ConversionPanel from "@components/ConversionPanel";
 import { useCallback } from "react";
 import * as React from "react";
 import gs from "generate-schema";
-import stringify from "stringify-object";
 
 export default function() {
-  const transformer = useCallback(({ value }) => {
-    return stringify(gs.bigquery(JSON.parse(value)));
+  const transformer = useCallback(async ({ value }) => {
+    return JSON.stringify(gs.bigquery(JSON.parse(value)), null, 2);
   }, []);
 
   return (
