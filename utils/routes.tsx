@@ -30,7 +30,9 @@ export const categorizedRoutes = [
       },
       {
         label: "to Pug",
-        path: "/html-to-pug"
+        path: "/html-to-pug",
+        packageName: "html2pug",
+        packageUrl: "https://github.com/izolate/html2pug"
       }
     ]
   },
