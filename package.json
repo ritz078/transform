@@ -51,6 +51,7 @@
     "gofmt.js": "^0.0.2",
     "graphql": "^14.4.2",
     "graphql-tools": "^4.0.5",
+    "html2pug": "^4.0.0",
     "htmltojsx": "^0.3.0",
     "is-capitalized": "^1.0.0",
     "is-svg": "^4.2.0",
