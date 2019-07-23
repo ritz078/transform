@@ -11,7 +11,8 @@
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
     "build": "next build",
     "now-build": "next build && cp -r ./static/* .next/static",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "build:analyze": "ANALYZE=true yarn build"
   },
   "engines": {
     "node": "10.x"
@@ -78,6 +79,7 @@
     "yaml": "^1.6.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^9.0.2",
     "@now/node": "^0.12.0",
     "@types/lodash": "^4.14.135",
     "@types/next": "^8.0.5",
