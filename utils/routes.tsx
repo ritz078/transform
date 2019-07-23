@@ -27,6 +27,10 @@ export const categorizedRoutes = [
       {
         label: "to JSX",
         path: "/html-to-jsx"
+      },
+      {
+        label: "to Pug",
+        path: "/html-to-pug"
       }
     ]
   },

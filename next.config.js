@@ -39,7 +39,8 @@ const config = {
           "graphql",
           "scala",
           "plaintext",
-          "java"
+          "java",
+          "pug"
         ],
         features: [
           "folding",
