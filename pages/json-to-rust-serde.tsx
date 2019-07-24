@@ -4,7 +4,6 @@ import { useCallback } from "react";
 import { useSettings } from "@hooks/useSettings";
 import { EditorPanelProps } from "@components/EditorPanel";
 import Form, { InputType } from "@components/Form";
-import jsonToRustSerde from "@assets/vendor/json-to-rust-serde";
 
 const formFields = [
   {
@@ -41,10 +40,16 @@ export default function() {
 
   const transformer = useCallback<Transformer>(
     async ({ value }) => {
-      return jsonToRustSerde(value, {
-        lang: "rust-serde",
-        rustCase: settings.snakeCase ? "snakeCase" : "camelCase"
-      });
+      const { run } = await import(
+        "@assets/vendor/json-to-rust/json_typegen_wasm"
+      );
+      return run(
+        "Hello",
+        value,
+        JSON.stringify({
+          output_mode: "rust"
+        })
+      );
     },
     [settings]
   );
