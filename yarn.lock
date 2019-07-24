@@ -5850,6 +5850,11 @@ json5@^2.1.0:
   dependencies:
     minimist "^1.2.0"
 
+json_typegen_wasm@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/json_typegen_wasm/-/json_typegen_wasm-0.3.2.tgz#5d3c107ee1b0126345cc0c79c7e6752a2539e5c6"
+  integrity sha512-O7U0G6tqjF4TAuwm5S503a2Wn7WLJMljKIT95blS0m8UrpPFPouk0Uur2RoqR2j8xA39c/MUcBPEAyIngPQ4Hg==
+
 jsonfile@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"

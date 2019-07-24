@@ -4,9 +4,7 @@ import { useCallback } from "react";
 
 export default function() {
   const transformer = useCallback(async ({ value }) => {
-    const { run } = await import(
-      "@assets/vendor/json-typegen/json_typegen_wasm"
-    );
+    const { run } = await import("json_typegen_wasm");
     return run(
       "Root",
       value,
