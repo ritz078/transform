@@ -9,7 +9,7 @@ export default function() {
       "Root",
       value,
       JSON.stringify({
-        output_mode: "typescript"
+        output_mode: "kotlin"
       })
     );
   }, []);
@@ -19,8 +19,8 @@ export default function() {
       transformer={transformer}
       editorTitle="JSON"
       editorLanguage="json"
-      resultTitle="TypeScript"
-      resultLanguage={"typescript"}
+      resultTitle="Kotlin"
+      resultLanguage={"kotlin"}
     />
   );
 }

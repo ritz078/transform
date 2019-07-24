@@ -37,36 +37,38 @@ export default function() {
                 </Heading>
               </Pane>
 
-              {(route.content as Route[]).map((a: Route) => {
-                const isActive = router.pathname === a.path;
-                return (
-                  <Link key={a.label} href={a.path}>
-                    <a
-                      style={{
-                        textDecoration: "none"
-                      }}
-                    >
-                      <Pane
-                        paddingLeft={16}
-                        paddingY={3}
-                        backgroundColor={isActive ? "#f3f3f3" : undefined}
-                        borderLeft={
-                          isActive
-                            ? "3px solid #009688"
-                            : "3px solid transparent"
-                        }
-                        css={{
-                          "&:hover": {
-                            backgroundColor: "#f5f5f5"
-                          }
+              {(route.content as Route[])
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .map((a: Route) => {
+                  const isActive = router.pathname === a.path;
+                  return (
+                    <Link key={a.label} href={a.path}>
+                      <a
+                        style={{
+                          textDecoration: "none"
                         }}
                       >
-                        <Text fontSize={13}>{a.label}</Text>
-                      </Pane>
-                    </a>
-                  </Link>
-                );
-              })}
+                        <Pane
+                          paddingLeft={16}
+                          paddingY={3}
+                          backgroundColor={isActive ? "#f3f3f3" : undefined}
+                          borderLeft={
+                            isActive
+                              ? "3px solid #009688"
+                              : "3px solid transparent"
+                          }
+                          css={{
+                            "&:hover": {
+                              backgroundColor: "#f5f5f5"
+                            }
+                          }}
+                        >
+                          <Text fontSize={13}>{a.label}</Text>
+                        </Pane>
+                      </a>
+                    </Link>
+                  );
+                })}
             </Fragment>
           );
         })}
