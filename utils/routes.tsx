@@ -57,7 +57,9 @@ export const categorizedRoutes = [
       },
       {
         label: "to TypeScript",
-        path: "/json-to-typescript"
+        path: "/json-to-typescript",
+        packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
+        packageName: "json_typegen_wasm"
       },
       {
         label: "to MobX-State-Tree Model",
@@ -120,11 +122,15 @@ export const categorizedRoutes = [
       },
       {
         label: "to Kotlin",
-        path: "/json-to-kotlin"
+        path: "/json-to-kotlin",
+        packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
+        packageName: "json_typegen_wasm"
       },
       {
         label: "to JSON Schema",
-        path: "/json-to-json-schema"
+        path: "/json-to-json-schema",
+        packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
+        packageName: "json_typegen_wasm"
       }
     ]
   },
