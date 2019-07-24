@@ -10,7 +10,7 @@
     "start": "next start",
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
     "build": "next build",
-    "now-build": "next build && cp -r ./static/* .next/static",
+    "now-build": "next build",
     "postinstall": "patch-package",
     "build:analyze": "ANALYZE=true yarn build"
   },
