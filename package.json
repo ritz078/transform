@@ -71,6 +71,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-ga": "^2.6.0",
+    "rust-keywords": "^1.1.0",
+    "sha1": "^1.1.1",
     "snack-sdk": "^2.3.1",
     "stringify-object": "^3.3.0",
     "svg-to-dataurl": "^1.0.0",

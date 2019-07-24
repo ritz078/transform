@@ -1,10 +1,10 @@
-import transform from "transform-json-types";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import * as React from "react";
 import { useCallback } from "react";
 import { useSettings } from "@hooks/useSettings";
 import { EditorPanelProps } from "@components/EditorPanel";
 import Form, { InputType } from "@components/Form";
+import jsonToRustSerde from "@assets/vendor/json-to-rust-serde";
 
 const formFields = [
   {
@@ -41,7 +41,7 @@ export default function() {
 
   const transformer = useCallback<Transformer>(
     async ({ value }) => {
-      return transform(value, {
+      return jsonToRustSerde(value, {
         lang: "rust-serde",
         rustCase: settings.snakeCase ? "snakeCase" : "camelCase"
       });
