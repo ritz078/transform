@@ -1,6 +1,9 @@
 const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true"
+});
 
 const config = {
   webpack(config, options) {
@@ -34,7 +37,8 @@ const config = {
           "graphql",
           "scala",
           "plaintext",
-          "java"
+          "java",
+          "pug"
         ],
         features: [
           "folding",
@@ -65,9 +69,11 @@ const config = {
       }
     });
 
+    config.output.webassemblyModuleFilename = "static/wasm/[modulehash].wasm";
+
     return config;
   },
   target: "serverless"
 };
 
-module.exports = withCSS(config);
+module.exports = withBundleAnalyzer(withCSS(config));
