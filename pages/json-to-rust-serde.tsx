@@ -1,18 +1,14 @@
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import * as React from "react";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 export default function() {
-  useEffect(() => {
-    import("@utils/textEncoder");
-  }, []);
-
   const transformer = useCallback<Transformer>(async ({ value }) => {
     const { run } = await import(
-      "@assets/vendor/json-to-rust/json_typegen_wasm"
+      "@assets/vendor/json-typegen/json_typegen_wasm"
     );
     return run(
-      "Hello",
+      "Root",
       value,
       JSON.stringify({
         output_mode: "rust"

@@ -1,5 +1,9 @@
 import * as wasm from "./json_typegen_wasm_bg.wasm";
 
+if (IN_BROWSER) {
+  import("@utils/textEncoder");
+}
+
 let WASM_VECTOR_LEN = 0;
 
 let cachedTextEncoder = new TextEncoder("utf-8");

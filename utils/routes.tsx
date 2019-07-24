@@ -117,6 +117,14 @@ export const categorizedRoutes = [
       {
         label: "to JSDoc",
         path: "/json-to-jsdoc"
+      },
+      {
+        label: "to Kotlin",
+        path: "/json-to-kotlin"
+      },
+      {
+        label: "to JSON Schema",
+        path: "/json-to-json-schema"
       }
     ]
   },

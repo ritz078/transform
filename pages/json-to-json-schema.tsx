@@ -11,7 +11,7 @@ export default function() {
       "Root",
       value,
       JSON.stringify({
-        output_mode: "typescript"
+        output_mode: "json_schema"
       })
     );
   }, []);
@@ -21,8 +21,8 @@ export default function() {
       transformer={transformer}
       editorTitle="JSON"
       editorLanguage="json"
-      resultTitle="TypeScript"
-      resultLanguage={"typescript"}
+      resultTitle="JSON Schema"
+      resultLanguage={"json"}
     />
   );
 }

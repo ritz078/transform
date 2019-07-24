@@ -3,10 +3,33 @@ import * as React from "react";
 import { useCallback } from "react";
 import { json2ts } from "json-ts";
 import { useSettings } from "@hooks/useSettings";
-import Form from "@components/Form";
+import Form, { InputType } from "@components/Form";
 import { EditorPanelProps } from "@components/EditorPanel";
 import { Settings } from "@constants/svgoConfig";
-import { defaultSettings, formFields } from "./json-to-typescript";
+
+const formFields = [
+  {
+    type: InputType.TEXT_INPUT,
+    key: "namespace",
+    label: "Namespace"
+  },
+  {
+    type: InputType.TEXT_INPUT,
+    key: "prefix",
+    label: "prefix"
+  },
+  {
+    type: InputType.TEXT_INPUT,
+    key: "rootName",
+    label: "Root Name"
+  }
+];
+
+const defaultSettings = {
+  namespace: "",
+  prefix: "I",
+  rootName: "RootObject"
+};
 
 export default function() {
   const name = "json-to-flow";
