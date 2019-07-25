@@ -52,7 +52,6 @@ export default class MyDocument extends Document<DocumentProps> {
             property="og:title"
             content="Transform | A polyglot web converter"
           />
-          /
           <meta property="og:image" content="/static/transform.png" />
           <meta property="og:url" content="https://transform.tools" />
           <meta name="twitter:card" content="summary_large_image" />
