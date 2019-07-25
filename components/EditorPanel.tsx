@@ -93,7 +93,7 @@ export default function({
     fontSize: 14,
     readOnly: !editable,
     codeLens: false,
-    fontFamily: "Menlo, Consolas, sans-serif",
+    fontFamily: "Menlo, Consolas, monospace, sans-serif",
     minimap: {
       enabled: false
     },
