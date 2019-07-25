@@ -43,8 +43,8 @@ const config = {
         features: [
           "folding",
           "goToDefinitionMouse",
-          "goToDefinitionCommands",
-          "referenceSearch"
+          "referenceSearch",
+          "coreCommands"
         ]
       })
     );
