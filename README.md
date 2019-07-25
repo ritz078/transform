@@ -42,6 +42,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://haroen.me"><img src="https://avatars3.githubusercontent.com/u/6270048?v=4" width="100px;" alt="Haroen Viaene"/><br /><sub><b>Haroen Viaene</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=Haroenv" title="Code">💻</a></td>
     <td align="center"><a href="https://timn.tech"><img src="https://avatars2.githubusercontent.com/u/6324199?v=4" width="100px;" alt="Tim Neutkens"/><br /><sub><b>Tim Neutkens</b></sub></a><br /><a href="#plugin-timneutkens" title="Plugin/utility libraries">🔌</a> <a href="https://github.com/ritz078/transform/commits?author=timneutkens" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/raminrez"><img src="https://avatars1.githubusercontent.com/u/7345325?v=4" width="100px;" alt="Ramin Rezaie"/><br /><sub><b>Ramin Rezaie</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=raminrez" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
