@@ -37,6 +37,7 @@ declare module "evergreen-ui" {
     delay?: number;
     size?: number;
     theme?: any;
+    css?: any;
   }
 
   export class Spinner extends React.PureComponent<SpinnerProps> {}

@@ -42,7 +42,7 @@ export default function() {
                 .map((a: Route) => {
                   const isActive = router.pathname === a.path;
                   return (
-                    <Link key={a.label} href={a.path}>
+                    <Link key={a.label} href={a.path} prefetch={false}>
                       <a
                         style={{
                           textDecoration: "none"
