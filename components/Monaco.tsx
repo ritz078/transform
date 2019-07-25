@@ -7,18 +7,18 @@ import { lightEditor } from "@utils/theme";
 self.MonacoEnvironment = {
   getWorkerUrl: function(_moduleId, label) {
     if (label === "json") {
-      return `/static/json.worker.js`;
+      return `/static/monaco/json.worker.js`;
     }
     if (label === "css") {
-      return `/static/css.worker.js`;
+      return `/static/monaco/css.worker.js`;
     }
     if (label === "html") {
-      return `/static/html.worker.js`;
+      return `/static/monaco/html.worker.js`;
     }
     if (label === "typescript" || label === "javascript") {
-      return `/static/typescript.worker.js`;
+      return `/static/monaco/typescript.worker.js`;
     }
-    return `/static/editor.worker.js`;
+    return `/static/monaco/editor.worker.js`;
   }
 };
 
