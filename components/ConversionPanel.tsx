@@ -1,4 +1,4 @@
-import { Pane, Alert } from "evergreen-ui";
+import { Pane, Alert, Spinner } from "evergreen-ui";
 import EditorPanel, { EditorPanelProps } from "@components/EditorPanel";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -67,6 +67,7 @@ const ConversionPanel: React.FunctionComponent<
   );
   const [result, setResult] = useState("");
   const [message, setMessage] = useState("");
+  const [showUpdateSpinner, toggleUpdateSpinner] = useState(false);
 
   const router = useRouter();
   const route = activeRouteData(router.pathname);
@@ -88,6 +89,7 @@ const ConversionPanel: React.FunctionComponent<
   useEffect(() => {
     async function transform() {
       try {
+        toggleUpdateSpinner(true);
         prettierWorker = prettierWorker || getWorker(PrettierWorker);
 
         const result = await transformer({
@@ -104,6 +106,7 @@ const ConversionPanel: React.FunctionComponent<
       } catch (e) {
         setMessage(e.message);
       }
+      toggleUpdateSpinner(false);
     }
 
     transform();
@@ -154,17 +157,42 @@ const ConversionPanel: React.FunctionComponent<
             </Pane>
           )}
         </Pane>
-        <EditorPanel
-          title={resultTitle}
-          defaultValue={result}
-          language={getEditorLanguage(resultLanguage)}
-          id={3}
-          editable={false}
-          hasPrettier={false}
-          settingElement={resultSettingsElement}
-          packageDetails={packageDetails}
-          {...resultEditorProps}
-        />
+        <Pane display="flex" flex={1} position="relative">
+          {showUpdateSpinner && (
+            <Pane
+              display="inline-flex"
+              position="absolute"
+              backgroundColor="#fff"
+              zIndex={9}
+              borderRadius={"50%"}
+              paddingX={8}
+              paddingY={8}
+              elevation={1}
+              top={50}
+              right={30}
+            >
+              <Spinner
+                css={{
+                  "& circle": {
+                    stroke: "#0e7ccf"
+                  }
+                }}
+                size={32}
+              />
+            </Pane>
+          )}
+          <EditorPanel
+            title={resultTitle}
+            defaultValue={result}
+            language={getEditorLanguage(resultLanguage)}
+            id={3}
+            editable={false}
+            hasPrettier={false}
+            settingElement={resultSettingsElement}
+            packageDetails={packageDetails}
+            {...resultEditorProps}
+          />
+        </Pane>
       </Pane>
 
       {message && (
