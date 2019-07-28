@@ -16,7 +16,7 @@ export default function() {
       editorTitle="TypeScript"
       editorLanguage="typescript"
       resultTitle="Flow"
-      resultLanguage={"typescript"}
+      resultLanguage={"plaintext"}
       resultEditorProps={{
         topNotifications: () => (
           <Alert
