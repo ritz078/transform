@@ -295,3 +295,33 @@ export const jsonLd = `{
 export const jsonLdContext = `{
   "@context": "https://schema.org/"
 }`;
+
+export const typescript = `declare module "evergreen-ui" {
+  export interface PaneProps {
+    elevation?: number;
+    className?: string;
+    css?: any;
+    is?: any;
+  }
+
+  type Intent = "none" | "success" | "warning" | "danger";
+  type Appearance = "minimal" | "primary" | "default";
+
+  export interface ButtonProps {
+    intent?: Intent;
+    appearance?: Appearance;
+    isLoading?: boolean;
+    isActive?: boolean;
+    iconBefore?: string;
+    iconAfter?: string;
+    disabled?: boolean;
+    theme?: any;
+    className?: string;
+    children: any;
+    is?: string;
+    href?: string;
+    onClick?: () => void;
+    css?: any;
+  }
+}
+`;

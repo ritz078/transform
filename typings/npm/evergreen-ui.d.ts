@@ -92,7 +92,7 @@ declare module "evergreen-ui" {
   type TextSize = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
   export interface HeadingProps extends EnhancerProps {
-    size: TextSize;
+    size?: TextSize;
     is?: string;
     onClick?: () => void;
   }
