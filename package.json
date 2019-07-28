@@ -46,6 +46,7 @@
     "clipboard-copy": "^3.0.0",
     "evergreen-ui": "^4.18.1",
     "flow-to-ts": "gist:3f49c8bd7a2b71429dcae28f2c2d1d97",
+    "flowgen": "^1.9.2",
     "formik": "^1.5.8",
     "generate-schema": "^2.6.0",
     "gofmt.js": "^0.0.2",
@@ -87,7 +88,6 @@
     "@next/bundle-analyzer": "^9.0.2",
     "@now/node": "^0.12.0",
     "@types/lodash": "^4.14.135",
-    "@types/next": "^8.0.5",
     "@types/prettier": "^1.18.0",
     "@types/react": "^16.8.23",
     "@types/svgo": "^1.2.1",
@@ -95,7 +95,7 @@
     "babel-plugin-module-resolver": "^3.2.0",
     "husky": "^3.0.1",
     "imagemin-lint-staged": "^0.4.0",
-    "lint-staged": "^9.2.0",
+    "lint-staged": "^9.2.1",
     "monaco-editor-webpack-plugin": "^1.7.0",
     "patch-package": "^6.1.2",
     "postinstall-postinstall": "^2.0.0",
@@ -103,7 +103,7 @@
     "pretty-quick": "^1.11.1",
     "typescript": "3.5.3",
     "ui-box": "^2.1.0",
-    "webpack": "^4.37.0",
+    "webpack": "^4.38.0",
     "worker-loader": "^2.0.0"
   },
   "husky": {
