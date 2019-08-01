@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { Container } from "next/app";
+import React from "react";
+import App, { Container } from "next/app";
 import { Button, Text, Pane, Popover, Link, Heading } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
 import NProgress from "nprogress";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import { activeRouteData } from "@utils/routes";
 
 let reactGa;
@@ -57,117 +57,129 @@ function renderHeadWay() {
   })("https://cdn.headwayapp.co/widget.js");
 }
 
-export default function App({ Component, pageProps }) {
-  const router = useRouter();
+export default class extends App {
+  timer: any;
 
-  useEffect(() => {
-    reactGa && reactGa.pageview(router.pathname);
+  private stopProgress = pathname => {
+    reactGa && reactGa.pageview(pathname);
+    clearTimeout(this.timer);
+    NProgress.done();
+  };
 
-    const startProgress = () => NProgress.start();
+  private startProgress = () => NProgress.start();
 
-    let timer;
-    const stopProgress = pathname => {
-      reactGa && reactGa.pageview(pathname);
-      clearTimeout(timer);
-      NProgress.done();
-    };
+  private showProgressBar = () => {
+    this.timer = setTimeout(this.startProgress, 300);
+    Router.events.on("routeChangeComplete", this.stopProgress);
+    Router.events.on("routeChangeError", this.stopProgress);
+  };
 
-    const showProgressBar = () => {
-      timer = setTimeout(startProgress, 300);
-      router.events.on("routeChangeComplete", stopProgress);
-      router.events.on("routeChangeError", stopProgress);
-    };
+  componentDidMount(): void {
+    reactGa && reactGa.pageview(Router.pathname);
+    Router.events.on("routeChangeStart", this.showProgressBar);
+  }
 
-    router.events.on("routeChangeStart", showProgressBar);
+  componentWillUnmount(): void {
+    Router.events.off("routeChangeComplete", this.stopProgress);
+    Router.events.off("routeChangeError", this.stopProgress);
+    Router.events.off("routeChangeStart", this.showProgressBar);
+    this.timer && clearTimeout(this.timer);
+  }
 
-    return () => {
-      router.events.off("routeChangeComplete", stopProgress);
-      router.events.off("routeChangeError", stopProgress);
-      router.events.off("routeChangeStart", showProgressBar);
-      timer && clearTimeout(timer);
-    };
-  }, []);
+  render(): JSX.Element {
+    const { Component, pageProps } = this.props;
 
-  renderHeadWay();
+    renderHeadWay();
 
-  const activeRoute = activeRouteData(router.pathname);
+    const activeRoute = IN_BROWSER
+      ? activeRouteData(Router.pathname)
+      : undefined;
 
-  return (
-    <Container>
-      <title>
-        {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
-      </title>
-      <meta name="description" content={activeRoute && activeRoute.desc} />
-      <meta name="viewport" content="width=1024" />
-      <Pane
-        display="flex"
-        alignItems="center"
-        flexDirection="row"
-        is="header"
-        height={40}
-        backgroundColor="#0e7ccf"
-        paddingRight={20}
-      >
-        <Pane flex={1} display="flex" paddingX={20} className="logo-transform">
-          {logo}
-        </Pane>
-
-        <Pane display="flex" alignItems={"center"}>
-          <Popover
-            content={() => (
-              <Pane padding={20} width={400}>
-                <Heading marginBottom={10} size={400}>
-                  Your Data is always with you.
-                </Heading>
-
-                <Text size={400}>
-                  This website is static which means no data goes to the server.
-                  Everything is done on the client side. The code of this
-                  website is open source which you can find{" "}
-                  <Link size={400} href="https://github.com/ritz078/transform">
-                    on GitHub
-                  </Link>
-                </Text>
-              </Pane>
-            )}
+    return (
+      <Container>
+        <title>
+          {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
+        </title>
+        <meta name="description" content={activeRoute && activeRoute.desc} />
+        <meta name="viewport" content="width=1024" />
+        <Pane
+          display="flex"
+          alignItems="center"
+          flexDirection="row"
+          is="header"
+          height={40}
+          backgroundColor="#0e7ccf"
+          paddingRight={20}
+        >
+          <Pane
+            flex={1}
+            display="flex"
+            paddingX={20}
+            className="logo-transform"
           >
+            {logo}
+          </Pane>
+
+          <Pane display="flex" alignItems={"center"}>
+            <Popover
+              content={() => (
+                <Pane padding={20} width={400}>
+                  <Heading marginBottom={10} size={400}>
+                    Your Data is always with you.
+                  </Heading>
+
+                  <Text size={400}>
+                    This website is static which means no data goes to the
+                    server. Everything is done on the client side. The code of
+                    this website is open source which you can find{" "}
+                    <Link
+                      size={400}
+                      href="https://github.com/ritz078/transform"
+                    >
+                      on GitHub
+                    </Link>
+                  </Text>
+                </Pane>
+              )}
+            >
+              <Button
+                appearance="minimal"
+                height={40}
+                css={{
+                  color: "#fff !important"
+                }}
+              >
+                Privacy
+              </Button>
+            </Popover>
             <Button
               appearance="minimal"
               height={40}
+              className="transform-changelog"
               css={{
                 color: "#fff !important"
               }}
             >
-              Privacy
+              Changelog
             </Button>
-          </Popover>
-          <Button
-            appearance="minimal"
-            height={40}
-            className="transform-changelog"
-            css={{
-              color: "#fff !important"
-            }}
-          >
-            Changelog
-          </Button>
-          <a href="https://github.com/ritz078/transform" target="_blank">
-            <Button
-              appearance="minimal"
-              height={40}
-              css={{
-                color: "#fff !important"
-              }}
-            >
-              GitHub
-            </Button>
-          </a>
+            <a href="https://github.com/ritz078/transform" target="_blank">
+              <Button
+                appearance="minimal"
+                height={40}
+                css={{
+                  color: "#fff !important"
+                }}
+              >
+                GitHub
+              </Button>
+            </a>
+          </Pane>
         </Pane>
-      </Pane>
-      <Pane display="flex" flexDirection="row">
-        <Navigator />
-        <Component {...pageProps} />
-      </Pane>
-    </Container>
-  );
+        <Pane display="flex" flexDirection="row">
+          <Navigator />
+          <Component {...pageProps} />
+        </Pane>
+      </Container>
+    );
+  }
 }
