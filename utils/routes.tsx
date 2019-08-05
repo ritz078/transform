@@ -264,8 +264,14 @@ export const categorizedRoutes = [
     iconName: "",
     content: [
       {
-        label: "Flow to Typescript",
+        label: "Flow to TypeScript",
         path: "/flow-to-typescript"
+      },
+      {
+        label: "TypeScript to Flow",
+        path: "/typescript-to-flow",
+        packageName: "flowgen",
+        packageUrl: "https://github.com/joarwilk/flowgen"
       },
       {
         label: "XML to JSON",

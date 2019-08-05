@@ -129,15 +129,19 @@ export default class extends App {
                   </Heading>
 
                   <Text size={400}>
-                    This website is static which means no data goes to the
-                    server. Everything is done on the client side. The code of
-                    this website is open source which you can find{" "}
+                    This website doesn't track your data. The code of this
+                    website is open source which you can find{" "}
                     <Link
                       size={400}
                       href="https://github.com/ritz078/transform"
                     >
                       on GitHub
                     </Link>
+                    . All the transformations except{" "}
+                    <Link href="/typescript-to-flow">
+                      <a>TypeScript to Flow</a>
+                    </Link>{" "}
+                    work entirely on the client side.
                   </Text>
                 </Pane>
               )}
