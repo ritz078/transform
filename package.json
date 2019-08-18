@@ -62,6 +62,7 @@
     "json-ts": "^1.6.4",
     "json_typegen_wasm": "^0.3.3",
     "jsonld": "^1.6.2",
+    "load-script": "^1.0.0",
     "lodash": "^4.17.15",
     "markdown": "^0.5.0",
     "monaco-editor": "^0.17.1",
