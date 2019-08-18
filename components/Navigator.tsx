@@ -1,12 +1,19 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Heading, Pane, Text } from "evergreen-ui";
 import { categorizedRoutes, Route } from "@utils/routes";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import SearchBox from "@components/Searchbox";
+import loadScript from "load-script";
 
 export default function() {
   const router = useRouter();
+
+  useEffect(() => {
+    loadScript("https://codefund.io/properties/367/funder.js", {
+      async: true
+    });
+  }, []);
 
   return (
     <Pane
@@ -76,7 +83,6 @@ export default function() {
 
       <Pane borderTop>
         <div id="codefund" />
-        <script src="https://codefund.io/properties/367/funder.js" async />
         <Heading size={400} paddingY={15} textAlign="center">
           Created by{" "}
           <Link href="https://twitter.com/ritz078">
