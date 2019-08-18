@@ -1,6 +1,6 @@
 import React from "react";
 import App, { Container } from "next/app";
-import { Button, Text, Pane, Popover, Link, Heading } from "evergreen-ui";
+import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
@@ -121,41 +121,6 @@ export default class extends App {
           </Pane>
 
           <Pane display="flex" alignItems={"center"}>
-            <Popover
-              content={() => (
-                <Pane padding={20} width={400}>
-                  <Heading marginBottom={10} size={400}>
-                    Your Data is always with you.
-                  </Heading>
-
-                  <Text size={400}>
-                    This website doesn't track your data. The code of this
-                    website is open source which you can find{" "}
-                    <Link
-                      size={400}
-                      href="https://github.com/ritz078/transform"
-                    >
-                      on GitHub
-                    </Link>
-                    . All the transformations except{" "}
-                    <Link href="/typescript-to-flow">
-                      <a>TypeScript to Flow</a>
-                    </Link>{" "}
-                    work entirely on the client side.
-                  </Text>
-                </Pane>
-              )}
-            >
-              <Button
-                appearance="minimal"
-                height={40}
-                css={{
-                  color: "#fff !important"
-                }}
-              >
-                Privacy
-              </Button>
-            </Popover>
             <Button
               appearance="minimal"
               height={40}

@@ -74,8 +74,10 @@ export default function() {
         })}
       </Pane>
 
-      <Pane paddingY={15} background="#f6f6f6" borderTop>
-        <Heading size={400} textAlign="center">
+      <Pane borderTop>
+        <div id="codefund" />
+        <script src="https://codefund.io/properties/367/funder.js" async />
+        <Heading size={400} paddingY={15} textAlign="center">
           Created by{" "}
           <Link href="https://twitter.com/ritz078">
             <a target="_blank">@ritz078</a>

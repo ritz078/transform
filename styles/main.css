@@ -33,7 +33,7 @@ html {
 #nprogress .peg {
   display: block;
   position: absolute;
-  right: 0px;
+  right: 0;
   width: 100px;
   height: 100%;
   box-shadow: 0 0 10px #22b6ff, 0 0 5px #a5ddcd;
@@ -57,4 +57,25 @@ html {
   position: absolute !important;
   right: 0;
   top: 0;
+}
+
+.cf-wrapper {
+  padding: 4px !important;
+  font-size: 12px !important;
+  border-radius: 0 !important;
+  line-height: 1.3 !important;
+  border-bottom: 1px solid #dfdfdf;
+}
+
+.cf-img {
+  max-width: 90px !important;
+  height: 70px;
+}
+
+.cf-img-wrapper {
+  margin-right: 8px !important;
+}
+
+.cf-powered-by {
+  text-align: right !important;
 }
