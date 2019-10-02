@@ -111,6 +111,10 @@ export const categorizedRoutes = [
         packageUrl: "https://github.com/mholt/json-to-go"
       },
       {
+        label: "to Go Bson",
+        path: "/json-to-go-bson"
+      },
+      {
         label: "to YAML",
         path: "/json-to-yaml",
         packageName: "json2yaml",
