@@ -212,6 +212,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "guilhermesteves",
+      "name": "Guilherme Esteves",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2166045?v=4",
+      "profile": "https://guilhermeesteves.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
