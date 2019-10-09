@@ -9634,6 +9634,15 @@ uglify-js@^3.5.1:
     commander "~2.20.0"
     source-map "~0.6.1"
 
+ui-box@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/ui-box/-/ui-box-2.1.0.tgz#b967eafb80d1304d4e4bf5aae3b8f25caf949c92"
+  integrity sha512-2ARy6sjCHP7hithU0VlpYNZQzFs/EB/FRIUOX7qxL/96OnudwXMbJPyvWv+b4dAV1xxerSXlbMSJS43mVKviSQ==
+  dependencies:
+    "@emotion/hash" "^0.7.1"
+    inline-style-prefixer "^5.0.4"
+    prop-types "^15.7.2"
+
 ui-box@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/ui-box/-/ui-box-1.4.0.tgz#c146158bb750eef006e78780296fc0a2eff3004b"
@@ -9643,15 +9652,6 @@ ui-box@^1.4.0:
     glamor "^2.20.0"
     inline-style-prefixer "^4.0.2"
     prop-types "^15.6.0"
-
-ui-box@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ui-box/-/ui-box-2.1.0.tgz#b967eafb80d1304d4e4bf5aae3b8f25caf949c92"
-  integrity sha512-2ARy6sjCHP7hithU0VlpYNZQzFs/EB/FRIUOX7qxL/96OnudwXMbJPyvWv+b4dAV1xxerSXlbMSJS43mVKviSQ==
-  dependencies:
-    "@emotion/hash" "^0.7.1"
-    inline-style-prefixer "^5.0.4"
-    prop-types "^15.7.2"
 
 unbzip2-stream@^1.0.9:
   version "1.3.3"
