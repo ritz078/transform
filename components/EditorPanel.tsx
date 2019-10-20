@@ -14,7 +14,7 @@ import {
   Tooltip
 } from "evergreen-ui";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next-server/dynamic";
+import dynamic from "next/dynamic";
 import copy from "clipboard-copy";
 import { getWorker, Wrapper } from "@utils/workerWrapper";
 import Npm from "@assets/svgs/Npm";
