@@ -4,4 +4,4 @@ node_modules
 yarn-error.log
 dist
 .DS_Store
-static/monaco/*.worker.js.map
+public/static/monaco/*.worker.js.map
