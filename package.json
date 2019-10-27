@@ -15,7 +15,7 @@
     "build:analyze": "ANALYZE=true yarn build"
   },
   "engines": {
-    "node": "10.x"
+    "node": "12.13.0"
   },
   "dependencies": {
     "@babel/standalone": "^7.5.5",
