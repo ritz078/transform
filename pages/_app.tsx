@@ -96,7 +96,7 @@ export default class extends App {
       : undefined;
 
     return (
-      <Container>
+      <>
         <title>
           {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
         </title>
@@ -148,7 +148,7 @@ export default class extends App {
           <Navigator />
           <Component {...pageProps} />
         </Pane>
-      </Container>
+      </>
     );
   }
 }
