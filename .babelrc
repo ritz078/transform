@@ -6,7 +6,7 @@
     ["module-resolver", {
       "root": ["."],
       "alias": {
-        "@components": "./components",
+        "@components": "./src/components",
         "@styles": "./src/styles",
         "@utils": "./src/utils",
         "@workers": "./src/workers",
