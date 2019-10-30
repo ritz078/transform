@@ -7,7 +7,7 @@
       "root": ["."],
       "alias": {
         "@components": "./components",
-        "@styles": "./styles",
+        "@styles": "./src/styles",
         "@utils": "./src/utils",
         "@workers": "./src/workers",
         "@typings": "./typings",

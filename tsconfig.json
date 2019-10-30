@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@styles/*": ["./styles/*"],
+      "@styles/*": ["./src/styles/*"],
       "@components/*": ["./components/*"],
       "@constants/*": ["./constants/*"],
       "@workers/*": ["./src/workers/*"],
