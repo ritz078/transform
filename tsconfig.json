@@ -19,9 +19,9 @@
       "@components/*": ["./components/*"],
       "@constants/*": ["./constants/*"],
       "@workers/*": ["./src/workers/*"],
-      "@utils/*": ["./utils/*"],
+      "@utils/*": ["./src/utils/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@assets/*": ["./assets/*"]
+      "@assets/*": ["./src/assets/*"]
     },
     "lib": ["dom", "es2016", "webworker"],
     "typeRoots": ["./node_modules/@types", "./typings/npm"],

@@ -8,10 +8,10 @@
       "alias": {
         "@components": "./components",
         "@styles": "./styles",
-        "@utils": "./utils",
+        "@utils": "./src/utils",
         "@workers": "./src/workers",
         "@typings": "./typings",
-        "@assets":  "./assets",
+        "@assets":  "./src/assets",
         "@constants": "./constants",
         "@hooks": "./src/hooks"
       }
