@@ -13,7 +13,7 @@
         "@typings": "./typings",
         "@assets":  "./assets",
         "@constants": "./constants",
-        "@hooks": "./hooks"
+        "@hooks": "./src/hooks"
       }
     }]
   ]

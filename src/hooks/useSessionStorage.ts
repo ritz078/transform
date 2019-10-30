@@ -1,5 +1,5 @@
 import { useState } from "react";
-import pkg from "../package.json";
+import pkg from "../../package.json";
 
 const prefix = `transform:${pkg.version}:`;
 
