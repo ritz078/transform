@@ -12,7 +12,7 @@
         "@workers": "./src/workers",
         "@typings": "./typings",
         "@assets":  "./src/assets",
-        "@constants": "./constants",
+        "@constants": "./src/constants",
         "@hooks": "./src/hooks"
       }
     }]

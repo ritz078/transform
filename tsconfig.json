@@ -17,7 +17,7 @@
     "paths": {
       "@styles/*": ["./src/styles/*"],
       "@components/*": ["./src/components/*"],
-      "@constants/*": ["./constants/*"],
+      "@constants/*": ["./src/constants/*"],
       "@workers/*": ["./src/workers/*"],
       "@utils/*": ["./src/utils/*"],
       "@hooks/*": ["./src/hooks/*"],
