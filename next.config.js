@@ -21,7 +21,7 @@ const config = {
         IS_DEV: options.dev
       }),
       new MonacoWebpackPlugin({
-        output: "../../public/static/monaco",
+        output: "../../public/monaco",
         languages: [
           "json",
           "typescript",

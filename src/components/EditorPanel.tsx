@@ -108,7 +108,7 @@ export default function({
 
   useEffect(() => {
     // @ts-ignore
-    window.__webpack_public_path__ = "/_next/static/";
+    window.__webpack_public_path__ = "/_next/";
   }, []);
 
   const getSettings = useCallback(
