@@ -54,7 +54,7 @@ const config = {
       use: {
         loader: "worker-loader",
         options: {
-          name: "static/[hash].worker.js",
+          name: "/[hash].worker.js",
           publicPath: "/_next/"
         }
       }
@@ -69,7 +69,7 @@ const config = {
       }
     });
 
-    config.output.webassemblyModuleFilename = "static/wasm/[modulehash].wasm";
+    config.output.webassemblyModuleFilename = "wasm/[modulehash].wasm";
 
     return config;
   },
