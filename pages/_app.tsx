@@ -1,5 +1,5 @@
 import React from "react";
-import App, { Container } from "next/app";
+import App from "next/app";
 import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
@@ -96,7 +96,7 @@ export default class extends App {
       : undefined;
 
     return (
-      <Container>
+      <>
         <title>
           {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
         </title>
@@ -148,7 +148,7 @@ export default class extends App {
           <Navigator />
           <Component {...pageProps} />
         </Pane>
-      </Container>
+      </>
     );
   }
 }
