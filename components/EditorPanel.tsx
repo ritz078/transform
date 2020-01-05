@@ -19,6 +19,7 @@ import copy from "clipboard-copy";
 import { getWorker, Wrapper } from "@utils/workerWrapper";
 import Npm from "@assets/svgs/Npm";
 import { supportedLanguages } from "@utils/prettier";
+import { useDropzone } from "react-dropzone";
 
 export interface EditorPanelProps {
   editable?: boolean;
@@ -132,7 +133,8 @@ export default function({
     [showSettingsDialogue]
   );
 
-  const onFilePicked = useCallback((files, close) => {
+  const onFilePicked = useCallback((files, close = () => {}) => {
+    if (!(files && files.length)) return;
     const file = files[0];
     const reader = new FileReader();
     reader.readAsText(file, "utf-8");
@@ -142,6 +144,16 @@ export default function({
       close();
     };
   }, []);
+
+  const { getRootProps } = useDropzone({
+    onDrop: files => onFilePicked(files),
+    disabled: !editable,
+    accept: acceptFiles,
+    onDropRejected: () =>
+      toaster.danger("This file type is not supported.", {
+        id
+      })
+  });
 
   const copyValue = useCallback(() => {
     copy(value);
@@ -310,7 +322,15 @@ export default function({
         )}
       </Pane>
 
-      <Pane display="flex" flexDirection="column" flex={1} overflow="hidden">
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          overflow: "hidden"
+        }}
+        {...getRootProps()}
+      >
         {topNotifications &&
           topNotifications({
             isSettingsOpen: showSettingsDialogue,
@@ -327,7 +347,7 @@ export default function({
           }}
           innerRef={editorRef}
         />
-      </Pane>
+      </div>
 
       {IN_BROWSER && showPreview && previewElement && (
         <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
