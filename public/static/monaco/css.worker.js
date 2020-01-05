@@ -9387,7 +9387,7 @@ function getWellformedEdit(textEdit) {
 /*!***************************************************************************************************************!*\
   !*** ./node_modules/monaco-editor/esm/vs/language/css/_deps/vscode-css-languageservice/cssLanguageService.js ***!
   \***************************************************************************************************************/
-/*! exports provided: getCSSLanguageService, getSCSSLanguageService, getLESSLanguageService, TextDocument, ClientCapabilities, FileType, Position, Range, Location, LocationLink, Color, ColorInformation, ColorPresentation, FoldingRangeKind, FoldingRange, DiagnosticRelatedInformation, DiagnosticSeverity, DiagnosticTag, Diagnostic, Command, TextEdit, TextDocumentEdit, CreateFile, RenameFile, DeleteFile, WorkspaceEdit, WorkspaceChange, TextDocumentIdentifier, VersionedTextDocumentIdentifier, TextDocumentItem, MarkupKind, MarkupContent, CompletionItemKind, InsertTextFormat, CompletionItemTag, CompletionItem, CompletionList, MarkedString, Hover, ParameterInformation, SignatureInformation, DocumentHighlightKind, DocumentHighlight, SymbolKind, SymbolTag, SymbolInformation, DocumentSymbol, CodeActionKind, CodeActionContext, CodeAction, CodeLens, FormattingOptions, DocumentLink, SelectionRange, EOL */
+/*! exports provided: getCSSLanguageService, getSCSSLanguageService, getLESSLanguageService, TextDocument, Position, Range, Location, LocationLink, Color, ColorInformation, ColorPresentation, FoldingRangeKind, FoldingRange, DiagnosticRelatedInformation, DiagnosticSeverity, DiagnosticTag, Diagnostic, Command, TextEdit, TextDocumentEdit, CreateFile, RenameFile, DeleteFile, WorkspaceEdit, WorkspaceChange, TextDocumentIdentifier, VersionedTextDocumentIdentifier, TextDocumentItem, MarkupKind, MarkupContent, CompletionItemKind, InsertTextFormat, CompletionItemTag, CompletionItem, CompletionList, MarkedString, Hover, ParameterInformation, SignatureInformation, DocumentHighlightKind, DocumentHighlight, SymbolKind, SymbolTag, SymbolInformation, DocumentSymbol, CodeActionKind, CodeActionContext, CodeAction, CodeLens, FormattingOptions, DocumentLink, SelectionRange, EOL, ClientCapabilities, FileType */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9411,10 +9411,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_scssNavigation_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./services/scssNavigation.js */ "./node_modules/monaco-editor/esm/vs/language/css/_deps/vscode-css-languageservice/services/scssNavigation.js");
 /* harmony import */ var _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./cssLanguageTypes.js */ "./node_modules/monaco-editor/esm/vs/language/css/_deps/vscode-css-languageservice/cssLanguageTypes.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TextDocument", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["TextDocument"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ClientCapabilities", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["ClientCapabilities"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FileType", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["FileType"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Position", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["Position"]; });
 
@@ -9514,6 +9510,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "EOL", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["EOL"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ClientCapabilities", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["ClientCapabilities"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FileType", function() { return _cssLanguageTypes_js__WEBPACK_IMPORTED_MODULE_14__["FileType"]; });
+
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -9586,7 +9586,7 @@ function getLESSLanguageService(options) {
 /*!*************************************************************************************************************!*\
   !*** ./node_modules/monaco-editor/esm/vs/language/css/_deps/vscode-css-languageservice/cssLanguageTypes.js ***!
   \*************************************************************************************************************/
-/*! exports provided: TextDocument, ClientCapabilities, FileType, Position, Range, Location, LocationLink, Color, ColorInformation, ColorPresentation, FoldingRangeKind, FoldingRange, DiagnosticRelatedInformation, DiagnosticSeverity, DiagnosticTag, Diagnostic, Command, TextEdit, TextDocumentEdit, CreateFile, RenameFile, DeleteFile, WorkspaceEdit, WorkspaceChange, TextDocumentIdentifier, VersionedTextDocumentIdentifier, TextDocumentItem, MarkupKind, MarkupContent, CompletionItemKind, InsertTextFormat, CompletionItemTag, CompletionItem, CompletionList, MarkedString, Hover, ParameterInformation, SignatureInformation, DocumentHighlightKind, DocumentHighlight, SymbolKind, SymbolTag, SymbolInformation, DocumentSymbol, CodeActionKind, CodeActionContext, CodeAction, CodeLens, FormattingOptions, DocumentLink, SelectionRange, EOL */
+/*! exports provided: TextDocument, Position, Range, Location, LocationLink, Color, ColorInformation, ColorPresentation, FoldingRangeKind, FoldingRange, DiagnosticRelatedInformation, DiagnosticSeverity, DiagnosticTag, Diagnostic, Command, TextEdit, TextDocumentEdit, CreateFile, RenameFile, DeleteFile, WorkspaceEdit, WorkspaceChange, TextDocumentIdentifier, VersionedTextDocumentIdentifier, TextDocumentItem, MarkupKind, MarkupContent, CompletionItemKind, InsertTextFormat, CompletionItemTag, CompletionItem, CompletionList, MarkedString, Hover, ParameterInformation, SignatureInformation, DocumentHighlightKind, DocumentHighlight, SymbolKind, SymbolTag, SymbolInformation, DocumentSymbol, CodeActionKind, CodeActionContext, CodeAction, CodeLens, FormattingOptions, DocumentLink, SelectionRange, EOL, ClientCapabilities, FileType */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31191,7 +31191,7 @@ function getBrowserLabel(browsers) {
 /*!****************************************************************************************************************!*\
   !*** ./node_modules/monaco-editor/esm/vs/language/css/_deps/vscode-css-languageservice/languageFacts/facts.js ***!
   \****************************************************************************************************************/
-/*! exports provided: cssDataManager, browserNames, getEntryDescription, getBrowserLabel, colorFunctions, colors, colorKeywords, isColorConstructor, isColorValue, hexDigit, colorFromHex, colorFrom256RGB, colorFromHSL, hslFromColor, getColorValue, positionKeywords, repeatStyleKeywords, lineStyleKeywords, lineWidthKeywords, boxKeywords, geometryBoxKeywords, cssWideKeywords, imageFunctions, transitionTimingFunctions, basicShapeFunctions, units, html5Tags, svgElements, pageBoxDirectives, CSSDataProvider, CSSDataManager */
+/*! exports provided: browserNames, getEntryDescription, getBrowserLabel, colorFunctions, colors, colorKeywords, isColorConstructor, isColorValue, hexDigit, colorFromHex, colorFrom256RGB, colorFromHSL, hslFromColor, getColorValue, positionKeywords, repeatStyleKeywords, lineStyleKeywords, lineWidthKeywords, boxKeywords, geometryBoxKeywords, cssWideKeywords, imageFunctions, transitionTimingFunctions, basicShapeFunctions, units, html5Tags, svgElements, pageBoxDirectives, CSSDataProvider, CSSDataManager, cssDataManager */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
