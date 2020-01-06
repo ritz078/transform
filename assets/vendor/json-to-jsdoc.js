@@ -35,7 +35,7 @@ function keepUniqueTypes(obj, jsonObjects) {
   const numberOfJSONDefinitions = jsonObjects.length;
 
   Object.keys(obj).forEach(objectKey => {
-    if (objectKey.includes(".")) {
+    if (!objectKey.includes(".")) {
       if (obj[objectKey].length < numberOfJSONDefinitions) {
         temporaryObject[objectKey].push("undefined");
       }
