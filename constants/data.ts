@@ -296,8 +296,7 @@ export const jsonLdContext = `{
   "@context": "https://schema.org/"
 }`;
 
-export const typescript = `declare module "evergreen-ui" {
-  export interface PaneProps {
+export const typescript = `export interface PaneProps {
     elevation?: number;
     className?: string;
     css?: any;
@@ -323,5 +322,4 @@ export const typescript = `declare module "evergreen-ui" {
     onClick?: () => void;
     css?: any;
   }
-}
 `;
