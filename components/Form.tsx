@@ -65,6 +65,7 @@ const Form = <T extends object>({
                         value={props.values[key]}
                         onChange={props.handleChange}
                         name={key}
+                        defaultValue={options[0].value}
                       >
                         {options.map(({ label, value }) => (
                           <option
