@@ -64,10 +64,14 @@ const Form = <T extends object>({
                       <Select
                         value={props.values[key]}
                         onChange={props.handleChange}
+                        name={key}
                       >
                         {options.map(({ label, value }) => (
-                          <option value={value} selected>
-                            {label} selected={props.values[key] === value}
+                          <option
+                            value={value}
+                            selected={props.values[key] === value}
+                          >
+                            {label}
                           </option>
                         ))}
                       </Select>

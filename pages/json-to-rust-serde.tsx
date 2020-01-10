@@ -74,6 +74,7 @@ export default function() {
       resultTitle="Rust Serde"
       resultLanguage={"rust"}
       resultSettingsElement={getSettingsElement}
+      settings={settings}
     />
   );
 }
