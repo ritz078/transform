@@ -56,6 +56,14 @@ declare module "evergreen-ui" {
         description?: string;
       }
     ) => void;
+    danger: (
+      text: string,
+      options?: {
+        id?: string | number;
+        duration?: number;
+        description?: string;
+      }
+    ) => void;
     closeAll: () => void;
   };
 

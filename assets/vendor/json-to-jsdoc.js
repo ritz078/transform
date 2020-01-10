@@ -5,7 +5,7 @@ function checkIfNeededToAddUndefinedType(obj, objectKey) {
   Object.keys(obj).forEach(currentKey => {
     // check if it's our Object,
     // like awards.editions in awards.editions.outcome
-    if (~currentKey.indexOf(objectKey) && currentKey !== objectKey) {
+    if (currentKey.includes(objectKey) && currentKey !== objectKey) {
       temporaryObject[currentKey] = obj[currentKey];
     }
   });
@@ -35,7 +35,7 @@ function keepUniqueTypes(obj, jsonObjects) {
   const numberOfJSONDefinitions = jsonObjects.length;
 
   Object.keys(obj).forEach(objectKey => {
-    if (!~objectKey.indexOf(".")) {
+    if (!objectKey.includes(".")) {
       if (obj[objectKey].length < numberOfJSONDefinitions) {
         temporaryObject[objectKey].push("undefined");
       }
