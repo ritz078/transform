@@ -68,6 +68,7 @@ const Form = <T extends object>({
                       >
                         {options.map(({ label, value }) => (
                           <option
+                            key={value}
                             value={value}
                             selected={props.values[key] === value}
                           >
