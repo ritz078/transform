@@ -25,6 +25,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     const generator: SchemaGenerator = new SchemaGenerator(
       program,
       createParser(program, config),
+      // @ts-ignore
       createFormatter(config)
     );
     const schema = generator.createSchema("*");
