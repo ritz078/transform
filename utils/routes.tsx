@@ -264,6 +264,23 @@ export const categorizedRoutes = [
     }))
   },
   {
+    category: "TypeScript",
+    content: [
+      {
+        label: "to Flow",
+        path: "/typescript-to-flow",
+        packageName: "flowgen",
+        packageUrl: "https://github.com/joarwilk/flowgen"
+      },
+      {
+        label: "to JSON Schema",
+        path: "/typescript-to-json-schema",
+        packageName: "ts-json-schema-generator",
+        packageUrl: "https://github.com/vega/ts-json-schema-generator"
+      }
+    ]
+  },
+  {
     category: "Others",
     iconName: "",
     content: [
