@@ -1,0 +1,17 @@
+diff --git a/node_modules/json_typegen_wasm/index.js b/node_modules/json_typegen_wasm/index.js
+index 2201033..e7f5ab6 100644
+--- a/node_modules/json_typegen_wasm/index.js
++++ b/node_modules/json_typegen_wasm/index.js
+@@ -4,6 +4,12 @@ let WASM_VECTOR_LEN = 0;
+ 
+ let cachedTextEncoder = new TextEncoder('utf-8');
+ 
++if (IN_BROWSER && !window.TextEncoder) {
++    const encoding = require("text-encoding-utf-8");
++    window.TextEncoder = encoding.TextEncoder;
++    window.TextDecoder = encoding.TextDecoder;
++}
++
+ const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
+     ? function (arg, view) {
+     return cachedTextEncoder.encodeInto(arg, view);

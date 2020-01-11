@@ -33,6 +33,6 @@
     "esModuleInterop": true,
     "isolatedModules": true
   },
-  "exclude": ["static", "public", ".next", "node_modules"],
+  "exclude": ["static", "public", ".next", "node_modules", "assets"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

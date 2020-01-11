@@ -255,6 +255,8 @@ declare module "evergreen-ui" {
   export interface SelectProps extends EnhancerProps {
     value: string;
     onChange: (e) => void;
+    name?: string;
+    defaultValue?: string | number;
   }
 
   export class Select extends React.PureComponent<SelectProps> {}
