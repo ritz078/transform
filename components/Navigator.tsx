@@ -86,9 +86,9 @@ export default function() {
         <div id="codefund" />
         <Heading size={400} paddingY={15} textAlign="center">
           Created by{" "}
-          <Link href="https://twitter.com/ritz078">
-            <a target="_blank">@ritz078</a>
-          </Link>
+          <a href="https://twitter.com/ritz078" target="_blank">
+            @ritz078
+          </a>
         </Heading>
       </Pane>
     </Pane>
