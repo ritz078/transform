@@ -87,721 +87,40 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "5QBA");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./node_modules/monaco-editor/esm/vs/editor/editor.worker.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "5QBA":
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/arrays.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/arrays.js ***!
+  \*****************************************************************/
+/*! exports provided: tail, tail2, equals, binarySearch, findFirstInSorted, mergeSort, groupBy, coalesce, isFalsyOrEmpty, isNonEmptyArray, distinct, distinctES6, firstIndex, first, flatten, range, arrayInsert, pushToStart, pushToEnd, asArray */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/errors.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-// Avoid circular dependency on EventEmitter by implementing a subset of the interface.
-var ErrorHandler = /** @class */ (function () {
-    function ErrorHandler() {
-        this.listeners = [];
-        this.unexpectedErrorHandler = function (e) {
-            setTimeout(function () {
-                if (e.stack) {
-                    throw new Error(e.message + '\n\n' + e.stack);
-                }
-                throw e;
-            }, 0);
-        };
-    }
-    ErrorHandler.prototype.emit = function (e) {
-        this.listeners.forEach(function (listener) {
-            listener(e);
-        });
-    };
-    ErrorHandler.prototype.onUnexpectedError = function (e) {
-        this.unexpectedErrorHandler(e);
-        this.emit(e);
-    };
-    // For external errors, we don't want the listeners to be called
-    ErrorHandler.prototype.onUnexpectedExternalError = function (e) {
-        this.unexpectedErrorHandler(e);
-    };
-    return ErrorHandler;
-}());
-
-var errorHandler = new ErrorHandler();
-function onUnexpectedError(e) {
-    // ignore errors from cancelled promises
-    if (!isPromiseCanceledError(e)) {
-        errorHandler.onUnexpectedError(e);
-    }
-    return undefined;
-}
-function onUnexpectedExternalError(e) {
-    // ignore errors from cancelled promises
-    if (!isPromiseCanceledError(e)) {
-        errorHandler.onUnexpectedExternalError(e);
-    }
-    return undefined;
-}
-function transformErrorForSerialization(error) {
-    if (error instanceof Error) {
-        var name_1 = error.name, message = error.message;
-        var stack = error.stacktrace || error.stack;
-        return {
-            $isError: true,
-            name: name_1,
-            message: message,
-            stack: stack
-        };
-    }
-    // return as is
-    return error;
-}
-var canceledName = 'Canceled';
-/**
- * Checks if the given error is a promise in canceled state
- */
-function isPromiseCanceledError(error) {
-    return error instanceof Error && error.name === canceledName && error.message === canceledName;
-}
-/**
- * Returns an error that signals cancellation.
- */
-function canceled() {
-    var error = new Error(canceledName);
-    error.name = error.message;
-    return error;
-}
-function illegalArgument(name) {
-    if (name) {
-        return new Error("Illegal argument: " + name);
-    }
-    else {
-        return new Error('Illegal argument');
-    }
-}
-function illegalState(name) {
-    if (name) {
-        return new Error("Illegal state: " + name);
-    }
-    else {
-        return new Error('Illegal state');
-    }
-}
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/lifecycle.js
-function isDisposable(thing) {
-    return typeof thing.dispose === 'function'
-        && thing.dispose.length === 0;
-}
-function lifecycle_dispose(first) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
-    if (Array.isArray(first)) {
-        first.forEach(function (d) { return d && d.dispose(); });
-        return [];
-    }
-    else if (rest.length === 0) {
-        if (first) {
-            first.dispose();
-            return first;
-        }
-        return undefined;
-    }
-    else {
-        lifecycle_dispose(first);
-        lifecycle_dispose(rest);
-        return [];
-    }
-}
-function combinedDisposable(disposables) {
-    return { dispose: function () { return lifecycle_dispose(disposables); } };
-}
-function toDisposable(fn) {
-    return { dispose: function () { fn(); } };
-}
-var Disposable = /** @class */ (function () {
-    function Disposable() {
-        this._toDispose = [];
-        this._lifecycle_disposable_isDisposed = false;
-    }
-    Disposable.prototype.dispose = function () {
-        this._lifecycle_disposable_isDisposed = true;
-        this._toDispose = lifecycle_dispose(this._toDispose);
-    };
-    Disposable.prototype._register = function (t) {
-        if (this._lifecycle_disposable_isDisposed) {
-            console.warn('Registering disposable on object that has already been disposed.');
-            t.dispose();
-        }
-        else {
-            this._toDispose.push(t);
-        }
-        return t;
-    };
-    Disposable.None = Object.freeze({ dispose: function () { } });
-    return Disposable;
-}());
-
-var ImmortalReference = /** @class */ (function () {
-    function ImmortalReference(object) {
-        this.object = object;
-    }
-    ImmortalReference.prototype.dispose = function () { };
-    return ImmortalReference;
-}());
-
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/platform.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var LANGUAGE_DEFAULT = 'en';
-var _isWindows = false;
-var _isMacintosh = false;
-var _isLinux = false;
-var _isNative = false;
-var _isWeb = false;
-var _locale = undefined;
-var _language = LANGUAGE_DEFAULT;
-var _translationsConfigFile = undefined;
-var isElectronRenderer = (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'renderer');
-// OS detection
-if (typeof navigator === 'object' && !isElectronRenderer) {
-    var userAgent = navigator.userAgent;
-    _isWindows = userAgent.indexOf('Windows') >= 0;
-    _isMacintosh = userAgent.indexOf('Macintosh') >= 0;
-    _isLinux = userAgent.indexOf('Linux') >= 0;
-    _isWeb = true;
-    _locale = navigator.language;
-    _language = _locale;
-}
-else if (typeof process === 'object') {
-    _isWindows = (process.platform === 'win32');
-    _isMacintosh = (process.platform === 'darwin');
-    _isLinux = (process.platform === 'linux');
-    _locale = LANGUAGE_DEFAULT;
-    _language = LANGUAGE_DEFAULT;
-    var rawNlsConfig = process.env['VSCODE_NLS_CONFIG'];
-    if (rawNlsConfig) {
-        try {
-            var nlsConfig = JSON.parse(rawNlsConfig);
-            var resolved = nlsConfig.availableLanguages['*'];
-            _locale = nlsConfig.locale;
-            // VSCode's default language is 'en'
-            _language = resolved ? resolved : LANGUAGE_DEFAULT;
-            _translationsConfigFile = nlsConfig._translationsConfigFile;
-        }
-        catch (e) {
-        }
-    }
-    _isNative = true;
-}
-var _platform = 0 /* Web */;
-if (_isNative) {
-    if (_isMacintosh) {
-        _platform = 1 /* Mac */;
-    }
-    else if (_isWindows) {
-        _platform = 3 /* Windows */;
-    }
-    else if (_isLinux) {
-        _platform = 2 /* Linux */;
-    }
-}
-var isWindows = _isWindows;
-var isMacintosh = _isMacintosh;
-var isLinux = _isLinux;
-var isNative = _isNative;
-var isWeb = _isWeb;
-var _globals = (typeof self === 'object' ? self : typeof global === 'object' ? global : {});
-var globals = _globals;
-var _setImmediate = null;
-function setImmediate(callback) {
-    if (_setImmediate === null) {
-        if (globals.setImmediate) {
-            _setImmediate = globals.setImmediate.bind(globals);
-        }
-        else if (typeof process !== 'undefined' && typeof process.nextTick === 'function') {
-            _setImmediate = process.nextTick.bind(process);
-        }
-        else {
-            _setImmediate = globals.setTimeout.bind(globals);
-        }
-    }
-    return _setImmediate(callback);
-}
-var OS = (_isMacintosh ? 2 /* Macintosh */ : (_isWindows ? 1 /* Windows */ : 3 /* Linux */));
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/types.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var _typeof = {
-    number: 'number',
-    string: 'string',
-    undefined: 'undefined',
-    object: 'object',
-    function: 'function'
-};
-/**
- * @returns whether the provided parameter is a JavaScript Array or not.
- */
-function isArray(array) {
-    if (Array.isArray) {
-        return Array.isArray(array);
-    }
-    if (array && typeof (array.length) === _typeof.number && array.constructor === Array) {
-        return true;
-    }
-    return false;
-}
-/**
- * @returns whether the provided parameter is a JavaScript String or not.
- */
-function isString(str) {
-    if (typeof (str) === _typeof.string || str instanceof String) {
-        return true;
-    }
-    return false;
-}
-/**
- *
- * @returns whether the provided parameter is of type `object` but **not**
- *	`null`, an `array`, a `regexp`, nor a `date`.
- */
-function isObject(obj) {
-    // The method can't do a type cast since there are type (like strings) which
-    // are subclasses of any put not positvely matched by the function. Hence type
-    // narrowing results in wrong results.
-    return typeof obj === _typeof.object
-        && obj !== null
-        && !Array.isArray(obj)
-        && !(obj instanceof RegExp)
-        && !(obj instanceof Date);
-}
-/**
- * In **contrast** to just checking `typeof` this will return `false` for `NaN`.
- * @returns whether the provided parameter is a JavaScript Number or not.
- */
-function isNumber(obj) {
-    if ((typeof (obj) === _typeof.number || obj instanceof Number) && !isNaN(obj)) {
-        return true;
-    }
-    return false;
-}
-/**
- * @returns whether the provided parameter is a JavaScript Boolean or not.
- */
-function isBoolean(obj) {
-    return obj === true || obj === false;
-}
-/**
- * @returns whether the provided parameter is undefined.
- */
-function isUndefined(obj) {
-    return typeof (obj) === _typeof.undefined;
-}
-/**
- * @returns whether the provided parameter is undefined or null.
- */
-function isUndefinedOrNull(obj) {
-    return isUndefined(obj) || obj === null;
-}
-var types_hasOwnProperty = Object.prototype.hasOwnProperty;
-/**
- * @returns whether the provided parameter is an empty JavaScript Object or not.
- */
-function isEmptyObject(obj) {
-    if (!isObject(obj)) {
-        return false;
-    }
-    for (var key in obj) {
-        if (types_hasOwnProperty.call(obj, key)) {
-            return false;
-        }
-    }
-    return true;
-}
-/**
- * @returns whether the provided parameter is a JavaScript Function or not.
- */
-function isFunction(obj) {
-    return typeof obj === _typeof.function;
-}
-function validateConstraints(args, constraints) {
-    var len = Math.min(args.length, constraints.length);
-    for (var i = 0; i < len; i++) {
-        validateConstraint(args[i], constraints[i]);
-    }
-}
-function validateConstraint(arg, constraint) {
-    if (isString(constraint)) {
-        if (typeof arg !== constraint) {
-            throw new Error("argument does not match constraint: typeof " + constraint);
-        }
-    }
-    else if (isFunction(constraint)) {
-        try {
-            if (arg instanceof constraint) {
-                return;
-            }
-        }
-        catch (_a) {
-            // ignore
-        }
-        if (!isUndefinedOrNull(arg) && arg.constructor === constraint) {
-            return;
-        }
-        if (constraint.length === 1 && constraint.call(undefined, arg) === true) {
-            return;
-        }
-        throw new Error("argument does not match one of these constraints: arg instanceof constraint, arg.constructor === constraint, nor constraint(arg) === true");
-    }
-}
-function getAllPropertyNames(obj) {
-    var res = [];
-    var proto = Object.getPrototypeOf(obj);
-    while (Object.prototype !== proto) {
-        res = res.concat(Object.getOwnPropertyNames(proto));
-        proto = Object.getPrototypeOf(proto);
-    }
-    return res;
-}
-/**
- * Converts null to undefined, passes all other values through.
- */
-function withNullAsUndefined(x) {
-    return x === null ? undefined : x;
-}
-/**
- * Converts undefined to null, passes all other values through.
- */
-function withUndefinedAsNull(x) {
-    return typeof x === 'undefined' ? null : x;
-}
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/worker/simpleWorker.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var __extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-
-
-var INITIALIZE = '$initialize';
-var webWorkerWarningLogged = false;
-function logOnceWebWorkerWarning(err) {
-    if (!isWeb) {
-        // running tests
-        return;
-    }
-    if (!webWorkerWarningLogged) {
-        webWorkerWarningLogged = true;
-        console.warn('Could not create web worker(s). Falling back to loading web worker code in main thread, which might cause UI freezes. Please see https://github.com/Microsoft/monaco-editor#faq');
-    }
-    console.warn(err.message);
-}
-var simpleWorker_SimpleWorkerProtocol = /** @class */ (function () {
-    function SimpleWorkerProtocol(handler) {
-        this._workerId = -1;
-        this._handler = handler;
-        this._lastSentReq = 0;
-        this._pendingReplies = Object.create(null);
-    }
-    SimpleWorkerProtocol.prototype.setWorkerId = function (workerId) {
-        this._workerId = workerId;
-    };
-    SimpleWorkerProtocol.prototype.sendMessage = function (method, args) {
-        var _this = this;
-        var req = String(++this._lastSentReq);
-        return new Promise(function (resolve, reject) {
-            _this._pendingReplies[req] = {
-                resolve: resolve,
-                reject: reject
-            };
-            _this._send({
-                vsWorker: _this._workerId,
-                req: req,
-                method: method,
-                args: args
-            });
-        });
-    };
-    SimpleWorkerProtocol.prototype.handleMessage = function (serializedMessage) {
-        var message;
-        try {
-            message = JSON.parse(serializedMessage);
-        }
-        catch (e) {
-            // nothing
-            return;
-        }
-        if (!message || !message.vsWorker) {
-            return;
-        }
-        if (this._workerId !== -1 && message.vsWorker !== this._workerId) {
-            return;
-        }
-        this._handleMessage(message);
-    };
-    SimpleWorkerProtocol.prototype._handleMessage = function (msg) {
-        var _this = this;
-        if (msg.seq) {
-            var replyMessage = msg;
-            if (!this._pendingReplies[replyMessage.seq]) {
-                console.warn('Got reply to unknown seq');
-                return;
-            }
-            var reply = this._pendingReplies[replyMessage.seq];
-            delete this._pendingReplies[replyMessage.seq];
-            if (replyMessage.err) {
-                var err = replyMessage.err;
-                if (replyMessage.err.$isError) {
-                    err = new Error();
-                    err.name = replyMessage.err.name;
-                    err.message = replyMessage.err.message;
-                    err.stack = replyMessage.err.stack;
-                }
-                reply.reject(err);
-                return;
-            }
-            reply.resolve(replyMessage.res);
-            return;
-        }
-        var requestMessage = msg;
-        var req = requestMessage.req;
-        var result = this._handler.handleMessage(requestMessage.method, requestMessage.args);
-        result.then(function (r) {
-            _this._send({
-                vsWorker: _this._workerId,
-                seq: req,
-                res: r,
-                err: undefined
-            });
-        }, function (e) {
-            if (e.detail instanceof Error) {
-                // Loading errors have a detail property that points to the actual error
-                e.detail = transformErrorForSerialization(e.detail);
-            }
-            _this._send({
-                vsWorker: _this._workerId,
-                seq: req,
-                res: undefined,
-                err: transformErrorForSerialization(e)
-            });
-        });
-    };
-    SimpleWorkerProtocol.prototype._send = function (msg) {
-        var strMsg = JSON.stringify(msg);
-        // console.log('SENDING: ' + strMsg);
-        this._handler.sendMessage(strMsg);
-    };
-    return SimpleWorkerProtocol;
-}());
-/**
- * Main thread side
- */
-var SimpleWorkerClient = /** @class */ (function (_super) {
-    __extends(SimpleWorkerClient, _super);
-    function SimpleWorkerClient(workerFactory, moduleId) {
-        var _this = _super.call(this) || this;
-        var lazyProxyReject = null;
-        _this._worker = _this._register(workerFactory.create('vs/base/common/worker/simpleWorker', function (msg) {
-            _this._protocol.handleMessage(msg);
-        }, function (err) {
-            // in Firefox, web workers fail lazily :(
-            // we will reject the proxy
-            if (lazyProxyReject) {
-                lazyProxyReject(err);
-            }
-        }));
-        _this._protocol = new simpleWorker_SimpleWorkerProtocol({
-            sendMessage: function (msg) {
-                _this._worker.postMessage(msg);
-            },
-            handleMessage: function (method, args) {
-                // Intentionally not supporting worker -> main requests
-                return Promise.resolve(null);
-            }
-        });
-        _this._protocol.setWorkerId(_this._worker.getId());
-        // Gather loader configuration
-        var loaderConfiguration = null;
-        if (typeof self.require !== 'undefined' && typeof self.require.getConfig === 'function') {
-            // Get the configuration from the Monaco AMD Loader
-            loaderConfiguration = self.require.getConfig();
-        }
-        else if (typeof self.requirejs !== 'undefined') {
-            // Get the configuration from requirejs
-            loaderConfiguration = self.requirejs.s.contexts._.config;
-        }
-        // Send initialize message
-        _this._onModuleLoaded = _this._protocol.sendMessage(INITIALIZE, [
-            _this._worker.getId(),
-            moduleId,
-            loaderConfiguration
-        ]);
-        _this._lazyProxy = new Promise(function (resolve, reject) {
-            lazyProxyReject = reject;
-            _this._onModuleLoaded.then(function (availableMethods) {
-                var proxy = {};
-                for (var _i = 0, availableMethods_1 = availableMethods; _i < availableMethods_1.length; _i++) {
-                    var methodName = availableMethods_1[_i];
-                    proxy[methodName] = createProxyMethod(methodName, proxyMethodRequest);
-                }
-                resolve(proxy);
-            }, function (e) {
-                reject(e);
-                _this._onError('Worker failed to load ' + moduleId, e);
-            });
-        });
-        // Create proxy to loaded code
-        var proxyMethodRequest = function (method, args) {
-            return _this._request(method, args);
-        };
-        var createProxyMethod = function (method, proxyMethodRequest) {
-            return function () {
-                var args = Array.prototype.slice.call(arguments, 0);
-                return proxyMethodRequest(method, args);
-            };
-        };
-        return _this;
-    }
-    SimpleWorkerClient.prototype.getProxyObject = function () {
-        return this._lazyProxy;
-    };
-    SimpleWorkerClient.prototype._request = function (method, args) {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._onModuleLoaded.then(function () {
-                _this._protocol.sendMessage(method, args).then(resolve, reject);
-            }, reject);
-        });
-    };
-    SimpleWorkerClient.prototype._onError = function (message, error) {
-        console.error(message);
-        console.info(error);
-    };
-    return SimpleWorkerClient;
-}(Disposable));
-
-/**
- * Worker side
- */
-var simpleWorker_SimpleWorkerServer = /** @class */ (function () {
-    function SimpleWorkerServer(postSerializedMessage, requestHandler) {
-        var _this = this;
-        this._requestHandler = requestHandler;
-        this._protocol = new simpleWorker_SimpleWorkerProtocol({
-            sendMessage: function (msg) {
-                postSerializedMessage(msg);
-            },
-            handleMessage: function (method, args) { return _this._handleMessage(method, args); }
-        });
-    }
-    SimpleWorkerServer.prototype.onmessage = function (msg) {
-        this._protocol.handleMessage(msg);
-    };
-    SimpleWorkerServer.prototype._handleMessage = function (method, args) {
-        if (method === INITIALIZE) {
-            return this.initialize(args[0], args[1], args[2]);
-        }
-        if (!this._requestHandler || typeof this._requestHandler[method] !== 'function') {
-            return Promise.reject(new Error('Missing requestHandler or method: ' + method));
-        }
-        try {
-            return Promise.resolve(this._requestHandler[method].apply(this._requestHandler, args));
-        }
-        catch (e) {
-            return Promise.reject(e);
-        }
-    };
-    SimpleWorkerServer.prototype.initialize = function (workerId, moduleId, loaderConfig) {
-        var _this = this;
-        this._protocol.setWorkerId(workerId);
-        if (this._requestHandler) {
-            // static request handler
-            var methods = [];
-            for (var _i = 0, _a = getAllPropertyNames(this._requestHandler); _i < _a.length; _i++) {
-                var prop = _a[_i];
-                if (typeof this._requestHandler[prop] === 'function') {
-                    methods.push(prop);
-                }
-            }
-            return Promise.resolve(methods);
-        }
-        if (loaderConfig) {
-            // Remove 'baseUrl', handling it is beyond scope for now
-            if (typeof loaderConfig.baseUrl !== 'undefined') {
-                delete loaderConfig['baseUrl'];
-            }
-            if (typeof loaderConfig.paths !== 'undefined') {
-                if (typeof loaderConfig.paths.vs !== 'undefined') {
-                    delete loaderConfig.paths['vs'];
-                }
-            }
-            // Since this is in a web worker, enable catching errors
-            loaderConfig.catchError = true;
-            self.require.config(loaderConfig);
-        }
-        return new Promise(function (resolve, reject) {
-            // Use the global require to be sure to get the global config
-            self.require([moduleId], function () {
-                var result = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    result[_i] = arguments[_i];
-                }
-                var handlerModule = result[0];
-                _this._requestHandler = handlerModule.create();
-                if (!_this._requestHandler) {
-                    reject(new Error("No RequestHandler!"));
-                    return;
-                }
-                var methods = [];
-                for (var _a = 0, _b = getAllPropertyNames(_this._requestHandler); _a < _b.length; _a++) {
-                    var prop = _b[_a];
-                    if (typeof _this._requestHandler[prop] === 'function') {
-                        methods.push(prop);
-                    }
-                }
-                resolve(methods);
-            }, reject);
-        });
-    };
-    return SimpleWorkerServer;
-}());
-
-/**
- * Called on the worker side
- */
-function create(postMessage) {
-    return new simpleWorker_SimpleWorkerServer(postMessage, null);
-}
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/arrays.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tail", function() { return tail; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tail2", function() { return tail2; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "equals", function() { return equals; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "binarySearch", function() { return binarySearch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "findFirstInSorted", function() { return findFirstInSorted; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mergeSort", function() { return mergeSort; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "groupBy", function() { return groupBy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "coalesce", function() { return coalesce; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFalsyOrEmpty", function() { return isFalsyOrEmpty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNonEmptyArray", function() { return isNonEmptyArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distinct", function() { return distinct; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "distinctES6", function() { return distinctES6; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "firstIndex", function() { return firstIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "first", function() { return first; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flatten", function() { return flatten; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "range", function() { return range; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayInsert", function() { return arrayInsert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pushToStart", function() { return pushToStart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pushToEnd", function() { return pushToEnd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asArray", function() { return asArray; });
 /**
  * Returns the last element of an array.
  * @param array The array.
@@ -1004,7 +323,7 @@ function flatten(arr) {
     var _a;
     return (_a = []).concat.apply(_a, arr);
 }
-function arrays_range(arg, to) {
+function range(arg, to) {
     var from = typeof to === 'number' ? arg : 0;
     if (typeof to === 'number') {
         from = arg;
@@ -1059,43 +378,161 @@ function asArray(x) {
     return Array.isArray(x) ? x : [x];
 }
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/diff/diffChange.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/cancellation.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/cancellation.js ***!
+  \***********************************************************************/
+/*! exports provided: CancellationToken, CancellationTokenSource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CancellationToken", function() { return CancellationToken; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CancellationTokenSource", function() { return CancellationTokenSource; });
+/* harmony import */ var _event_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./event.js */ "./node_modules/monaco-editor/esm/vs/base/common/event.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-/**
- * Represents information about a specific difference between two sequences.
- */
-var DiffChange = /** @class */ (function () {
-    /**
-     * Constructs a new DiffChange with the given sequence information
-     * and content.
-     */
-    function DiffChange(originalStart, originalLength, modifiedStart, modifiedLength) {
-        //Debug.Assert(originalLength > 0 || modifiedLength > 0, "originalLength and modifiedLength cannot both be <= 0");
-        this.originalStart = originalStart;
-        this.originalLength = originalLength;
-        this.modifiedStart = modifiedStart;
-        this.modifiedLength = modifiedLength;
+
+var shortcutEvent = Object.freeze(function (callback, context) {
+    var handle = setTimeout(callback.bind(context), 0);
+    return { dispose: function () { clearTimeout(handle); } };
+});
+var CancellationToken;
+(function (CancellationToken) {
+    function isCancellationToken(thing) {
+        if (thing === CancellationToken.None || thing === CancellationToken.Cancelled) {
+            return true;
+        }
+        if (thing instanceof MutableToken) {
+            return true;
+        }
+        if (!thing || typeof thing !== 'object') {
+            return false;
+        }
+        return typeof thing.isCancellationRequested === 'boolean'
+            && typeof thing.onCancellationRequested === 'function';
     }
-    /**
-     * The end point (exclusive) of the change in the original sequence.
-     */
-    DiffChange.prototype.getOriginalEnd = function () {
-        return this.originalStart + this.originalLength;
+    CancellationToken.isCancellationToken = isCancellationToken;
+    CancellationToken.None = Object.freeze({
+        isCancellationRequested: false,
+        onCancellationRequested: _event_js__WEBPACK_IMPORTED_MODULE_0__["Event"].None
+    });
+    CancellationToken.Cancelled = Object.freeze({
+        isCancellationRequested: true,
+        onCancellationRequested: shortcutEvent
+    });
+})(CancellationToken || (CancellationToken = {}));
+var MutableToken = /** @class */ (function () {
+    function MutableToken() {
+        this._isCancelled = false;
+        this._emitter = null;
+    }
+    MutableToken.prototype.cancel = function () {
+        if (!this._isCancelled) {
+            this._isCancelled = true;
+            if (this._emitter) {
+                this._emitter.fire(undefined);
+                this.dispose();
+            }
+        }
     };
-    /**
-     * The end point (exclusive) of the change in the modified sequence.
-     */
-    DiffChange.prototype.getModifiedEnd = function () {
-        return this.modifiedStart + this.modifiedLength;
+    Object.defineProperty(MutableToken.prototype, "isCancellationRequested", {
+        get: function () {
+            return this._isCancelled;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MutableToken.prototype, "onCancellationRequested", {
+        get: function () {
+            if (this._isCancelled) {
+                return shortcutEvent;
+            }
+            if (!this._emitter) {
+                this._emitter = new _event_js__WEBPACK_IMPORTED_MODULE_0__["Emitter"]();
+            }
+            return this._emitter.event;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    MutableToken.prototype.dispose = function () {
+        if (this._emitter) {
+            this._emitter.dispose();
+            this._emitter = null;
+        }
     };
-    return DiffChange;
+    return MutableToken;
+}());
+var CancellationTokenSource = /** @class */ (function () {
+    function CancellationTokenSource(parent) {
+        this._token = undefined;
+        this._parentListener = undefined;
+        this._parentListener = parent && parent.onCancellationRequested(this.cancel, this);
+    }
+    Object.defineProperty(CancellationTokenSource.prototype, "token", {
+        get: function () {
+            if (!this._token) {
+                // be lazy and create the token only when
+                // actually needed
+                this._token = new MutableToken();
+            }
+            return this._token;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CancellationTokenSource.prototype.cancel = function () {
+        if (!this._token) {
+            // save an object by returning the default
+            // cancelled token when cancellation happens
+            // before someone asks for the token
+            this._token = CancellationToken.Cancelled;
+        }
+        else if (this._token instanceof MutableToken) {
+            // actually cancel
+            this._token.cancel();
+        }
+    };
+    CancellationTokenSource.prototype.dispose = function () {
+        if (this._parentListener) {
+            this._parentListener.dispose();
+        }
+        if (!this._token) {
+            // ensure to initialize with an empty token if we had none
+            this._token = CancellationToken.None;
+        }
+        else if (this._token instanceof MutableToken) {
+            // actually dispose
+            this._token.dispose();
+        }
+    };
+    return CancellationTokenSource;
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/diff/diff.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/diff/diff.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/diff/diff.js ***!
+  \********************************************************************/
+/*! exports provided: stringDiff, Debug, MyArray, LcsDiff */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringDiff", function() { return stringDiff; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Debug", function() { return Debug; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyArray", function() { return MyArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LcsDiff", function() { return LcsDiff; });
+/* harmony import */ var _diffChange_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./diffChange.js */ "./node_modules/monaco-editor/esm/vs/base/common/diff/diffChange.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -1108,7 +545,7 @@ function createStringSequence(a) {
     };
 }
 function stringDiff(original, modified, pretty) {
-    return new diff_LcsDiff(createStringSequence(original), createStringSequence(modified)).ComputeDiff(pretty);
+    return new LcsDiff(createStringSequence(original), createStringSequence(modified)).ComputeDiff(pretty);
 }
 //
 // The code below has been ported from a C# implementation in VS
@@ -1171,7 +608,7 @@ var MaxDifferencesHistory = 1447;
  * distinct changes. At the end, the Changes property can be called to retrieve
  * the constructed changes.
  */
-var diff_DiffChangeHelper = /** @class */ (function () {
+var DiffChangeHelper = /** @class */ (function () {
     /**
      * Constructs a new DiffChangeHelper for the given DiffSequences.
      */
@@ -1189,7 +626,7 @@ var diff_DiffChangeHelper = /** @class */ (function () {
         // Only add to the list if there is something to add
         if (this.m_originalCount > 0 || this.m_modifiedCount > 0) {
             // Add the new change to our list
-            this.m_changes.push(new DiffChange(this.m_originalStart, this.m_originalCount, this.m_modifiedStart, this.m_modifiedCount));
+            this.m_changes.push(new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](this.m_originalStart, this.m_originalCount, this.m_modifiedStart, this.m_modifiedCount));
         }
         // Reset for the next change
         this.m_originalCount = 0;
@@ -1250,7 +687,7 @@ var diff_DiffChangeHelper = /** @class */ (function () {
  * An implementation of the difference algorithm described in
  * "An O(ND) Difference Algorithm and its variations" by Eugene W. Myers
  */
-var diff_LcsDiff = /** @class */ (function () {
+var LcsDiff = /** @class */ (function () {
     /**
      * Constructs the DiffFinder
      */
@@ -1314,14 +751,14 @@ var diff_LcsDiff = /** @class */ (function () {
                 Debug.Assert(originalStart === originalEnd + 1, 'originalStart should only be one more than originalEnd');
                 // All insertions
                 changes = [
-                    new DiffChange(originalStart, 0, modifiedStart, modifiedEnd - modifiedStart + 1)
+                    new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](originalStart, 0, modifiedStart, modifiedEnd - modifiedStart + 1)
                 ];
             }
             else if (originalStart <= originalEnd) {
                 Debug.Assert(modifiedStart === modifiedEnd + 1, 'modifiedStart should only be one more than modifiedEnd');
                 // All deletions
                 changes = [
-                    new DiffChange(originalStart, originalEnd - originalStart + 1, modifiedStart, 0)
+                    new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](originalStart, originalEnd - originalStart + 1, modifiedStart, 0)
                 ];
             }
             else {
@@ -1356,20 +793,20 @@ var diff_LcsDiff = /** @class */ (function () {
                 // We did't have time to finish the first half, so we don't have time to compute this half.
                 // Consider the entire rest of the sequence different.
                 rightChanges = [
-                    new DiffChange(midOriginal + 1, originalEnd - (midOriginal + 1) + 1, midModified + 1, modifiedEnd - (midModified + 1) + 1)
+                    new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](midOriginal + 1, originalEnd - (midOriginal + 1) + 1, midModified + 1, modifiedEnd - (midModified + 1) + 1)
                 ];
             }
             return this.ConcatenateChanges(leftChanges, rightChanges);
         }
         // If we hit here, we quit early, and so can't return anything meaningful
         return [
-            new DiffChange(originalStart, originalEnd - originalStart + 1, modifiedStart, modifiedEnd - modifiedStart + 1)
+            new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](originalStart, originalEnd - originalStart + 1, modifiedStart, modifiedEnd - modifiedStart + 1)
         ];
     };
     LcsDiff.prototype.WALKTRACE = function (diagonalForwardBase, diagonalForwardStart, diagonalForwardEnd, diagonalForwardOffset, diagonalReverseBase, diagonalReverseStart, diagonalReverseEnd, diagonalReverseOffset, forwardPoints, reversePoints, originalIndex, originalEnd, midOriginalArr, modifiedIndex, modifiedEnd, midModifiedArr, deltaIsEven, quitEarlyArr) {
         var forwardChanges = null, reverseChanges = null;
         // First, walk backward through the forward diagonals history
-        var changeHelper = new diff_DiffChangeHelper();
+        var changeHelper = new DiffChangeHelper();
         var diagonalMin = diagonalForwardStart;
         var diagonalMax = diagonalForwardEnd;
         var diagonalRelative = (midOriginalArr[0] - midModifiedArr[0]) - diagonalForwardOffset;
@@ -1423,12 +860,12 @@ var diff_LcsDiff = /** @class */ (function () {
                 modifiedStartPoint = Math.max(modifiedStartPoint, lastForwardChange.getModifiedEnd());
             }
             reverseChanges = [
-                new DiffChange(originalStartPoint, originalEnd - originalStartPoint + 1, modifiedStartPoint, modifiedEnd - modifiedStartPoint + 1)
+                new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](originalStartPoint, originalEnd - originalStartPoint + 1, modifiedStartPoint, modifiedEnd - modifiedStartPoint + 1)
             ];
         }
         else {
             // Now walk backward through the reverse diagonals history
-            changeHelper = new diff_DiffChangeHelper();
+            changeHelper = new DiffChangeHelper();
             diagonalMin = diagonalReverseStart;
             diagonalMax = diagonalReverseEnd;
             diagonalRelative = (midOriginalArr[0] - midModifiedArr[0]) - diagonalReverseOffset;
@@ -1611,7 +1048,7 @@ var diff_LcsDiff = /** @class */ (function () {
                     originalStart++;
                     modifiedStart++;
                     return [
-                        new DiffChange(originalStart, originalEnd - originalStart + 1, modifiedStart, modifiedEnd - modifiedStart + 1)
+                        new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](originalStart, originalEnd - originalStart + 1, modifiedStart, modifiedEnd - modifiedStart + 1)
                     ];
                 }
             }
@@ -1842,7 +1279,7 @@ var diff_LcsDiff = /** @class */ (function () {
             if (left.modifiedStart + left.modifiedLength >= right.modifiedStart) {
                 modifiedLength = right.modifiedStart + right.modifiedLength - left.modifiedStart;
             }
-            mergedChangeArr[0] = new DiffChange(originalStart, originalLength, modifiedStart, modifiedLength);
+            mergedChangeArr[0] = new _diffChange_js__WEBPACK_IMPORTED_MODULE_0__["DiffChange"](originalStart, originalLength, modifiedStart, modifiedLength);
             return true;
         }
         else {
@@ -1885,12 +1322,952 @@ var diff_LcsDiff = /** @class */ (function () {
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/iterator.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/diff/diffChange.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/diff/diffChange.js ***!
+  \**************************************************************************/
+/*! exports provided: DiffChange */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DiffChange", function() { return DiffChange; });
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-var iterator_extends = (undefined && undefined.__extends) || (function () {
+/**
+ * Represents information about a specific difference between two sequences.
+ */
+var DiffChange = /** @class */ (function () {
+    /**
+     * Constructs a new DiffChange with the given sequence information
+     * and content.
+     */
+    function DiffChange(originalStart, originalLength, modifiedStart, modifiedLength) {
+        //Debug.Assert(originalLength > 0 || modifiedLength > 0, "originalLength and modifiedLength cannot both be <= 0");
+        this.originalStart = originalStart;
+        this.originalLength = originalLength;
+        this.modifiedStart = modifiedStart;
+        this.modifiedLength = modifiedLength;
+    }
+    /**
+     * The end point (exclusive) of the change in the original sequence.
+     */
+    DiffChange.prototype.getOriginalEnd = function () {
+        return this.originalStart + this.originalLength;
+    };
+    /**
+     * The end point (exclusive) of the change in the modified sequence.
+     */
+    DiffChange.prototype.getModifiedEnd = function () {
+        return this.modifiedStart + this.modifiedLength;
+    };
+    return DiffChange;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/errors.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/errors.js ***!
+  \*****************************************************************/
+/*! exports provided: ErrorHandler, errorHandler, onUnexpectedError, onUnexpectedExternalError, transformErrorForSerialization, isPromiseCanceledError, canceled, illegalArgument, illegalState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorHandler", function() { return ErrorHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorHandler", function() { return errorHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onUnexpectedError", function() { return onUnexpectedError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onUnexpectedExternalError", function() { return onUnexpectedExternalError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "transformErrorForSerialization", function() { return transformErrorForSerialization; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isPromiseCanceledError", function() { return isPromiseCanceledError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "canceled", function() { return canceled; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "illegalArgument", function() { return illegalArgument; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "illegalState", function() { return illegalState; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+// Avoid circular dependency on EventEmitter by implementing a subset of the interface.
+var ErrorHandler = /** @class */ (function () {
+    function ErrorHandler() {
+        this.listeners = [];
+        this.unexpectedErrorHandler = function (e) {
+            setTimeout(function () {
+                if (e.stack) {
+                    throw new Error(e.message + '\n\n' + e.stack);
+                }
+                throw e;
+            }, 0);
+        };
+    }
+    ErrorHandler.prototype.emit = function (e) {
+        this.listeners.forEach(function (listener) {
+            listener(e);
+        });
+    };
+    ErrorHandler.prototype.onUnexpectedError = function (e) {
+        this.unexpectedErrorHandler(e);
+        this.emit(e);
+    };
+    // For external errors, we don't want the listeners to be called
+    ErrorHandler.prototype.onUnexpectedExternalError = function (e) {
+        this.unexpectedErrorHandler(e);
+    };
+    return ErrorHandler;
+}());
+
+var errorHandler = new ErrorHandler();
+function onUnexpectedError(e) {
+    // ignore errors from cancelled promises
+    if (!isPromiseCanceledError(e)) {
+        errorHandler.onUnexpectedError(e);
+    }
+    return undefined;
+}
+function onUnexpectedExternalError(e) {
+    // ignore errors from cancelled promises
+    if (!isPromiseCanceledError(e)) {
+        errorHandler.onUnexpectedExternalError(e);
+    }
+    return undefined;
+}
+function transformErrorForSerialization(error) {
+    if (error instanceof Error) {
+        var name_1 = error.name, message = error.message;
+        var stack = error.stacktrace || error.stack;
+        return {
+            $isError: true,
+            name: name_1,
+            message: message,
+            stack: stack
+        };
+    }
+    // return as is
+    return error;
+}
+var canceledName = 'Canceled';
+/**
+ * Checks if the given error is a promise in canceled state
+ */
+function isPromiseCanceledError(error) {
+    return error instanceof Error && error.name === canceledName && error.message === canceledName;
+}
+/**
+ * Returns an error that signals cancellation.
+ */
+function canceled() {
+    var error = new Error(canceledName);
+    error.name = error.message;
+    return error;
+}
+function illegalArgument(name) {
+    if (name) {
+        return new Error("Illegal argument: " + name);
+    }
+    else {
+        return new Error('Illegal argument');
+    }
+}
+function illegalState(name) {
+    if (name) {
+        return new Error("Illegal state: " + name);
+    }
+    else {
+        return new Error('Illegal state');
+    }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/event.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/event.js ***!
+  \****************************************************************/
+/*! exports provided: Event, Emitter, PauseableEmitter, EventMultiplexer, EventBufferer, Relay */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Event", function() { return Event; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Emitter", function() { return Emitter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PauseableEmitter", function() { return PauseableEmitter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventMultiplexer", function() { return EventMultiplexer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBufferer", function() { return EventBufferer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Relay", function() { return Relay; });
+/* harmony import */ var _errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./errors.js */ "./node_modules/monaco-editor/esm/vs/base/common/errors.js");
+/* harmony import */ var _functional_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./functional.js */ "./node_modules/monaco-editor/esm/vs/base/common/functional.js");
+/* harmony import */ var _lifecycle_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lifecycle.js */ "./node_modules/monaco-editor/esm/vs/base/common/lifecycle.js");
+/* harmony import */ var _linkedList_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./linkedList.js */ "./node_modules/monaco-editor/esm/vs/base/common/linkedList.js");
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+var Event;
+(function (Event) {
+    var _disposable = { dispose: function () { } };
+    Event.None = function () { return _disposable; };
+    /**
+     * Given an event, returns another event which only fires once.
+     */
+    function once(event) {
+        return function (listener, thisArgs, disposables) {
+            if (thisArgs === void 0) { thisArgs = null; }
+            // we need this, in case the event fires during the listener call
+            var didFire = false;
+            var result;
+            result = event(function (e) {
+                if (didFire) {
+                    return;
+                }
+                else if (result) {
+                    result.dispose();
+                }
+                else {
+                    didFire = true;
+                }
+                return listener.call(thisArgs, e);
+            }, null, disposables);
+            if (didFire) {
+                result.dispose();
+            }
+            return result;
+        };
+    }
+    Event.once = once;
+    /**
+     * Given an event and a `map` function, returns another event which maps each element
+     * throught the mapping function.
+     */
+    function map(event, map) {
+        return snapshot(function (listener, thisArgs, disposables) {
+            if (thisArgs === void 0) { thisArgs = null; }
+            return event(function (i) { return listener.call(thisArgs, map(i)); }, null, disposables);
+        });
+    }
+    Event.map = map;
+    /**
+     * Given an event and an `each` function, returns another identical event and calls
+     * the `each` function per each element.
+     */
+    function forEach(event, each) {
+        return snapshot(function (listener, thisArgs, disposables) {
+            if (thisArgs === void 0) { thisArgs = null; }
+            return event(function (i) { each(i); listener.call(thisArgs, i); }, null, disposables);
+        });
+    }
+    Event.forEach = forEach;
+    function filter(event, filter) {
+        return snapshot(function (listener, thisArgs, disposables) {
+            if (thisArgs === void 0) { thisArgs = null; }
+            return event(function (e) { return filter(e) && listener.call(thisArgs, e); }, null, disposables);
+        });
+    }
+    Event.filter = filter;
+    /**
+     * Given an event, returns the same event but typed as `Event<void>`.
+     */
+    function signal(event) {
+        return event;
+    }
+    Event.signal = signal;
+    /**
+     * Given a collection of events, returns a single event which emits
+     * whenever any of the provided events emit.
+     */
+    function any() {
+        var events = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            events[_i] = arguments[_i];
+        }
+        return function (listener, thisArgs, disposables) {
+            if (thisArgs === void 0) { thisArgs = null; }
+            return Object(_lifecycle_js__WEBPACK_IMPORTED_MODULE_2__["combinedDisposable"])(events.map(function (event) { return event(function (e) { return listener.call(thisArgs, e); }, null, disposables); }));
+        };
+    }
+    Event.any = any;
+    /**
+     * Given an event and a `merge` function, returns another event which maps each element
+     * and the cummulative result throught the `merge` function. Similar to `map`, but with memory.
+     */
+    function reduce(event, merge, initial) {
+        var output = initial;
+        return map(event, function (e) {
+            output = merge(output, e);
+            return output;
+        });
+    }
+    Event.reduce = reduce;
+    /**
+     * Given a chain of event processing functions (filter, map, etc), each
+     * function will be invoked per event & per listener. Snapshotting an event
+     * chain allows each function to be invoked just once per event.
+     */
+    function snapshot(event) {
+        var listener;
+        var emitter = new Emitter({
+            onFirstListenerAdd: function () {
+                listener = event(emitter.fire, emitter);
+            },
+            onLastListenerRemove: function () {
+                listener.dispose();
+            }
+        });
+        return emitter.event;
+    }
+    Event.snapshot = snapshot;
+    function debounce(event, merge, delay, leading, leakWarningThreshold) {
+        if (delay === void 0) { delay = 100; }
+        if (leading === void 0) { leading = false; }
+        var subscription;
+        var output = undefined;
+        var handle = undefined;
+        var numDebouncedCalls = 0;
+        var emitter = new Emitter({
+            leakWarningThreshold: leakWarningThreshold,
+            onFirstListenerAdd: function () {
+                subscription = event(function (cur) {
+                    numDebouncedCalls++;
+                    output = merge(output, cur);
+                    if (leading && !handle) {
+                        emitter.fire(output);
+                    }
+                    clearTimeout(handle);
+                    handle = setTimeout(function () {
+                        var _output = output;
+                        output = undefined;
+                        handle = undefined;
+                        if (!leading || numDebouncedCalls > 1) {
+                            emitter.fire(_output);
+                        }
+                        numDebouncedCalls = 0;
+                    }, delay);
+                });
+            },
+            onLastListenerRemove: function () {
+                subscription.dispose();
+            }
+        });
+        return emitter.event;
+    }
+    Event.debounce = debounce;
+    /**
+     * Given an event, it returns another event which fires only once and as soon as
+     * the input event emits. The event data is the number of millis it took for the
+     * event to fire.
+     */
+    function stopwatch(event) {
+        var start = new Date().getTime();
+        return map(once(event), function (_) { return new Date().getTime() - start; });
+    }
+    Event.stopwatch = stopwatch;
+    /**
+     * Given an event, it returns another event which fires only when the event
+     * element changes.
+     */
+    function latch(event) {
+        var firstCall = true;
+        var cache;
+        return filter(event, function (value) {
+            var shouldEmit = firstCall || value !== cache;
+            firstCall = false;
+            cache = value;
+            return shouldEmit;
+        });
+    }
+    Event.latch = latch;
+    /**
+     * Buffers the provided event until a first listener comes
+     * along, at which point fire all the events at once and
+     * pipe the event from then on.
+     *
+     * ```typescript
+     * const emitter = new Emitter<number>();
+     * const event = emitter.event;
+     * const bufferedEvent = buffer(event);
+     *
+     * emitter.fire(1);
+     * emitter.fire(2);
+     * emitter.fire(3);
+     * // nothing...
+     *
+     * const listener = bufferedEvent(num => console.log(num));
+     * // 1, 2, 3
+     *
+     * emitter.fire(4);
+     * // 4
+     * ```
+     */
+    function buffer(event, nextTick, _buffer) {
+        if (nextTick === void 0) { nextTick = false; }
+        if (_buffer === void 0) { _buffer = []; }
+        var buffer = _buffer.slice();
+        var listener = event(function (e) {
+            if (buffer) {
+                buffer.push(e);
+            }
+            else {
+                emitter.fire(e);
+            }
+        });
+        var flush = function () {
+            if (buffer) {
+                buffer.forEach(function (e) { return emitter.fire(e); });
+            }
+            buffer = null;
+        };
+        var emitter = new Emitter({
+            onFirstListenerAdd: function () {
+                if (!listener) {
+                    listener = event(function (e) { return emitter.fire(e); });
+                }
+            },
+            onFirstListenerDidAdd: function () {
+                if (buffer) {
+                    if (nextTick) {
+                        setTimeout(flush);
+                    }
+                    else {
+                        flush();
+                    }
+                }
+            },
+            onLastListenerRemove: function () {
+                if (listener) {
+                    listener.dispose();
+                }
+                listener = null;
+            }
+        });
+        return emitter.event;
+    }
+    Event.buffer = buffer;
+    var ChainableEvent = /** @class */ (function () {
+        function ChainableEvent(event) {
+            this.event = event;
+        }
+        ChainableEvent.prototype.map = function (fn) {
+            return new ChainableEvent(map(this.event, fn));
+        };
+        ChainableEvent.prototype.forEach = function (fn) {
+            return new ChainableEvent(forEach(this.event, fn));
+        };
+        ChainableEvent.prototype.filter = function (fn) {
+            return new ChainableEvent(filter(this.event, fn));
+        };
+        ChainableEvent.prototype.reduce = function (merge, initial) {
+            return new ChainableEvent(reduce(this.event, merge, initial));
+        };
+        ChainableEvent.prototype.latch = function () {
+            return new ChainableEvent(latch(this.event));
+        };
+        ChainableEvent.prototype.on = function (listener, thisArgs, disposables) {
+            return this.event(listener, thisArgs, disposables);
+        };
+        ChainableEvent.prototype.once = function (listener, thisArgs, disposables) {
+            return once(this.event)(listener, thisArgs, disposables);
+        };
+        return ChainableEvent;
+    }());
+    function chain(event) {
+        return new ChainableEvent(event);
+    }
+    Event.chain = chain;
+    function fromNodeEventEmitter(emitter, eventName, map) {
+        if (map === void 0) { map = function (id) { return id; }; }
+        var fn = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return result.fire(map.apply(void 0, args));
+        };
+        var onFirstListenerAdd = function () { return emitter.on(eventName, fn); };
+        var onLastListenerRemove = function () { return emitter.removeListener(eventName, fn); };
+        var result = new Emitter({ onFirstListenerAdd: onFirstListenerAdd, onLastListenerRemove: onLastListenerRemove });
+        return result.event;
+    }
+    Event.fromNodeEventEmitter = fromNodeEventEmitter;
+    function fromPromise(promise) {
+        var emitter = new Emitter();
+        var shouldEmit = false;
+        promise
+            .then(undefined, function () { return null; })
+            .then(function () {
+            if (!shouldEmit) {
+                setTimeout(function () { return emitter.fire(undefined); }, 0);
+            }
+            else {
+                emitter.fire(undefined);
+            }
+        });
+        shouldEmit = true;
+        return emitter.event;
+    }
+    Event.fromPromise = fromPromise;
+    function toPromise(event) {
+        return new Promise(function (c) { return once(event)(c); });
+    }
+    Event.toPromise = toPromise;
+})(Event || (Event = {}));
+var _globalLeakWarningThreshold = -1;
+var LeakageMonitor = /** @class */ (function () {
+    function LeakageMonitor(customThreshold, name) {
+        if (name === void 0) { name = Math.random().toString(18).slice(2, 5); }
+        this.customThreshold = customThreshold;
+        this.name = name;
+        this._warnCountdown = 0;
+    }
+    LeakageMonitor.prototype.dispose = function () {
+        if (this._stacks) {
+            this._stacks.clear();
+        }
+    };
+    LeakageMonitor.prototype.check = function (listenerCount) {
+        var _this = this;
+        var threshold = _globalLeakWarningThreshold;
+        if (typeof this.customThreshold === 'number') {
+            threshold = this.customThreshold;
+        }
+        if (threshold <= 0 || listenerCount < threshold) {
+            return undefined;
+        }
+        if (!this._stacks) {
+            this._stacks = new Map();
+        }
+        var stack = new Error().stack.split('\n').slice(3).join('\n');
+        var count = (this._stacks.get(stack) || 0);
+        this._stacks.set(stack, count + 1);
+        this._warnCountdown -= 1;
+        if (this._warnCountdown <= 0) {
+            // only warn on first exceed and then every time the limit
+            // is exceeded by 50% again
+            this._warnCountdown = threshold * 0.5;
+            // find most frequent listener and print warning
+            var topStack_1;
+            var topCount_1 = 0;
+            this._stacks.forEach(function (count, stack) {
+                if (!topStack_1 || topCount_1 < count) {
+                    topStack_1 = stack;
+                    topCount_1 = count;
+                }
+            });
+            console.warn("[" + this.name + "] potential listener LEAK detected, having " + listenerCount + " listeners already. MOST frequent listener (" + topCount_1 + "):");
+            console.warn(topStack_1);
+        }
+        return function () {
+            var count = (_this._stacks.get(stack) || 0);
+            _this._stacks.set(stack, count - 1);
+        };
+    };
+    return LeakageMonitor;
+}());
+/**
+ * The Emitter can be used to expose an Event to the public
+ * to fire it from the insides.
+ * Sample:
+    class Document {
+
+        private _onDidChange = new Emitter<(value:string)=>any>();
+
+        public onDidChange = this._onDidChange.event;
+
+        // getter-style
+        // get onDidChange(): Event<(value:string)=>any> {
+        // 	return this._onDidChange.event;
+        // }
+
+        private _doIt() {
+            //...
+            this._onDidChange.fire(value);
+        }
+    }
+ */
+var Emitter = /** @class */ (function () {
+    function Emitter(options) {
+        this._disposed = false;
+        this._options = options;
+        this._leakageMon = _globalLeakWarningThreshold > 0
+            ? new LeakageMonitor(this._options && this._options.leakWarningThreshold)
+            : undefined;
+    }
+    Object.defineProperty(Emitter.prototype, "event", {
+        /**
+         * For the public to allow to subscribe
+         * to events from this Emitter
+         */
+        get: function () {
+            var _this = this;
+            if (!this._event) {
+                this._event = function (listener, thisArgs, disposables) {
+                    if (!_this._listeners) {
+                        _this._listeners = new _linkedList_js__WEBPACK_IMPORTED_MODULE_3__["LinkedList"]();
+                    }
+                    var firstListener = _this._listeners.isEmpty();
+                    if (firstListener && _this._options && _this._options.onFirstListenerAdd) {
+                        _this._options.onFirstListenerAdd(_this);
+                    }
+                    var remove = _this._listeners.push(!thisArgs ? listener : [listener, thisArgs]);
+                    if (firstListener && _this._options && _this._options.onFirstListenerDidAdd) {
+                        _this._options.onFirstListenerDidAdd(_this);
+                    }
+                    if (_this._options && _this._options.onListenerDidAdd) {
+                        _this._options.onListenerDidAdd(_this, listener, thisArgs);
+                    }
+                    // check and record this emitter for potential leakage
+                    var removeMonitor;
+                    if (_this._leakageMon) {
+                        removeMonitor = _this._leakageMon.check(_this._listeners.size);
+                    }
+                    var result;
+                    result = {
+                        dispose: function () {
+                            if (removeMonitor) {
+                                removeMonitor();
+                            }
+                            result.dispose = Emitter._noop;
+                            if (!_this._disposed) {
+                                remove();
+                                if (_this._options && _this._options.onLastListenerRemove) {
+                                    var hasListeners = (_this._listeners && !_this._listeners.isEmpty());
+                                    if (!hasListeners) {
+                                        _this._options.onLastListenerRemove(_this);
+                                    }
+                                }
+                            }
+                        }
+                    };
+                    if (Array.isArray(disposables)) {
+                        disposables.push(result);
+                    }
+                    return result;
+                };
+            }
+            return this._event;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * To be kept private to fire an event to
+     * subscribers
+     */
+    Emitter.prototype.fire = function (event) {
+        if (this._listeners) {
+            // put all [listener,event]-pairs into delivery queue
+            // then emit all event. an inner/nested event might be
+            // the driver of this
+            if (!this._deliveryQueue) {
+                this._deliveryQueue = new _linkedList_js__WEBPACK_IMPORTED_MODULE_3__["LinkedList"]();
+            }
+            for (var iter = this._listeners.iterator(), e = iter.next(); !e.done; e = iter.next()) {
+                this._deliveryQueue.push([e.value, event]);
+            }
+            while (this._deliveryQueue.size > 0) {
+                var _a = this._deliveryQueue.shift(), listener = _a[0], event_1 = _a[1];
+                try {
+                    if (typeof listener === 'function') {
+                        listener.call(undefined, event_1);
+                    }
+                    else {
+                        listener[0].call(listener[1], event_1);
+                    }
+                }
+                catch (e) {
+                    Object(_errors_js__WEBPACK_IMPORTED_MODULE_0__["onUnexpectedError"])(e);
+                }
+            }
+        }
+    };
+    Emitter.prototype.dispose = function () {
+        if (this._listeners) {
+            this._listeners.clear();
+        }
+        if (this._deliveryQueue) {
+            this._deliveryQueue.clear();
+        }
+        if (this._leakageMon) {
+            this._leakageMon.dispose();
+        }
+        this._disposed = true;
+    };
+    Emitter._noop = function () { };
+    return Emitter;
+}());
+
+var PauseableEmitter = /** @class */ (function (_super) {
+    __extends(PauseableEmitter, _super);
+    function PauseableEmitter(options) {
+        var _this = _super.call(this, options) || this;
+        _this._isPaused = 0;
+        _this._eventQueue = new _linkedList_js__WEBPACK_IMPORTED_MODULE_3__["LinkedList"]();
+        _this._mergeFn = options && options.merge;
+        return _this;
+    }
+    PauseableEmitter.prototype.pause = function () {
+        this._isPaused++;
+    };
+    PauseableEmitter.prototype.resume = function () {
+        if (this._isPaused !== 0 && --this._isPaused === 0) {
+            if (this._mergeFn) {
+                // use the merge function to create a single composite
+                // event. make a copy in case firing pauses this emitter
+                var events = this._eventQueue.toArray();
+                this._eventQueue.clear();
+                _super.prototype.fire.call(this, this._mergeFn(events));
+            }
+            else {
+                // no merging, fire each event individually and test
+                // that this emitter isn't paused halfway through
+                while (!this._isPaused && this._eventQueue.size !== 0) {
+                    _super.prototype.fire.call(this, this._eventQueue.shift());
+                }
+            }
+        }
+    };
+    PauseableEmitter.prototype.fire = function (event) {
+        if (this._listeners) {
+            if (this._isPaused !== 0) {
+                this._eventQueue.push(event);
+            }
+            else {
+                _super.prototype.fire.call(this, event);
+            }
+        }
+    };
+    return PauseableEmitter;
+}(Emitter));
+
+var EventMultiplexer = /** @class */ (function () {
+    function EventMultiplexer() {
+        var _this = this;
+        this.hasListeners = false;
+        this.events = [];
+        this.emitter = new Emitter({
+            onFirstListenerAdd: function () { return _this.onFirstListenerAdd(); },
+            onLastListenerRemove: function () { return _this.onLastListenerRemove(); }
+        });
+    }
+    Object.defineProperty(EventMultiplexer.prototype, "event", {
+        get: function () {
+            return this.emitter.event;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    EventMultiplexer.prototype.add = function (event) {
+        var _this = this;
+        var e = { event: event, listener: null };
+        this.events.push(e);
+        if (this.hasListeners) {
+            this.hook(e);
+        }
+        var dispose = function () {
+            if (_this.hasListeners) {
+                _this.unhook(e);
+            }
+            var idx = _this.events.indexOf(e);
+            _this.events.splice(idx, 1);
+        };
+        return Object(_lifecycle_js__WEBPACK_IMPORTED_MODULE_2__["toDisposable"])(Object(_functional_js__WEBPACK_IMPORTED_MODULE_1__["once"])(dispose));
+    };
+    EventMultiplexer.prototype.onFirstListenerAdd = function () {
+        var _this = this;
+        this.hasListeners = true;
+        this.events.forEach(function (e) { return _this.hook(e); });
+    };
+    EventMultiplexer.prototype.onLastListenerRemove = function () {
+        var _this = this;
+        this.hasListeners = false;
+        this.events.forEach(function (e) { return _this.unhook(e); });
+    };
+    EventMultiplexer.prototype.hook = function (e) {
+        var _this = this;
+        e.listener = e.event(function (r) { return _this.emitter.fire(r); });
+    };
+    EventMultiplexer.prototype.unhook = function (e) {
+        if (e.listener) {
+            e.listener.dispose();
+        }
+        e.listener = null;
+    };
+    EventMultiplexer.prototype.dispose = function () {
+        this.emitter.dispose();
+    };
+    return EventMultiplexer;
+}());
+
+/**
+ * The EventBufferer is useful in situations in which you want
+ * to delay firing your events during some code.
+ * You can wrap that code and be sure that the event will not
+ * be fired during that wrap.
+ *
+ * ```
+ * const emitter: Emitter;
+ * const delayer = new EventDelayer();
+ * const delayedEvent = delayer.wrapEvent(emitter.event);
+ *
+ * delayedEvent(console.log);
+ *
+ * delayer.bufferEvents(() => {
+ *   emitter.fire(); // event will not be fired yet
+ * });
+ *
+ * // event will only be fired at this point
+ * ```
+ */
+var EventBufferer = /** @class */ (function () {
+    function EventBufferer() {
+        this.buffers = [];
+    }
+    EventBufferer.prototype.wrapEvent = function (event) {
+        var _this = this;
+        return function (listener, thisArgs, disposables) {
+            return event(function (i) {
+                var buffer = _this.buffers[_this.buffers.length - 1];
+                if (buffer) {
+                    buffer.push(function () { return listener.call(thisArgs, i); });
+                }
+                else {
+                    listener.call(thisArgs, i);
+                }
+            }, undefined, disposables);
+        };
+    };
+    EventBufferer.prototype.bufferEvents = function (fn) {
+        var buffer = [];
+        this.buffers.push(buffer);
+        var r = fn();
+        this.buffers.pop();
+        buffer.forEach(function (flush) { return flush(); });
+        return r;
+    };
+    return EventBufferer;
+}());
+
+/**
+ * A Relay is an event forwarder which functions as a replugabble event pipe.
+ * Once created, you can connect an input event to it and it will simply forward
+ * events from that input event through its own `event` property. The `input`
+ * can be changed at any point in time.
+ */
+var Relay = /** @class */ (function () {
+    function Relay() {
+        var _this = this;
+        this.listening = false;
+        this.inputEvent = Event.None;
+        this.inputEventListener = _lifecycle_js__WEBPACK_IMPORTED_MODULE_2__["Disposable"].None;
+        this.emitter = new Emitter({
+            onFirstListenerDidAdd: function () {
+                _this.listening = true;
+                _this.inputEventListener = _this.inputEvent(_this.emitter.fire, _this.emitter);
+            },
+            onLastListenerRemove: function () {
+                _this.listening = false;
+                _this.inputEventListener.dispose();
+            }
+        });
+        this.event = this.emitter.event;
+    }
+    Object.defineProperty(Relay.prototype, "input", {
+        set: function (event) {
+            this.inputEvent = event;
+            if (this.listening) {
+                this.inputEventListener.dispose();
+                this.inputEventListener = event(this.emitter.fire, this.emitter);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Relay.prototype.dispose = function () {
+        this.inputEventListener.dispose();
+        this.emitter.dispose();
+    };
+    return Relay;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/functional.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/functional.js ***!
+  \*********************************************************************/
+/*! exports provided: once */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "once", function() { return once; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+function once(fn) {
+    var _this = this;
+    var didCall = false;
+    var result;
+    return function () {
+        if (didCall) {
+            return result;
+        }
+        didCall = true;
+        result = fn.apply(_this, arguments);
+        return result;
+    };
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/iterator.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/iterator.js ***!
+  \*******************************************************************/
+/*! exports provided: FIN, Iterator, getSequenceIterator, ArrayIterator, ArrayNavigator, MappedIterator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FIN", function() { return FIN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Iterator", function() { return Iterator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSequenceIterator", function() { return getSequenceIterator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ArrayIterator", function() { return ArrayIterator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ArrayNavigator", function() { return ArrayNavigator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MappedIterator", function() { return MappedIterator; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -2015,7 +2392,7 @@ var ArrayIterator = /** @class */ (function () {
 }());
 
 var ArrayNavigator = /** @class */ (function (_super) {
-    iterator_extends(ArrayNavigator, _super);
+    __extends(ArrayNavigator, _super);
     function ArrayNavigator(items, start, end, index) {
         if (start === void 0) { start = 0; }
         if (end === void 0) { end = items.length; }
@@ -2054,1057 +2431,687 @@ var MappedIterator = /** @class */ (function () {
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/uri.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/keyCodes.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/keyCodes.js ***!
+  \*******************************************************************/
+/*! exports provided: KeyCodeUtils, KeyChord, createKeybinding, createSimpleKeybinding, SimpleKeybinding, ChordKeybinding, ResolvedKeybindingPart, ResolvedKeybinding */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyCodeUtils", function() { return KeyCodeUtils; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyChord", function() { return KeyChord; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createKeybinding", function() { return createKeybinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSimpleKeybinding", function() { return createSimpleKeybinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SimpleKeybinding", function() { return SimpleKeybinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChordKeybinding", function() { return ChordKeybinding; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResolvedKeybindingPart", function() { return ResolvedKeybindingPart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ResolvedKeybinding", function() { return ResolvedKeybinding; });
+/* harmony import */ var _errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./errors.js */ "./node_modules/monaco-editor/esm/vs/base/common/errors.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-var uri_extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var uri_a;
 
-var _schemePattern = /^\w[\w\d+.-]*$/;
-var _singleSlashStart = /^\//;
-var _doubleSlashStart = /^\/\//;
-var _throwOnMissingSchema = true;
-function _validateUri(ret, _strict) {
-    // scheme, must be set
-    if (!ret.scheme) {
-        if (_strict || _throwOnMissingSchema) {
-            throw new Error("[UriError]: Scheme is missing: {scheme: \"\", authority: \"" + ret.authority + "\", path: \"" + ret.path + "\", query: \"" + ret.query + "\", fragment: \"" + ret.fragment + "\"}");
-        }
-        else {
-            console.warn("[UriError]: Scheme is missing: {scheme: \"\", authority: \"" + ret.authority + "\", path: \"" + ret.path + "\", query: \"" + ret.query + "\", fragment: \"" + ret.fragment + "\"}");
-        }
+var KeyCodeStrMap = /** @class */ (function () {
+    function KeyCodeStrMap() {
+        this._keyCodeToStr = [];
+        this._strToKeyCode = Object.create(null);
     }
-    // scheme, https://tools.ietf.org/html/rfc3986#section-3.1
-    // ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
-    if (ret.scheme && !_schemePattern.test(ret.scheme)) {
-        throw new Error('[UriError]: Scheme contains illegal characters.');
+    KeyCodeStrMap.prototype.define = function (keyCode, str) {
+        this._keyCodeToStr[keyCode] = str;
+        this._strToKeyCode[str.toLowerCase()] = keyCode;
+    };
+    KeyCodeStrMap.prototype.keyCodeToStr = function (keyCode) {
+        return this._keyCodeToStr[keyCode];
+    };
+    KeyCodeStrMap.prototype.strToKeyCode = function (str) {
+        return this._strToKeyCode[str.toLowerCase()] || 0 /* Unknown */;
+    };
+    return KeyCodeStrMap;
+}());
+var uiMap = new KeyCodeStrMap();
+var userSettingsUSMap = new KeyCodeStrMap();
+var userSettingsGeneralMap = new KeyCodeStrMap();
+(function () {
+    function define(keyCode, uiLabel, usUserSettingsLabel, generalUserSettingsLabel) {
+        if (usUserSettingsLabel === void 0) { usUserSettingsLabel = uiLabel; }
+        if (generalUserSettingsLabel === void 0) { generalUserSettingsLabel = usUserSettingsLabel; }
+        uiMap.define(keyCode, uiLabel);
+        userSettingsUSMap.define(keyCode, usUserSettingsLabel);
+        userSettingsGeneralMap.define(keyCode, generalUserSettingsLabel);
     }
-    // path, http://tools.ietf.org/html/rfc3986#section-3.3
-    // If a URI contains an authority component, then the path component
-    // must either be empty or begin with a slash ("/") character.  If a URI
-    // does not contain an authority component, then the path cannot begin
-    // with two slash characters ("//").
-    if (ret.path) {
-        if (ret.authority) {
-            if (!_singleSlashStart.test(ret.path)) {
-                throw new Error('[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character');
-            }
-        }
-        else {
-            if (_doubleSlashStart.test(ret.path)) {
-                throw new Error('[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")');
-            }
-        }
+    define(0 /* Unknown */, 'unknown');
+    define(1 /* Backspace */, 'Backspace');
+    define(2 /* Tab */, 'Tab');
+    define(3 /* Enter */, 'Enter');
+    define(4 /* Shift */, 'Shift');
+    define(5 /* Ctrl */, 'Ctrl');
+    define(6 /* Alt */, 'Alt');
+    define(7 /* PauseBreak */, 'PauseBreak');
+    define(8 /* CapsLock */, 'CapsLock');
+    define(9 /* Escape */, 'Escape');
+    define(10 /* Space */, 'Space');
+    define(11 /* PageUp */, 'PageUp');
+    define(12 /* PageDown */, 'PageDown');
+    define(13 /* End */, 'End');
+    define(14 /* Home */, 'Home');
+    define(15 /* LeftArrow */, 'LeftArrow', 'Left');
+    define(16 /* UpArrow */, 'UpArrow', 'Up');
+    define(17 /* RightArrow */, 'RightArrow', 'Right');
+    define(18 /* DownArrow */, 'DownArrow', 'Down');
+    define(19 /* Insert */, 'Insert');
+    define(20 /* Delete */, 'Delete');
+    define(21 /* KEY_0 */, '0');
+    define(22 /* KEY_1 */, '1');
+    define(23 /* KEY_2 */, '2');
+    define(24 /* KEY_3 */, '3');
+    define(25 /* KEY_4 */, '4');
+    define(26 /* KEY_5 */, '5');
+    define(27 /* KEY_6 */, '6');
+    define(28 /* KEY_7 */, '7');
+    define(29 /* KEY_8 */, '8');
+    define(30 /* KEY_9 */, '9');
+    define(31 /* KEY_A */, 'A');
+    define(32 /* KEY_B */, 'B');
+    define(33 /* KEY_C */, 'C');
+    define(34 /* KEY_D */, 'D');
+    define(35 /* KEY_E */, 'E');
+    define(36 /* KEY_F */, 'F');
+    define(37 /* KEY_G */, 'G');
+    define(38 /* KEY_H */, 'H');
+    define(39 /* KEY_I */, 'I');
+    define(40 /* KEY_J */, 'J');
+    define(41 /* KEY_K */, 'K');
+    define(42 /* KEY_L */, 'L');
+    define(43 /* KEY_M */, 'M');
+    define(44 /* KEY_N */, 'N');
+    define(45 /* KEY_O */, 'O');
+    define(46 /* KEY_P */, 'P');
+    define(47 /* KEY_Q */, 'Q');
+    define(48 /* KEY_R */, 'R');
+    define(49 /* KEY_S */, 'S');
+    define(50 /* KEY_T */, 'T');
+    define(51 /* KEY_U */, 'U');
+    define(52 /* KEY_V */, 'V');
+    define(53 /* KEY_W */, 'W');
+    define(54 /* KEY_X */, 'X');
+    define(55 /* KEY_Y */, 'Y');
+    define(56 /* KEY_Z */, 'Z');
+    define(57 /* Meta */, 'Meta');
+    define(58 /* ContextMenu */, 'ContextMenu');
+    define(59 /* F1 */, 'F1');
+    define(60 /* F2 */, 'F2');
+    define(61 /* F3 */, 'F3');
+    define(62 /* F4 */, 'F4');
+    define(63 /* F5 */, 'F5');
+    define(64 /* F6 */, 'F6');
+    define(65 /* F7 */, 'F7');
+    define(66 /* F8 */, 'F8');
+    define(67 /* F9 */, 'F9');
+    define(68 /* F10 */, 'F10');
+    define(69 /* F11 */, 'F11');
+    define(70 /* F12 */, 'F12');
+    define(71 /* F13 */, 'F13');
+    define(72 /* F14 */, 'F14');
+    define(73 /* F15 */, 'F15');
+    define(74 /* F16 */, 'F16');
+    define(75 /* F17 */, 'F17');
+    define(76 /* F18 */, 'F18');
+    define(77 /* F19 */, 'F19');
+    define(78 /* NumLock */, 'NumLock');
+    define(79 /* ScrollLock */, 'ScrollLock');
+    define(80 /* US_SEMICOLON */, ';', ';', 'OEM_1');
+    define(81 /* US_EQUAL */, '=', '=', 'OEM_PLUS');
+    define(82 /* US_COMMA */, ',', ',', 'OEM_COMMA');
+    define(83 /* US_MINUS */, '-', '-', 'OEM_MINUS');
+    define(84 /* US_DOT */, '.', '.', 'OEM_PERIOD');
+    define(85 /* US_SLASH */, '/', '/', 'OEM_2');
+    define(86 /* US_BACKTICK */, '`', '`', 'OEM_3');
+    define(110 /* ABNT_C1 */, 'ABNT_C1');
+    define(111 /* ABNT_C2 */, 'ABNT_C2');
+    define(87 /* US_OPEN_SQUARE_BRACKET */, '[', '[', 'OEM_4');
+    define(88 /* US_BACKSLASH */, '\\', '\\', 'OEM_5');
+    define(89 /* US_CLOSE_SQUARE_BRACKET */, ']', ']', 'OEM_6');
+    define(90 /* US_QUOTE */, '\'', '\'', 'OEM_7');
+    define(91 /* OEM_8 */, 'OEM_8');
+    define(92 /* OEM_102 */, 'OEM_102');
+    define(93 /* NUMPAD_0 */, 'NumPad0');
+    define(94 /* NUMPAD_1 */, 'NumPad1');
+    define(95 /* NUMPAD_2 */, 'NumPad2');
+    define(96 /* NUMPAD_3 */, 'NumPad3');
+    define(97 /* NUMPAD_4 */, 'NumPad4');
+    define(98 /* NUMPAD_5 */, 'NumPad5');
+    define(99 /* NUMPAD_6 */, 'NumPad6');
+    define(100 /* NUMPAD_7 */, 'NumPad7');
+    define(101 /* NUMPAD_8 */, 'NumPad8');
+    define(102 /* NUMPAD_9 */, 'NumPad9');
+    define(103 /* NUMPAD_MULTIPLY */, 'NumPad_Multiply');
+    define(104 /* NUMPAD_ADD */, 'NumPad_Add');
+    define(105 /* NUMPAD_SEPARATOR */, 'NumPad_Separator');
+    define(106 /* NUMPAD_SUBTRACT */, 'NumPad_Subtract');
+    define(107 /* NUMPAD_DECIMAL */, 'NumPad_Decimal');
+    define(108 /* NUMPAD_DIVIDE */, 'NumPad_Divide');
+})();
+var KeyCodeUtils;
+(function (KeyCodeUtils) {
+    function toString(keyCode) {
+        return uiMap.keyCodeToStr(keyCode);
     }
+    KeyCodeUtils.toString = toString;
+    function fromString(key) {
+        return uiMap.strToKeyCode(key);
+    }
+    KeyCodeUtils.fromString = fromString;
+    function toUserSettingsUS(keyCode) {
+        return userSettingsUSMap.keyCodeToStr(keyCode);
+    }
+    KeyCodeUtils.toUserSettingsUS = toUserSettingsUS;
+    function toUserSettingsGeneral(keyCode) {
+        return userSettingsGeneralMap.keyCodeToStr(keyCode);
+    }
+    KeyCodeUtils.toUserSettingsGeneral = toUserSettingsGeneral;
+    function fromUserSettings(key) {
+        return userSettingsUSMap.strToKeyCode(key) || userSettingsGeneralMap.strToKeyCode(key);
+    }
+    KeyCodeUtils.fromUserSettings = fromUserSettings;
+})(KeyCodeUtils || (KeyCodeUtils = {}));
+function KeyChord(firstPart, secondPart) {
+    var chordPart = ((secondPart & 0x0000FFFF) << 16) >>> 0;
+    return (firstPart | chordPart) >>> 0;
 }
-// for a while we allowed uris *without* schemes and this is the migration
-// for them, e.g. an uri without scheme and without strict-mode warns and falls
-// back to the file-scheme. that should cause the least carnage and still be a
-// clear warning
-function _schemeFix(scheme, _strict) {
-    if (_strict || _throwOnMissingSchema) {
-        return scheme || _empty;
+function createKeybinding(keybinding, OS) {
+    if (keybinding === 0) {
+        return null;
     }
-    if (!scheme) {
-        console.trace('BAD uri lacks scheme, falling back to file-scheme.');
-        scheme = 'file';
+    var firstPart = (keybinding & 0x0000FFFF) >>> 0;
+    var chordPart = (keybinding & 0xFFFF0000) >>> 16;
+    if (chordPart !== 0) {
+        return new ChordKeybinding([
+            createSimpleKeybinding(firstPart, OS),
+            createSimpleKeybinding(chordPart, OS)
+        ]);
     }
-    return scheme;
+    return new ChordKeybinding([createSimpleKeybinding(firstPart, OS)]);
 }
-// implements a bit of https://tools.ietf.org/html/rfc3986#section-5
-function _referenceResolution(scheme, path) {
-    // the slash-character is our 'default base' as we don't
-    // support constructing URIs relative to other URIs. This
-    // also means that we alter and potentially break paths.
-    // see https://tools.ietf.org/html/rfc3986#section-5.1.4
-    switch (scheme) {
-        case 'https':
-        case 'http':
-        case 'file':
-            if (!path) {
-                path = _slash;
-            }
-            else if (path[0] !== _slash) {
-                path = _slash + path;
-            }
-            break;
-    }
-    return path;
+function createSimpleKeybinding(keybinding, OS) {
+    var ctrlCmd = (keybinding & 2048 /* CtrlCmd */ ? true : false);
+    var winCtrl = (keybinding & 256 /* WinCtrl */ ? true : false);
+    var ctrlKey = (OS === 2 /* Macintosh */ ? winCtrl : ctrlCmd);
+    var shiftKey = (keybinding & 1024 /* Shift */ ? true : false);
+    var altKey = (keybinding & 512 /* Alt */ ? true : false);
+    var metaKey = (OS === 2 /* Macintosh */ ? ctrlCmd : winCtrl);
+    var keyCode = (keybinding & 255 /* KeyCode */);
+    return new SimpleKeybinding(ctrlKey, shiftKey, altKey, metaKey, keyCode);
 }
-var _empty = '';
-var _slash = '/';
-var _regexp = /^(([^:/?#]+?):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/;
-/**
- * Uniform Resource Identifier (URI) http://tools.ietf.org/html/rfc3986.
- * This class is a simple parser which creates the basic component parts
- * (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
- * and encoding.
- *
- *       foo://example.com:8042/over/there?name=ferret#nose
- *       \_/   \______________/\_________/ \_________/ \__/
- *        |           |            |            |        |
- *     scheme     authority       path        query   fragment
- *        |   _____________________|__
- *       / \ /                        \
- *       urn:example:animal:ferret:nose
- */
-var uri_URI = /** @class */ (function () {
-    /**
-     * @internal
-     */
-    function URI(schemeOrData, authority, path, query, fragment, _strict) {
-        if (_strict === void 0) { _strict = false; }
-        if (typeof schemeOrData === 'object') {
-            this.scheme = schemeOrData.scheme || _empty;
-            this.authority = schemeOrData.authority || _empty;
-            this.path = schemeOrData.path || _empty;
-            this.query = schemeOrData.query || _empty;
-            this.fragment = schemeOrData.fragment || _empty;
-            // no validation because it's this URI
-            // that creates uri components.
-            // _validateUri(this);
-        }
-        else {
-            this.scheme = _schemeFix(schemeOrData, _strict);
-            this.authority = authority || _empty;
-            this.path = _referenceResolution(this.scheme, path || _empty);
-            this.query = query || _empty;
-            this.fragment = fragment || _empty;
-            _validateUri(this, _strict);
-        }
+var SimpleKeybinding = /** @class */ (function () {
+    function SimpleKeybinding(ctrlKey, shiftKey, altKey, metaKey, keyCode) {
+        this.ctrlKey = ctrlKey;
+        this.shiftKey = shiftKey;
+        this.altKey = altKey;
+        this.metaKey = metaKey;
+        this.keyCode = keyCode;
     }
-    URI.isUri = function (thing) {
-        if (thing instanceof URI) {
-            return true;
-        }
-        if (!thing) {
-            return false;
-        }
-        return typeof thing.authority === 'string'
-            && typeof thing.fragment === 'string'
-            && typeof thing.path === 'string'
-            && typeof thing.query === 'string'
-            && typeof thing.scheme === 'string'
-            && typeof thing.fsPath === 'function'
-            && typeof thing.with === 'function'
-            && typeof thing.toString === 'function';
+    SimpleKeybinding.prototype.equals = function (other) {
+        return (this.ctrlKey === other.ctrlKey
+            && this.shiftKey === other.shiftKey
+            && this.altKey === other.altKey
+            && this.metaKey === other.metaKey
+            && this.keyCode === other.keyCode);
     };
-    Object.defineProperty(URI.prototype, "fsPath", {
-        // ---- filesystem path -----------------------
-        /**
-         * Returns a string representing the corresponding file system path of this URI.
-         * Will handle UNC paths, normalizes windows drive letters to lower-case, and uses the
-         * platform specific path separator.
-         *
-         * * Will *not* validate the path for invalid characters and semantics.
-         * * Will *not* look at the scheme of this URI.
-         * * The result shall *not* be used for display purposes but for accessing a file on disk.
-         *
-         *
-         * The *difference* to `URI#path` is the use of the platform specific separator and the handling
-         * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
-         *
-         * ```ts
-            const u = URI.parse('file://server/c$/folder/file.txt')
-            u.authority === 'server'
-            u.path === '/shares/c$/file.txt'
-            u.fsPath === '\\server\c$\folder\file.txt'
-        ```
-         *
-         * Using `URI#path` to read a file (using fs-apis) would not be enough because parts of the path,
-         * namely the server name, would be missing. Therefore `URI#fsPath` exists - it's sugar to ease working
-         * with URIs that represent files on disk (`file` scheme).
-         */
-        get: function () {
-            // if (this.scheme !== 'file') {
-            // 	console.warn(`[UriError] calling fsPath with scheme ${this.scheme}`);
-            // }
-            return _makeFsPath(this);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    // ---- modify to new -------------------------
-    URI.prototype.with = function (change) {
-        if (!change) {
-            return this;
-        }
-        var scheme = change.scheme, authority = change.authority, path = change.path, query = change.query, fragment = change.fragment;
-        if (scheme === undefined) {
-            scheme = this.scheme;
-        }
-        else if (scheme === null) {
-            scheme = _empty;
-        }
-        if (authority === undefined) {
-            authority = this.authority;
-        }
-        else if (authority === null) {
-            authority = _empty;
-        }
-        if (path === undefined) {
-            path = this.path;
-        }
-        else if (path === null) {
-            path = _empty;
-        }
-        if (query === undefined) {
-            query = this.query;
-        }
-        else if (query === null) {
-            query = _empty;
-        }
-        if (fragment === undefined) {
-            fragment = this.fragment;
-        }
-        else if (fragment === null) {
-            fragment = _empty;
-        }
-        if (scheme === this.scheme
-            && authority === this.authority
-            && path === this.path
-            && query === this.query
-            && fragment === this.fragment) {
-            return this;
-        }
-        return new _URI(scheme, authority, path, query, fragment);
+    SimpleKeybinding.prototype.isModifierKey = function () {
+        return (this.keyCode === 0 /* Unknown */
+            || this.keyCode === 5 /* Ctrl */
+            || this.keyCode === 57 /* Meta */
+            || this.keyCode === 6 /* Alt */
+            || this.keyCode === 4 /* Shift */);
     };
-    // ---- parse & validate ------------------------
-    /**
-     * Creates a new URI from a string, e.g. `http://www.msft.com/some/path`,
-     * `file:///usr/home`, or `scheme:with/path`.
-     *
-     * @param value A string which represents an URI (see `URI#toString`).
-     */
-    URI.parse = function (value, _strict) {
-        if (_strict === void 0) { _strict = false; }
-        var match = _regexp.exec(value);
-        if (!match) {
-            return new _URI(_empty, _empty, _empty, _empty, _empty);
-        }
-        return new _URI(match[2] || _empty, decodeURIComponent(match[4] || _empty), decodeURIComponent(match[5] || _empty), decodeURIComponent(match[7] || _empty), decodeURIComponent(match[9] || _empty), _strict);
+    SimpleKeybinding.prototype.toChord = function () {
+        return new ChordKeybinding([this]);
     };
     /**
-     * Creates a new URI from a file system path, e.g. `c:\my\files`,
-     * `/usr/home`, or `\\server\share\some\path`.
-     *
-     * The *difference* between `URI#parse` and `URI#file` is that the latter treats the argument
-     * as path, not as stringified-uri. E.g. `URI.file(path)` is **not the same as**
-     * `URI.parse('file://' + path)` because the path might contain characters that are
-     * interpreted (# and ?). See the following sample:
-     * ```ts
-    const good = URI.file('/coding/c#/project1');
-    good.scheme === 'file';
-    good.path === '/coding/c#/project1';
-    good.fragment === '';
-    const bad = URI.parse('file://' + '/coding/c#/project1');
-    bad.scheme === 'file';
-    bad.path === '/coding/c'; // path is now broken
-    bad.fragment === '/project1';
-    ```
-     *
-     * @param path A file system path (see `URI#fsPath`)
+     * Does this keybinding refer to the key code of a modifier and it also has the modifier flag?
      */
-    URI.file = function (path) {
-        var authority = _empty;
-        // normalize to fwd-slashes on windows,
-        // on other systems bwd-slashes are valid
-        // filename character, eg /f\oo/ba\r.txt
-        if (isWindows) {
-            path = path.replace(/\\/g, _slash);
-        }
-        // check for authority as used in UNC shares
-        // or use the path as given
-        if (path[0] === _slash && path[1] === _slash) {
-            var idx = path.indexOf(_slash, 2);
-            if (idx === -1) {
-                authority = path.substring(2);
-                path = _slash;
-            }
-            else {
-                authority = path.substring(2, idx);
-                path = path.substring(idx) || _slash;
-            }
-        }
-        return new _URI('file', authority, path, _empty, _empty);
+    SimpleKeybinding.prototype.isDuplicateModifierCase = function () {
+        return ((this.ctrlKey && this.keyCode === 5 /* Ctrl */)
+            || (this.shiftKey && this.keyCode === 4 /* Shift */)
+            || (this.altKey && this.keyCode === 6 /* Alt */)
+            || (this.metaKey && this.keyCode === 57 /* Meta */));
     };
-    URI.from = function (components) {
-        return new _URI(components.scheme, components.authority, components.path, components.query, components.fragment);
-    };
-    // ---- printing/externalize ---------------------------
-    /**
-     * Creates a string representation for this URI. It's guaranteed that calling
-     * `URI.parse` with the result of this function creates an URI which is equal
-     * to this URI.
-     *
-     * * The result shall *not* be used for display purposes but for externalization or transport.
-     * * The result will be encoded using the percentage encoding and encoding happens mostly
-     * ignore the scheme-specific encoding rules.
-     *
-     * @param skipEncoding Do not encode the result, default is `false`
-     */
-    URI.prototype.toString = function (skipEncoding) {
-        if (skipEncoding === void 0) { skipEncoding = false; }
-        return _asFormatted(this, skipEncoding);
-    };
-    URI.prototype.toJSON = function () {
-        return this;
-    };
-    URI.revive = function (data) {
-        if (!data) {
-            return data;
-        }
-        else if (data instanceof URI) {
-            return data;
-        }
-        else {
-            var result = new _URI(data);
-            result._fsPath = data.fsPath;
-            result._formatted = data.external;
-            return result;
-        }
-    };
-    return URI;
+    return SimpleKeybinding;
 }());
 
-// tslint:disable-next-line:class-name
-var _URI = /** @class */ (function (_super) {
-    uri_extends(_URI, _super);
-    function _URI() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this._formatted = null;
-        _this._fsPath = null;
-        return _this;
+var ChordKeybinding = /** @class */ (function () {
+    function ChordKeybinding(parts) {
+        if (parts.length === 0) {
+            throw Object(_errors_js__WEBPACK_IMPORTED_MODULE_0__["illegalArgument"])("parts");
+        }
+        this.parts = parts;
     }
-    Object.defineProperty(_URI.prototype, "fsPath", {
-        get: function () {
-            if (!this._fsPath) {
-                this._fsPath = _makeFsPath(this);
-            }
-            return this._fsPath;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    _URI.prototype.toString = function (skipEncoding) {
-        if (skipEncoding === void 0) { skipEncoding = false; }
-        if (!skipEncoding) {
-            if (!this._formatted) {
-                this._formatted = _asFormatted(this, false);
-            }
-            return this._formatted;
+    ChordKeybinding.prototype.equals = function (other) {
+        if (other === null) {
+            return false;
         }
-        else {
-            // we don't cache that
-            return _asFormatted(this, true);
+        if (this.parts.length !== other.parts.length) {
+            return false;
         }
+        for (var i = 0; i < this.parts.length; i++) {
+            if (!this.parts[i].equals(other.parts[i])) {
+                return false;
+            }
+        }
+        return true;
     };
-    _URI.prototype.toJSON = function () {
-        var res = {
-            $mid: 1
-        };
-        // cached state
-        if (this._fsPath) {
-            res.fsPath = this._fsPath;
-        }
-        if (this._formatted) {
-            res.external = this._formatted;
-        }
-        // uri components
-        if (this.path) {
-            res.path = this.path;
-        }
-        if (this.scheme) {
-            res.scheme = this.scheme;
-        }
-        if (this.authority) {
-            res.authority = this.authority;
-        }
-        if (this.query) {
-            res.query = this.query;
-        }
-        if (this.fragment) {
-            res.fragment = this.fragment;
-        }
-        return res;
-    };
-    return _URI;
-}(uri_URI));
-// reserved characters: https://tools.ietf.org/html/rfc3986#section-2.2
-var encodeTable = (uri_a = {},
-    uri_a[58 /* Colon */] = '%3A',
-    uri_a[47 /* Slash */] = '%2F',
-    uri_a[63 /* QuestionMark */] = '%3F',
-    uri_a[35 /* Hash */] = '%23',
-    uri_a[91 /* OpenSquareBracket */] = '%5B',
-    uri_a[93 /* CloseSquareBracket */] = '%5D',
-    uri_a[64 /* AtSign */] = '%40',
-    uri_a[33 /* ExclamationMark */] = '%21',
-    uri_a[36 /* DollarSign */] = '%24',
-    uri_a[38 /* Ampersand */] = '%26',
-    uri_a[39 /* SingleQuote */] = '%27',
-    uri_a[40 /* OpenParen */] = '%28',
-    uri_a[41 /* CloseParen */] = '%29',
-    uri_a[42 /* Asterisk */] = '%2A',
-    uri_a[43 /* Plus */] = '%2B',
-    uri_a[44 /* Comma */] = '%2C',
-    uri_a[59 /* Semicolon */] = '%3B',
-    uri_a[61 /* Equals */] = '%3D',
-    uri_a[32 /* Space */] = '%20',
-    uri_a);
-function encodeURIComponentFast(uriComponent, allowSlash) {
-    var res = undefined;
-    var nativeEncodePos = -1;
-    for (var pos = 0; pos < uriComponent.length; pos++) {
-        var code = uriComponent.charCodeAt(pos);
-        // unreserved characters: https://tools.ietf.org/html/rfc3986#section-2.3
-        if ((code >= 97 /* a */ && code <= 122 /* z */)
-            || (code >= 65 /* A */ && code <= 90 /* Z */)
-            || (code >= 48 /* Digit0 */ && code <= 57 /* Digit9 */)
-            || code === 45 /* Dash */
-            || code === 46 /* Period */
-            || code === 95 /* Underline */
-            || code === 126 /* Tilde */
-            || (allowSlash && code === 47 /* Slash */)) {
-            // check if we are delaying native encode
-            if (nativeEncodePos !== -1) {
-                res += encodeURIComponent(uriComponent.substring(nativeEncodePos, pos));
-                nativeEncodePos = -1;
-            }
-            // check if we write into a new string (by default we try to return the param)
-            if (res !== undefined) {
-                res += uriComponent.charAt(pos);
-            }
-        }
-        else {
-            // encoding needed, we need to allocate a new string
-            if (res === undefined) {
-                res = uriComponent.substr(0, pos);
-            }
-            // check with default table first
-            var escaped = encodeTable[code];
-            if (escaped !== undefined) {
-                // check if we are delaying native encode
-                if (nativeEncodePos !== -1) {
-                    res += encodeURIComponent(uriComponent.substring(nativeEncodePos, pos));
-                    nativeEncodePos = -1;
-                }
-                // append escaped variant to result
-                res += escaped;
-            }
-            else if (nativeEncodePos === -1) {
-                // use native encode only when needed
-                nativeEncodePos = pos;
-            }
-        }
+    return ChordKeybinding;
+}());
+
+var ResolvedKeybindingPart = /** @class */ (function () {
+    function ResolvedKeybindingPart(ctrlKey, shiftKey, altKey, metaKey, kbLabel, kbAriaLabel) {
+        this.ctrlKey = ctrlKey;
+        this.shiftKey = shiftKey;
+        this.altKey = altKey;
+        this.metaKey = metaKey;
+        this.keyLabel = kbLabel;
+        this.keyAriaLabel = kbAriaLabel;
     }
-    if (nativeEncodePos !== -1) {
-        res += encodeURIComponent(uriComponent.substring(nativeEncodePos));
-    }
-    return res !== undefined ? res : uriComponent;
-}
-function encodeURIComponentMinimal(path) {
-    var res = undefined;
-    for (var pos = 0; pos < path.length; pos++) {
-        var code = path.charCodeAt(pos);
-        if (code === 35 /* Hash */ || code === 63 /* QuestionMark */) {
-            if (res === undefined) {
-                res = path.substr(0, pos);
-            }
-            res += encodeTable[code];
-        }
-        else {
-            if (res !== undefined) {
-                res += path[pos];
-            }
-        }
-    }
-    return res !== undefined ? res : path;
-}
+    return ResolvedKeybindingPart;
+}());
+
 /**
- * Compute `fsPath` for the given uri
+ * A resolved keybinding. Can be a simple keybinding or a chord keybinding.
  */
-function _makeFsPath(uri) {
-    var value;
-    if (uri.authority && uri.path.length > 1 && uri.scheme === 'file') {
-        // unc path: file://shares/c$/far/boo
-        value = "//" + uri.authority + uri.path;
+var ResolvedKeybinding = /** @class */ (function () {
+    function ResolvedKeybinding() {
     }
-    else if (uri.path.charCodeAt(0) === 47 /* Slash */
-        && (uri.path.charCodeAt(1) >= 65 /* A */ && uri.path.charCodeAt(1) <= 90 /* Z */ || uri.path.charCodeAt(1) >= 97 /* a */ && uri.path.charCodeAt(1) <= 122 /* z */)
-        && uri.path.charCodeAt(2) === 58 /* Colon */) {
-        // windows drive letter: file:///c:/far/boo
-        value = uri.path[1].toLowerCase() + uri.path.substr(2);
+    return ResolvedKeybinding;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/lifecycle.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/lifecycle.js ***!
+  \********************************************************************/
+/*! exports provided: isDisposable, dispose, combinedDisposable, toDisposable, Disposable, ImmortalReference */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isDisposable", function() { return isDisposable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "dispose", function() { return dispose; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "combinedDisposable", function() { return combinedDisposable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toDisposable", function() { return toDisposable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Disposable", function() { return Disposable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImmortalReference", function() { return ImmortalReference; });
+function isDisposable(thing) {
+    return typeof thing.dispose === 'function'
+        && thing.dispose.length === 0;
+}
+function dispose(first) {
+    var rest = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        rest[_i - 1] = arguments[_i];
+    }
+    if (Array.isArray(first)) {
+        first.forEach(function (d) { return d && d.dispose(); });
+        return [];
+    }
+    else if (rest.length === 0) {
+        if (first) {
+            first.dispose();
+            return first;
+        }
+        return undefined;
     }
     else {
-        // other path
-        value = uri.path;
+        dispose(first);
+        dispose(rest);
+        return [];
     }
-    if (isWindows) {
-        value = value.replace(/\//g, '\\');
-    }
-    return value;
 }
-/**
- * Create the external version of a uri
- */
-function _asFormatted(uri, skipEncoding) {
-    var encoder = !skipEncoding
-        ? encodeURIComponentFast
-        : encodeURIComponentMinimal;
-    var res = '';
-    var scheme = uri.scheme, authority = uri.authority, path = uri.path, query = uri.query, fragment = uri.fragment;
-    if (scheme) {
-        res += scheme;
-        res += ':';
+function combinedDisposable(disposables) {
+    return { dispose: function () { return dispose(disposables); } };
+}
+function toDisposable(fn) {
+    return { dispose: function () { fn(); } };
+}
+var Disposable = /** @class */ (function () {
+    function Disposable() {
+        this._toDispose = [];
+        this._lifecycle_disposable_isDisposed = false;
     }
-    if (authority || scheme === 'file') {
-        res += _slash;
-        res += _slash;
-    }
-    if (authority) {
-        var idx = authority.indexOf('@');
-        if (idx !== -1) {
-            // <user>@<auth>
-            var userinfo = authority.substr(0, idx);
-            authority = authority.substr(idx + 1);
-            idx = userinfo.indexOf(':');
-            if (idx === -1) {
-                res += encoder(userinfo, false);
-            }
-            else {
-                // <user>:<pass>@<auth>
-                res += encoder(userinfo.substr(0, idx), false);
-                res += ':';
-                res += encoder(userinfo.substr(idx + 1), false);
-            }
-            res += '@';
-        }
-        authority = authority.toLowerCase();
-        idx = authority.indexOf(':');
-        if (idx === -1) {
-            res += encoder(authority, false);
+    Disposable.prototype.dispose = function () {
+        this._lifecycle_disposable_isDisposed = true;
+        this._toDispose = dispose(this._toDispose);
+    };
+    Disposable.prototype._register = function (t) {
+        if (this._lifecycle_disposable_isDisposed) {
+            console.warn('Registering disposable on object that has already been disposed.');
+            t.dispose();
         }
         else {
-            // <auth>:<port>
-            res += encoder(authority.substr(0, idx), false);
-            res += authority.substr(idx);
+            this._toDispose.push(t);
         }
-    }
-    if (path) {
-        // lower-case windows drive letters in /C:/fff or C:/fff
-        if (path.length >= 3 && path.charCodeAt(0) === 47 /* Slash */ && path.charCodeAt(2) === 58 /* Colon */) {
-            var code = path.charCodeAt(1);
-            if (code >= 65 /* A */ && code <= 90 /* Z */) {
-                path = "/" + String.fromCharCode(code + 32) + ":" + path.substr(3); // "/c:".length === 3
-            }
-        }
-        else if (path.length >= 2 && path.charCodeAt(1) === 58 /* Colon */) {
-            var code = path.charCodeAt(0);
-            if (code >= 65 /* A */ && code <= 90 /* Z */) {
-                path = String.fromCharCode(code + 32) + ":" + path.substr(2); // "/c:".length === 3
-            }
-        }
-        // encode the rest of the path
-        res += encoder(path, true);
-    }
-    if (query) {
-        res += '?';
-        res += encoder(query, false);
-    }
-    if (fragment) {
-        res += '#';
-        res += !skipEncoding ? encodeURIComponentFast(fragment, false) : fragment;
-    }
-    return res;
-}
+        return t;
+    };
+    Disposable.None = Object.freeze({ dispose: function () { } });
+    return Disposable;
+}());
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/core/position.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-/**
- * A position in the editor.
- */
-var Position = /** @class */ (function () {
-    function Position(lineNumber, column) {
-        this.lineNumber = lineNumber;
-        this.column = column;
+var ImmortalReference = /** @class */ (function () {
+    function ImmortalReference(object) {
+        this.object = object;
     }
-    /**
-     * Create a new postion from this position.
-     *
-     * @param newLineNumber new line number
-     * @param newColumn new column
-     */
-    Position.prototype.with = function (newLineNumber, newColumn) {
-        if (newLineNumber === void 0) { newLineNumber = this.lineNumber; }
-        if (newColumn === void 0) { newColumn = this.column; }
-        if (newLineNumber === this.lineNumber && newColumn === this.column) {
-            return this;
-        }
-        else {
-            return new Position(newLineNumber, newColumn);
-        }
-    };
-    /**
-     * Derive a new position from this position.
-     *
-     * @param deltaLineNumber line number delta
-     * @param deltaColumn column delta
-     */
-    Position.prototype.delta = function (deltaLineNumber, deltaColumn) {
-        if (deltaLineNumber === void 0) { deltaLineNumber = 0; }
-        if (deltaColumn === void 0) { deltaColumn = 0; }
-        return this.with(this.lineNumber + deltaLineNumber, this.column + deltaColumn);
-    };
-    /**
-     * Test if this position equals other position
-     */
-    Position.prototype.equals = function (other) {
-        return Position.equals(this, other);
-    };
-    /**
-     * Test if position `a` equals position `b`
-     */
-    Position.equals = function (a, b) {
-        if (!a && !b) {
-            return true;
-        }
-        return (!!a &&
-            !!b &&
-            a.lineNumber === b.lineNumber &&
-            a.column === b.column);
-    };
-    /**
-     * Test if this position is before other position.
-     * If the two positions are equal, the result will be false.
-     */
-    Position.prototype.isBefore = function (other) {
-        return Position.isBefore(this, other);
-    };
-    /**
-     * Test if position `a` is before position `b`.
-     * If the two positions are equal, the result will be false.
-     */
-    Position.isBefore = function (a, b) {
-        if (a.lineNumber < b.lineNumber) {
-            return true;
-        }
-        if (b.lineNumber < a.lineNumber) {
-            return false;
-        }
-        return a.column < b.column;
-    };
-    /**
-     * Test if this position is before other position.
-     * If the two positions are equal, the result will be true.
-     */
-    Position.prototype.isBeforeOrEqual = function (other) {
-        return Position.isBeforeOrEqual(this, other);
-    };
-    /**
-     * Test if position `a` is before position `b`.
-     * If the two positions are equal, the result will be true.
-     */
-    Position.isBeforeOrEqual = function (a, b) {
-        if (a.lineNumber < b.lineNumber) {
-            return true;
-        }
-        if (b.lineNumber < a.lineNumber) {
-            return false;
-        }
-        return a.column <= b.column;
-    };
-    /**
-     * A function that compares positions, useful for sorting
-     */
-    Position.compare = function (a, b) {
-        var aLineNumber = a.lineNumber | 0;
-        var bLineNumber = b.lineNumber | 0;
-        if (aLineNumber === bLineNumber) {
-            var aColumn = a.column | 0;
-            var bColumn = b.column | 0;
-            return aColumn - bColumn;
-        }
-        return aLineNumber - bLineNumber;
-    };
-    /**
-     * Clone this position.
-     */
-    Position.prototype.clone = function () {
-        return new Position(this.lineNumber, this.column);
-    };
-    /**
-     * Convert to a human-readable representation.
-     */
-    Position.prototype.toString = function () {
-        return '(' + this.lineNumber + ',' + this.column + ')';
-    };
-    // ---
-    /**
-     * Create a `Position` from an `IPosition`.
-     */
-    Position.lift = function (pos) {
-        return new Position(pos.lineNumber, pos.column);
-    };
-    /**
-     * Test if `obj` is an `IPosition`.
-     */
-    Position.isIPosition = function (obj) {
-        return (obj
-            && (typeof obj.lineNumber === 'number')
-            && (typeof obj.column === 'number'));
-    };
-    return Position;
+    ImmortalReference.prototype.dispose = function () { };
+    return ImmortalReference;
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/core/range.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/linkedList.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/linkedList.js ***!
+  \*********************************************************************/
+/*! exports provided: LinkedList */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinkedList", function() { return LinkedList; });
+/* harmony import */ var _iterator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./iterator.js */ "./node_modules/monaco-editor/esm/vs/base/common/iterator.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-/**
- * A range in the editor. (startLineNumber,startColumn) is <= (endLineNumber,endColumn)
- */
-var range_Range = /** @class */ (function () {
-    function Range(startLineNumber, startColumn, endLineNumber, endColumn) {
-        if ((startLineNumber > endLineNumber) || (startLineNumber === endLineNumber && startColumn > endColumn)) {
-            this.startLineNumber = endLineNumber;
-            this.startColumn = endColumn;
-            this.endLineNumber = startLineNumber;
-            this.endColumn = startColumn;
-        }
-        else {
-            this.startLineNumber = startLineNumber;
-            this.startColumn = startColumn;
-            this.endLineNumber = endLineNumber;
-            this.endColumn = endColumn;
-        }
+var Node = /** @class */ (function () {
+    function Node(element) {
+        this.element = element;
+        this.next = Node.Undefined;
+        this.prev = Node.Undefined;
     }
-    /**
-     * Test if this range is empty.
-     */
-    Range.prototype.isEmpty = function () {
-        return Range.isEmpty(this);
+    Node.Undefined = new Node(undefined);
+    return Node;
+}());
+var LinkedList = /** @class */ (function () {
+    function LinkedList() {
+        this._first = Node.Undefined;
+        this._last = Node.Undefined;
+        this._size = 0;
+    }
+    Object.defineProperty(LinkedList.prototype, "size", {
+        get: function () {
+            return this._size;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    LinkedList.prototype.isEmpty = function () {
+        return this._first === Node.Undefined;
     };
-    /**
-     * Test if `range` is empty.
-     */
-    Range.isEmpty = function (range) {
-        return (range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn);
+    LinkedList.prototype.clear = function () {
+        this._first = Node.Undefined;
+        this._last = Node.Undefined;
+        this._size = 0;
     };
-    /**
-     * Test if position is in this range. If the position is at the edges, will return true.
-     */
-    Range.prototype.containsPosition = function (position) {
-        return Range.containsPosition(this, position);
+    LinkedList.prototype.unshift = function (element) {
+        return this._insert(element, false);
     };
-    /**
-     * Test if `position` is in `range`. If the position is at the edges, will return true.
-     */
-    Range.containsPosition = function (range, position) {
-        if (position.lineNumber < range.startLineNumber || position.lineNumber > range.endLineNumber) {
-            return false;
-        }
-        if (position.lineNumber === range.startLineNumber && position.column < range.startColumn) {
-            return false;
-        }
-        if (position.lineNumber === range.endLineNumber && position.column > range.endColumn) {
-            return false;
-        }
-        return true;
+    LinkedList.prototype.push = function (element) {
+        return this._insert(element, true);
     };
-    /**
-     * Test if range is in this range. If the range is equal to this range, will return true.
-     */
-    Range.prototype.containsRange = function (range) {
-        return Range.containsRange(this, range);
-    };
-    /**
-     * Test if `otherRange` is in `range`. If the ranges are equal, will return true.
-     */
-    Range.containsRange = function (range, otherRange) {
-        if (otherRange.startLineNumber < range.startLineNumber || otherRange.endLineNumber < range.startLineNumber) {
-            return false;
+    LinkedList.prototype._insert = function (element, atTheEnd) {
+        var _this = this;
+        var newNode = new Node(element);
+        if (this._first === Node.Undefined) {
+            this._first = newNode;
+            this._last = newNode;
         }
-        if (otherRange.startLineNumber > range.endLineNumber || otherRange.endLineNumber > range.endLineNumber) {
-            return false;
-        }
-        if (otherRange.startLineNumber === range.startLineNumber && otherRange.startColumn < range.startColumn) {
-            return false;
-        }
-        if (otherRange.endLineNumber === range.endLineNumber && otherRange.endColumn > range.endColumn) {
-            return false;
-        }
-        return true;
-    };
-    /**
-     * A reunion of the two ranges.
-     * The smallest position will be used as the start point, and the largest one as the end point.
-     */
-    Range.prototype.plusRange = function (range) {
-        return Range.plusRange(this, range);
-    };
-    /**
-     * A reunion of the two ranges.
-     * The smallest position will be used as the start point, and the largest one as the end point.
-     */
-    Range.plusRange = function (a, b) {
-        var startLineNumber;
-        var startColumn;
-        var endLineNumber;
-        var endColumn;
-        if (b.startLineNumber < a.startLineNumber) {
-            startLineNumber = b.startLineNumber;
-            startColumn = b.startColumn;
-        }
-        else if (b.startLineNumber === a.startLineNumber) {
-            startLineNumber = b.startLineNumber;
-            startColumn = Math.min(b.startColumn, a.startColumn);
+        else if (atTheEnd) {
+            // push
+            var oldLast = this._last;
+            this._last = newNode;
+            newNode.prev = oldLast;
+            oldLast.next = newNode;
         }
         else {
-            startLineNumber = a.startLineNumber;
-            startColumn = a.startColumn;
+            // unshift
+            var oldFirst = this._first;
+            this._first = newNode;
+            newNode.next = oldFirst;
+            oldFirst.prev = newNode;
         }
-        if (b.endLineNumber > a.endLineNumber) {
-            endLineNumber = b.endLineNumber;
-            endColumn = b.endColumn;
-        }
-        else if (b.endLineNumber === a.endLineNumber) {
-            endLineNumber = b.endLineNumber;
-            endColumn = Math.max(b.endColumn, a.endColumn);
+        this._size += 1;
+        var didRemove = false;
+        return function () {
+            if (!didRemove) {
+                didRemove = true;
+                _this._remove(newNode);
+            }
+        };
+    };
+    LinkedList.prototype.shift = function () {
+        if (this._first === Node.Undefined) {
+            return undefined;
         }
         else {
-            endLineNumber = a.endLineNumber;
-            endColumn = a.endColumn;
+            var res = this._first.element;
+            this._remove(this._first);
+            return res;
         }
-        return new Range(startLineNumber, startColumn, endLineNumber, endColumn);
     };
-    /**
-     * A intersection of the two ranges.
-     */
-    Range.prototype.intersectRanges = function (range) {
-        return Range.intersectRanges(this, range);
-    };
-    /**
-     * A intersection of the two ranges.
-     */
-    Range.intersectRanges = function (a, b) {
-        var resultStartLineNumber = a.startLineNumber;
-        var resultStartColumn = a.startColumn;
-        var resultEndLineNumber = a.endLineNumber;
-        var resultEndColumn = a.endColumn;
-        var otherStartLineNumber = b.startLineNumber;
-        var otherStartColumn = b.startColumn;
-        var otherEndLineNumber = b.endLineNumber;
-        var otherEndColumn = b.endColumn;
-        if (resultStartLineNumber < otherStartLineNumber) {
-            resultStartLineNumber = otherStartLineNumber;
-            resultStartColumn = otherStartColumn;
+    LinkedList.prototype._remove = function (node) {
+        if (node.prev !== Node.Undefined && node.next !== Node.Undefined) {
+            // middle
+            var anchor = node.prev;
+            anchor.next = node.next;
+            node.next.prev = anchor;
         }
-        else if (resultStartLineNumber === otherStartLineNumber) {
-            resultStartColumn = Math.max(resultStartColumn, otherStartColumn);
+        else if (node.prev === Node.Undefined && node.next === Node.Undefined) {
+            // only node
+            this._first = Node.Undefined;
+            this._last = Node.Undefined;
         }
-        if (resultEndLineNumber > otherEndLineNumber) {
-            resultEndLineNumber = otherEndLineNumber;
-            resultEndColumn = otherEndColumn;
+        else if (node.next === Node.Undefined) {
+            // last
+            this._last = this._last.prev;
+            this._last.next = Node.Undefined;
         }
-        else if (resultEndLineNumber === otherEndLineNumber) {
-            resultEndColumn = Math.min(resultEndColumn, otherEndColumn);
+        else if (node.prev === Node.Undefined) {
+            // first
+            this._first = this._first.next;
+            this._first.prev = Node.Undefined;
         }
-        // Check if selection is now empty
-        if (resultStartLineNumber > resultEndLineNumber) {
-            return null;
-        }
-        if (resultStartLineNumber === resultEndLineNumber && resultStartColumn > resultEndColumn) {
-            return null;
-        }
-        return new Range(resultStartLineNumber, resultStartColumn, resultEndLineNumber, resultEndColumn);
+        // done
+        this._size -= 1;
     };
-    /**
-     * Test if this range equals other.
-     */
-    Range.prototype.equalsRange = function (other) {
-        return Range.equalsRange(this, other);
-    };
-    /**
-     * Test if range `a` equals `b`.
-     */
-    Range.equalsRange = function (a, b) {
-        return (!!a &&
-            !!b &&
-            a.startLineNumber === b.startLineNumber &&
-            a.startColumn === b.startColumn &&
-            a.endLineNumber === b.endLineNumber &&
-            a.endColumn === b.endColumn);
-    };
-    /**
-     * Return the end position (which will be after or equal to the start position)
-     */
-    Range.prototype.getEndPosition = function () {
-        return new Position(this.endLineNumber, this.endColumn);
-    };
-    /**
-     * Return the start position (which will be before or equal to the end position)
-     */
-    Range.prototype.getStartPosition = function () {
-        return new Position(this.startLineNumber, this.startColumn);
-    };
-    /**
-     * Transform to a user presentable string representation.
-     */
-    Range.prototype.toString = function () {
-        return '[' + this.startLineNumber + ',' + this.startColumn + ' -> ' + this.endLineNumber + ',' + this.endColumn + ']';
-    };
-    /**
-     * Create a new range using this range's start position, and using endLineNumber and endColumn as the end position.
-     */
-    Range.prototype.setEndPosition = function (endLineNumber, endColumn) {
-        return new Range(this.startLineNumber, this.startColumn, endLineNumber, endColumn);
-    };
-    /**
-     * Create a new range using this range's end position, and using startLineNumber and startColumn as the start position.
-     */
-    Range.prototype.setStartPosition = function (startLineNumber, startColumn) {
-        return new Range(startLineNumber, startColumn, this.endLineNumber, this.endColumn);
-    };
-    /**
-     * Create a new empty range using this range's start position.
-     */
-    Range.prototype.collapseToStart = function () {
-        return Range.collapseToStart(this);
-    };
-    /**
-     * Create a new empty range using this range's start position.
-     */
-    Range.collapseToStart = function (range) {
-        return new Range(range.startLineNumber, range.startColumn, range.startLineNumber, range.startColumn);
-    };
-    // ---
-    Range.fromPositions = function (start, end) {
-        if (end === void 0) { end = start; }
-        return new Range(start.lineNumber, start.column, end.lineNumber, end.column);
-    };
-    Range.lift = function (range) {
-        if (!range) {
-            return null;
-        }
-        return new Range(range.startLineNumber, range.startColumn, range.endLineNumber, range.endColumn);
-    };
-    /**
-     * Test if `obj` is an `IRange`.
-     */
-    Range.isIRange = function (obj) {
-        return (obj
-            && (typeof obj.startLineNumber === 'number')
-            && (typeof obj.startColumn === 'number')
-            && (typeof obj.endLineNumber === 'number')
-            && (typeof obj.endColumn === 'number'));
-    };
-    /**
-     * Test if the two ranges are touching in any way.
-     */
-    Range.areIntersectingOrTouching = function (a, b) {
-        // Check if `a` is before `b`
-        if (a.endLineNumber < b.startLineNumber || (a.endLineNumber === b.startLineNumber && a.endColumn < b.startColumn)) {
-            return false;
-        }
-        // Check if `b` is before `a`
-        if (b.endLineNumber < a.startLineNumber || (b.endLineNumber === a.startLineNumber && b.endColumn < a.startColumn)) {
-            return false;
-        }
-        // These ranges must intersect
-        return true;
-    };
-    /**
-     * Test if the two ranges are intersecting. If the ranges are touching it returns true.
-     */
-    Range.areIntersecting = function (a, b) {
-        // Check if `a` is before `b`
-        if (a.endLineNumber < b.startLineNumber || (a.endLineNumber === b.startLineNumber && a.endColumn <= b.startColumn)) {
-            return false;
-        }
-        // Check if `b` is before `a`
-        if (b.endLineNumber < a.startLineNumber || (b.endLineNumber === a.startLineNumber && b.endColumn <= a.startColumn)) {
-            return false;
-        }
-        // These ranges must intersect
-        return true;
-    };
-    /**
-     * A function that compares ranges, useful for sorting ranges
-     * It will first compare ranges on the startPosition and then on the endPosition
-     */
-    Range.compareRangesUsingStarts = function (a, b) {
-        if (a && b) {
-            var aStartLineNumber = a.startLineNumber | 0;
-            var bStartLineNumber = b.startLineNumber | 0;
-            if (aStartLineNumber === bStartLineNumber) {
-                var aStartColumn = a.startColumn | 0;
-                var bStartColumn = b.startColumn | 0;
-                if (aStartColumn === bStartColumn) {
-                    var aEndLineNumber = a.endLineNumber | 0;
-                    var bEndLineNumber = b.endLineNumber | 0;
-                    if (aEndLineNumber === bEndLineNumber) {
-                        var aEndColumn = a.endColumn | 0;
-                        var bEndColumn = b.endColumn | 0;
-                        return aEndColumn - bEndColumn;
-                    }
-                    return aEndLineNumber - bEndLineNumber;
+    LinkedList.prototype.iterator = function () {
+        var element;
+        var node = this._first;
+        return {
+            next: function () {
+                if (node === Node.Undefined) {
+                    return _iterator_js__WEBPACK_IMPORTED_MODULE_0__["FIN"];
                 }
-                return aStartColumn - bStartColumn;
-            }
-            return aStartLineNumber - bStartLineNumber;
-        }
-        var aExists = (a ? 1 : 0);
-        var bExists = (b ? 1 : 0);
-        return aExists - bExists;
-    };
-    /**
-     * A function that compares ranges, useful for sorting ranges
-     * It will first compare ranges on the endPosition and then on the startPosition
-     */
-    Range.compareRangesUsingEnds = function (a, b) {
-        if (a.endLineNumber === b.endLineNumber) {
-            if (a.endColumn === b.endColumn) {
-                if (a.startLineNumber === b.startLineNumber) {
-                    return a.startColumn - b.startColumn;
+                if (!element) {
+                    element = { done: false, value: node.element };
                 }
-                return a.startLineNumber - b.startLineNumber;
+                else {
+                    element.value = node.element;
+                }
+                node = node.next;
+                return element;
             }
-            return a.endColumn - b.endColumn;
+        };
+    };
+    LinkedList.prototype.toArray = function () {
+        var result = [];
+        for (var node = this._first; node !== Node.Undefined; node = node.next) {
+            result.push(node.element);
         }
-        return a.endLineNumber - b.endLineNumber;
+        return result;
     };
-    /**
-     * Test if the range spans multiple lines.
-     */
-    Range.spansMultipleLines = function (range) {
-        return range.endLineNumber > range.startLineNumber;
-    };
-    return Range;
+    return LinkedList;
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/strings.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/platform.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/platform.js ***!
+  \*******************************************************************/
+/*! exports provided: isWindows, isMacintosh, isLinux, isNative, isWeb, globals, setImmediate, OS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isWindows", function() { return isWindows; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isMacintosh", function() { return isMacintosh; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLinux", function() { return isLinux; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNative", function() { return isNative; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isWeb", function() { return isWeb; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "globals", function() { return globals; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setImmediate", function() { return setImmediate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OS", function() { return OS; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var LANGUAGE_DEFAULT = 'en';
+var _isWindows = false;
+var _isMacintosh = false;
+var _isLinux = false;
+var _isNative = false;
+var _isWeb = false;
+var _locale = undefined;
+var _language = LANGUAGE_DEFAULT;
+var _translationsConfigFile = undefined;
+var isElectronRenderer = (typeof process !== 'undefined' && typeof process.versions !== 'undefined' && typeof process.versions.electron !== 'undefined' && process.type === 'renderer');
+// OS detection
+if (typeof navigator === 'object' && !isElectronRenderer) {
+    var userAgent = navigator.userAgent;
+    _isWindows = userAgent.indexOf('Windows') >= 0;
+    _isMacintosh = userAgent.indexOf('Macintosh') >= 0;
+    _isLinux = userAgent.indexOf('Linux') >= 0;
+    _isWeb = true;
+    _locale = navigator.language;
+    _language = _locale;
+}
+else if (typeof process === 'object') {
+    _isWindows = (process.platform === 'win32');
+    _isMacintosh = (process.platform === 'darwin');
+    _isLinux = (process.platform === 'linux');
+    _locale = LANGUAGE_DEFAULT;
+    _language = LANGUAGE_DEFAULT;
+    var rawNlsConfig = process.env['VSCODE_NLS_CONFIG'];
+    if (rawNlsConfig) {
+        try {
+            var nlsConfig = JSON.parse(rawNlsConfig);
+            var resolved = nlsConfig.availableLanguages['*'];
+            _locale = nlsConfig.locale;
+            // VSCode's default language is 'en'
+            _language = resolved ? resolved : LANGUAGE_DEFAULT;
+            _translationsConfigFile = nlsConfig._translationsConfigFile;
+        }
+        catch (e) {
+        }
+    }
+    _isNative = true;
+}
+var _platform = 0 /* Web */;
+if (_isNative) {
+    if (_isMacintosh) {
+        _platform = 1 /* Mac */;
+    }
+    else if (_isWindows) {
+        _platform = 3 /* Windows */;
+    }
+    else if (_isLinux) {
+        _platform = 2 /* Linux */;
+    }
+}
+var isWindows = _isWindows;
+var isMacintosh = _isMacintosh;
+var isLinux = _isLinux;
+var isNative = _isNative;
+var isWeb = _isWeb;
+var _globals = (typeof self === 'object' ? self : typeof global === 'object' ? global : {});
+var globals = _globals;
+var _setImmediate = null;
+function setImmediate(callback) {
+    if (_setImmediate === null) {
+        if (globals.setImmediate) {
+            _setImmediate = globals.setImmediate.bind(globals);
+        }
+        else if (typeof process !== 'undefined' && typeof process.nextTick === 'function') {
+            _setImmediate = process.nextTick.bind(process);
+        }
+        else {
+            _setImmediate = globals.setTimeout.bind(globals);
+        }
+    }
+    return _setImmediate(callback);
+}
+var OS = (_isMacintosh ? 2 /* Macintosh */ : (_isWindows ? 1 /* Windows */ : 3 /* Linux */));
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/strings.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/strings.js ***!
+  \******************************************************************/
+/*! exports provided: empty, isFalsyOrWhitespace, pad, format, escape, escapeRegExpCharacters, trim, ltrim, rtrim, convertSimple2RegExpPattern, startsWith, endsWith, createRegExp, regExpLeadsToEndlessLoop, regExpFlags, firstNonWhitespaceIndex, getLeadingWhitespace, lastNonWhitespaceIndex, compare, isLowerAsciiLetter, isUpperAsciiLetter, equalsIgnoreCase, startsWithIgnoreCase, commonPrefixLength, commonSuffixLength, isHighSurrogate, isLowSurrogate, containsRTL, containsEmoji, isBasicASCII, containsFullWidthCharacter, isFullWidthCharacter, UTF8_BOM_CHARACTER, startsWithUTF8BOM, safeBtoa, repeat */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "empty", function() { return empty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFalsyOrWhitespace", function() { return isFalsyOrWhitespace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pad", function() { return pad; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "format", function() { return format; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escape", function() { return escape; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeRegExpCharacters", function() { return escapeRegExpCharacters; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trim", function() { return trim; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ltrim", function() { return ltrim; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rtrim", function() { return rtrim; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "convertSimple2RegExpPattern", function() { return convertSimple2RegExpPattern; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startsWith", function() { return startsWith; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "endsWith", function() { return endsWith; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createRegExp", function() { return createRegExp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "regExpLeadsToEndlessLoop", function() { return regExpLeadsToEndlessLoop; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "regExpFlags", function() { return regExpFlags; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "firstNonWhitespaceIndex", function() { return firstNonWhitespaceIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLeadingWhitespace", function() { return getLeadingWhitespace; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lastNonWhitespaceIndex", function() { return lastNonWhitespaceIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compare", function() { return compare; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLowerAsciiLetter", function() { return isLowerAsciiLetter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUpperAsciiLetter", function() { return isUpperAsciiLetter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "equalsIgnoreCase", function() { return equalsIgnoreCase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startsWithIgnoreCase", function() { return startsWithIgnoreCase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "commonPrefixLength", function() { return commonPrefixLength; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "commonSuffixLength", function() { return commonSuffixLength; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isHighSurrogate", function() { return isHighSurrogate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLowSurrogate", function() { return isLowSurrogate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "containsRTL", function() { return containsRTL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "containsEmoji", function() { return containsEmoji; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBasicASCII", function() { return isBasicASCII; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "containsFullWidthCharacter", function() { return containsFullWidthCharacter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFullWidthCharacter", function() { return isFullWidthCharacter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UTF8_BOM_CHARACTER", function() { return UTF8_BOM_CHARACTER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "startsWithUTF8BOM", function() { return startsWithUTF8BOM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "safeBtoa", function() { return safeBtoa; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "repeat", function() { return repeat; });
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -3157,7 +3164,7 @@ function format(value) {
  * Converts HTML characters inside the string to use entities instead. Makes the string safe from
  * being used e.g. in HTMLElement.innerHTML.
  */
-function strings_escape(html) {
+function escape(html) {
     return html.replace(/[<>&]/g, function (match) {
         switch (match) {
             case '<': return '&lt;';
@@ -3554,7 +3561,1964 @@ function repeat(s, count) {
     return result;
 }
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/diff/diffComputer.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/types.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/types.js ***!
+  \****************************************************************/
+/*! exports provided: isArray, isString, isObject, isNumber, isBoolean, isUndefined, isUndefinedOrNull, isEmptyObject, isFunction, validateConstraints, validateConstraint, getAllPropertyNames, withNullAsUndefined, withUndefinedAsNull */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArray", function() { return isArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isString", function() { return isString; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isObject", function() { return isObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNumber", function() { return isNumber; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isBoolean", function() { return isBoolean; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUndefined", function() { return isUndefined; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUndefinedOrNull", function() { return isUndefinedOrNull; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isEmptyObject", function() { return isEmptyObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isFunction", function() { return isFunction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validateConstraints", function() { return validateConstraints; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validateConstraint", function() { return validateConstraint; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAllPropertyNames", function() { return getAllPropertyNames; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "withNullAsUndefined", function() { return withNullAsUndefined; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "withUndefinedAsNull", function() { return withUndefinedAsNull; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var _typeof = {
+    number: 'number',
+    string: 'string',
+    undefined: 'undefined',
+    object: 'object',
+    function: 'function'
+};
+/**
+ * @returns whether the provided parameter is a JavaScript Array or not.
+ */
+function isArray(array) {
+    if (Array.isArray) {
+        return Array.isArray(array);
+    }
+    if (array && typeof (array.length) === _typeof.number && array.constructor === Array) {
+        return true;
+    }
+    return false;
+}
+/**
+ * @returns whether the provided parameter is a JavaScript String or not.
+ */
+function isString(str) {
+    if (typeof (str) === _typeof.string || str instanceof String) {
+        return true;
+    }
+    return false;
+}
+/**
+ *
+ * @returns whether the provided parameter is of type `object` but **not**
+ *	`null`, an `array`, a `regexp`, nor a `date`.
+ */
+function isObject(obj) {
+    // The method can't do a type cast since there are type (like strings) which
+    // are subclasses of any put not positvely matched by the function. Hence type
+    // narrowing results in wrong results.
+    return typeof obj === _typeof.object
+        && obj !== null
+        && !Array.isArray(obj)
+        && !(obj instanceof RegExp)
+        && !(obj instanceof Date);
+}
+/**
+ * In **contrast** to just checking `typeof` this will return `false` for `NaN`.
+ * @returns whether the provided parameter is a JavaScript Number or not.
+ */
+function isNumber(obj) {
+    if ((typeof (obj) === _typeof.number || obj instanceof Number) && !isNaN(obj)) {
+        return true;
+    }
+    return false;
+}
+/**
+ * @returns whether the provided parameter is a JavaScript Boolean or not.
+ */
+function isBoolean(obj) {
+    return obj === true || obj === false;
+}
+/**
+ * @returns whether the provided parameter is undefined.
+ */
+function isUndefined(obj) {
+    return typeof (obj) === _typeof.undefined;
+}
+/**
+ * @returns whether the provided parameter is undefined or null.
+ */
+function isUndefinedOrNull(obj) {
+    return isUndefined(obj) || obj === null;
+}
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+/**
+ * @returns whether the provided parameter is an empty JavaScript Object or not.
+ */
+function isEmptyObject(obj) {
+    if (!isObject(obj)) {
+        return false;
+    }
+    for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) {
+            return false;
+        }
+    }
+    return true;
+}
+/**
+ * @returns whether the provided parameter is a JavaScript Function or not.
+ */
+function isFunction(obj) {
+    return typeof obj === _typeof.function;
+}
+function validateConstraints(args, constraints) {
+    var len = Math.min(args.length, constraints.length);
+    for (var i = 0; i < len; i++) {
+        validateConstraint(args[i], constraints[i]);
+    }
+}
+function validateConstraint(arg, constraint) {
+    if (isString(constraint)) {
+        if (typeof arg !== constraint) {
+            throw new Error("argument does not match constraint: typeof " + constraint);
+        }
+    }
+    else if (isFunction(constraint)) {
+        try {
+            if (arg instanceof constraint) {
+                return;
+            }
+        }
+        catch (_a) {
+            // ignore
+        }
+        if (!isUndefinedOrNull(arg) && arg.constructor === constraint) {
+            return;
+        }
+        if (constraint.length === 1 && constraint.call(undefined, arg) === true) {
+            return;
+        }
+        throw new Error("argument does not match one of these constraints: arg instanceof constraint, arg.constructor === constraint, nor constraint(arg) === true");
+    }
+}
+function getAllPropertyNames(obj) {
+    var res = [];
+    var proto = Object.getPrototypeOf(obj);
+    while (Object.prototype !== proto) {
+        res = res.concat(Object.getOwnPropertyNames(proto));
+        proto = Object.getPrototypeOf(proto);
+    }
+    return res;
+}
+/**
+ * Converts null to undefined, passes all other values through.
+ */
+function withNullAsUndefined(x) {
+    return x === null ? undefined : x;
+}
+/**
+ * Converts undefined to null, passes all other values through.
+ */
+function withUndefinedAsNull(x) {
+    return typeof x === 'undefined' ? null : x;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/uri.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/uri.js ***!
+  \**************************************************************/
+/*! exports provided: URI */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "URI", function() { return URI; });
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./platform.js */ "./node_modules/monaco-editor/esm/vs/base/common/platform.js");
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var _a;
+
+var _schemePattern = /^\w[\w\d+.-]*$/;
+var _singleSlashStart = /^\//;
+var _doubleSlashStart = /^\/\//;
+var _throwOnMissingSchema = true;
+function _validateUri(ret, _strict) {
+    // scheme, must be set
+    if (!ret.scheme) {
+        if (_strict || _throwOnMissingSchema) {
+            throw new Error("[UriError]: Scheme is missing: {scheme: \"\", authority: \"" + ret.authority + "\", path: \"" + ret.path + "\", query: \"" + ret.query + "\", fragment: \"" + ret.fragment + "\"}");
+        }
+        else {
+            console.warn("[UriError]: Scheme is missing: {scheme: \"\", authority: \"" + ret.authority + "\", path: \"" + ret.path + "\", query: \"" + ret.query + "\", fragment: \"" + ret.fragment + "\"}");
+        }
+    }
+    // scheme, https://tools.ietf.org/html/rfc3986#section-3.1
+    // ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
+    if (ret.scheme && !_schemePattern.test(ret.scheme)) {
+        throw new Error('[UriError]: Scheme contains illegal characters.');
+    }
+    // path, http://tools.ietf.org/html/rfc3986#section-3.3
+    // If a URI contains an authority component, then the path component
+    // must either be empty or begin with a slash ("/") character.  If a URI
+    // does not contain an authority component, then the path cannot begin
+    // with two slash characters ("//").
+    if (ret.path) {
+        if (ret.authority) {
+            if (!_singleSlashStart.test(ret.path)) {
+                throw new Error('[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character');
+            }
+        }
+        else {
+            if (_doubleSlashStart.test(ret.path)) {
+                throw new Error('[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")');
+            }
+        }
+    }
+}
+// for a while we allowed uris *without* schemes and this is the migration
+// for them, e.g. an uri without scheme and without strict-mode warns and falls
+// back to the file-scheme. that should cause the least carnage and still be a
+// clear warning
+function _schemeFix(scheme, _strict) {
+    if (_strict || _throwOnMissingSchema) {
+        return scheme || _empty;
+    }
+    if (!scheme) {
+        console.trace('BAD uri lacks scheme, falling back to file-scheme.');
+        scheme = 'file';
+    }
+    return scheme;
+}
+// implements a bit of https://tools.ietf.org/html/rfc3986#section-5
+function _referenceResolution(scheme, path) {
+    // the slash-character is our 'default base' as we don't
+    // support constructing URIs relative to other URIs. This
+    // also means that we alter and potentially break paths.
+    // see https://tools.ietf.org/html/rfc3986#section-5.1.4
+    switch (scheme) {
+        case 'https':
+        case 'http':
+        case 'file':
+            if (!path) {
+                path = _slash;
+            }
+            else if (path[0] !== _slash) {
+                path = _slash + path;
+            }
+            break;
+    }
+    return path;
+}
+var _empty = '';
+var _slash = '/';
+var _regexp = /^(([^:/?#]+?):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/;
+/**
+ * Uniform Resource Identifier (URI) http://tools.ietf.org/html/rfc3986.
+ * This class is a simple parser which creates the basic component parts
+ * (http://tools.ietf.org/html/rfc3986#section-3) with minimal validation
+ * and encoding.
+ *
+ *       foo://example.com:8042/over/there?name=ferret#nose
+ *       \_/   \______________/\_________/ \_________/ \__/
+ *        |           |            |            |        |
+ *     scheme     authority       path        query   fragment
+ *        |   _____________________|__
+ *       / \ /                        \
+ *       urn:example:animal:ferret:nose
+ */
+var URI = /** @class */ (function () {
+    /**
+     * @internal
+     */
+    function URI(schemeOrData, authority, path, query, fragment, _strict) {
+        if (_strict === void 0) { _strict = false; }
+        if (typeof schemeOrData === 'object') {
+            this.scheme = schemeOrData.scheme || _empty;
+            this.authority = schemeOrData.authority || _empty;
+            this.path = schemeOrData.path || _empty;
+            this.query = schemeOrData.query || _empty;
+            this.fragment = schemeOrData.fragment || _empty;
+            // no validation because it's this URI
+            // that creates uri components.
+            // _validateUri(this);
+        }
+        else {
+            this.scheme = _schemeFix(schemeOrData, _strict);
+            this.authority = authority || _empty;
+            this.path = _referenceResolution(this.scheme, path || _empty);
+            this.query = query || _empty;
+            this.fragment = fragment || _empty;
+            _validateUri(this, _strict);
+        }
+    }
+    URI.isUri = function (thing) {
+        if (thing instanceof URI) {
+            return true;
+        }
+        if (!thing) {
+            return false;
+        }
+        return typeof thing.authority === 'string'
+            && typeof thing.fragment === 'string'
+            && typeof thing.path === 'string'
+            && typeof thing.query === 'string'
+            && typeof thing.scheme === 'string'
+            && typeof thing.fsPath === 'function'
+            && typeof thing.with === 'function'
+            && typeof thing.toString === 'function';
+    };
+    Object.defineProperty(URI.prototype, "fsPath", {
+        // ---- filesystem path -----------------------
+        /**
+         * Returns a string representing the corresponding file system path of this URI.
+         * Will handle UNC paths, normalizes windows drive letters to lower-case, and uses the
+         * platform specific path separator.
+         *
+         * * Will *not* validate the path for invalid characters and semantics.
+         * * Will *not* look at the scheme of this URI.
+         * * The result shall *not* be used for display purposes but for accessing a file on disk.
+         *
+         *
+         * The *difference* to `URI#path` is the use of the platform specific separator and the handling
+         * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
+         *
+         * ```ts
+            const u = URI.parse('file://server/c$/folder/file.txt')
+            u.authority === 'server'
+            u.path === '/shares/c$/file.txt'
+            u.fsPath === '\\server\c$\folder\file.txt'
+        ```
+         *
+         * Using `URI#path` to read a file (using fs-apis) would not be enough because parts of the path,
+         * namely the server name, would be missing. Therefore `URI#fsPath` exists - it's sugar to ease working
+         * with URIs that represent files on disk (`file` scheme).
+         */
+        get: function () {
+            // if (this.scheme !== 'file') {
+            // 	console.warn(`[UriError] calling fsPath with scheme ${this.scheme}`);
+            // }
+            return _makeFsPath(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    // ---- modify to new -------------------------
+    URI.prototype.with = function (change) {
+        if (!change) {
+            return this;
+        }
+        var scheme = change.scheme, authority = change.authority, path = change.path, query = change.query, fragment = change.fragment;
+        if (scheme === undefined) {
+            scheme = this.scheme;
+        }
+        else if (scheme === null) {
+            scheme = _empty;
+        }
+        if (authority === undefined) {
+            authority = this.authority;
+        }
+        else if (authority === null) {
+            authority = _empty;
+        }
+        if (path === undefined) {
+            path = this.path;
+        }
+        else if (path === null) {
+            path = _empty;
+        }
+        if (query === undefined) {
+            query = this.query;
+        }
+        else if (query === null) {
+            query = _empty;
+        }
+        if (fragment === undefined) {
+            fragment = this.fragment;
+        }
+        else if (fragment === null) {
+            fragment = _empty;
+        }
+        if (scheme === this.scheme
+            && authority === this.authority
+            && path === this.path
+            && query === this.query
+            && fragment === this.fragment) {
+            return this;
+        }
+        return new _URI(scheme, authority, path, query, fragment);
+    };
+    // ---- parse & validate ------------------------
+    /**
+     * Creates a new URI from a string, e.g. `http://www.msft.com/some/path`,
+     * `file:///usr/home`, or `scheme:with/path`.
+     *
+     * @param value A string which represents an URI (see `URI#toString`).
+     */
+    URI.parse = function (value, _strict) {
+        if (_strict === void 0) { _strict = false; }
+        var match = _regexp.exec(value);
+        if (!match) {
+            return new _URI(_empty, _empty, _empty, _empty, _empty);
+        }
+        return new _URI(match[2] || _empty, decodeURIComponent(match[4] || _empty), decodeURIComponent(match[5] || _empty), decodeURIComponent(match[7] || _empty), decodeURIComponent(match[9] || _empty), _strict);
+    };
+    /**
+     * Creates a new URI from a file system path, e.g. `c:\my\files`,
+     * `/usr/home`, or `\\server\share\some\path`.
+     *
+     * The *difference* between `URI#parse` and `URI#file` is that the latter treats the argument
+     * as path, not as stringified-uri. E.g. `URI.file(path)` is **not the same as**
+     * `URI.parse('file://' + path)` because the path might contain characters that are
+     * interpreted (# and ?). See the following sample:
+     * ```ts
+    const good = URI.file('/coding/c#/project1');
+    good.scheme === 'file';
+    good.path === '/coding/c#/project1';
+    good.fragment === '';
+    const bad = URI.parse('file://' + '/coding/c#/project1');
+    bad.scheme === 'file';
+    bad.path === '/coding/c'; // path is now broken
+    bad.fragment === '/project1';
+    ```
+     *
+     * @param path A file system path (see `URI#fsPath`)
+     */
+    URI.file = function (path) {
+        var authority = _empty;
+        // normalize to fwd-slashes on windows,
+        // on other systems bwd-slashes are valid
+        // filename character, eg /f\oo/ba\r.txt
+        if (_platform_js__WEBPACK_IMPORTED_MODULE_0__["isWindows"]) {
+            path = path.replace(/\\/g, _slash);
+        }
+        // check for authority as used in UNC shares
+        // or use the path as given
+        if (path[0] === _slash && path[1] === _slash) {
+            var idx = path.indexOf(_slash, 2);
+            if (idx === -1) {
+                authority = path.substring(2);
+                path = _slash;
+            }
+            else {
+                authority = path.substring(2, idx);
+                path = path.substring(idx) || _slash;
+            }
+        }
+        return new _URI('file', authority, path, _empty, _empty);
+    };
+    URI.from = function (components) {
+        return new _URI(components.scheme, components.authority, components.path, components.query, components.fragment);
+    };
+    // ---- printing/externalize ---------------------------
+    /**
+     * Creates a string representation for this URI. It's guaranteed that calling
+     * `URI.parse` with the result of this function creates an URI which is equal
+     * to this URI.
+     *
+     * * The result shall *not* be used for display purposes but for externalization or transport.
+     * * The result will be encoded using the percentage encoding and encoding happens mostly
+     * ignore the scheme-specific encoding rules.
+     *
+     * @param skipEncoding Do not encode the result, default is `false`
+     */
+    URI.prototype.toString = function (skipEncoding) {
+        if (skipEncoding === void 0) { skipEncoding = false; }
+        return _asFormatted(this, skipEncoding);
+    };
+    URI.prototype.toJSON = function () {
+        return this;
+    };
+    URI.revive = function (data) {
+        if (!data) {
+            return data;
+        }
+        else if (data instanceof URI) {
+            return data;
+        }
+        else {
+            var result = new _URI(data);
+            result._fsPath = data.fsPath;
+            result._formatted = data.external;
+            return result;
+        }
+    };
+    return URI;
+}());
+
+// tslint:disable-next-line:class-name
+var _URI = /** @class */ (function (_super) {
+    __extends(_URI, _super);
+    function _URI() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._formatted = null;
+        _this._fsPath = null;
+        return _this;
+    }
+    Object.defineProperty(_URI.prototype, "fsPath", {
+        get: function () {
+            if (!this._fsPath) {
+                this._fsPath = _makeFsPath(this);
+            }
+            return this._fsPath;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    _URI.prototype.toString = function (skipEncoding) {
+        if (skipEncoding === void 0) { skipEncoding = false; }
+        if (!skipEncoding) {
+            if (!this._formatted) {
+                this._formatted = _asFormatted(this, false);
+            }
+            return this._formatted;
+        }
+        else {
+            // we don't cache that
+            return _asFormatted(this, true);
+        }
+    };
+    _URI.prototype.toJSON = function () {
+        var res = {
+            $mid: 1
+        };
+        // cached state
+        if (this._fsPath) {
+            res.fsPath = this._fsPath;
+        }
+        if (this._formatted) {
+            res.external = this._formatted;
+        }
+        // uri components
+        if (this.path) {
+            res.path = this.path;
+        }
+        if (this.scheme) {
+            res.scheme = this.scheme;
+        }
+        if (this.authority) {
+            res.authority = this.authority;
+        }
+        if (this.query) {
+            res.query = this.query;
+        }
+        if (this.fragment) {
+            res.fragment = this.fragment;
+        }
+        return res;
+    };
+    return _URI;
+}(URI));
+// reserved characters: https://tools.ietf.org/html/rfc3986#section-2.2
+var encodeTable = (_a = {},
+    _a[58 /* Colon */] = '%3A',
+    _a[47 /* Slash */] = '%2F',
+    _a[63 /* QuestionMark */] = '%3F',
+    _a[35 /* Hash */] = '%23',
+    _a[91 /* OpenSquareBracket */] = '%5B',
+    _a[93 /* CloseSquareBracket */] = '%5D',
+    _a[64 /* AtSign */] = '%40',
+    _a[33 /* ExclamationMark */] = '%21',
+    _a[36 /* DollarSign */] = '%24',
+    _a[38 /* Ampersand */] = '%26',
+    _a[39 /* SingleQuote */] = '%27',
+    _a[40 /* OpenParen */] = '%28',
+    _a[41 /* CloseParen */] = '%29',
+    _a[42 /* Asterisk */] = '%2A',
+    _a[43 /* Plus */] = '%2B',
+    _a[44 /* Comma */] = '%2C',
+    _a[59 /* Semicolon */] = '%3B',
+    _a[61 /* Equals */] = '%3D',
+    _a[32 /* Space */] = '%20',
+    _a);
+function encodeURIComponentFast(uriComponent, allowSlash) {
+    var res = undefined;
+    var nativeEncodePos = -1;
+    for (var pos = 0; pos < uriComponent.length; pos++) {
+        var code = uriComponent.charCodeAt(pos);
+        // unreserved characters: https://tools.ietf.org/html/rfc3986#section-2.3
+        if ((code >= 97 /* a */ && code <= 122 /* z */)
+            || (code >= 65 /* A */ && code <= 90 /* Z */)
+            || (code >= 48 /* Digit0 */ && code <= 57 /* Digit9 */)
+            || code === 45 /* Dash */
+            || code === 46 /* Period */
+            || code === 95 /* Underline */
+            || code === 126 /* Tilde */
+            || (allowSlash && code === 47 /* Slash */)) {
+            // check if we are delaying native encode
+            if (nativeEncodePos !== -1) {
+                res += encodeURIComponent(uriComponent.substring(nativeEncodePos, pos));
+                nativeEncodePos = -1;
+            }
+            // check if we write into a new string (by default we try to return the param)
+            if (res !== undefined) {
+                res += uriComponent.charAt(pos);
+            }
+        }
+        else {
+            // encoding needed, we need to allocate a new string
+            if (res === undefined) {
+                res = uriComponent.substr(0, pos);
+            }
+            // check with default table first
+            var escaped = encodeTable[code];
+            if (escaped !== undefined) {
+                // check if we are delaying native encode
+                if (nativeEncodePos !== -1) {
+                    res += encodeURIComponent(uriComponent.substring(nativeEncodePos, pos));
+                    nativeEncodePos = -1;
+                }
+                // append escaped variant to result
+                res += escaped;
+            }
+            else if (nativeEncodePos === -1) {
+                // use native encode only when needed
+                nativeEncodePos = pos;
+            }
+        }
+    }
+    if (nativeEncodePos !== -1) {
+        res += encodeURIComponent(uriComponent.substring(nativeEncodePos));
+    }
+    return res !== undefined ? res : uriComponent;
+}
+function encodeURIComponentMinimal(path) {
+    var res = undefined;
+    for (var pos = 0; pos < path.length; pos++) {
+        var code = path.charCodeAt(pos);
+        if (code === 35 /* Hash */ || code === 63 /* QuestionMark */) {
+            if (res === undefined) {
+                res = path.substr(0, pos);
+            }
+            res += encodeTable[code];
+        }
+        else {
+            if (res !== undefined) {
+                res += path[pos];
+            }
+        }
+    }
+    return res !== undefined ? res : path;
+}
+/**
+ * Compute `fsPath` for the given uri
+ */
+function _makeFsPath(uri) {
+    var value;
+    if (uri.authority && uri.path.length > 1 && uri.scheme === 'file') {
+        // unc path: file://shares/c$/far/boo
+        value = "//" + uri.authority + uri.path;
+    }
+    else if (uri.path.charCodeAt(0) === 47 /* Slash */
+        && (uri.path.charCodeAt(1) >= 65 /* A */ && uri.path.charCodeAt(1) <= 90 /* Z */ || uri.path.charCodeAt(1) >= 97 /* a */ && uri.path.charCodeAt(1) <= 122 /* z */)
+        && uri.path.charCodeAt(2) === 58 /* Colon */) {
+        // windows drive letter: file:///c:/far/boo
+        value = uri.path[1].toLowerCase() + uri.path.substr(2);
+    }
+    else {
+        // other path
+        value = uri.path;
+    }
+    if (_platform_js__WEBPACK_IMPORTED_MODULE_0__["isWindows"]) {
+        value = value.replace(/\//g, '\\');
+    }
+    return value;
+}
+/**
+ * Create the external version of a uri
+ */
+function _asFormatted(uri, skipEncoding) {
+    var encoder = !skipEncoding
+        ? encodeURIComponentFast
+        : encodeURIComponentMinimal;
+    var res = '';
+    var scheme = uri.scheme, authority = uri.authority, path = uri.path, query = uri.query, fragment = uri.fragment;
+    if (scheme) {
+        res += scheme;
+        res += ':';
+    }
+    if (authority || scheme === 'file') {
+        res += _slash;
+        res += _slash;
+    }
+    if (authority) {
+        var idx = authority.indexOf('@');
+        if (idx !== -1) {
+            // <user>@<auth>
+            var userinfo = authority.substr(0, idx);
+            authority = authority.substr(idx + 1);
+            idx = userinfo.indexOf(':');
+            if (idx === -1) {
+                res += encoder(userinfo, false);
+            }
+            else {
+                // <user>:<pass>@<auth>
+                res += encoder(userinfo.substr(0, idx), false);
+                res += ':';
+                res += encoder(userinfo.substr(idx + 1), false);
+            }
+            res += '@';
+        }
+        authority = authority.toLowerCase();
+        idx = authority.indexOf(':');
+        if (idx === -1) {
+            res += encoder(authority, false);
+        }
+        else {
+            // <auth>:<port>
+            res += encoder(authority.substr(0, idx), false);
+            res += authority.substr(idx);
+        }
+    }
+    if (path) {
+        // lower-case windows drive letters in /C:/fff or C:/fff
+        if (path.length >= 3 && path.charCodeAt(0) === 47 /* Slash */ && path.charCodeAt(2) === 58 /* Colon */) {
+            var code = path.charCodeAt(1);
+            if (code >= 65 /* A */ && code <= 90 /* Z */) {
+                path = "/" + String.fromCharCode(code + 32) + ":" + path.substr(3); // "/c:".length === 3
+            }
+        }
+        else if (path.length >= 2 && path.charCodeAt(1) === 58 /* Colon */) {
+            var code = path.charCodeAt(0);
+            if (code >= 65 /* A */ && code <= 90 /* Z */) {
+                path = String.fromCharCode(code + 32) + ":" + path.substr(2); // "/c:".length === 3
+            }
+        }
+        // encode the rest of the path
+        res += encoder(path, true);
+    }
+    if (query) {
+        res += '?';
+        res += encoder(query, false);
+    }
+    if (fragment) {
+        res += '#';
+        res += !skipEncoding ? encodeURIComponentFast(fragment, false) : fragment;
+    }
+    return res;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/base/common/worker/simpleWorker.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/base/common/worker/simpleWorker.js ***!
+  \******************************************************************************/
+/*! exports provided: logOnceWebWorkerWarning, SimpleWorkerClient, SimpleWorkerServer, create */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "logOnceWebWorkerWarning", function() { return logOnceWebWorkerWarning; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SimpleWorkerClient", function() { return SimpleWorkerClient; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SimpleWorkerServer", function() { return SimpleWorkerServer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
+/* harmony import */ var _errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../errors.js */ "./node_modules/monaco-editor/esm/vs/base/common/errors.js");
+/* harmony import */ var _lifecycle_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lifecycle.js */ "./node_modules/monaco-editor/esm/vs/base/common/lifecycle.js");
+/* harmony import */ var _platform_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../platform.js */ "./node_modules/monaco-editor/esm/vs/base/common/platform.js");
+/* harmony import */ var _types_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../types.js */ "./node_modules/monaco-editor/esm/vs/base/common/types.js");
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+
+
+var INITIALIZE = '$initialize';
+var webWorkerWarningLogged = false;
+function logOnceWebWorkerWarning(err) {
+    if (!_platform_js__WEBPACK_IMPORTED_MODULE_2__["isWeb"]) {
+        // running tests
+        return;
+    }
+    if (!webWorkerWarningLogged) {
+        webWorkerWarningLogged = true;
+        console.warn('Could not create web worker(s). Falling back to loading web worker code in main thread, which might cause UI freezes. Please see https://github.com/Microsoft/monaco-editor#faq');
+    }
+    console.warn(err.message);
+}
+var SimpleWorkerProtocol = /** @class */ (function () {
+    function SimpleWorkerProtocol(handler) {
+        this._workerId = -1;
+        this._handler = handler;
+        this._lastSentReq = 0;
+        this._pendingReplies = Object.create(null);
+    }
+    SimpleWorkerProtocol.prototype.setWorkerId = function (workerId) {
+        this._workerId = workerId;
+    };
+    SimpleWorkerProtocol.prototype.sendMessage = function (method, args) {
+        var _this = this;
+        var req = String(++this._lastSentReq);
+        return new Promise(function (resolve, reject) {
+            _this._pendingReplies[req] = {
+                resolve: resolve,
+                reject: reject
+            };
+            _this._send({
+                vsWorker: _this._workerId,
+                req: req,
+                method: method,
+                args: args
+            });
+        });
+    };
+    SimpleWorkerProtocol.prototype.handleMessage = function (serializedMessage) {
+        var message;
+        try {
+            message = JSON.parse(serializedMessage);
+        }
+        catch (e) {
+            // nothing
+            return;
+        }
+        if (!message || !message.vsWorker) {
+            return;
+        }
+        if (this._workerId !== -1 && message.vsWorker !== this._workerId) {
+            return;
+        }
+        this._handleMessage(message);
+    };
+    SimpleWorkerProtocol.prototype._handleMessage = function (msg) {
+        var _this = this;
+        if (msg.seq) {
+            var replyMessage = msg;
+            if (!this._pendingReplies[replyMessage.seq]) {
+                console.warn('Got reply to unknown seq');
+                return;
+            }
+            var reply = this._pendingReplies[replyMessage.seq];
+            delete this._pendingReplies[replyMessage.seq];
+            if (replyMessage.err) {
+                var err = replyMessage.err;
+                if (replyMessage.err.$isError) {
+                    err = new Error();
+                    err.name = replyMessage.err.name;
+                    err.message = replyMessage.err.message;
+                    err.stack = replyMessage.err.stack;
+                }
+                reply.reject(err);
+                return;
+            }
+            reply.resolve(replyMessage.res);
+            return;
+        }
+        var requestMessage = msg;
+        var req = requestMessage.req;
+        var result = this._handler.handleMessage(requestMessage.method, requestMessage.args);
+        result.then(function (r) {
+            _this._send({
+                vsWorker: _this._workerId,
+                seq: req,
+                res: r,
+                err: undefined
+            });
+        }, function (e) {
+            if (e.detail instanceof Error) {
+                // Loading errors have a detail property that points to the actual error
+                e.detail = Object(_errors_js__WEBPACK_IMPORTED_MODULE_0__["transformErrorForSerialization"])(e.detail);
+            }
+            _this._send({
+                vsWorker: _this._workerId,
+                seq: req,
+                res: undefined,
+                err: Object(_errors_js__WEBPACK_IMPORTED_MODULE_0__["transformErrorForSerialization"])(e)
+            });
+        });
+    };
+    SimpleWorkerProtocol.prototype._send = function (msg) {
+        var strMsg = JSON.stringify(msg);
+        // console.log('SENDING: ' + strMsg);
+        this._handler.sendMessage(strMsg);
+    };
+    return SimpleWorkerProtocol;
+}());
+/**
+ * Main thread side
+ */
+var SimpleWorkerClient = /** @class */ (function (_super) {
+    __extends(SimpleWorkerClient, _super);
+    function SimpleWorkerClient(workerFactory, moduleId) {
+        var _this = _super.call(this) || this;
+        var lazyProxyReject = null;
+        _this._worker = _this._register(workerFactory.create('vs/base/common/worker/simpleWorker', function (msg) {
+            _this._protocol.handleMessage(msg);
+        }, function (err) {
+            // in Firefox, web workers fail lazily :(
+            // we will reject the proxy
+            if (lazyProxyReject) {
+                lazyProxyReject(err);
+            }
+        }));
+        _this._protocol = new SimpleWorkerProtocol({
+            sendMessage: function (msg) {
+                _this._worker.postMessage(msg);
+            },
+            handleMessage: function (method, args) {
+                // Intentionally not supporting worker -> main requests
+                return Promise.resolve(null);
+            }
+        });
+        _this._protocol.setWorkerId(_this._worker.getId());
+        // Gather loader configuration
+        var loaderConfiguration = null;
+        if (typeof self.require !== 'undefined' && typeof self.require.getConfig === 'function') {
+            // Get the configuration from the Monaco AMD Loader
+            loaderConfiguration = self.require.getConfig();
+        }
+        else if (typeof self.requirejs !== 'undefined') {
+            // Get the configuration from requirejs
+            loaderConfiguration = self.requirejs.s.contexts._.config;
+        }
+        // Send initialize message
+        _this._onModuleLoaded = _this._protocol.sendMessage(INITIALIZE, [
+            _this._worker.getId(),
+            moduleId,
+            loaderConfiguration
+        ]);
+        _this._lazyProxy = new Promise(function (resolve, reject) {
+            lazyProxyReject = reject;
+            _this._onModuleLoaded.then(function (availableMethods) {
+                var proxy = {};
+                for (var _i = 0, availableMethods_1 = availableMethods; _i < availableMethods_1.length; _i++) {
+                    var methodName = availableMethods_1[_i];
+                    proxy[methodName] = createProxyMethod(methodName, proxyMethodRequest);
+                }
+                resolve(proxy);
+            }, function (e) {
+                reject(e);
+                _this._onError('Worker failed to load ' + moduleId, e);
+            });
+        });
+        // Create proxy to loaded code
+        var proxyMethodRequest = function (method, args) {
+            return _this._request(method, args);
+        };
+        var createProxyMethod = function (method, proxyMethodRequest) {
+            return function () {
+                var args = Array.prototype.slice.call(arguments, 0);
+                return proxyMethodRequest(method, args);
+            };
+        };
+        return _this;
+    }
+    SimpleWorkerClient.prototype.getProxyObject = function () {
+        return this._lazyProxy;
+    };
+    SimpleWorkerClient.prototype._request = function (method, args) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this._onModuleLoaded.then(function () {
+                _this._protocol.sendMessage(method, args).then(resolve, reject);
+            }, reject);
+        });
+    };
+    SimpleWorkerClient.prototype._onError = function (message, error) {
+        console.error(message);
+        console.info(error);
+    };
+    return SimpleWorkerClient;
+}(_lifecycle_js__WEBPACK_IMPORTED_MODULE_1__["Disposable"]));
+
+/**
+ * Worker side
+ */
+var SimpleWorkerServer = /** @class */ (function () {
+    function SimpleWorkerServer(postSerializedMessage, requestHandler) {
+        var _this = this;
+        this._requestHandler = requestHandler;
+        this._protocol = new SimpleWorkerProtocol({
+            sendMessage: function (msg) {
+                postSerializedMessage(msg);
+            },
+            handleMessage: function (method, args) { return _this._handleMessage(method, args); }
+        });
+    }
+    SimpleWorkerServer.prototype.onmessage = function (msg) {
+        this._protocol.handleMessage(msg);
+    };
+    SimpleWorkerServer.prototype._handleMessage = function (method, args) {
+        if (method === INITIALIZE) {
+            return this.initialize(args[0], args[1], args[2]);
+        }
+        if (!this._requestHandler || typeof this._requestHandler[method] !== 'function') {
+            return Promise.reject(new Error('Missing requestHandler or method: ' + method));
+        }
+        try {
+            return Promise.resolve(this._requestHandler[method].apply(this._requestHandler, args));
+        }
+        catch (e) {
+            return Promise.reject(e);
+        }
+    };
+    SimpleWorkerServer.prototype.initialize = function (workerId, moduleId, loaderConfig) {
+        var _this = this;
+        this._protocol.setWorkerId(workerId);
+        if (this._requestHandler) {
+            // static request handler
+            var methods = [];
+            for (var _i = 0, _a = Object(_types_js__WEBPACK_IMPORTED_MODULE_3__["getAllPropertyNames"])(this._requestHandler); _i < _a.length; _i++) {
+                var prop = _a[_i];
+                if (typeof this._requestHandler[prop] === 'function') {
+                    methods.push(prop);
+                }
+            }
+            return Promise.resolve(methods);
+        }
+        if (loaderConfig) {
+            // Remove 'baseUrl', handling it is beyond scope for now
+            if (typeof loaderConfig.baseUrl !== 'undefined') {
+                delete loaderConfig['baseUrl'];
+            }
+            if (typeof loaderConfig.paths !== 'undefined') {
+                if (typeof loaderConfig.paths.vs !== 'undefined') {
+                    delete loaderConfig.paths['vs'];
+                }
+            }
+            // Since this is in a web worker, enable catching errors
+            loaderConfig.catchError = true;
+            self.require.config(loaderConfig);
+        }
+        return new Promise(function (resolve, reject) {
+            // Use the global require to be sure to get the global config
+            self.require([moduleId], function () {
+                var result = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    result[_i] = arguments[_i];
+                }
+                var handlerModule = result[0];
+                _this._requestHandler = handlerModule.create();
+                if (!_this._requestHandler) {
+                    reject(new Error("No RequestHandler!"));
+                    return;
+                }
+                var methods = [];
+                for (var _a = 0, _b = Object(_types_js__WEBPACK_IMPORTED_MODULE_3__["getAllPropertyNames"])(_this._requestHandler); _a < _b.length; _a++) {
+                    var prop = _b[_a];
+                    if (typeof _this._requestHandler[prop] === 'function') {
+                        methods.push(prop);
+                    }
+                }
+                resolve(methods);
+            }, reject);
+        });
+    };
+    return SimpleWorkerServer;
+}());
+
+/**
+ * Called on the worker side
+ */
+function create(postMessage) {
+    return new SimpleWorkerServer(postMessage, null);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/core/characterClassifier.js":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/core/characterClassifier.js ***!
+  \*************************************************************************************/
+/*! exports provided: CharacterClassifier, CharacterSet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CharacterClassifier", function() { return CharacterClassifier; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CharacterSet", function() { return CharacterSet; });
+/* harmony import */ var _uint_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./uint.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/uint.js");
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/**
+ * A fast character classifier that uses a compact array for ASCII values.
+ */
+var CharacterClassifier = /** @class */ (function () {
+    function CharacterClassifier(_defaultValue) {
+        var defaultValue = Object(_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint8"])(_defaultValue);
+        this._defaultValue = defaultValue;
+        this._asciiMap = CharacterClassifier._createAsciiMap(defaultValue);
+        this._map = new Map();
+    }
+    CharacterClassifier._createAsciiMap = function (defaultValue) {
+        var asciiMap = new Uint8Array(256);
+        for (var i = 0; i < 256; i++) {
+            asciiMap[i] = defaultValue;
+        }
+        return asciiMap;
+    };
+    CharacterClassifier.prototype.set = function (charCode, _value) {
+        var value = Object(_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint8"])(_value);
+        if (charCode >= 0 && charCode < 256) {
+            this._asciiMap[charCode] = value;
+        }
+        else {
+            this._map.set(charCode, value);
+        }
+    };
+    CharacterClassifier.prototype.get = function (charCode) {
+        if (charCode >= 0 && charCode < 256) {
+            return this._asciiMap[charCode];
+        }
+        else {
+            return (this._map.get(charCode) || this._defaultValue);
+        }
+    };
+    return CharacterClassifier;
+}());
+
+var CharacterSet = /** @class */ (function () {
+    function CharacterSet() {
+        this._actual = new CharacterClassifier(0 /* False */);
+    }
+    CharacterSet.prototype.add = function (charCode) {
+        this._actual.set(charCode, 1 /* True */);
+    };
+    CharacterSet.prototype.has = function (charCode) {
+        return (this._actual.get(charCode) === 1 /* True */);
+    };
+    return CharacterSet;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/core/position.js":
+/*!**************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/core/position.js ***!
+  \**************************************************************************/
+/*! exports provided: Position */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Position", function() { return Position; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/**
+ * A position in the editor.
+ */
+var Position = /** @class */ (function () {
+    function Position(lineNumber, column) {
+        this.lineNumber = lineNumber;
+        this.column = column;
+    }
+    /**
+     * Create a new postion from this position.
+     *
+     * @param newLineNumber new line number
+     * @param newColumn new column
+     */
+    Position.prototype.with = function (newLineNumber, newColumn) {
+        if (newLineNumber === void 0) { newLineNumber = this.lineNumber; }
+        if (newColumn === void 0) { newColumn = this.column; }
+        if (newLineNumber === this.lineNumber && newColumn === this.column) {
+            return this;
+        }
+        else {
+            return new Position(newLineNumber, newColumn);
+        }
+    };
+    /**
+     * Derive a new position from this position.
+     *
+     * @param deltaLineNumber line number delta
+     * @param deltaColumn column delta
+     */
+    Position.prototype.delta = function (deltaLineNumber, deltaColumn) {
+        if (deltaLineNumber === void 0) { deltaLineNumber = 0; }
+        if (deltaColumn === void 0) { deltaColumn = 0; }
+        return this.with(this.lineNumber + deltaLineNumber, this.column + deltaColumn);
+    };
+    /**
+     * Test if this position equals other position
+     */
+    Position.prototype.equals = function (other) {
+        return Position.equals(this, other);
+    };
+    /**
+     * Test if position `a` equals position `b`
+     */
+    Position.equals = function (a, b) {
+        if (!a && !b) {
+            return true;
+        }
+        return (!!a &&
+            !!b &&
+            a.lineNumber === b.lineNumber &&
+            a.column === b.column);
+    };
+    /**
+     * Test if this position is before other position.
+     * If the two positions are equal, the result will be false.
+     */
+    Position.prototype.isBefore = function (other) {
+        return Position.isBefore(this, other);
+    };
+    /**
+     * Test if position `a` is before position `b`.
+     * If the two positions are equal, the result will be false.
+     */
+    Position.isBefore = function (a, b) {
+        if (a.lineNumber < b.lineNumber) {
+            return true;
+        }
+        if (b.lineNumber < a.lineNumber) {
+            return false;
+        }
+        return a.column < b.column;
+    };
+    /**
+     * Test if this position is before other position.
+     * If the two positions are equal, the result will be true.
+     */
+    Position.prototype.isBeforeOrEqual = function (other) {
+        return Position.isBeforeOrEqual(this, other);
+    };
+    /**
+     * Test if position `a` is before position `b`.
+     * If the two positions are equal, the result will be true.
+     */
+    Position.isBeforeOrEqual = function (a, b) {
+        if (a.lineNumber < b.lineNumber) {
+            return true;
+        }
+        if (b.lineNumber < a.lineNumber) {
+            return false;
+        }
+        return a.column <= b.column;
+    };
+    /**
+     * A function that compares positions, useful for sorting
+     */
+    Position.compare = function (a, b) {
+        var aLineNumber = a.lineNumber | 0;
+        var bLineNumber = b.lineNumber | 0;
+        if (aLineNumber === bLineNumber) {
+            var aColumn = a.column | 0;
+            var bColumn = b.column | 0;
+            return aColumn - bColumn;
+        }
+        return aLineNumber - bLineNumber;
+    };
+    /**
+     * Clone this position.
+     */
+    Position.prototype.clone = function () {
+        return new Position(this.lineNumber, this.column);
+    };
+    /**
+     * Convert to a human-readable representation.
+     */
+    Position.prototype.toString = function () {
+        return '(' + this.lineNumber + ',' + this.column + ')';
+    };
+    // ---
+    /**
+     * Create a `Position` from an `IPosition`.
+     */
+    Position.lift = function (pos) {
+        return new Position(pos.lineNumber, pos.column);
+    };
+    /**
+     * Test if `obj` is an `IPosition`.
+     */
+    Position.isIPosition = function (obj) {
+        return (obj
+            && (typeof obj.lineNumber === 'number')
+            && (typeof obj.column === 'number'));
+    };
+    return Position;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/core/range.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/core/range.js ***!
+  \***********************************************************************/
+/*! exports provided: Range */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Range", function() { return Range; });
+/* harmony import */ var _position_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./position.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/position.js");
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+/**
+ * A range in the editor. (startLineNumber,startColumn) is <= (endLineNumber,endColumn)
+ */
+var Range = /** @class */ (function () {
+    function Range(startLineNumber, startColumn, endLineNumber, endColumn) {
+        if ((startLineNumber > endLineNumber) || (startLineNumber === endLineNumber && startColumn > endColumn)) {
+            this.startLineNumber = endLineNumber;
+            this.startColumn = endColumn;
+            this.endLineNumber = startLineNumber;
+            this.endColumn = startColumn;
+        }
+        else {
+            this.startLineNumber = startLineNumber;
+            this.startColumn = startColumn;
+            this.endLineNumber = endLineNumber;
+            this.endColumn = endColumn;
+        }
+    }
+    /**
+     * Test if this range is empty.
+     */
+    Range.prototype.isEmpty = function () {
+        return Range.isEmpty(this);
+    };
+    /**
+     * Test if `range` is empty.
+     */
+    Range.isEmpty = function (range) {
+        return (range.startLineNumber === range.endLineNumber && range.startColumn === range.endColumn);
+    };
+    /**
+     * Test if position is in this range. If the position is at the edges, will return true.
+     */
+    Range.prototype.containsPosition = function (position) {
+        return Range.containsPosition(this, position);
+    };
+    /**
+     * Test if `position` is in `range`. If the position is at the edges, will return true.
+     */
+    Range.containsPosition = function (range, position) {
+        if (position.lineNumber < range.startLineNumber || position.lineNumber > range.endLineNumber) {
+            return false;
+        }
+        if (position.lineNumber === range.startLineNumber && position.column < range.startColumn) {
+            return false;
+        }
+        if (position.lineNumber === range.endLineNumber && position.column > range.endColumn) {
+            return false;
+        }
+        return true;
+    };
+    /**
+     * Test if range is in this range. If the range is equal to this range, will return true.
+     */
+    Range.prototype.containsRange = function (range) {
+        return Range.containsRange(this, range);
+    };
+    /**
+     * Test if `otherRange` is in `range`. If the ranges are equal, will return true.
+     */
+    Range.containsRange = function (range, otherRange) {
+        if (otherRange.startLineNumber < range.startLineNumber || otherRange.endLineNumber < range.startLineNumber) {
+            return false;
+        }
+        if (otherRange.startLineNumber > range.endLineNumber || otherRange.endLineNumber > range.endLineNumber) {
+            return false;
+        }
+        if (otherRange.startLineNumber === range.startLineNumber && otherRange.startColumn < range.startColumn) {
+            return false;
+        }
+        if (otherRange.endLineNumber === range.endLineNumber && otherRange.endColumn > range.endColumn) {
+            return false;
+        }
+        return true;
+    };
+    /**
+     * A reunion of the two ranges.
+     * The smallest position will be used as the start point, and the largest one as the end point.
+     */
+    Range.prototype.plusRange = function (range) {
+        return Range.plusRange(this, range);
+    };
+    /**
+     * A reunion of the two ranges.
+     * The smallest position will be used as the start point, and the largest one as the end point.
+     */
+    Range.plusRange = function (a, b) {
+        var startLineNumber;
+        var startColumn;
+        var endLineNumber;
+        var endColumn;
+        if (b.startLineNumber < a.startLineNumber) {
+            startLineNumber = b.startLineNumber;
+            startColumn = b.startColumn;
+        }
+        else if (b.startLineNumber === a.startLineNumber) {
+            startLineNumber = b.startLineNumber;
+            startColumn = Math.min(b.startColumn, a.startColumn);
+        }
+        else {
+            startLineNumber = a.startLineNumber;
+            startColumn = a.startColumn;
+        }
+        if (b.endLineNumber > a.endLineNumber) {
+            endLineNumber = b.endLineNumber;
+            endColumn = b.endColumn;
+        }
+        else if (b.endLineNumber === a.endLineNumber) {
+            endLineNumber = b.endLineNumber;
+            endColumn = Math.max(b.endColumn, a.endColumn);
+        }
+        else {
+            endLineNumber = a.endLineNumber;
+            endColumn = a.endColumn;
+        }
+        return new Range(startLineNumber, startColumn, endLineNumber, endColumn);
+    };
+    /**
+     * A intersection of the two ranges.
+     */
+    Range.prototype.intersectRanges = function (range) {
+        return Range.intersectRanges(this, range);
+    };
+    /**
+     * A intersection of the two ranges.
+     */
+    Range.intersectRanges = function (a, b) {
+        var resultStartLineNumber = a.startLineNumber;
+        var resultStartColumn = a.startColumn;
+        var resultEndLineNumber = a.endLineNumber;
+        var resultEndColumn = a.endColumn;
+        var otherStartLineNumber = b.startLineNumber;
+        var otherStartColumn = b.startColumn;
+        var otherEndLineNumber = b.endLineNumber;
+        var otherEndColumn = b.endColumn;
+        if (resultStartLineNumber < otherStartLineNumber) {
+            resultStartLineNumber = otherStartLineNumber;
+            resultStartColumn = otherStartColumn;
+        }
+        else if (resultStartLineNumber === otherStartLineNumber) {
+            resultStartColumn = Math.max(resultStartColumn, otherStartColumn);
+        }
+        if (resultEndLineNumber > otherEndLineNumber) {
+            resultEndLineNumber = otherEndLineNumber;
+            resultEndColumn = otherEndColumn;
+        }
+        else if (resultEndLineNumber === otherEndLineNumber) {
+            resultEndColumn = Math.min(resultEndColumn, otherEndColumn);
+        }
+        // Check if selection is now empty
+        if (resultStartLineNumber > resultEndLineNumber) {
+            return null;
+        }
+        if (resultStartLineNumber === resultEndLineNumber && resultStartColumn > resultEndColumn) {
+            return null;
+        }
+        return new Range(resultStartLineNumber, resultStartColumn, resultEndLineNumber, resultEndColumn);
+    };
+    /**
+     * Test if this range equals other.
+     */
+    Range.prototype.equalsRange = function (other) {
+        return Range.equalsRange(this, other);
+    };
+    /**
+     * Test if range `a` equals `b`.
+     */
+    Range.equalsRange = function (a, b) {
+        return (!!a &&
+            !!b &&
+            a.startLineNumber === b.startLineNumber &&
+            a.startColumn === b.startColumn &&
+            a.endLineNumber === b.endLineNumber &&
+            a.endColumn === b.endColumn);
+    };
+    /**
+     * Return the end position (which will be after or equal to the start position)
+     */
+    Range.prototype.getEndPosition = function () {
+        return new _position_js__WEBPACK_IMPORTED_MODULE_0__["Position"](this.endLineNumber, this.endColumn);
+    };
+    /**
+     * Return the start position (which will be before or equal to the end position)
+     */
+    Range.prototype.getStartPosition = function () {
+        return new _position_js__WEBPACK_IMPORTED_MODULE_0__["Position"](this.startLineNumber, this.startColumn);
+    };
+    /**
+     * Transform to a user presentable string representation.
+     */
+    Range.prototype.toString = function () {
+        return '[' + this.startLineNumber + ',' + this.startColumn + ' -> ' + this.endLineNumber + ',' + this.endColumn + ']';
+    };
+    /**
+     * Create a new range using this range's start position, and using endLineNumber and endColumn as the end position.
+     */
+    Range.prototype.setEndPosition = function (endLineNumber, endColumn) {
+        return new Range(this.startLineNumber, this.startColumn, endLineNumber, endColumn);
+    };
+    /**
+     * Create a new range using this range's end position, and using startLineNumber and startColumn as the start position.
+     */
+    Range.prototype.setStartPosition = function (startLineNumber, startColumn) {
+        return new Range(startLineNumber, startColumn, this.endLineNumber, this.endColumn);
+    };
+    /**
+     * Create a new empty range using this range's start position.
+     */
+    Range.prototype.collapseToStart = function () {
+        return Range.collapseToStart(this);
+    };
+    /**
+     * Create a new empty range using this range's start position.
+     */
+    Range.collapseToStart = function (range) {
+        return new Range(range.startLineNumber, range.startColumn, range.startLineNumber, range.startColumn);
+    };
+    // ---
+    Range.fromPositions = function (start, end) {
+        if (end === void 0) { end = start; }
+        return new Range(start.lineNumber, start.column, end.lineNumber, end.column);
+    };
+    Range.lift = function (range) {
+        if (!range) {
+            return null;
+        }
+        return new Range(range.startLineNumber, range.startColumn, range.endLineNumber, range.endColumn);
+    };
+    /**
+     * Test if `obj` is an `IRange`.
+     */
+    Range.isIRange = function (obj) {
+        return (obj
+            && (typeof obj.startLineNumber === 'number')
+            && (typeof obj.startColumn === 'number')
+            && (typeof obj.endLineNumber === 'number')
+            && (typeof obj.endColumn === 'number'));
+    };
+    /**
+     * Test if the two ranges are touching in any way.
+     */
+    Range.areIntersectingOrTouching = function (a, b) {
+        // Check if `a` is before `b`
+        if (a.endLineNumber < b.startLineNumber || (a.endLineNumber === b.startLineNumber && a.endColumn < b.startColumn)) {
+            return false;
+        }
+        // Check if `b` is before `a`
+        if (b.endLineNumber < a.startLineNumber || (b.endLineNumber === a.startLineNumber && b.endColumn < a.startColumn)) {
+            return false;
+        }
+        // These ranges must intersect
+        return true;
+    };
+    /**
+     * Test if the two ranges are intersecting. If the ranges are touching it returns true.
+     */
+    Range.areIntersecting = function (a, b) {
+        // Check if `a` is before `b`
+        if (a.endLineNumber < b.startLineNumber || (a.endLineNumber === b.startLineNumber && a.endColumn <= b.startColumn)) {
+            return false;
+        }
+        // Check if `b` is before `a`
+        if (b.endLineNumber < a.startLineNumber || (b.endLineNumber === a.startLineNumber && b.endColumn <= a.startColumn)) {
+            return false;
+        }
+        // These ranges must intersect
+        return true;
+    };
+    /**
+     * A function that compares ranges, useful for sorting ranges
+     * It will first compare ranges on the startPosition and then on the endPosition
+     */
+    Range.compareRangesUsingStarts = function (a, b) {
+        if (a && b) {
+            var aStartLineNumber = a.startLineNumber | 0;
+            var bStartLineNumber = b.startLineNumber | 0;
+            if (aStartLineNumber === bStartLineNumber) {
+                var aStartColumn = a.startColumn | 0;
+                var bStartColumn = b.startColumn | 0;
+                if (aStartColumn === bStartColumn) {
+                    var aEndLineNumber = a.endLineNumber | 0;
+                    var bEndLineNumber = b.endLineNumber | 0;
+                    if (aEndLineNumber === bEndLineNumber) {
+                        var aEndColumn = a.endColumn | 0;
+                        var bEndColumn = b.endColumn | 0;
+                        return aEndColumn - bEndColumn;
+                    }
+                    return aEndLineNumber - bEndLineNumber;
+                }
+                return aStartColumn - bStartColumn;
+            }
+            return aStartLineNumber - bStartLineNumber;
+        }
+        var aExists = (a ? 1 : 0);
+        var bExists = (b ? 1 : 0);
+        return aExists - bExists;
+    };
+    /**
+     * A function that compares ranges, useful for sorting ranges
+     * It will first compare ranges on the endPosition and then on the startPosition
+     */
+    Range.compareRangesUsingEnds = function (a, b) {
+        if (a.endLineNumber === b.endLineNumber) {
+            if (a.endColumn === b.endColumn) {
+                if (a.startLineNumber === b.startLineNumber) {
+                    return a.startColumn - b.startColumn;
+                }
+                return a.startLineNumber - b.startLineNumber;
+            }
+            return a.endColumn - b.endColumn;
+        }
+        return a.endLineNumber - b.endLineNumber;
+    };
+    /**
+     * Test if the range spans multiple lines.
+     */
+    Range.spansMultipleLines = function (range) {
+        return range.endLineNumber > range.startLineNumber;
+    };
+    return Range;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/core/selection.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/core/selection.js ***!
+  \***************************************************************************/
+/*! exports provided: Selection */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Selection", function() { return Selection; });
+/* harmony import */ var _position_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./position.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/position.js");
+/* harmony import */ var _range_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./range.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/range.js");
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+
+
+/**
+ * A selection in the editor.
+ * The selection is a range that has an orientation.
+ */
+var Selection = /** @class */ (function (_super) {
+    __extends(Selection, _super);
+    function Selection(selectionStartLineNumber, selectionStartColumn, positionLineNumber, positionColumn) {
+        var _this = _super.call(this, selectionStartLineNumber, selectionStartColumn, positionLineNumber, positionColumn) || this;
+        _this.selectionStartLineNumber = selectionStartLineNumber;
+        _this.selectionStartColumn = selectionStartColumn;
+        _this.positionLineNumber = positionLineNumber;
+        _this.positionColumn = positionColumn;
+        return _this;
+    }
+    /**
+     * Clone this selection.
+     */
+    Selection.prototype.clone = function () {
+        return new Selection(this.selectionStartLineNumber, this.selectionStartColumn, this.positionLineNumber, this.positionColumn);
+    };
+    /**
+     * Transform to a human-readable representation.
+     */
+    Selection.prototype.toString = function () {
+        return '[' + this.selectionStartLineNumber + ',' + this.selectionStartColumn + ' -> ' + this.positionLineNumber + ',' + this.positionColumn + ']';
+    };
+    /**
+     * Test if equals other selection.
+     */
+    Selection.prototype.equalsSelection = function (other) {
+        return (Selection.selectionsEqual(this, other));
+    };
+    /**
+     * Test if the two selections are equal.
+     */
+    Selection.selectionsEqual = function (a, b) {
+        return (a.selectionStartLineNumber === b.selectionStartLineNumber &&
+            a.selectionStartColumn === b.selectionStartColumn &&
+            a.positionLineNumber === b.positionLineNumber &&
+            a.positionColumn === b.positionColumn);
+    };
+    /**
+     * Get directions (LTR or RTL).
+     */
+    Selection.prototype.getDirection = function () {
+        if (this.selectionStartLineNumber === this.startLineNumber && this.selectionStartColumn === this.startColumn) {
+            return 0 /* LTR */;
+        }
+        return 1 /* RTL */;
+    };
+    /**
+     * Create a new selection with a different `positionLineNumber` and `positionColumn`.
+     */
+    Selection.prototype.setEndPosition = function (endLineNumber, endColumn) {
+        if (this.getDirection() === 0 /* LTR */) {
+            return new Selection(this.startLineNumber, this.startColumn, endLineNumber, endColumn);
+        }
+        return new Selection(endLineNumber, endColumn, this.startLineNumber, this.startColumn);
+    };
+    /**
+     * Get the position at `positionLineNumber` and `positionColumn`.
+     */
+    Selection.prototype.getPosition = function () {
+        return new _position_js__WEBPACK_IMPORTED_MODULE_0__["Position"](this.positionLineNumber, this.positionColumn);
+    };
+    /**
+     * Create a new selection with a different `selectionStartLineNumber` and `selectionStartColumn`.
+     */
+    Selection.prototype.setStartPosition = function (startLineNumber, startColumn) {
+        if (this.getDirection() === 0 /* LTR */) {
+            return new Selection(startLineNumber, startColumn, this.endLineNumber, this.endColumn);
+        }
+        return new Selection(this.endLineNumber, this.endColumn, startLineNumber, startColumn);
+    };
+    // ----
+    /**
+     * Create a `Selection` from one or two positions
+     */
+    Selection.fromPositions = function (start, end) {
+        if (end === void 0) { end = start; }
+        return new Selection(start.lineNumber, start.column, end.lineNumber, end.column);
+    };
+    /**
+     * Create a `Selection` from an `ISelection`.
+     */
+    Selection.liftSelection = function (sel) {
+        return new Selection(sel.selectionStartLineNumber, sel.selectionStartColumn, sel.positionLineNumber, sel.positionColumn);
+    };
+    /**
+     * `a` equals `b`.
+     */
+    Selection.selectionsArrEqual = function (a, b) {
+        if (a && !b || !a && b) {
+            return false;
+        }
+        if (!a && !b) {
+            return true;
+        }
+        if (a.length !== b.length) {
+            return false;
+        }
+        for (var i = 0, len = a.length; i < len; i++) {
+            if (!this.selectionsEqual(a[i], b[i])) {
+                return false;
+            }
+        }
+        return true;
+    };
+    /**
+     * Test if `obj` is an `ISelection`.
+     */
+    Selection.isISelection = function (obj) {
+        return (obj
+            && (typeof obj.selectionStartLineNumber === 'number')
+            && (typeof obj.selectionStartColumn === 'number')
+            && (typeof obj.positionLineNumber === 'number')
+            && (typeof obj.positionColumn === 'number'));
+    };
+    /**
+     * Create with a direction.
+     */
+    Selection.createWithDirection = function (startLineNumber, startColumn, endLineNumber, endColumn, direction) {
+        if (direction === 0 /* LTR */) {
+            return new Selection(startLineNumber, startColumn, endLineNumber, endColumn);
+        }
+        return new Selection(endLineNumber, endColumn, startLineNumber, startColumn);
+    };
+    return Selection;
+}(_range_js__WEBPACK_IMPORTED_MODULE_1__["Range"]));
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/core/token.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/core/token.js ***!
+  \***********************************************************************/
+/*! exports provided: Token, TokenizationResult, TokenizationResult2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Token", function() { return Token; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenizationResult", function() { return TokenizationResult; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenizationResult2", function() { return TokenizationResult2; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var Token = /** @class */ (function () {
+    function Token(offset, type, language) {
+        this.offset = offset | 0; // @perf
+        this.type = type;
+        this.language = language;
+    }
+    Token.prototype.toString = function () {
+        return '(' + this.offset + ', ' + this.type + ')';
+    };
+    return Token;
+}());
+
+var TokenizationResult = /** @class */ (function () {
+    function TokenizationResult(tokens, endState) {
+        this.tokens = tokens;
+        this.endState = endState;
+    }
+    return TokenizationResult;
+}());
+
+var TokenizationResult2 = /** @class */ (function () {
+    function TokenizationResult2(tokens, endState) {
+        this.tokens = tokens;
+        this.endState = endState;
+    }
+    return TokenizationResult2;
+}());
+
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/core/uint.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/core/uint.js ***!
+  \**********************************************************************/
+/*! exports provided: Uint8Matrix, toUint8, toUint32, toUint32Array */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Uint8Matrix", function() { return Uint8Matrix; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toUint8", function() { return toUint8; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toUint32", function() { return toUint32; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toUint32Array", function() { return toUint32Array; });
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+var Uint8Matrix = /** @class */ (function () {
+    function Uint8Matrix(rows, cols, defaultValue) {
+        var data = new Uint8Array(rows * cols);
+        for (var i = 0, len = rows * cols; i < len; i++) {
+            data[i] = defaultValue;
+        }
+        this._data = data;
+        this.rows = rows;
+        this.cols = cols;
+    }
+    Uint8Matrix.prototype.get = function (row, col) {
+        return this._data[row * this.cols + col];
+    };
+    Uint8Matrix.prototype.set = function (row, col, value) {
+        this._data[row * this.cols + col] = value;
+    };
+    return Uint8Matrix;
+}());
+
+function toUint8(v) {
+    if (v < 0) {
+        return 0;
+    }
+    if (v > 255 /* MAX_UINT_8 */) {
+        return 255 /* MAX_UINT_8 */;
+    }
+    return v | 0;
+}
+function toUint32(v) {
+    if (v < 0) {
+        return 0;
+    }
+    if (v > 4294967295 /* MAX_UINT_32 */) {
+        return 4294967295 /* MAX_UINT_32 */;
+    }
+    return v | 0;
+}
+function toUint32Array(arr) {
+    var len = arr.length;
+    var r = new Uint32Array(len);
+    for (var i = 0; i < len; i++) {
+        r[i] = toUint32(arr[i]);
+    }
+    return r;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/diff/diffComputer.js":
+/*!******************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/diff/diffComputer.js ***!
+  \******************************************************************************/
+/*! exports provided: DiffComputer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DiffComputer", function() { return DiffComputer; });
+/* harmony import */ var _base_common_diff_diff_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../base/common/diff/diff.js */ "./node_modules/monaco-editor/esm/vs/base/common/diff/diff.js");
+/* harmony import */ var _base_common_strings_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../base/common/strings.js */ "./node_modules/monaco-editor/esm/vs/base/common/strings.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -3564,10 +5528,10 @@ function repeat(s, count) {
 var MAXIMUM_RUN_TIME = 5000; // 5 seconds
 var MINIMUM_MATCHING_CHARACTER_LENGTH = 3;
 function computeDiff(originalSequence, modifiedSequence, continueProcessingPredicate, pretty) {
-    var diffAlgo = new diff_LcsDiff(originalSequence, modifiedSequence, continueProcessingPredicate);
+    var diffAlgo = new _base_common_diff_diff_js__WEBPACK_IMPORTED_MODULE_0__["LcsDiff"](originalSequence, modifiedSequence, continueProcessingPredicate);
     return diffAlgo.ComputeDiff(pretty);
 }
-var diffComputer_LineMarkerSequence = /** @class */ (function () {
+var LineMarkerSequence = /** @class */ (function () {
     function LineMarkerSequence(lines) {
         var startColumns = [];
         var endColumns = [];
@@ -3592,14 +5556,14 @@ var diffComputer_LineMarkerSequence = /** @class */ (function () {
         return i + 1;
     };
     LineMarkerSequence._getFirstNonBlankColumn = function (txt, defaultValue) {
-        var r = firstNonWhitespaceIndex(txt);
+        var r = _base_common_strings_js__WEBPACK_IMPORTED_MODULE_1__["firstNonWhitespaceIndex"](txt);
         if (r === -1) {
             return defaultValue;
         }
         return r + 1;
     };
     LineMarkerSequence._getLastNonBlankColumn = function (txt, defaultValue) {
-        var r = lastNonWhitespaceIndex(txt);
+        var r = _base_common_strings_js__WEBPACK_IMPORTED_MODULE_1__["lastNonWhitespaceIndex"](txt);
         if (r === -1) {
             return defaultValue;
         }
@@ -3779,8 +5743,8 @@ var DiffComputer = /** @class */ (function () {
         this.maximumRunTimeMs = MAXIMUM_RUN_TIME;
         this.originalLines = originalLines;
         this.modifiedLines = modifiedLines;
-        this.original = new diffComputer_LineMarkerSequence(originalLines);
-        this.modified = new diffComputer_LineMarkerSequence(modifiedLines);
+        this.original = new LineMarkerSequence(originalLines);
+        this.modified = new LineMarkerSequence(modifiedLines);
     }
     DiffComputer.prototype.computeDiff = function () {
         if (this.original.getLength() === 1 && this.original.getElementAtIndex(0).length === 0) {
@@ -3848,8 +5812,8 @@ var DiffComputer = /** @class */ (function () {
                     // These lines differ only in trim whitespace
                     // Check the leading whitespace
                     {
-                        var originalStartColumn = diffComputer_LineMarkerSequence._getFirstNonBlankColumn(originalLine, 1);
-                        var modifiedStartColumn = diffComputer_LineMarkerSequence._getFirstNonBlankColumn(modifiedLine, 1);
+                        var originalStartColumn = LineMarkerSequence._getFirstNonBlankColumn(originalLine, 1);
+                        var modifiedStartColumn = LineMarkerSequence._getFirstNonBlankColumn(modifiedLine, 1);
                         while (originalStartColumn > 1 && modifiedStartColumn > 1) {
                             var originalChar = originalLine.charCodeAt(originalStartColumn - 2);
                             var modifiedChar = modifiedLine.charCodeAt(modifiedStartColumn - 2);
@@ -3865,8 +5829,8 @@ var DiffComputer = /** @class */ (function () {
                     }
                     // Check the trailing whitespace
                     {
-                        var originalEndColumn = diffComputer_LineMarkerSequence._getLastNonBlankColumn(originalLine, 1);
-                        var modifiedEndColumn = diffComputer_LineMarkerSequence._getLastNonBlankColumn(modifiedLine, 1);
+                        var originalEndColumn = LineMarkerSequence._getLastNonBlankColumn(originalLine, 1);
+                        var modifiedEndColumn = LineMarkerSequence._getLastNonBlankColumn(modifiedLine, 1);
                         var originalMaxColumn = originalLine.length + 1;
                         var modifiedMaxColumn = modifiedLine.length + 1;
                         while (originalEndColumn < originalMaxColumn && modifiedEndColumn < modifiedMaxColumn) {
@@ -3937,267 +5901,28 @@ var DiffComputer = /** @class */ (function () {
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/core/uint.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var Uint8Matrix = /** @class */ (function () {
-    function Uint8Matrix(rows, cols, defaultValue) {
-        var data = new Uint8Array(rows * cols);
-        for (var i = 0, len = rows * cols; i < len; i++) {
-            data[i] = defaultValue;
-        }
-        this._data = data;
-        this.rows = rows;
-        this.cols = cols;
-    }
-    Uint8Matrix.prototype.get = function (row, col) {
-        return this._data[row * this.cols + col];
-    };
-    Uint8Matrix.prototype.set = function (row, col, value) {
-        this._data[row * this.cols + col] = value;
-    };
-    return Uint8Matrix;
-}());
 
-function toUint8(v) {
-    if (v < 0) {
-        return 0;
-    }
-    if (v > 255 /* MAX_UINT_8 */) {
-        return 255 /* MAX_UINT_8 */;
-    }
-    return v | 0;
-}
-function toUint32(v) {
-    if (v < 0) {
-        return 0;
-    }
-    if (v > 4294967295 /* MAX_UINT_32 */) {
-        return 4294967295 /* MAX_UINT_32 */;
-    }
-    return v | 0;
-}
-function toUint32Array(arr) {
-    var len = arr.length;
-    var r = new Uint32Array(len);
-    for (var i = 0; i < len; i++) {
-        r[i] = toUint32(arr[i]);
-    }
-    return r;
-}
+/***/ }),
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/viewModel/prefixSumComputer.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/model/mirrorTextModel.js":
+/*!**********************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/model/mirrorTextModel.js ***!
+  \**********************************************************************************/
+/*! exports provided: MirrorTextModel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var PrefixSumIndexOfResult = /** @class */ (function () {
-    function PrefixSumIndexOfResult(index, remainder) {
-        this.index = index;
-        this.remainder = remainder;
-    }
-    return PrefixSumIndexOfResult;
-}());
-
-var prefixSumComputer_PrefixSumComputer = /** @class */ (function () {
-    function PrefixSumComputer(values) {
-        this.values = values;
-        this.prefixSum = new Uint32Array(values.length);
-        this.prefixSumValidIndex = new Int32Array(1);
-        this.prefixSumValidIndex[0] = -1;
-    }
-    PrefixSumComputer.prototype.getCount = function () {
-        return this.values.length;
-    };
-    PrefixSumComputer.prototype.insertValues = function (insertIndex, insertValues) {
-        insertIndex = toUint32(insertIndex);
-        var oldValues = this.values;
-        var oldPrefixSum = this.prefixSum;
-        var insertValuesLen = insertValues.length;
-        if (insertValuesLen === 0) {
-            return false;
-        }
-        this.values = new Uint32Array(oldValues.length + insertValuesLen);
-        this.values.set(oldValues.subarray(0, insertIndex), 0);
-        this.values.set(oldValues.subarray(insertIndex), insertIndex + insertValuesLen);
-        this.values.set(insertValues, insertIndex);
-        if (insertIndex - 1 < this.prefixSumValidIndex[0]) {
-            this.prefixSumValidIndex[0] = insertIndex - 1;
-        }
-        this.prefixSum = new Uint32Array(this.values.length);
-        if (this.prefixSumValidIndex[0] >= 0) {
-            this.prefixSum.set(oldPrefixSum.subarray(0, this.prefixSumValidIndex[0] + 1));
-        }
-        return true;
-    };
-    PrefixSumComputer.prototype.changeValue = function (index, value) {
-        index = toUint32(index);
-        value = toUint32(value);
-        if (this.values[index] === value) {
-            return false;
-        }
-        this.values[index] = value;
-        if (index - 1 < this.prefixSumValidIndex[0]) {
-            this.prefixSumValidIndex[0] = index - 1;
-        }
-        return true;
-    };
-    PrefixSumComputer.prototype.removeValues = function (startIndex, cnt) {
-        startIndex = toUint32(startIndex);
-        cnt = toUint32(cnt);
-        var oldValues = this.values;
-        var oldPrefixSum = this.prefixSum;
-        if (startIndex >= oldValues.length) {
-            return false;
-        }
-        var maxCnt = oldValues.length - startIndex;
-        if (cnt >= maxCnt) {
-            cnt = maxCnt;
-        }
-        if (cnt === 0) {
-            return false;
-        }
-        this.values = new Uint32Array(oldValues.length - cnt);
-        this.values.set(oldValues.subarray(0, startIndex), 0);
-        this.values.set(oldValues.subarray(startIndex + cnt), startIndex);
-        this.prefixSum = new Uint32Array(this.values.length);
-        if (startIndex - 1 < this.prefixSumValidIndex[0]) {
-            this.prefixSumValidIndex[0] = startIndex - 1;
-        }
-        if (this.prefixSumValidIndex[0] >= 0) {
-            this.prefixSum.set(oldPrefixSum.subarray(0, this.prefixSumValidIndex[0] + 1));
-        }
-        return true;
-    };
-    PrefixSumComputer.prototype.getTotalValue = function () {
-        if (this.values.length === 0) {
-            return 0;
-        }
-        return this._getAccumulatedValue(this.values.length - 1);
-    };
-    PrefixSumComputer.prototype.getAccumulatedValue = function (index) {
-        if (index < 0) {
-            return 0;
-        }
-        index = toUint32(index);
-        return this._getAccumulatedValue(index);
-    };
-    PrefixSumComputer.prototype._getAccumulatedValue = function (index) {
-        if (index <= this.prefixSumValidIndex[0]) {
-            return this.prefixSum[index];
-        }
-        var startIndex = this.prefixSumValidIndex[0] + 1;
-        if (startIndex === 0) {
-            this.prefixSum[0] = this.values[0];
-            startIndex++;
-        }
-        if (index >= this.values.length) {
-            index = this.values.length - 1;
-        }
-        for (var i = startIndex; i <= index; i++) {
-            this.prefixSum[i] = this.prefixSum[i - 1] + this.values[i];
-        }
-        this.prefixSumValidIndex[0] = Math.max(this.prefixSumValidIndex[0], index);
-        return this.prefixSum[index];
-    };
-    PrefixSumComputer.prototype.getIndexOf = function (accumulatedValue) {
-        accumulatedValue = Math.floor(accumulatedValue); //@perf
-        // Compute all sums (to get a fully valid prefixSum)
-        this.getTotalValue();
-        var low = 0;
-        var high = this.values.length - 1;
-        var mid = 0;
-        var midStop = 0;
-        var midStart = 0;
-        while (low <= high) {
-            mid = low + ((high - low) / 2) | 0;
-            midStop = this.prefixSum[mid];
-            midStart = midStop - this.values[mid];
-            if (accumulatedValue < midStart) {
-                high = mid - 1;
-            }
-            else if (accumulatedValue >= midStop) {
-                low = mid + 1;
-            }
-            else {
-                break;
-            }
-        }
-        return new PrefixSumIndexOfResult(mid, accumulatedValue - midStart);
-    };
-    return PrefixSumComputer;
-}());
-
-var PrefixSumComputerWithCache = /** @class */ (function () {
-    function PrefixSumComputerWithCache(values) {
-        this._cacheAccumulatedValueStart = 0;
-        this._cache = null;
-        this._actual = new prefixSumComputer_PrefixSumComputer(values);
-        this._bustCache();
-    }
-    PrefixSumComputerWithCache.prototype._bustCache = function () {
-        this._cacheAccumulatedValueStart = 0;
-        this._cache = null;
-    };
-    PrefixSumComputerWithCache.prototype.insertValues = function (insertIndex, insertValues) {
-        if (this._actual.insertValues(insertIndex, insertValues)) {
-            this._bustCache();
-        }
-    };
-    PrefixSumComputerWithCache.prototype.changeValue = function (index, value) {
-        if (this._actual.changeValue(index, value)) {
-            this._bustCache();
-        }
-    };
-    PrefixSumComputerWithCache.prototype.removeValues = function (startIndex, cnt) {
-        if (this._actual.removeValues(startIndex, cnt)) {
-            this._bustCache();
-        }
-    };
-    PrefixSumComputerWithCache.prototype.getTotalValue = function () {
-        return this._actual.getTotalValue();
-    };
-    PrefixSumComputerWithCache.prototype.getAccumulatedValue = function (index) {
-        return this._actual.getAccumulatedValue(index);
-    };
-    PrefixSumComputerWithCache.prototype.getIndexOf = function (accumulatedValue) {
-        accumulatedValue = Math.floor(accumulatedValue); //@perf
-        if (this._cache !== null) {
-            var cacheIndex = accumulatedValue - this._cacheAccumulatedValueStart;
-            if (cacheIndex >= 0 && cacheIndex < this._cache.length) {
-                // Cache hit!
-                return this._cache[cacheIndex];
-            }
-        }
-        // Cache miss!
-        return this._actual.getIndexOf(accumulatedValue);
-    };
-    /**
-     * Gives a hint that a lot of requests are about to come in for these accumulated values.
-     */
-    PrefixSumComputerWithCache.prototype.warmUpCache = function (accumulatedValueStart, accumulatedValueEnd) {
-        var newCache = [];
-        for (var accumulatedValue = accumulatedValueStart; accumulatedValue <= accumulatedValueEnd; accumulatedValue++) {
-            newCache[accumulatedValue - accumulatedValueStart] = this.getIndexOf(accumulatedValue);
-        }
-        this._cache = newCache;
-        this._cacheAccumulatedValueStart = accumulatedValueStart;
-    };
-    return PrefixSumComputerWithCache;
-}());
-
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/model/mirrorTextModel.js
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MirrorTextModel", function() { return MirrorTextModel; });
+/* harmony import */ var _core_position_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core/position.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/position.js");
+/* harmony import */ var _viewModel_prefixSumComputer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../viewModel/prefixSumComputer.js */ "./node_modules/monaco-editor/esm/vs/editor/common/viewModel/prefixSumComputer.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
 
-var mirrorTextModel_MirrorTextModel = /** @class */ (function () {
+var MirrorTextModel = /** @class */ (function () {
     function MirrorTextModel(uri, lines, eol, versionId) {
         this._uri = uri;
         this._lines = lines;
@@ -4221,7 +5946,7 @@ var mirrorTextModel_MirrorTextModel = /** @class */ (function () {
         for (var _i = 0, changes_1 = changes; _i < changes_1.length; _i++) {
             var change = changes_1[_i];
             this._acceptDeleteRange(change.range);
-            this._acceptInsertText(new Position(change.range.startLineNumber, change.range.startColumn), change.text);
+            this._acceptInsertText(new _core_position_js__WEBPACK_IMPORTED_MODULE_0__["Position"](change.range.startLineNumber, change.range.startColumn), change.text);
         }
         this._versionId = e.versionId;
     };
@@ -4233,7 +5958,7 @@ var mirrorTextModel_MirrorTextModel = /** @class */ (function () {
             for (var i = 0; i < linesLength; i++) {
                 lineStartValues[i] = this._lines[i].length + eolLength;
             }
-            this._lineStarts = new prefixSumComputer_PrefixSumComputer(lineStartValues);
+            this._lineStarts = new _viewModel_prefixSumComputer_js__WEBPACK_IMPORTED_MODULE_1__["PrefixSumComputer"](lineStartValues);
         }
     };
     /**
@@ -4300,7 +6025,22 @@ var mirrorTextModel_MirrorTextModel = /** @class */ (function () {
 }());
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/model/wordHelper.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/model/wordHelper.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/model/wordHelper.js ***!
+  \*****************************************************************************/
+/*! exports provided: USUAL_WORD_SEPARATORS, DEFAULT_WORD_REGEXP, ensureValidWordDefinition, getWordAtText */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "USUAL_WORD_SEPARATORS", function() { return USUAL_WORD_SEPARATORS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DEFAULT_WORD_REGEXP", function() { return DEFAULT_WORD_REGEXP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ensureValidWordDefinition", function() { return ensureValidWordDefinition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWordAtText", function() { return getWordAtText; });
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -4414,71 +6154,30 @@ function getWordAtText(column, wordDefinition, text, textOffset) {
     return ret;
 }
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/core/characterClassifier.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
 
-/**
- * A fast character classifier that uses a compact array for ASCII values.
- */
-var characterClassifier_CharacterClassifier = /** @class */ (function () {
-    function CharacterClassifier(_defaultValue) {
-        var defaultValue = toUint8(_defaultValue);
-        this._defaultValue = defaultValue;
-        this._asciiMap = CharacterClassifier._createAsciiMap(defaultValue);
-        this._map = new Map();
-    }
-    CharacterClassifier._createAsciiMap = function (defaultValue) {
-        var asciiMap = new Uint8Array(256);
-        for (var i = 0; i < 256; i++) {
-            asciiMap[i] = defaultValue;
-        }
-        return asciiMap;
-    };
-    CharacterClassifier.prototype.set = function (charCode, _value) {
-        var value = toUint8(_value);
-        if (charCode >= 0 && charCode < 256) {
-            this._asciiMap[charCode] = value;
-        }
-        else {
-            this._map.set(charCode, value);
-        }
-    };
-    CharacterClassifier.prototype.get = function (charCode) {
-        if (charCode >= 0 && charCode < 256) {
-            return this._asciiMap[charCode];
-        }
-        else {
-            return (this._map.get(charCode) || this._defaultValue);
-        }
-    };
-    return CharacterClassifier;
-}());
+/***/ }),
 
-var CharacterSet = /** @class */ (function () {
-    function CharacterSet() {
-        this._actual = new characterClassifier_CharacterClassifier(0 /* False */);
-    }
-    CharacterSet.prototype.add = function (charCode) {
-        this._actual.set(charCode, 1 /* True */);
-    };
-    CharacterSet.prototype.has = function (charCode) {
-        return (this._actual.get(charCode) === 1 /* True */);
-    };
-    return CharacterSet;
-}());
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/modes/linkComputer.js":
+/*!*******************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/modes/linkComputer.js ***!
+  \*******************************************************************************/
+/*! exports provided: StateMachine, LinkComputer, computeLinks */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/modes/linkComputer.js
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StateMachine", function() { return StateMachine; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LinkComputer", function() { return LinkComputer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "computeLinks", function() { return computeLinks; });
+/* harmony import */ var _core_characterClassifier_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core/characterClassifier.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/characterClassifier.js");
+/* harmony import */ var _core_uint_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../core/uint.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/uint.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
 
-var linkComputer_StateMachine = /** @class */ (function () {
+var StateMachine = /** @class */ (function () {
     function StateMachine(edges) {
         var maxCharCode = 0;
         var maxState = 0 /* Invalid */;
@@ -4496,7 +6195,7 @@ var linkComputer_StateMachine = /** @class */ (function () {
         }
         maxCharCode++;
         maxState++;
-        var states = new Uint8Matrix(maxState, maxCharCode, 0 /* Invalid */);
+        var states = new _core_uint_js__WEBPACK_IMPORTED_MODULE_1__["Uint8Matrix"](maxState, maxCharCode, 0 /* Invalid */);
         for (var i = 0, len = edges.length; i < len; i++) {
             var _b = edges[i], from = _b[0], chCode = _b[1], to = _b[2];
             states.set(from, chCode, to);
@@ -4517,7 +6216,7 @@ var linkComputer_StateMachine = /** @class */ (function () {
 var _stateMachine = null;
 function getStateMachine() {
     if (_stateMachine === null) {
-        _stateMachine = new linkComputer_StateMachine([
+        _stateMachine = new StateMachine([
             [1 /* Start */, 104 /* h */, 2 /* H */],
             [1 /* Start */, 72 /* H */, 2 /* H */],
             [1 /* Start */, 102 /* f */, 6 /* F */],
@@ -4547,7 +6246,7 @@ function getStateMachine() {
 var _classifier = null;
 function getClassifier() {
     if (_classifier === null) {
-        _classifier = new characterClassifier_CharacterClassifier(0 /* None */);
+        _classifier = new _core_characterClassifier_js__WEBPACK_IMPORTED_MODULE_0__["CharacterClassifier"](0 /* None */);
         var FORCE_TERMINATION_CHARACTERS = ' \t<>\'\"、。｡､，．：；？！＠＃＄％＆＊‘“〈《「『【〔（［｛｢｣｝］）〕】』」》〉”’｀～…';
         for (var i = 0; i < FORCE_TERMINATION_CHARACTERS.length; i++) {
             _classifier.set(FORCE_TERMINATION_CHARACTERS.charCodeAt(i), 1 /* ForceTermination */);
@@ -4713,7 +6412,19 @@ function computeLinks(model) {
     return LinkComputer.computeLinks(model);
 }
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/modes/supports/inplaceReplaceSupport.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/modes/supports/inplaceReplaceSupport.js":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/modes/supports/inplaceReplaceSupport.js ***!
+  \*************************************************************************************************/
+/*! exports provided: BasicInplaceReplace */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BasicInplaceReplace", function() { return BasicInplaceReplace; });
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -4802,171 +6513,40 @@ var BasicInplaceReplace = /** @class */ (function () {
 }());
 
 
-// EXTERNAL MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/standalone/promise-polyfill/polyfill.js
-var polyfill = __webpack_require__("URDS");
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/functional.js
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/services/editorSimpleWorker.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/services/editorSimpleWorker.js ***!
+  \****************************************************************************************/
+/*! exports provided: BaseEditorSimpleWorker, EditorSimpleWorkerImpl, create */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BaseEditorSimpleWorker", function() { return BaseEditorSimpleWorker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditorSimpleWorkerImpl", function() { return EditorSimpleWorkerImpl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "create", function() { return create; });
+/* harmony import */ var _base_common_arrays_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../base/common/arrays.js */ "./node_modules/monaco-editor/esm/vs/base/common/arrays.js");
+/* harmony import */ var _base_common_diff_diff_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../base/common/diff/diff.js */ "./node_modules/monaco-editor/esm/vs/base/common/diff/diff.js");
+/* harmony import */ var _base_common_iterator_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../base/common/iterator.js */ "./node_modules/monaco-editor/esm/vs/base/common/iterator.js");
+/* harmony import */ var _base_common_platform_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../base/common/platform.js */ "./node_modules/monaco-editor/esm/vs/base/common/platform.js");
+/* harmony import */ var _base_common_uri_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../base/common/uri.js */ "./node_modules/monaco-editor/esm/vs/base/common/uri.js");
+/* harmony import */ var _core_position_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/position.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/position.js");
+/* harmony import */ var _core_range_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../core/range.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/range.js");
+/* harmony import */ var _diff_diffComputer_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../diff/diffComputer.js */ "./node_modules/monaco-editor/esm/vs/editor/common/diff/diffComputer.js");
+/* harmony import */ var _model_mirrorTextModel_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../model/mirrorTextModel.js */ "./node_modules/monaco-editor/esm/vs/editor/common/model/mirrorTextModel.js");
+/* harmony import */ var _model_wordHelper_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../model/wordHelper.js */ "./node_modules/monaco-editor/esm/vs/editor/common/model/wordHelper.js");
+/* harmony import */ var _modes_linkComputer_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../modes/linkComputer.js */ "./node_modules/monaco-editor/esm/vs/editor/common/modes/linkComputer.js");
+/* harmony import */ var _modes_supports_inplaceReplaceSupport_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../modes/supports/inplaceReplaceSupport.js */ "./node_modules/monaco-editor/esm/vs/editor/common/modes/supports/inplaceReplaceSupport.js");
+/* harmony import */ var _standalone_standaloneBase_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../standalone/standaloneBase.js */ "./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneBase.js");
+/* harmony import */ var _base_common_types_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../base/common/types.js */ "./node_modules/monaco-editor/esm/vs/base/common/types.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-function functional_once(fn) {
-    var _this = this;
-    var didCall = false;
-    var result;
-    return function () {
-        if (didCall) {
-            return result;
-        }
-        didCall = true;
-        result = fn.apply(_this, arguments);
-        return result;
-    };
-}
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/linkedList.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-var Node = /** @class */ (function () {
-    function Node(element) {
-        this.element = element;
-        this.next = Node.Undefined;
-        this.prev = Node.Undefined;
-    }
-    Node.Undefined = new Node(undefined);
-    return Node;
-}());
-var linkedList_LinkedList = /** @class */ (function () {
-    function LinkedList() {
-        this._first = Node.Undefined;
-        this._last = Node.Undefined;
-        this._size = 0;
-    }
-    Object.defineProperty(LinkedList.prototype, "size", {
-        get: function () {
-            return this._size;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    LinkedList.prototype.isEmpty = function () {
-        return this._first === Node.Undefined;
-    };
-    LinkedList.prototype.clear = function () {
-        this._first = Node.Undefined;
-        this._last = Node.Undefined;
-        this._size = 0;
-    };
-    LinkedList.prototype.unshift = function (element) {
-        return this._insert(element, false);
-    };
-    LinkedList.prototype.push = function (element) {
-        return this._insert(element, true);
-    };
-    LinkedList.prototype._insert = function (element, atTheEnd) {
-        var _this = this;
-        var newNode = new Node(element);
-        if (this._first === Node.Undefined) {
-            this._first = newNode;
-            this._last = newNode;
-        }
-        else if (atTheEnd) {
-            // push
-            var oldLast = this._last;
-            this._last = newNode;
-            newNode.prev = oldLast;
-            oldLast.next = newNode;
-        }
-        else {
-            // unshift
-            var oldFirst = this._first;
-            this._first = newNode;
-            newNode.next = oldFirst;
-            oldFirst.prev = newNode;
-        }
-        this._size += 1;
-        var didRemove = false;
-        return function () {
-            if (!didRemove) {
-                didRemove = true;
-                _this._remove(newNode);
-            }
-        };
-    };
-    LinkedList.prototype.shift = function () {
-        if (this._first === Node.Undefined) {
-            return undefined;
-        }
-        else {
-            var res = this._first.element;
-            this._remove(this._first);
-            return res;
-        }
-    };
-    LinkedList.prototype._remove = function (node) {
-        if (node.prev !== Node.Undefined && node.next !== Node.Undefined) {
-            // middle
-            var anchor = node.prev;
-            anchor.next = node.next;
-            node.next.prev = anchor;
-        }
-        else if (node.prev === Node.Undefined && node.next === Node.Undefined) {
-            // only node
-            this._first = Node.Undefined;
-            this._last = Node.Undefined;
-        }
-        else if (node.next === Node.Undefined) {
-            // last
-            this._last = this._last.prev;
-            this._last.next = Node.Undefined;
-        }
-        else if (node.prev === Node.Undefined) {
-            // first
-            this._first = this._first.next;
-            this._first.prev = Node.Undefined;
-        }
-        // done
-        this._size -= 1;
-    };
-    LinkedList.prototype.iterator = function () {
-        var element;
-        var node = this._first;
-        return {
-            next: function () {
-                if (node === Node.Undefined) {
-                    return FIN;
-                }
-                if (!element) {
-                    element = { done: false, value: node.element };
-                }
-                else {
-                    element.value = node.element;
-                }
-                node = node.next;
-                return element;
-            }
-        };
-    };
-    LinkedList.prototype.toArray = function () {
-        var result = [];
-        for (var node = this._first; node !== Node.Undefined; node = node.next) {
-            result.push(node.element);
-        }
-        return result;
-    };
-    return LinkedList;
-}());
-
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/event.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var event_extends = (undefined && undefined.__extends) || (function () {
+var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -4983,1282 +6563,944 @@ var event_extends = (undefined && undefined.__extends) || (function () {
 
 
 
-var event_Event;
-(function (Event) {
-    var _disposable = { dispose: function () { } };
-    Event.None = function () { return _disposable; };
-    /**
-     * Given an event, returns another event which only fires once.
-     */
-    function once(event) {
-        return function (listener, thisArgs, disposables) {
-            if (thisArgs === void 0) { thisArgs = null; }
-            // we need this, in case the event fires during the listener call
-            var didFire = false;
-            var result;
-            result = event(function (e) {
-                if (didFire) {
-                    return;
-                }
-                else if (result) {
-                    result.dispose();
-                }
-                else {
-                    didFire = true;
-                }
-                return listener.call(thisArgs, e);
-            }, null, disposables);
-            if (didFire) {
-                result.dispose();
-            }
-            return result;
-        };
-    }
-    Event.once = once;
-    /**
-     * Given an event and a `map` function, returns another event which maps each element
-     * throught the mapping function.
-     */
-    function map(event, map) {
-        return snapshot(function (listener, thisArgs, disposables) {
-            if (thisArgs === void 0) { thisArgs = null; }
-            return event(function (i) { return listener.call(thisArgs, map(i)); }, null, disposables);
-        });
-    }
-    Event.map = map;
-    /**
-     * Given an event and an `each` function, returns another identical event and calls
-     * the `each` function per each element.
-     */
-    function forEach(event, each) {
-        return snapshot(function (listener, thisArgs, disposables) {
-            if (thisArgs === void 0) { thisArgs = null; }
-            return event(function (i) { each(i); listener.call(thisArgs, i); }, null, disposables);
-        });
-    }
-    Event.forEach = forEach;
-    function filter(event, filter) {
-        return snapshot(function (listener, thisArgs, disposables) {
-            if (thisArgs === void 0) { thisArgs = null; }
-            return event(function (e) { return filter(e) && listener.call(thisArgs, e); }, null, disposables);
-        });
-    }
-    Event.filter = filter;
-    /**
-     * Given an event, returns the same event but typed as `Event<void>`.
-     */
-    function signal(event) {
-        return event;
-    }
-    Event.signal = signal;
-    /**
-     * Given a collection of events, returns a single event which emits
-     * whenever any of the provided events emit.
-     */
-    function any() {
-        var events = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            events[_i] = arguments[_i];
-        }
-        return function (listener, thisArgs, disposables) {
-            if (thisArgs === void 0) { thisArgs = null; }
-            return combinedDisposable(events.map(function (event) { return event(function (e) { return listener.call(thisArgs, e); }, null, disposables); }));
-        };
-    }
-    Event.any = any;
-    /**
-     * Given an event and a `merge` function, returns another event which maps each element
-     * and the cummulative result throught the `merge` function. Similar to `map`, but with memory.
-     */
-    function reduce(event, merge, initial) {
-        var output = initial;
-        return map(event, function (e) {
-            output = merge(output, e);
-            return output;
-        });
-    }
-    Event.reduce = reduce;
-    /**
-     * Given a chain of event processing functions (filter, map, etc), each
-     * function will be invoked per event & per listener. Snapshotting an event
-     * chain allows each function to be invoked just once per event.
-     */
-    function snapshot(event) {
-        var listener;
-        var emitter = new event_Emitter({
-            onFirstListenerAdd: function () {
-                listener = event(emitter.fire, emitter);
-            },
-            onLastListenerRemove: function () {
-                listener.dispose();
-            }
-        });
-        return emitter.event;
-    }
-    Event.snapshot = snapshot;
-    function debounce(event, merge, delay, leading, leakWarningThreshold) {
-        if (delay === void 0) { delay = 100; }
-        if (leading === void 0) { leading = false; }
-        var subscription;
-        var output = undefined;
-        var handle = undefined;
-        var numDebouncedCalls = 0;
-        var emitter = new event_Emitter({
-            leakWarningThreshold: leakWarningThreshold,
-            onFirstListenerAdd: function () {
-                subscription = event(function (cur) {
-                    numDebouncedCalls++;
-                    output = merge(output, cur);
-                    if (leading && !handle) {
-                        emitter.fire(output);
-                    }
-                    clearTimeout(handle);
-                    handle = setTimeout(function () {
-                        var _output = output;
-                        output = undefined;
-                        handle = undefined;
-                        if (!leading || numDebouncedCalls > 1) {
-                            emitter.fire(_output);
-                        }
-                        numDebouncedCalls = 0;
-                    }, delay);
-                });
-            },
-            onLastListenerRemove: function () {
-                subscription.dispose();
-            }
-        });
-        return emitter.event;
-    }
-    Event.debounce = debounce;
-    /**
-     * Given an event, it returns another event which fires only once and as soon as
-     * the input event emits. The event data is the number of millis it took for the
-     * event to fire.
-     */
-    function stopwatch(event) {
-        var start = new Date().getTime();
-        return map(once(event), function (_) { return new Date().getTime() - start; });
-    }
-    Event.stopwatch = stopwatch;
-    /**
-     * Given an event, it returns another event which fires only when the event
-     * element changes.
-     */
-    function latch(event) {
-        var firstCall = true;
-        var cache;
-        return filter(event, function (value) {
-            var shouldEmit = firstCall || value !== cache;
-            firstCall = false;
-            cache = value;
-            return shouldEmit;
-        });
-    }
-    Event.latch = latch;
-    /**
-     * Buffers the provided event until a first listener comes
-     * along, at which point fire all the events at once and
-     * pipe the event from then on.
-     *
-     * ```typescript
-     * const emitter = new Emitter<number>();
-     * const event = emitter.event;
-     * const bufferedEvent = buffer(event);
-     *
-     * emitter.fire(1);
-     * emitter.fire(2);
-     * emitter.fire(3);
-     * // nothing...
-     *
-     * const listener = bufferedEvent(num => console.log(num));
-     * // 1, 2, 3
-     *
-     * emitter.fire(4);
-     * // 4
-     * ```
-     */
-    function buffer(event, nextTick, _buffer) {
-        if (nextTick === void 0) { nextTick = false; }
-        if (_buffer === void 0) { _buffer = []; }
-        var buffer = _buffer.slice();
-        var listener = event(function (e) {
-            if (buffer) {
-                buffer.push(e);
-            }
-            else {
-                emitter.fire(e);
-            }
-        });
-        var flush = function () {
-            if (buffer) {
-                buffer.forEach(function (e) { return emitter.fire(e); });
-            }
-            buffer = null;
-        };
-        var emitter = new event_Emitter({
-            onFirstListenerAdd: function () {
-                if (!listener) {
-                    listener = event(function (e) { return emitter.fire(e); });
-                }
-            },
-            onFirstListenerDidAdd: function () {
-                if (buffer) {
-                    if (nextTick) {
-                        setTimeout(flush);
-                    }
-                    else {
-                        flush();
-                    }
-                }
-            },
-            onLastListenerRemove: function () {
-                if (listener) {
-                    listener.dispose();
-                }
-                listener = null;
-            }
-        });
-        return emitter.event;
-    }
-    Event.buffer = buffer;
-    var ChainableEvent = /** @class */ (function () {
-        function ChainableEvent(event) {
-            this.event = event;
-        }
-        ChainableEvent.prototype.map = function (fn) {
-            return new ChainableEvent(map(this.event, fn));
-        };
-        ChainableEvent.prototype.forEach = function (fn) {
-            return new ChainableEvent(forEach(this.event, fn));
-        };
-        ChainableEvent.prototype.filter = function (fn) {
-            return new ChainableEvent(filter(this.event, fn));
-        };
-        ChainableEvent.prototype.reduce = function (merge, initial) {
-            return new ChainableEvent(reduce(this.event, merge, initial));
-        };
-        ChainableEvent.prototype.latch = function () {
-            return new ChainableEvent(latch(this.event));
-        };
-        ChainableEvent.prototype.on = function (listener, thisArgs, disposables) {
-            return this.event(listener, thisArgs, disposables);
-        };
-        ChainableEvent.prototype.once = function (listener, thisArgs, disposables) {
-            return once(this.event)(listener, thisArgs, disposables);
-        };
-        return ChainableEvent;
-    }());
-    function chain(event) {
-        return new ChainableEvent(event);
-    }
-    Event.chain = chain;
-    function fromNodeEventEmitter(emitter, eventName, map) {
-        if (map === void 0) { map = function (id) { return id; }; }
-        var fn = function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            return result.fire(map.apply(void 0, args));
-        };
-        var onFirstListenerAdd = function () { return emitter.on(eventName, fn); };
-        var onLastListenerRemove = function () { return emitter.removeListener(eventName, fn); };
-        var result = new event_Emitter({ onFirstListenerAdd: onFirstListenerAdd, onLastListenerRemove: onLastListenerRemove });
-        return result.event;
-    }
-    Event.fromNodeEventEmitter = fromNodeEventEmitter;
-    function fromPromise(promise) {
-        var emitter = new event_Emitter();
-        var shouldEmit = false;
-        promise
-            .then(undefined, function () { return null; })
-            .then(function () {
-            if (!shouldEmit) {
-                setTimeout(function () { return emitter.fire(undefined); }, 0);
-            }
-            else {
-                emitter.fire(undefined);
-            }
-        });
-        shouldEmit = true;
-        return emitter.event;
-    }
-    Event.fromPromise = fromPromise;
-    function toPromise(event) {
-        return new Promise(function (c) { return once(event)(c); });
-    }
-    Event.toPromise = toPromise;
-})(event_Event || (event_Event = {}));
-var _globalLeakWarningThreshold = -1;
-var LeakageMonitor = /** @class */ (function () {
-    function LeakageMonitor(customThreshold, name) {
-        if (name === void 0) { name = Math.random().toString(18).slice(2, 5); }
-        this.customThreshold = customThreshold;
-        this.name = name;
-        this._warnCountdown = 0;
-    }
-    LeakageMonitor.prototype.dispose = function () {
-        if (this._stacks) {
-            this._stacks.clear();
-        }
-    };
-    LeakageMonitor.prototype.check = function (listenerCount) {
-        var _this = this;
-        var threshold = _globalLeakWarningThreshold;
-        if (typeof this.customThreshold === 'number') {
-            threshold = this.customThreshold;
-        }
-        if (threshold <= 0 || listenerCount < threshold) {
-            return undefined;
-        }
-        if (!this._stacks) {
-            this._stacks = new Map();
-        }
-        var stack = new Error().stack.split('\n').slice(3).join('\n');
-        var count = (this._stacks.get(stack) || 0);
-        this._stacks.set(stack, count + 1);
-        this._warnCountdown -= 1;
-        if (this._warnCountdown <= 0) {
-            // only warn on first exceed and then every time the limit
-            // is exceeded by 50% again
-            this._warnCountdown = threshold * 0.5;
-            // find most frequent listener and print warning
-            var topStack_1;
-            var topCount_1 = 0;
-            this._stacks.forEach(function (count, stack) {
-                if (!topStack_1 || topCount_1 < count) {
-                    topStack_1 = stack;
-                    topCount_1 = count;
-                }
-            });
-            console.warn("[" + this.name + "] potential listener LEAK detected, having " + listenerCount + " listeners already. MOST frequent listener (" + topCount_1 + "):");
-            console.warn(topStack_1);
-        }
-        return function () {
-            var count = (_this._stacks.get(stack) || 0);
-            _this._stacks.set(stack, count - 1);
-        };
-    };
-    return LeakageMonitor;
-}());
-/**
- * The Emitter can be used to expose an Event to the public
- * to fire it from the insides.
- * Sample:
-    class Document {
 
-        private _onDidChange = new Emitter<(value:string)=>any>();
 
-        public onDidChange = this._onDidChange.event;
 
-        // getter-style
-        // get onDidChange(): Event<(value:string)=>any> {
-        // 	return this._onDidChange.event;
-        // }
 
-        private _doIt() {
-            //...
-            this._onDidChange.fire(value);
-        }
-    }
- */
-var event_Emitter = /** @class */ (function () {
-    function Emitter(options) {
-        this._disposed = false;
-        this._options = options;
-        this._leakageMon = _globalLeakWarningThreshold > 0
-            ? new LeakageMonitor(this._options && this._options.leakWarningThreshold)
-            : undefined;
-    }
-    Object.defineProperty(Emitter.prototype, "event", {
-        /**
-         * For the public to allow to subscribe
-         * to events from this Emitter
-         */
-        get: function () {
-            var _this = this;
-            if (!this._event) {
-                this._event = function (listener, thisArgs, disposables) {
-                    if (!_this._listeners) {
-                        _this._listeners = new linkedList_LinkedList();
-                    }
-                    var firstListener = _this._listeners.isEmpty();
-                    if (firstListener && _this._options && _this._options.onFirstListenerAdd) {
-                        _this._options.onFirstListenerAdd(_this);
-                    }
-                    var remove = _this._listeners.push(!thisArgs ? listener : [listener, thisArgs]);
-                    if (firstListener && _this._options && _this._options.onFirstListenerDidAdd) {
-                        _this._options.onFirstListenerDidAdd(_this);
-                    }
-                    if (_this._options && _this._options.onListenerDidAdd) {
-                        _this._options.onListenerDidAdd(_this, listener, thisArgs);
-                    }
-                    // check and record this emitter for potential leakage
-                    var removeMonitor;
-                    if (_this._leakageMon) {
-                        removeMonitor = _this._leakageMon.check(_this._listeners.size);
-                    }
-                    var result;
-                    result = {
-                        dispose: function () {
-                            if (removeMonitor) {
-                                removeMonitor();
-                            }
-                            result.dispose = Emitter._noop;
-                            if (!_this._disposed) {
-                                remove();
-                                if (_this._options && _this._options.onLastListenerRemove) {
-                                    var hasListeners = (_this._listeners && !_this._listeners.isEmpty());
-                                    if (!hasListeners) {
-                                        _this._options.onLastListenerRemove(_this);
-                                    }
-                                }
-                            }
-                        }
-                    };
-                    if (Array.isArray(disposables)) {
-                        disposables.push(result);
-                    }
-                    return result;
-                };
-            }
-            return this._event;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * To be kept private to fire an event to
-     * subscribers
-     */
-    Emitter.prototype.fire = function (event) {
-        if (this._listeners) {
-            // put all [listener,event]-pairs into delivery queue
-            // then emit all event. an inner/nested event might be
-            // the driver of this
-            if (!this._deliveryQueue) {
-                this._deliveryQueue = new linkedList_LinkedList();
-            }
-            for (var iter = this._listeners.iterator(), e = iter.next(); !e.done; e = iter.next()) {
-                this._deliveryQueue.push([e.value, event]);
-            }
-            while (this._deliveryQueue.size > 0) {
-                var _a = this._deliveryQueue.shift(), listener = _a[0], event_1 = _a[1];
-                try {
-                    if (typeof listener === 'function') {
-                        listener.call(undefined, event_1);
-                    }
-                    else {
-                        listener[0].call(listener[1], event_1);
-                    }
-                }
-                catch (e) {
-                    onUnexpectedError(e);
-                }
-            }
-        }
-    };
-    Emitter.prototype.dispose = function () {
-        if (this._listeners) {
-            this._listeners.clear();
-        }
-        if (this._deliveryQueue) {
-            this._deliveryQueue.clear();
-        }
-        if (this._leakageMon) {
-            this._leakageMon.dispose();
-        }
-        this._disposed = true;
-    };
-    Emitter._noop = function () { };
-    return Emitter;
-}());
 
-var event_PauseableEmitter = /** @class */ (function (_super) {
-    event_extends(PauseableEmitter, _super);
-    function PauseableEmitter(options) {
-        var _this = _super.call(this, options) || this;
-        _this._isPaused = 0;
-        _this._eventQueue = new linkedList_LinkedList();
-        _this._mergeFn = options && options.merge;
-        return _this;
-    }
-    PauseableEmitter.prototype.pause = function () {
-        this._isPaused++;
-    };
-    PauseableEmitter.prototype.resume = function () {
-        if (this._isPaused !== 0 && --this._isPaused === 0) {
-            if (this._mergeFn) {
-                // use the merge function to create a single composite
-                // event. make a copy in case firing pauses this emitter
-                var events = this._eventQueue.toArray();
-                this._eventQueue.clear();
-                _super.prototype.fire.call(this, this._mergeFn(events));
-            }
-            else {
-                // no merging, fire each event individually and test
-                // that this emitter isn't paused halfway through
-                while (!this._isPaused && this._eventQueue.size !== 0) {
-                    _super.prototype.fire.call(this, this._eventQueue.shift());
-                }
-            }
-        }
-    };
-    PauseableEmitter.prototype.fire = function (event) {
-        if (this._listeners) {
-            if (this._isPaused !== 0) {
-                this._eventQueue.push(event);
-            }
-            else {
-                _super.prototype.fire.call(this, event);
-            }
-        }
-    };
-    return PauseableEmitter;
-}(event_Emitter));
 
-var event_EventMultiplexer = /** @class */ (function () {
-    function EventMultiplexer() {
-        var _this = this;
-        this.hasListeners = false;
-        this.events = [];
-        this.emitter = new event_Emitter({
-            onFirstListenerAdd: function () { return _this.onFirstListenerAdd(); },
-            onLastListenerRemove: function () { return _this.onLastListenerRemove(); }
-        });
-    }
-    Object.defineProperty(EventMultiplexer.prototype, "event", {
-        get: function () {
-            return this.emitter.event;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    EventMultiplexer.prototype.add = function (event) {
-        var _this = this;
-        var e = { event: event, listener: null };
-        this.events.push(e);
-        if (this.hasListeners) {
-            this.hook(e);
-        }
-        var dispose = function () {
-            if (_this.hasListeners) {
-                _this.unhook(e);
-            }
-            var idx = _this.events.indexOf(e);
-            _this.events.splice(idx, 1);
-        };
-        return toDisposable(functional_once(dispose));
-    };
-    EventMultiplexer.prototype.onFirstListenerAdd = function () {
-        var _this = this;
-        this.hasListeners = true;
-        this.events.forEach(function (e) { return _this.hook(e); });
-    };
-    EventMultiplexer.prototype.onLastListenerRemove = function () {
-        var _this = this;
-        this.hasListeners = false;
-        this.events.forEach(function (e) { return _this.unhook(e); });
-    };
-    EventMultiplexer.prototype.hook = function (e) {
-        var _this = this;
-        e.listener = e.event(function (r) { return _this.emitter.fire(r); });
-    };
-    EventMultiplexer.prototype.unhook = function (e) {
-        if (e.listener) {
-            e.listener.dispose();
-        }
-        e.listener = null;
-    };
-    EventMultiplexer.prototype.dispose = function () {
-        this.emitter.dispose();
-    };
-    return EventMultiplexer;
-}());
+
+
+
 
 /**
- * The EventBufferer is useful in situations in which you want
- * to delay firing your events during some code.
- * You can wrap that code and be sure that the event will not
- * be fired during that wrap.
- *
- * ```
- * const emitter: Emitter;
- * const delayer = new EventDelayer();
- * const delayedEvent = delayer.wrapEvent(emitter.event);
- *
- * delayedEvent(console.log);
- *
- * delayer.bufferEvents(() => {
- *   emitter.fire(); // event will not be fired yet
- * });
- *
- * // event will only be fired at this point
- * ```
+ * @internal
  */
-var EventBufferer = /** @class */ (function () {
-    function EventBufferer() {
-        this.buffers = [];
+var MirrorModel = /** @class */ (function (_super) {
+    __extends(MirrorModel, _super);
+    function MirrorModel() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    EventBufferer.prototype.wrapEvent = function (event) {
-        var _this = this;
-        return function (listener, thisArgs, disposables) {
-            return event(function (i) {
-                var buffer = _this.buffers[_this.buffers.length - 1];
-                if (buffer) {
-                    buffer.push(function () { return listener.call(thisArgs, i); });
-                }
-                else {
-                    listener.call(thisArgs, i);
-                }
-            }, undefined, disposables);
-        };
-    };
-    EventBufferer.prototype.bufferEvents = function (fn) {
-        var buffer = [];
-        this.buffers.push(buffer);
-        var r = fn();
-        this.buffers.pop();
-        buffer.forEach(function (flush) { return flush(); });
-        return r;
-    };
-    return EventBufferer;
-}());
-
-/**
- * A Relay is an event forwarder which functions as a replugabble event pipe.
- * Once created, you can connect an input event to it and it will simply forward
- * events from that input event through its own `event` property. The `input`
- * can be changed at any point in time.
- */
-var event_Relay = /** @class */ (function () {
-    function Relay() {
-        var _this = this;
-        this.listening = false;
-        this.inputEvent = event_Event.None;
-        this.inputEventListener = Disposable.None;
-        this.emitter = new event_Emitter({
-            onFirstListenerDidAdd: function () {
-                _this.listening = true;
-                _this.inputEventListener = _this.inputEvent(_this.emitter.fire, _this.emitter);
-            },
-            onLastListenerRemove: function () {
-                _this.listening = false;
-                _this.inputEventListener.dispose();
-            }
-        });
-        this.event = this.emitter.event;
-    }
-    Object.defineProperty(Relay.prototype, "input", {
-        set: function (event) {
-            this.inputEvent = event;
-            if (this.listening) {
-                this.inputEventListener.dispose();
-                this.inputEventListener = event(this.emitter.fire, this.emitter);
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Relay.prototype.dispose = function () {
-        this.inputEventListener.dispose();
-        this.emitter.dispose();
-    };
-    return Relay;
-}());
-
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/cancellation.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-var shortcutEvent = Object.freeze(function (callback, context) {
-    var handle = setTimeout(callback.bind(context), 0);
-    return { dispose: function () { clearTimeout(handle); } };
-});
-var cancellation_CancellationToken;
-(function (CancellationToken) {
-    function isCancellationToken(thing) {
-        if (thing === CancellationToken.None || thing === CancellationToken.Cancelled) {
-            return true;
-        }
-        if (thing instanceof cancellation_MutableToken) {
-            return true;
-        }
-        if (!thing || typeof thing !== 'object') {
-            return false;
-        }
-        return typeof thing.isCancellationRequested === 'boolean'
-            && typeof thing.onCancellationRequested === 'function';
-    }
-    CancellationToken.isCancellationToken = isCancellationToken;
-    CancellationToken.None = Object.freeze({
-        isCancellationRequested: false,
-        onCancellationRequested: event_Event.None
-    });
-    CancellationToken.Cancelled = Object.freeze({
-        isCancellationRequested: true,
-        onCancellationRequested: shortcutEvent
-    });
-})(cancellation_CancellationToken || (cancellation_CancellationToken = {}));
-var cancellation_MutableToken = /** @class */ (function () {
-    function MutableToken() {
-        this._isCancelled = false;
-        this._emitter = null;
-    }
-    MutableToken.prototype.cancel = function () {
-        if (!this._isCancelled) {
-            this._isCancelled = true;
-            if (this._emitter) {
-                this._emitter.fire(undefined);
-                this.dispose();
-            }
-        }
-    };
-    Object.defineProperty(MutableToken.prototype, "isCancellationRequested", {
+    Object.defineProperty(MirrorModel.prototype, "uri", {
         get: function () {
-            return this._isCancelled;
+            return this._uri;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MutableToken.prototype, "onCancellationRequested", {
+    Object.defineProperty(MirrorModel.prototype, "version", {
         get: function () {
-            if (this._isCancelled) {
-                return shortcutEvent;
-            }
-            if (!this._emitter) {
-                this._emitter = new event_Emitter();
-            }
-            return this._emitter.event;
+            return this._versionId;
         },
         enumerable: true,
         configurable: true
     });
-    MutableToken.prototype.dispose = function () {
-        if (this._emitter) {
-            this._emitter.dispose();
-            this._emitter = null;
-        }
-    };
-    return MutableToken;
-}());
-var CancellationTokenSource = /** @class */ (function () {
-    function CancellationTokenSource(parent) {
-        this._token = undefined;
-        this._parentListener = undefined;
-        this._parentListener = parent && parent.onCancellationRequested(this.cancel, this);
-    }
-    Object.defineProperty(CancellationTokenSource.prototype, "token", {
+    Object.defineProperty(MirrorModel.prototype, "eol", {
         get: function () {
-            if (!this._token) {
-                // be lazy and create the token only when
-                // actually needed
-                this._token = new cancellation_MutableToken();
-            }
-            return this._token;
+            return this._eol;
         },
         enumerable: true,
         configurable: true
     });
-    CancellationTokenSource.prototype.cancel = function () {
-        if (!this._token) {
-            // save an object by returning the default
-            // cancelled token when cancellation happens
-            // before someone asks for the token
-            this._token = cancellation_CancellationToken.Cancelled;
-        }
-        else if (this._token instanceof cancellation_MutableToken) {
-            // actually cancel
-            this._token.cancel();
-        }
+    MirrorModel.prototype.getValue = function () {
+        return this.getText();
     };
-    CancellationTokenSource.prototype.dispose = function () {
-        if (this._parentListener) {
-            this._parentListener.dispose();
+    MirrorModel.prototype.getLinesContent = function () {
+        return this._lines.slice(0);
+    };
+    MirrorModel.prototype.getLineCount = function () {
+        return this._lines.length;
+    };
+    MirrorModel.prototype.getLineContent = function (lineNumber) {
+        return this._lines[lineNumber - 1];
+    };
+    MirrorModel.prototype.getWordAtPosition = function (position, wordDefinition) {
+        var wordAtText = Object(_model_wordHelper_js__WEBPACK_IMPORTED_MODULE_9__["getWordAtText"])(position.column, Object(_model_wordHelper_js__WEBPACK_IMPORTED_MODULE_9__["ensureValidWordDefinition"])(wordDefinition), this._lines[position.lineNumber - 1], 0);
+        if (wordAtText) {
+            return new _core_range_js__WEBPACK_IMPORTED_MODULE_6__["Range"](position.lineNumber, wordAtText.startColumn, position.lineNumber, wordAtText.endColumn);
         }
-        if (!this._token) {
-            // ensure to initialize with an empty token if we had none
-            this._token = cancellation_CancellationToken.None;
-        }
-        else if (this._token instanceof cancellation_MutableToken) {
-            // actually dispose
-            this._token.dispose();
-        }
-    };
-    return CancellationTokenSource;
-}());
-
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/base/common/keyCodes.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-var KeyCodeStrMap = /** @class */ (function () {
-    function KeyCodeStrMap() {
-        this._keyCodeToStr = [];
-        this._strToKeyCode = Object.create(null);
-    }
-    KeyCodeStrMap.prototype.define = function (keyCode, str) {
-        this._keyCodeToStr[keyCode] = str;
-        this._strToKeyCode[str.toLowerCase()] = keyCode;
-    };
-    KeyCodeStrMap.prototype.keyCodeToStr = function (keyCode) {
-        return this._keyCodeToStr[keyCode];
-    };
-    KeyCodeStrMap.prototype.strToKeyCode = function (str) {
-        return this._strToKeyCode[str.toLowerCase()] || 0 /* Unknown */;
-    };
-    return KeyCodeStrMap;
-}());
-var uiMap = new KeyCodeStrMap();
-var userSettingsUSMap = new KeyCodeStrMap();
-var userSettingsGeneralMap = new KeyCodeStrMap();
-(function () {
-    function define(keyCode, uiLabel, usUserSettingsLabel, generalUserSettingsLabel) {
-        if (usUserSettingsLabel === void 0) { usUserSettingsLabel = uiLabel; }
-        if (generalUserSettingsLabel === void 0) { generalUserSettingsLabel = usUserSettingsLabel; }
-        uiMap.define(keyCode, uiLabel);
-        userSettingsUSMap.define(keyCode, usUserSettingsLabel);
-        userSettingsGeneralMap.define(keyCode, generalUserSettingsLabel);
-    }
-    define(0 /* Unknown */, 'unknown');
-    define(1 /* Backspace */, 'Backspace');
-    define(2 /* Tab */, 'Tab');
-    define(3 /* Enter */, 'Enter');
-    define(4 /* Shift */, 'Shift');
-    define(5 /* Ctrl */, 'Ctrl');
-    define(6 /* Alt */, 'Alt');
-    define(7 /* PauseBreak */, 'PauseBreak');
-    define(8 /* CapsLock */, 'CapsLock');
-    define(9 /* Escape */, 'Escape');
-    define(10 /* Space */, 'Space');
-    define(11 /* PageUp */, 'PageUp');
-    define(12 /* PageDown */, 'PageDown');
-    define(13 /* End */, 'End');
-    define(14 /* Home */, 'Home');
-    define(15 /* LeftArrow */, 'LeftArrow', 'Left');
-    define(16 /* UpArrow */, 'UpArrow', 'Up');
-    define(17 /* RightArrow */, 'RightArrow', 'Right');
-    define(18 /* DownArrow */, 'DownArrow', 'Down');
-    define(19 /* Insert */, 'Insert');
-    define(20 /* Delete */, 'Delete');
-    define(21 /* KEY_0 */, '0');
-    define(22 /* KEY_1 */, '1');
-    define(23 /* KEY_2 */, '2');
-    define(24 /* KEY_3 */, '3');
-    define(25 /* KEY_4 */, '4');
-    define(26 /* KEY_5 */, '5');
-    define(27 /* KEY_6 */, '6');
-    define(28 /* KEY_7 */, '7');
-    define(29 /* KEY_8 */, '8');
-    define(30 /* KEY_9 */, '9');
-    define(31 /* KEY_A */, 'A');
-    define(32 /* KEY_B */, 'B');
-    define(33 /* KEY_C */, 'C');
-    define(34 /* KEY_D */, 'D');
-    define(35 /* KEY_E */, 'E');
-    define(36 /* KEY_F */, 'F');
-    define(37 /* KEY_G */, 'G');
-    define(38 /* KEY_H */, 'H');
-    define(39 /* KEY_I */, 'I');
-    define(40 /* KEY_J */, 'J');
-    define(41 /* KEY_K */, 'K');
-    define(42 /* KEY_L */, 'L');
-    define(43 /* KEY_M */, 'M');
-    define(44 /* KEY_N */, 'N');
-    define(45 /* KEY_O */, 'O');
-    define(46 /* KEY_P */, 'P');
-    define(47 /* KEY_Q */, 'Q');
-    define(48 /* KEY_R */, 'R');
-    define(49 /* KEY_S */, 'S');
-    define(50 /* KEY_T */, 'T');
-    define(51 /* KEY_U */, 'U');
-    define(52 /* KEY_V */, 'V');
-    define(53 /* KEY_W */, 'W');
-    define(54 /* KEY_X */, 'X');
-    define(55 /* KEY_Y */, 'Y');
-    define(56 /* KEY_Z */, 'Z');
-    define(57 /* Meta */, 'Meta');
-    define(58 /* ContextMenu */, 'ContextMenu');
-    define(59 /* F1 */, 'F1');
-    define(60 /* F2 */, 'F2');
-    define(61 /* F3 */, 'F3');
-    define(62 /* F4 */, 'F4');
-    define(63 /* F5 */, 'F5');
-    define(64 /* F6 */, 'F6');
-    define(65 /* F7 */, 'F7');
-    define(66 /* F8 */, 'F8');
-    define(67 /* F9 */, 'F9');
-    define(68 /* F10 */, 'F10');
-    define(69 /* F11 */, 'F11');
-    define(70 /* F12 */, 'F12');
-    define(71 /* F13 */, 'F13');
-    define(72 /* F14 */, 'F14');
-    define(73 /* F15 */, 'F15');
-    define(74 /* F16 */, 'F16');
-    define(75 /* F17 */, 'F17');
-    define(76 /* F18 */, 'F18');
-    define(77 /* F19 */, 'F19');
-    define(78 /* NumLock */, 'NumLock');
-    define(79 /* ScrollLock */, 'ScrollLock');
-    define(80 /* US_SEMICOLON */, ';', ';', 'OEM_1');
-    define(81 /* US_EQUAL */, '=', '=', 'OEM_PLUS');
-    define(82 /* US_COMMA */, ',', ',', 'OEM_COMMA');
-    define(83 /* US_MINUS */, '-', '-', 'OEM_MINUS');
-    define(84 /* US_DOT */, '.', '.', 'OEM_PERIOD');
-    define(85 /* US_SLASH */, '/', '/', 'OEM_2');
-    define(86 /* US_BACKTICK */, '`', '`', 'OEM_3');
-    define(110 /* ABNT_C1 */, 'ABNT_C1');
-    define(111 /* ABNT_C2 */, 'ABNT_C2');
-    define(87 /* US_OPEN_SQUARE_BRACKET */, '[', '[', 'OEM_4');
-    define(88 /* US_BACKSLASH */, '\\', '\\', 'OEM_5');
-    define(89 /* US_CLOSE_SQUARE_BRACKET */, ']', ']', 'OEM_6');
-    define(90 /* US_QUOTE */, '\'', '\'', 'OEM_7');
-    define(91 /* OEM_8 */, 'OEM_8');
-    define(92 /* OEM_102 */, 'OEM_102');
-    define(93 /* NUMPAD_0 */, 'NumPad0');
-    define(94 /* NUMPAD_1 */, 'NumPad1');
-    define(95 /* NUMPAD_2 */, 'NumPad2');
-    define(96 /* NUMPAD_3 */, 'NumPad3');
-    define(97 /* NUMPAD_4 */, 'NumPad4');
-    define(98 /* NUMPAD_5 */, 'NumPad5');
-    define(99 /* NUMPAD_6 */, 'NumPad6');
-    define(100 /* NUMPAD_7 */, 'NumPad7');
-    define(101 /* NUMPAD_8 */, 'NumPad8');
-    define(102 /* NUMPAD_9 */, 'NumPad9');
-    define(103 /* NUMPAD_MULTIPLY */, 'NumPad_Multiply');
-    define(104 /* NUMPAD_ADD */, 'NumPad_Add');
-    define(105 /* NUMPAD_SEPARATOR */, 'NumPad_Separator');
-    define(106 /* NUMPAD_SUBTRACT */, 'NumPad_Subtract');
-    define(107 /* NUMPAD_DECIMAL */, 'NumPad_Decimal');
-    define(108 /* NUMPAD_DIVIDE */, 'NumPad_Divide');
-})();
-var KeyCodeUtils;
-(function (KeyCodeUtils) {
-    function toString(keyCode) {
-        return uiMap.keyCodeToStr(keyCode);
-    }
-    KeyCodeUtils.toString = toString;
-    function fromString(key) {
-        return uiMap.strToKeyCode(key);
-    }
-    KeyCodeUtils.fromString = fromString;
-    function toUserSettingsUS(keyCode) {
-        return userSettingsUSMap.keyCodeToStr(keyCode);
-    }
-    KeyCodeUtils.toUserSettingsUS = toUserSettingsUS;
-    function toUserSettingsGeneral(keyCode) {
-        return userSettingsGeneralMap.keyCodeToStr(keyCode);
-    }
-    KeyCodeUtils.toUserSettingsGeneral = toUserSettingsGeneral;
-    function fromUserSettings(key) {
-        return userSettingsUSMap.strToKeyCode(key) || userSettingsGeneralMap.strToKeyCode(key);
-    }
-    KeyCodeUtils.fromUserSettings = fromUserSettings;
-})(KeyCodeUtils || (KeyCodeUtils = {}));
-function KeyChord(firstPart, secondPart) {
-    var chordPart = ((secondPart & 0x0000FFFF) << 16) >>> 0;
-    return (firstPart | chordPart) >>> 0;
-}
-function createKeybinding(keybinding, OS) {
-    if (keybinding === 0) {
         return null;
-    }
-    var firstPart = (keybinding & 0x0000FFFF) >>> 0;
-    var chordPart = (keybinding & 0xFFFF0000) >>> 16;
-    if (chordPart !== 0) {
-        return new keyCodes_ChordKeybinding([
-            createSimpleKeybinding(firstPart, OS),
-            createSimpleKeybinding(chordPart, OS)
-        ]);
-    }
-    return new keyCodes_ChordKeybinding([createSimpleKeybinding(firstPart, OS)]);
-}
-function createSimpleKeybinding(keybinding, OS) {
-    var ctrlCmd = (keybinding & 2048 /* CtrlCmd */ ? true : false);
-    var winCtrl = (keybinding & 256 /* WinCtrl */ ? true : false);
-    var ctrlKey = (OS === 2 /* Macintosh */ ? winCtrl : ctrlCmd);
-    var shiftKey = (keybinding & 1024 /* Shift */ ? true : false);
-    var altKey = (keybinding & 512 /* Alt */ ? true : false);
-    var metaKey = (OS === 2 /* Macintosh */ ? ctrlCmd : winCtrl);
-    var keyCode = (keybinding & 255 /* KeyCode */);
-    return new SimpleKeybinding(ctrlKey, shiftKey, altKey, metaKey, keyCode);
-}
-var SimpleKeybinding = /** @class */ (function () {
-    function SimpleKeybinding(ctrlKey, shiftKey, altKey, metaKey, keyCode) {
-        this.ctrlKey = ctrlKey;
-        this.shiftKey = shiftKey;
-        this.altKey = altKey;
-        this.metaKey = metaKey;
-        this.keyCode = keyCode;
-    }
-    SimpleKeybinding.prototype.equals = function (other) {
-        return (this.ctrlKey === other.ctrlKey
-            && this.shiftKey === other.shiftKey
-            && this.altKey === other.altKey
-            && this.metaKey === other.metaKey
-            && this.keyCode === other.keyCode);
     };
-    SimpleKeybinding.prototype.isModifierKey = function () {
-        return (this.keyCode === 0 /* Unknown */
-            || this.keyCode === 5 /* Ctrl */
-            || this.keyCode === 57 /* Meta */
-            || this.keyCode === 6 /* Alt */
-            || this.keyCode === 4 /* Shift */);
-    };
-    SimpleKeybinding.prototype.toChord = function () {
-        return new keyCodes_ChordKeybinding([this]);
-    };
-    /**
-     * Does this keybinding refer to the key code of a modifier and it also has the modifier flag?
-     */
-    SimpleKeybinding.prototype.isDuplicateModifierCase = function () {
-        return ((this.ctrlKey && this.keyCode === 5 /* Ctrl */)
-            || (this.shiftKey && this.keyCode === 4 /* Shift */)
-            || (this.altKey && this.keyCode === 6 /* Alt */)
-            || (this.metaKey && this.keyCode === 57 /* Meta */));
-    };
-    return SimpleKeybinding;
-}());
-
-var keyCodes_ChordKeybinding = /** @class */ (function () {
-    function ChordKeybinding(parts) {
-        if (parts.length === 0) {
-            throw illegalArgument("parts");
+    MirrorModel.prototype.getWordUntilPosition = function (position, wordDefinition) {
+        var wordAtPosition = this.getWordAtPosition(position, wordDefinition);
+        if (!wordAtPosition) {
+            return {
+                word: '',
+                startColumn: position.column,
+                endColumn: position.column
+            };
         }
-        this.parts = parts;
+        return {
+            word: this._lines[position.lineNumber - 1].substring(wordAtPosition.startColumn - 1, position.column - 1),
+            startColumn: wordAtPosition.startColumn,
+            endColumn: position.column
+        };
+    };
+    MirrorModel.prototype.createWordIterator = function (wordDefinition) {
+        var _this = this;
+        var obj;
+        var lineNumber = 0;
+        var lineText;
+        var wordRangesIdx = 0;
+        var wordRanges = [];
+        var next = function () {
+            if (wordRangesIdx < wordRanges.length) {
+                var value = lineText.substring(wordRanges[wordRangesIdx].start, wordRanges[wordRangesIdx].end);
+                wordRangesIdx += 1;
+                if (!obj) {
+                    obj = { done: false, value: value };
+                }
+                else {
+                    obj.value = value;
+                }
+                return obj;
+            }
+            else if (lineNumber >= _this._lines.length) {
+                return _base_common_iterator_js__WEBPACK_IMPORTED_MODULE_2__["FIN"];
+            }
+            else {
+                lineText = _this._lines[lineNumber];
+                wordRanges = _this._wordenize(lineText, wordDefinition);
+                wordRangesIdx = 0;
+                lineNumber += 1;
+                return next();
+            }
+        };
+        return { next: next };
+    };
+    MirrorModel.prototype.getLineWords = function (lineNumber, wordDefinition) {
+        var content = this._lines[lineNumber - 1];
+        var ranges = this._wordenize(content, wordDefinition);
+        var words = [];
+        for (var _i = 0, ranges_1 = ranges; _i < ranges_1.length; _i++) {
+            var range = ranges_1[_i];
+            words.push({
+                word: content.substring(range.start, range.end),
+                startColumn: range.start + 1,
+                endColumn: range.end + 1
+            });
+        }
+        return words;
+    };
+    MirrorModel.prototype._wordenize = function (content, wordDefinition) {
+        var result = [];
+        var match;
+        wordDefinition.lastIndex = 0; // reset lastIndex just to be sure
+        while (match = wordDefinition.exec(content)) {
+            if (match[0].length === 0) {
+                // it did match the empty string
+                break;
+            }
+            result.push({ start: match.index, end: match.index + match[0].length });
+        }
+        return result;
+    };
+    MirrorModel.prototype.getValueInRange = function (range) {
+        range = this._validateRange(range);
+        if (range.startLineNumber === range.endLineNumber) {
+            return this._lines[range.startLineNumber - 1].substring(range.startColumn - 1, range.endColumn - 1);
+        }
+        var lineEnding = this._eol;
+        var startLineIndex = range.startLineNumber - 1;
+        var endLineIndex = range.endLineNumber - 1;
+        var resultLines = [];
+        resultLines.push(this._lines[startLineIndex].substring(range.startColumn - 1));
+        for (var i = startLineIndex + 1; i < endLineIndex; i++) {
+            resultLines.push(this._lines[i]);
+        }
+        resultLines.push(this._lines[endLineIndex].substring(0, range.endColumn - 1));
+        return resultLines.join(lineEnding);
+    };
+    MirrorModel.prototype.offsetAt = function (position) {
+        position = this._validatePosition(position);
+        this._ensureLineStarts();
+        return this._lineStarts.getAccumulatedValue(position.lineNumber - 2) + (position.column - 1);
+    };
+    MirrorModel.prototype.positionAt = function (offset) {
+        offset = Math.floor(offset);
+        offset = Math.max(0, offset);
+        this._ensureLineStarts();
+        var out = this._lineStarts.getIndexOf(offset);
+        var lineLength = this._lines[out.index].length;
+        // Ensure we return a valid position
+        return {
+            lineNumber: 1 + out.index,
+            column: 1 + Math.min(out.remainder, lineLength)
+        };
+    };
+    MirrorModel.prototype._validateRange = function (range) {
+        var start = this._validatePosition({ lineNumber: range.startLineNumber, column: range.startColumn });
+        var end = this._validatePosition({ lineNumber: range.endLineNumber, column: range.endColumn });
+        if (start.lineNumber !== range.startLineNumber
+            || start.column !== range.startColumn
+            || end.lineNumber !== range.endLineNumber
+            || end.column !== range.endColumn) {
+            return {
+                startLineNumber: start.lineNumber,
+                startColumn: start.column,
+                endLineNumber: end.lineNumber,
+                endColumn: end.column
+            };
+        }
+        return range;
+    };
+    MirrorModel.prototype._validatePosition = function (position) {
+        if (!_core_position_js__WEBPACK_IMPORTED_MODULE_5__["Position"].isIPosition(position)) {
+            throw new Error('bad position');
+        }
+        var lineNumber = position.lineNumber, column = position.column;
+        var hasChanged = false;
+        if (lineNumber < 1) {
+            lineNumber = 1;
+            column = 1;
+            hasChanged = true;
+        }
+        else if (lineNumber > this._lines.length) {
+            lineNumber = this._lines.length;
+            column = this._lines[lineNumber - 1].length + 1;
+            hasChanged = true;
+        }
+        else {
+            var maxCharacter = this._lines[lineNumber - 1].length + 1;
+            if (column < 1) {
+                column = 1;
+                hasChanged = true;
+            }
+            else if (column > maxCharacter) {
+                column = maxCharacter;
+                hasChanged = true;
+            }
+        }
+        if (!hasChanged) {
+            return position;
+        }
+        else {
+            return { lineNumber: lineNumber, column: column };
+        }
+    };
+    return MirrorModel;
+}(_model_mirrorTextModel_js__WEBPACK_IMPORTED_MODULE_8__["MirrorTextModel"]));
+/**
+ * @internal
+ */
+var BaseEditorSimpleWorker = /** @class */ (function () {
+    function BaseEditorSimpleWorker(foreignModuleFactory) {
+        this._foreignModuleFactory = foreignModuleFactory;
+        this._foreignModule = null;
     }
-    ChordKeybinding.prototype.equals = function (other) {
-        if (other === null) {
+    // ---- BEGIN diff --------------------------------------------------------------------------
+    BaseEditorSimpleWorker.prototype.computeDiff = function (originalUrl, modifiedUrl, ignoreTrimWhitespace) {
+        var original = this._getModel(originalUrl);
+        var modified = this._getModel(modifiedUrl);
+        if (!original || !modified) {
+            return Promise.resolve(null);
+        }
+        var originalLines = original.getLinesContent();
+        var modifiedLines = modified.getLinesContent();
+        var diffComputer = new _diff_diffComputer_js__WEBPACK_IMPORTED_MODULE_7__["DiffComputer"](originalLines, modifiedLines, {
+            shouldComputeCharChanges: true,
+            shouldPostProcessCharChanges: true,
+            shouldIgnoreTrimWhitespace: ignoreTrimWhitespace,
+            shouldMakePrettyDiff: true
+        });
+        var changes = diffComputer.computeDiff();
+        var identical = (changes.length > 0 ? false : this._modelsAreIdentical(original, modified));
+        return Promise.resolve({
+            identical: identical,
+            changes: changes
+        });
+    };
+    BaseEditorSimpleWorker.prototype._modelsAreIdentical = function (original, modified) {
+        var originalLineCount = original.getLineCount();
+        var modifiedLineCount = modified.getLineCount();
+        if (originalLineCount !== modifiedLineCount) {
             return false;
         }
-        if (this.parts.length !== other.parts.length) {
-            return false;
-        }
-        for (var i = 0; i < this.parts.length; i++) {
-            if (!this.parts[i].equals(other.parts[i])) {
+        for (var line = 1; line <= originalLineCount; line++) {
+            var originalLine = original.getLineContent(line);
+            var modifiedLine = modified.getLineContent(line);
+            if (originalLine !== modifiedLine) {
                 return false;
             }
         }
         return true;
     };
-    return ChordKeybinding;
-}());
-
-var ResolvedKeybindingPart = /** @class */ (function () {
-    function ResolvedKeybindingPart(ctrlKey, shiftKey, altKey, metaKey, kbLabel, kbAriaLabel) {
-        this.ctrlKey = ctrlKey;
-        this.shiftKey = shiftKey;
-        this.altKey = altKey;
-        this.metaKey = metaKey;
-        this.keyLabel = kbLabel;
-        this.keyAriaLabel = kbAriaLabel;
-    }
-    return ResolvedKeybindingPart;
+    BaseEditorSimpleWorker.prototype.computeMoreMinimalEdits = function (modelUrl, edits) {
+        var model = this._getModel(modelUrl);
+        if (!model) {
+            return Promise.resolve(edits);
+        }
+        var result = [];
+        var lastEol = undefined;
+        edits = Object(_base_common_arrays_js__WEBPACK_IMPORTED_MODULE_0__["mergeSort"])(edits, function (a, b) {
+            if (a.range && b.range) {
+                return _core_range_js__WEBPACK_IMPORTED_MODULE_6__["Range"].compareRangesUsingStarts(a.range, b.range);
+            }
+            // eol only changes should go to the end
+            var aRng = a.range ? 0 : 1;
+            var bRng = b.range ? 0 : 1;
+            return aRng - bRng;
+        });
+        for (var _i = 0, edits_1 = edits; _i < edits_1.length; _i++) {
+            var _a = edits_1[_i], range = _a.range, text = _a.text, eol = _a.eol;
+            if (typeof eol === 'number') {
+                lastEol = eol;
+            }
+            if (_core_range_js__WEBPACK_IMPORTED_MODULE_6__["Range"].isEmpty(range) && !text) {
+                // empty change
+                continue;
+            }
+            var original = model.getValueInRange(range);
+            text = text.replace(/\r\n|\n|\r/g, model.eol);
+            if (original === text) {
+                // noop
+                continue;
+            }
+            // make sure diff won't take too long
+            if (Math.max(text.length, original.length) > BaseEditorSimpleWorker._diffLimit) {
+                result.push({ range: range, text: text });
+                continue;
+            }
+            // compute diff between original and edit.text
+            var changes = Object(_base_common_diff_diff_js__WEBPACK_IMPORTED_MODULE_1__["stringDiff"])(original, text, false);
+            var editOffset = model.offsetAt(_core_range_js__WEBPACK_IMPORTED_MODULE_6__["Range"].lift(range).getStartPosition());
+            for (var _b = 0, changes_1 = changes; _b < changes_1.length; _b++) {
+                var change = changes_1[_b];
+                var start = model.positionAt(editOffset + change.originalStart);
+                var end = model.positionAt(editOffset + change.originalStart + change.originalLength);
+                var newEdit = {
+                    text: text.substr(change.modifiedStart, change.modifiedLength),
+                    range: { startLineNumber: start.lineNumber, startColumn: start.column, endLineNumber: end.lineNumber, endColumn: end.column }
+                };
+                if (model.getValueInRange(newEdit.range) !== newEdit.text) {
+                    result.push(newEdit);
+                }
+            }
+        }
+        if (typeof lastEol === 'number') {
+            result.push({ eol: lastEol, text: '', range: { startLineNumber: 0, startColumn: 0, endLineNumber: 0, endColumn: 0 } });
+        }
+        return Promise.resolve(result);
+    };
+    // ---- END minimal edits ---------------------------------------------------------------
+    BaseEditorSimpleWorker.prototype.computeLinks = function (modelUrl) {
+        var model = this._getModel(modelUrl);
+        if (!model) {
+            return Promise.resolve(null);
+        }
+        return Promise.resolve(Object(_modes_linkComputer_js__WEBPACK_IMPORTED_MODULE_10__["computeLinks"])(model));
+    };
+    BaseEditorSimpleWorker.prototype.textualSuggest = function (modelUrl, position, wordDef, wordDefFlags) {
+        var model = this._getModel(modelUrl);
+        if (!model) {
+            return Promise.resolve(null);
+        }
+        var seen = Object.create(null);
+        var suggestions = [];
+        var wordDefRegExp = new RegExp(wordDef, wordDefFlags);
+        var wordUntil = model.getWordUntilPosition(position, wordDefRegExp);
+        var wordAt = model.getWordAtPosition(position, wordDefRegExp);
+        if (wordAt) {
+            seen[model.getValueInRange(wordAt)] = true;
+        }
+        for (var iter = model.createWordIterator(wordDefRegExp), e = iter.next(); !e.done && suggestions.length <= BaseEditorSimpleWorker._suggestionsLimit; e = iter.next()) {
+            var word = e.value;
+            if (seen[word]) {
+                continue;
+            }
+            seen[word] = true;
+            if (!isNaN(Number(word))) {
+                continue;
+            }
+            suggestions.push({
+                kind: 18 /* Text */,
+                label: word,
+                insertText: word,
+                range: { startLineNumber: position.lineNumber, startColumn: wordUntil.startColumn, endLineNumber: position.lineNumber, endColumn: wordUntil.endColumn }
+            });
+        }
+        return Promise.resolve({ suggestions: suggestions });
+    };
+    // ---- END suggest --------------------------------------------------------------------------
+    //#region -- word ranges --
+    BaseEditorSimpleWorker.prototype.computeWordRanges = function (modelUrl, range, wordDef, wordDefFlags) {
+        var model = this._getModel(modelUrl);
+        if (!model) {
+            return Promise.resolve(Object.create(null));
+        }
+        var wordDefRegExp = new RegExp(wordDef, wordDefFlags);
+        var result = Object.create(null);
+        for (var line = range.startLineNumber; line < range.endLineNumber; line++) {
+            var words = model.getLineWords(line, wordDefRegExp);
+            for (var _i = 0, words_1 = words; _i < words_1.length; _i++) {
+                var word = words_1[_i];
+                if (!isNaN(Number(word.word))) {
+                    continue;
+                }
+                var array = result[word.word];
+                if (!array) {
+                    array = [];
+                    result[word.word] = array;
+                }
+                array.push({
+                    startLineNumber: line,
+                    startColumn: word.startColumn,
+                    endLineNumber: line,
+                    endColumn: word.endColumn
+                });
+            }
+        }
+        return Promise.resolve(result);
+    };
+    //#endregion
+    BaseEditorSimpleWorker.prototype.navigateValueSet = function (modelUrl, range, up, wordDef, wordDefFlags) {
+        var model = this._getModel(modelUrl);
+        if (!model) {
+            return Promise.resolve(null);
+        }
+        var wordDefRegExp = new RegExp(wordDef, wordDefFlags);
+        if (range.startColumn === range.endColumn) {
+            range = {
+                startLineNumber: range.startLineNumber,
+                startColumn: range.startColumn,
+                endLineNumber: range.endLineNumber,
+                endColumn: range.endColumn + 1
+            };
+        }
+        var selectionText = model.getValueInRange(range);
+        var wordRange = model.getWordAtPosition({ lineNumber: range.startLineNumber, column: range.startColumn }, wordDefRegExp);
+        if (!wordRange) {
+            return Promise.resolve(null);
+        }
+        var word = model.getValueInRange(wordRange);
+        var result = _modes_supports_inplaceReplaceSupport_js__WEBPACK_IMPORTED_MODULE_11__["BasicInplaceReplace"].INSTANCE.navigateValueSet(range, selectionText, wordRange, word, up);
+        return Promise.resolve(result);
+    };
+    // ---- BEGIN foreign module support --------------------------------------------------------------------------
+    BaseEditorSimpleWorker.prototype.loadForeignModule = function (moduleId, createData) {
+        var _this = this;
+        var ctx = {
+            getMirrorModels: function () {
+                return _this._getModels();
+            }
+        };
+        if (this._foreignModuleFactory) {
+            this._foreignModule = this._foreignModuleFactory(ctx, createData);
+            // static foreing module
+            var methods = [];
+            for (var _i = 0, _a = Object(_base_common_types_js__WEBPACK_IMPORTED_MODULE_13__["getAllPropertyNames"])(this._foreignModule); _i < _a.length; _i++) {
+                var prop = _a[_i];
+                if (typeof this._foreignModule[prop] === 'function') {
+                    methods.push(prop);
+                }
+            }
+            return Promise.resolve(methods);
+        }
+        // ESM-comment-begin
+        // 		return new Promise<any>((resolve, reject) => {
+        // 			require([moduleId], (foreignModule: { create: IForeignModuleFactory }) => {
+        // 				this._foreignModule = foreignModule.create(ctx, createData);
+        // 
+        // 				let methods: string[] = [];
+        // 				for (const prop of getAllPropertyNames(this._foreignModule)) {
+        // 					if (typeof this._foreignModule[prop] === 'function') {
+        // 						methods.push(prop);
+        // 					}
+        // 				}
+        // 
+        // 				resolve(methods);
+        // 
+        // 			}, reject);
+        // 		});
+        // ESM-comment-end
+        // ESM-uncomment-begin
+        return Promise.reject(new Error("Unexpected usage"));
+        // ESM-uncomment-end
+    };
+    // foreign method request
+    BaseEditorSimpleWorker.prototype.fmr = function (method, args) {
+        if (!this._foreignModule || typeof this._foreignModule[method] !== 'function') {
+            return Promise.reject(new Error('Missing requestHandler or method: ' + method));
+        }
+        try {
+            return Promise.resolve(this._foreignModule[method].apply(this._foreignModule, args));
+        }
+        catch (e) {
+            return Promise.reject(e);
+        }
+    };
+    // ---- END diff --------------------------------------------------------------------------
+    // ---- BEGIN minimal edits ---------------------------------------------------------------
+    BaseEditorSimpleWorker._diffLimit = 100000;
+    // ---- BEGIN suggest --------------------------------------------------------------------------
+    BaseEditorSimpleWorker._suggestionsLimit = 10000;
+    return BaseEditorSimpleWorker;
 }());
 
 /**
- * A resolved keybinding. Can be a simple keybinding or a chord keybinding.
+ * @internal
  */
-var ResolvedKeybinding = /** @class */ (function () {
-    function ResolvedKeybinding() {
-    }
-    return ResolvedKeybinding;
-}());
-
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/core/selection.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var selection_extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-/**
- * A selection in the editor.
- * The selection is a range that has an orientation.
- */
-var selection_Selection = /** @class */ (function (_super) {
-    selection_extends(Selection, _super);
-    function Selection(selectionStartLineNumber, selectionStartColumn, positionLineNumber, positionColumn) {
-        var _this = _super.call(this, selectionStartLineNumber, selectionStartColumn, positionLineNumber, positionColumn) || this;
-        _this.selectionStartLineNumber = selectionStartLineNumber;
-        _this.selectionStartColumn = selectionStartColumn;
-        _this.positionLineNumber = positionLineNumber;
-        _this.positionColumn = positionColumn;
+var EditorSimpleWorkerImpl = /** @class */ (function (_super) {
+    __extends(EditorSimpleWorkerImpl, _super);
+    function EditorSimpleWorkerImpl(foreignModuleFactory) {
+        var _this = _super.call(this, foreignModuleFactory) || this;
+        _this._models = Object.create(null);
         return _this;
     }
-    /**
-     * Clone this selection.
-     */
-    Selection.prototype.clone = function () {
-        return new Selection(this.selectionStartLineNumber, this.selectionStartColumn, this.positionLineNumber, this.positionColumn);
+    EditorSimpleWorkerImpl.prototype.dispose = function () {
+        this._models = Object.create(null);
     };
-    /**
-     * Transform to a human-readable representation.
-     */
-    Selection.prototype.toString = function () {
-        return '[' + this.selectionStartLineNumber + ',' + this.selectionStartColumn + ' -> ' + this.positionLineNumber + ',' + this.positionColumn + ']';
+    EditorSimpleWorkerImpl.prototype._getModel = function (uri) {
+        return this._models[uri];
     };
-    /**
-     * Test if equals other selection.
-     */
-    Selection.prototype.equalsSelection = function (other) {
-        return (Selection.selectionsEqual(this, other));
+    EditorSimpleWorkerImpl.prototype._getModels = function () {
+        var _this = this;
+        var all = [];
+        Object.keys(this._models).forEach(function (key) { return all.push(_this._models[key]); });
+        return all;
     };
-    /**
-     * Test if the two selections are equal.
-     */
-    Selection.selectionsEqual = function (a, b) {
-        return (a.selectionStartLineNumber === b.selectionStartLineNumber &&
-            a.selectionStartColumn === b.selectionStartColumn &&
-            a.positionLineNumber === b.positionLineNumber &&
-            a.positionColumn === b.positionColumn);
+    EditorSimpleWorkerImpl.prototype.acceptNewModel = function (data) {
+        this._models[data.url] = new MirrorModel(_base_common_uri_js__WEBPACK_IMPORTED_MODULE_4__["URI"].parse(data.url), data.lines, data.EOL, data.versionId);
     };
-    /**
-     * Get directions (LTR or RTL).
-     */
-    Selection.prototype.getDirection = function () {
-        if (this.selectionStartLineNumber === this.startLineNumber && this.selectionStartColumn === this.startColumn) {
-            return 0 /* LTR */;
+    EditorSimpleWorkerImpl.prototype.acceptModelChanged = function (strURL, e) {
+        if (!this._models[strURL]) {
+            return;
         }
-        return 1 /* RTL */;
+        var model = this._models[strURL];
+        model.onEvents(e);
     };
-    /**
-     * Create a new selection with a different `positionLineNumber` and `positionColumn`.
-     */
-    Selection.prototype.setEndPosition = function (endLineNumber, endColumn) {
-        if (this.getDirection() === 0 /* LTR */) {
-            return new Selection(this.startLineNumber, this.startColumn, endLineNumber, endColumn);
+    EditorSimpleWorkerImpl.prototype.acceptRemovedModel = function (strURL) {
+        if (!this._models[strURL]) {
+            return;
         }
-        return new Selection(endLineNumber, endColumn, this.startLineNumber, this.startColumn);
+        delete this._models[strURL];
     };
-    /**
-     * Get the position at `positionLineNumber` and `positionColumn`.
-     */
-    Selection.prototype.getPosition = function () {
-        return new Position(this.positionLineNumber, this.positionColumn);
-    };
-    /**
-     * Create a new selection with a different `selectionStartLineNumber` and `selectionStartColumn`.
-     */
-    Selection.prototype.setStartPosition = function (startLineNumber, startColumn) {
-        if (this.getDirection() === 0 /* LTR */) {
-            return new Selection(startLineNumber, startColumn, this.endLineNumber, this.endColumn);
-        }
-        return new Selection(this.endLineNumber, this.endColumn, startLineNumber, startColumn);
-    };
-    // ----
-    /**
-     * Create a `Selection` from one or two positions
-     */
-    Selection.fromPositions = function (start, end) {
-        if (end === void 0) { end = start; }
-        return new Selection(start.lineNumber, start.column, end.lineNumber, end.column);
-    };
-    /**
-     * Create a `Selection` from an `ISelection`.
-     */
-    Selection.liftSelection = function (sel) {
-        return new Selection(sel.selectionStartLineNumber, sel.selectionStartColumn, sel.positionLineNumber, sel.positionColumn);
-    };
-    /**
-     * `a` equals `b`.
-     */
-    Selection.selectionsArrEqual = function (a, b) {
-        if (a && !b || !a && b) {
-            return false;
-        }
-        if (!a && !b) {
-            return true;
-        }
-        if (a.length !== b.length) {
-            return false;
-        }
-        for (var i = 0, len = a.length; i < len; i++) {
-            if (!this.selectionsEqual(a[i], b[i])) {
-                return false;
-            }
-        }
-        return true;
-    };
-    /**
-     * Test if `obj` is an `ISelection`.
-     */
-    Selection.isISelection = function (obj) {
-        return (obj
-            && (typeof obj.selectionStartLineNumber === 'number')
-            && (typeof obj.selectionStartColumn === 'number')
-            && (typeof obj.positionLineNumber === 'number')
-            && (typeof obj.positionColumn === 'number'));
-    };
-    /**
-     * Create with a direction.
-     */
-    Selection.createWithDirection = function (startLineNumber, startColumn, endLineNumber, endColumn, direction) {
-        if (direction === 0 /* LTR */) {
-            return new Selection(startLineNumber, startColumn, endLineNumber, endColumn);
-        }
-        return new Selection(endLineNumber, endColumn, startLineNumber, startColumn);
-    };
-    return Selection;
-}(range_Range));
+    return EditorSimpleWorkerImpl;
+}(BaseEditorSimpleWorker));
+
+/**
+ * Called on the worker side
+ * @internal
+ */
+function create() {
+    return new EditorSimpleWorkerImpl(null);
+}
+if (typeof importScripts === 'function') {
+    // Running in a web worker
+    _base_common_platform_js__WEBPACK_IMPORTED_MODULE_3__["globals"].monaco = Object(_standalone_standaloneBase_js__WEBPACK_IMPORTED_MODULE_12__["createMonacoBaseAPI"])();
+}
 
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/core/token.js
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/standalone/promise-polyfill/polyfill.js":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/standalone/promise-polyfill/polyfill.js ***!
+  \*************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+Copyright (c) 2014 Taylor Hakes
+Copyright (c) 2014 Forbes Lindesay
+ */
+(function (global, factory) {
+	 true ? factory() :
+		undefined;
+}(this, (function () {
+	'use strict';
+
+	/**
+	 * @this {Promise}
+	 */
+	function finallyConstructor(callback) {
+		var constructor = this.constructor;
+		return this.then(
+			function (value) {
+				return constructor.resolve(callback()).then(function () {
+					return value;
+				});
+			},
+			function (reason) {
+				return constructor.resolve(callback()).then(function () {
+					return constructor.reject(reason);
+				});
+			}
+		);
+	}
+
+	// Store setTimeout reference so promise-polyfill will be unaffected by
+	// other code modifying setTimeout (like sinon.useFakeTimers())
+	var setTimeoutFunc = setTimeout;
+
+	function noop() { }
+
+	// Polyfill for Function.prototype.bind
+	function bind(fn, thisArg) {
+		return function () {
+			fn.apply(thisArg, arguments);
+		};
+	}
+
+	/**
+	 * @constructor
+	 * @param {Function} fn
+	 */
+	function Promise(fn) {
+		if (!(this instanceof Promise))
+			throw new TypeError('Promises must be constructed via new');
+		if (typeof fn !== 'function') throw new TypeError('not a function');
+		/** @type {!number} */
+		this._state = 0;
+		/** @type {!boolean} */
+		this._handled = false;
+		/** @type {Promise|undefined} */
+		this._value = undefined;
+		/** @type {!Array<!Function>} */
+		this._deferreds = [];
+
+		doResolve(fn, this);
+	}
+
+	function handle(self, deferred) {
+		while (self._state === 3) {
+			self = self._value;
+		}
+		if (self._state === 0) {
+			self._deferreds.push(deferred);
+			return;
+		}
+		self._handled = true;
+		Promise._immediateFn(function () {
+			var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
+			if (cb === null) {
+				(self._state === 1 ? resolve : reject)(deferred.promise, self._value);
+				return;
+			}
+			var ret;
+			try {
+				ret = cb(self._value);
+			} catch (e) {
+				reject(deferred.promise, e);
+				return;
+			}
+			resolve(deferred.promise, ret);
+		});
+	}
+
+	function resolve(self, newValue) {
+		try {
+			// Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+			if (newValue === self)
+				throw new TypeError('A promise cannot be resolved with itself.');
+			if (
+				newValue &&
+				(typeof newValue === 'object' || typeof newValue === 'function')
+			) {
+				var then = newValue.then;
+				if (newValue instanceof Promise) {
+					self._state = 3;
+					self._value = newValue;
+					finale(self);
+					return;
+				} else if (typeof then === 'function') {
+					doResolve(bind(then, newValue), self);
+					return;
+				}
+			}
+			self._state = 1;
+			self._value = newValue;
+			finale(self);
+		} catch (e) {
+			reject(self, e);
+		}
+	}
+
+	function reject(self, newValue) {
+		self._state = 2;
+		self._value = newValue;
+		finale(self);
+	}
+
+	function finale(self) {
+		if (self._state === 2 && self._deferreds.length === 0) {
+			Promise._immediateFn(function () {
+				if (!self._handled) {
+					Promise._unhandledRejectionFn(self._value);
+				}
+			});
+		}
+
+		for (var i = 0, len = self._deferreds.length; i < len; i++) {
+			handle(self, self._deferreds[i]);
+		}
+		self._deferreds = null;
+	}
+
+	/**
+	 * @constructor
+	 */
+	function Handler(onFulfilled, onRejected, promise) {
+		this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+		this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+		this.promise = promise;
+	}
+
+	/**
+	 * Take a potentially misbehaving resolver function and make sure
+	 * onFulfilled and onRejected are only called once.
+	 *
+	 * Makes no guarantees about asynchrony.
+	 */
+	function doResolve(fn, self) {
+		var done = false;
+		try {
+			fn(
+				function (value) {
+					if (done) return;
+					done = true;
+					resolve(self, value);
+				},
+				function (reason) {
+					if (done) return;
+					done = true;
+					reject(self, reason);
+				}
+			);
+		} catch (ex) {
+			if (done) return;
+			done = true;
+			reject(self, ex);
+		}
+	}
+
+	Promise.prototype['catch'] = function (onRejected) {
+		return this.then(null, onRejected);
+	};
+
+	Promise.prototype.then = function (onFulfilled, onRejected) {
+		// @ts-ignore
+		var prom = new this.constructor(noop);
+
+		handle(this, new Handler(onFulfilled, onRejected, prom));
+		return prom;
+	};
+
+	Promise.prototype['finally'] = finallyConstructor;
+
+	Promise.all = function (arr) {
+		return new Promise(function (resolve, reject) {
+			if (!arr || typeof arr.length === 'undefined')
+				throw new TypeError('Promise.all accepts an array');
+			var args = Array.prototype.slice.call(arr);
+			if (args.length === 0) return resolve([]);
+			var remaining = args.length;
+
+			function res(i, val) {
+				try {
+					if (val && (typeof val === 'object' || typeof val === 'function')) {
+						var then = val.then;
+						if (typeof then === 'function') {
+							then.call(
+								val,
+								function (val) {
+									res(i, val);
+								},
+								reject
+							);
+							return;
+						}
+					}
+					args[i] = val;
+					if (--remaining === 0) {
+						resolve(args);
+					}
+				} catch (ex) {
+					reject(ex);
+				}
+			}
+
+			for (var i = 0; i < args.length; i++) {
+				res(i, args[i]);
+			}
+		});
+	};
+
+	Promise.resolve = function (value) {
+		if (value && typeof value === 'object' && value.constructor === Promise) {
+			return value;
+		}
+
+		return new Promise(function (resolve) {
+			resolve(value);
+		});
+	};
+
+	Promise.reject = function (value) {
+		return new Promise(function (resolve, reject) {
+			reject(value);
+		});
+	};
+
+	Promise.race = function (values) {
+		return new Promise(function (resolve, reject) {
+			for (var i = 0, len = values.length; i < len; i++) {
+				values[i].then(resolve, reject);
+			}
+		});
+	};
+
+	// Use polyfill for setImmediate for performance gains
+	Promise._immediateFn =
+		(typeof setImmediate === 'function' &&
+			function (fn) {
+				setImmediate(fn);
+			}) ||
+		function (fn) {
+			setTimeoutFunc(fn, 0);
+		};
+
+	Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
+		if (typeof console !== 'undefined' && console) {
+			console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
+		}
+	};
+
+	/** @suppress {undefinedVars} */
+	var globalNS = (function () {
+		// the only reliable means to get the global object is
+		// `Function('return this')()`
+		// However, this causes CSP violations in Chrome apps.
+		if (typeof self !== 'undefined') {
+			return self;
+		}
+		if (typeof window !== 'undefined') {
+			return window;
+		}
+		if (typeof global !== 'undefined') {
+			return global;
+		}
+		throw new Error('unable to locate global object');
+	})();
+
+	if (!('Promise' in globalNS)) {
+		globalNS['Promise'] = Promise;
+	} else if (!globalNS.Promise.prototype['finally']) {
+		globalNS.Promise.prototype['finally'] = finallyConstructor;
+	}
+
+})));
+
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneBase.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneBase.js ***!
+  \**************************************************************************************/
+/*! exports provided: KeyMod, createMonacoBaseAPI */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyMod", function() { return KeyMod; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createMonacoBaseAPI", function() { return createMonacoBaseAPI; });
+/* harmony import */ var _promise_polyfill_polyfill_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./promise-polyfill/polyfill.js */ "./node_modules/monaco-editor/esm/vs/editor/common/standalone/promise-polyfill/polyfill.js");
+/* harmony import */ var _promise_polyfill_polyfill_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_promise_polyfill_polyfill_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _base_common_cancellation_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../base/common/cancellation.js */ "./node_modules/monaco-editor/esm/vs/base/common/cancellation.js");
+/* harmony import */ var _base_common_event_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../base/common/event.js */ "./node_modules/monaco-editor/esm/vs/base/common/event.js");
+/* harmony import */ var _base_common_keyCodes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../base/common/keyCodes.js */ "./node_modules/monaco-editor/esm/vs/base/common/keyCodes.js");
+/* harmony import */ var _base_common_uri_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../base/common/uri.js */ "./node_modules/monaco-editor/esm/vs/base/common/uri.js");
+/* harmony import */ var _core_position_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../core/position.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/position.js");
+/* harmony import */ var _core_range_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../core/range.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/range.js");
+/* harmony import */ var _core_selection_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../core/selection.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/selection.js");
+/* harmony import */ var _core_token_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../core/token.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/token.js");
+/* harmony import */ var _standaloneEnums_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./standaloneEnums.js */ "./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneEnums.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-var Token = /** @class */ (function () {
-    function Token(offset, type, language) {
-        this.offset = offset | 0; // @perf
-        this.type = type;
-        this.language = language;
+
+
+
+
+
+
+
+
+
+
+var KeyMod = /** @class */ (function () {
+    function KeyMod() {
     }
-    Token.prototype.toString = function () {
-        return '(' + this.offset + ', ' + this.type + ')';
+    KeyMod.chord = function (firstPart, secondPart) {
+        return Object(_base_common_keyCodes_js__WEBPACK_IMPORTED_MODULE_3__["KeyChord"])(firstPart, secondPart);
     };
-    return Token;
+    KeyMod.CtrlCmd = 2048 /* CtrlCmd */;
+    KeyMod.Shift = 1024 /* Shift */;
+    KeyMod.Alt = 512 /* Alt */;
+    KeyMod.WinCtrl = 256 /* WinCtrl */;
+    return KeyMod;
 }());
 
-var TokenizationResult = /** @class */ (function () {
-    function TokenizationResult(tokens, endState) {
-        this.tokens = tokens;
-        this.endState = endState;
-    }
-    return TokenizationResult;
-}());
+function createMonacoBaseAPI() {
+    return {
+        editor: undefined,
+        languages: undefined,
+        CancellationTokenSource: _base_common_cancellation_js__WEBPACK_IMPORTED_MODULE_1__["CancellationTokenSource"],
+        Emitter: _base_common_event_js__WEBPACK_IMPORTED_MODULE_2__["Emitter"],
+        KeyCode: _standaloneEnums_js__WEBPACK_IMPORTED_MODULE_9__["KeyCode"],
+        KeyMod: KeyMod,
+        Position: _core_position_js__WEBPACK_IMPORTED_MODULE_5__["Position"],
+        Range: _core_range_js__WEBPACK_IMPORTED_MODULE_6__["Range"],
+        Selection: _core_selection_js__WEBPACK_IMPORTED_MODULE_7__["Selection"],
+        SelectionDirection: _standaloneEnums_js__WEBPACK_IMPORTED_MODULE_9__["SelectionDirection"],
+        MarkerSeverity: _standaloneEnums_js__WEBPACK_IMPORTED_MODULE_9__["MarkerSeverity"],
+        MarkerTag: _standaloneEnums_js__WEBPACK_IMPORTED_MODULE_9__["MarkerTag"],
+        Uri: _base_common_uri_js__WEBPACK_IMPORTED_MODULE_4__["URI"],
+        Token: _core_token_js__WEBPACK_IMPORTED_MODULE_8__["Token"]
+    };
+}
 
-var TokenizationResult2 = /** @class */ (function () {
-    function TokenizationResult2(tokens, endState) {
-        this.tokens = tokens;
-        this.endState = endState;
-    }
-    return TokenizationResult2;
-}());
 
+/***/ }),
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneEnums.js
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneEnums.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneEnums.js ***!
+  \***************************************************************************************/
+/*! exports provided: MarkerTag, MarkerSeverity, KeyCode, SelectionDirection, ScrollbarVisibility, OverviewRulerLane, EndOfLinePreference, DefaultEndOfLine, EndOfLineSequence, TrackedRangeStickiness, ScrollType, CursorChangeReason, RenderMinimap, WrappingIndent, TextEditorCursorBlinkingStyle, TextEditorCursorStyle, RenderLineNumbersType, ContentWidgetPositionPreference, OverlayWidgetPositionPreference, MouseTargetType, IndentAction, CompletionItemKind, CompletionItemInsertTextRule, CompletionTriggerKind, SignatureHelpTriggerKind, DocumentHighlightKind, SymbolKind */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarkerTag", function() { return MarkerTag; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarkerSeverity", function() { return MarkerSeverity; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyCode", function() { return KeyCode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelectionDirection", function() { return SelectionDirection; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScrollbarVisibility", function() { return ScrollbarVisibility; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OverviewRulerLane", function() { return OverviewRulerLane; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EndOfLinePreference", function() { return EndOfLinePreference; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DefaultEndOfLine", function() { return DefaultEndOfLine; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EndOfLineSequence", function() { return EndOfLineSequence; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TrackedRangeStickiness", function() { return TrackedRangeStickiness; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScrollType", function() { return ScrollType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CursorChangeReason", function() { return CursorChangeReason; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RenderMinimap", function() { return RenderMinimap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WrappingIndent", function() { return WrappingIndent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TextEditorCursorBlinkingStyle", function() { return TextEditorCursorBlinkingStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TextEditorCursorStyle", function() { return TextEditorCursorStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RenderLineNumbersType", function() { return RenderLineNumbersType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ContentWidgetPositionPreference", function() { return ContentWidgetPositionPreference; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OverlayWidgetPositionPreference", function() { return OverlayWidgetPositionPreference; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MouseTargetType", function() { return MouseTargetType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IndentAction", function() { return IndentAction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CompletionItemKind", function() { return CompletionItemKind; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CompletionItemInsertTextRule", function() { return CompletionItemInsertTextRule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CompletionTriggerKind", function() { return CompletionTriggerKind; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignatureHelpTriggerKind", function() { return SignatureHelpTriggerKind; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DocumentHighlightKind", function() { return DocumentHighlightKind; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SymbolKind", function() { return SymbolKind; });
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -6909,604 +8151,238 @@ var SymbolKind;
     SymbolKind[SymbolKind["TypeParameter"] = 25] = "TypeParameter";
 })(SymbolKind || (SymbolKind = {}));
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/standalone/standaloneBase.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/common/viewModel/prefixSumComputer.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/common/viewModel/prefixSumComputer.js ***!
+  \****************************************************************************************/
+/*! exports provided: PrefixSumIndexOfResult, PrefixSumComputer, PrefixSumComputerWithCache */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PrefixSumIndexOfResult", function() { return PrefixSumIndexOfResult; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PrefixSumComputer", function() { return PrefixSumComputer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PrefixSumComputerWithCache", function() { return PrefixSumComputerWithCache; });
+/* harmony import */ var _core_uint_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../core/uint.js */ "./node_modules/monaco-editor/esm/vs/editor/common/core/uint.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-
-
-
-
-
-
-
-
-
-var standaloneBase_KeyMod = /** @class */ (function () {
-    function KeyMod() {
+var PrefixSumIndexOfResult = /** @class */ (function () {
+    function PrefixSumIndexOfResult(index, remainder) {
+        this.index = index;
+        this.remainder = remainder;
     }
-    KeyMod.chord = function (firstPart, secondPart) {
-        return KeyChord(firstPart, secondPart);
-    };
-    KeyMod.CtrlCmd = 2048 /* CtrlCmd */;
-    KeyMod.Shift = 1024 /* Shift */;
-    KeyMod.Alt = 512 /* Alt */;
-    KeyMod.WinCtrl = 256 /* WinCtrl */;
-    return KeyMod;
+    return PrefixSumIndexOfResult;
 }());
 
-function createMonacoBaseAPI() {
-    return {
-        editor: undefined,
-        languages: undefined,
-        CancellationTokenSource: CancellationTokenSource,
-        Emitter: event_Emitter,
-        KeyCode: KeyCode,
-        KeyMod: standaloneBase_KeyMod,
-        Position: Position,
-        Range: range_Range,
-        Selection: selection_Selection,
-        SelectionDirection: SelectionDirection,
-        MarkerSeverity: MarkerSeverity,
-        MarkerTag: MarkerTag,
-        Uri: uri_URI,
-        Token: Token
-    };
-}
-
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/common/services/editorSimpleWorker.js
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-var editorSimpleWorker_extends = (undefined && undefined.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * @internal
- */
-var editorSimpleWorker_MirrorModel = /** @class */ (function (_super) {
-    editorSimpleWorker_extends(MirrorModel, _super);
-    function MirrorModel() {
-        return _super !== null && _super.apply(this, arguments) || this;
+var PrefixSumComputer = /** @class */ (function () {
+    function PrefixSumComputer(values) {
+        this.values = values;
+        this.prefixSum = new Uint32Array(values.length);
+        this.prefixSumValidIndex = new Int32Array(1);
+        this.prefixSumValidIndex[0] = -1;
     }
-    Object.defineProperty(MirrorModel.prototype, "uri", {
-        get: function () {
-            return this._uri;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MirrorModel.prototype, "version", {
-        get: function () {
-            return this._versionId;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MirrorModel.prototype, "eol", {
-        get: function () {
-            return this._eol;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    MirrorModel.prototype.getValue = function () {
-        return this.getText();
+    PrefixSumComputer.prototype.getCount = function () {
+        return this.values.length;
     };
-    MirrorModel.prototype.getLinesContent = function () {
-        return this._lines.slice(0);
-    };
-    MirrorModel.prototype.getLineCount = function () {
-        return this._lines.length;
-    };
-    MirrorModel.prototype.getLineContent = function (lineNumber) {
-        return this._lines[lineNumber - 1];
-    };
-    MirrorModel.prototype.getWordAtPosition = function (position, wordDefinition) {
-        var wordAtText = getWordAtText(position.column, ensureValidWordDefinition(wordDefinition), this._lines[position.lineNumber - 1], 0);
-        if (wordAtText) {
-            return new range_Range(position.lineNumber, wordAtText.startColumn, position.lineNumber, wordAtText.endColumn);
-        }
-        return null;
-    };
-    MirrorModel.prototype.getWordUntilPosition = function (position, wordDefinition) {
-        var wordAtPosition = this.getWordAtPosition(position, wordDefinition);
-        if (!wordAtPosition) {
-            return {
-                word: '',
-                startColumn: position.column,
-                endColumn: position.column
-            };
-        }
-        return {
-            word: this._lines[position.lineNumber - 1].substring(wordAtPosition.startColumn - 1, position.column - 1),
-            startColumn: wordAtPosition.startColumn,
-            endColumn: position.column
-        };
-    };
-    MirrorModel.prototype.createWordIterator = function (wordDefinition) {
-        var _this = this;
-        var obj;
-        var lineNumber = 0;
-        var lineText;
-        var wordRangesIdx = 0;
-        var wordRanges = [];
-        var next = function () {
-            if (wordRangesIdx < wordRanges.length) {
-                var value = lineText.substring(wordRanges[wordRangesIdx].start, wordRanges[wordRangesIdx].end);
-                wordRangesIdx += 1;
-                if (!obj) {
-                    obj = { done: false, value: value };
-                }
-                else {
-                    obj.value = value;
-                }
-                return obj;
-            }
-            else if (lineNumber >= _this._lines.length) {
-                return FIN;
-            }
-            else {
-                lineText = _this._lines[lineNumber];
-                wordRanges = _this._wordenize(lineText, wordDefinition);
-                wordRangesIdx = 0;
-                lineNumber += 1;
-                return next();
-            }
-        };
-        return { next: next };
-    };
-    MirrorModel.prototype.getLineWords = function (lineNumber, wordDefinition) {
-        var content = this._lines[lineNumber - 1];
-        var ranges = this._wordenize(content, wordDefinition);
-        var words = [];
-        for (var _i = 0, ranges_1 = ranges; _i < ranges_1.length; _i++) {
-            var range = ranges_1[_i];
-            words.push({
-                word: content.substring(range.start, range.end),
-                startColumn: range.start + 1,
-                endColumn: range.end + 1
-            });
-        }
-        return words;
-    };
-    MirrorModel.prototype._wordenize = function (content, wordDefinition) {
-        var result = [];
-        var match;
-        wordDefinition.lastIndex = 0; // reset lastIndex just to be sure
-        while (match = wordDefinition.exec(content)) {
-            if (match[0].length === 0) {
-                // it did match the empty string
-                break;
-            }
-            result.push({ start: match.index, end: match.index + match[0].length });
-        }
-        return result;
-    };
-    MirrorModel.prototype.getValueInRange = function (range) {
-        range = this._validateRange(range);
-        if (range.startLineNumber === range.endLineNumber) {
-            return this._lines[range.startLineNumber - 1].substring(range.startColumn - 1, range.endColumn - 1);
-        }
-        var lineEnding = this._eol;
-        var startLineIndex = range.startLineNumber - 1;
-        var endLineIndex = range.endLineNumber - 1;
-        var resultLines = [];
-        resultLines.push(this._lines[startLineIndex].substring(range.startColumn - 1));
-        for (var i = startLineIndex + 1; i < endLineIndex; i++) {
-            resultLines.push(this._lines[i]);
-        }
-        resultLines.push(this._lines[endLineIndex].substring(0, range.endColumn - 1));
-        return resultLines.join(lineEnding);
-    };
-    MirrorModel.prototype.offsetAt = function (position) {
-        position = this._validatePosition(position);
-        this._ensureLineStarts();
-        return this._lineStarts.getAccumulatedValue(position.lineNumber - 2) + (position.column - 1);
-    };
-    MirrorModel.prototype.positionAt = function (offset) {
-        offset = Math.floor(offset);
-        offset = Math.max(0, offset);
-        this._ensureLineStarts();
-        var out = this._lineStarts.getIndexOf(offset);
-        var lineLength = this._lines[out.index].length;
-        // Ensure we return a valid position
-        return {
-            lineNumber: 1 + out.index,
-            column: 1 + Math.min(out.remainder, lineLength)
-        };
-    };
-    MirrorModel.prototype._validateRange = function (range) {
-        var start = this._validatePosition({ lineNumber: range.startLineNumber, column: range.startColumn });
-        var end = this._validatePosition({ lineNumber: range.endLineNumber, column: range.endColumn });
-        if (start.lineNumber !== range.startLineNumber
-            || start.column !== range.startColumn
-            || end.lineNumber !== range.endLineNumber
-            || end.column !== range.endColumn) {
-            return {
-                startLineNumber: start.lineNumber,
-                startColumn: start.column,
-                endLineNumber: end.lineNumber,
-                endColumn: end.column
-            };
-        }
-        return range;
-    };
-    MirrorModel.prototype._validatePosition = function (position) {
-        if (!Position.isIPosition(position)) {
-            throw new Error('bad position');
-        }
-        var lineNumber = position.lineNumber, column = position.column;
-        var hasChanged = false;
-        if (lineNumber < 1) {
-            lineNumber = 1;
-            column = 1;
-            hasChanged = true;
-        }
-        else if (lineNumber > this._lines.length) {
-            lineNumber = this._lines.length;
-            column = this._lines[lineNumber - 1].length + 1;
-            hasChanged = true;
-        }
-        else {
-            var maxCharacter = this._lines[lineNumber - 1].length + 1;
-            if (column < 1) {
-                column = 1;
-                hasChanged = true;
-            }
-            else if (column > maxCharacter) {
-                column = maxCharacter;
-                hasChanged = true;
-            }
-        }
-        if (!hasChanged) {
-            return position;
-        }
-        else {
-            return { lineNumber: lineNumber, column: column };
-        }
-    };
-    return MirrorModel;
-}(mirrorTextModel_MirrorTextModel));
-/**
- * @internal
- */
-var editorSimpleWorker_BaseEditorSimpleWorker = /** @class */ (function () {
-    function BaseEditorSimpleWorker(foreignModuleFactory) {
-        this._foreignModuleFactory = foreignModuleFactory;
-        this._foreignModule = null;
-    }
-    // ---- BEGIN diff --------------------------------------------------------------------------
-    BaseEditorSimpleWorker.prototype.computeDiff = function (originalUrl, modifiedUrl, ignoreTrimWhitespace) {
-        var original = this._getModel(originalUrl);
-        var modified = this._getModel(modifiedUrl);
-        if (!original || !modified) {
-            return Promise.resolve(null);
-        }
-        var originalLines = original.getLinesContent();
-        var modifiedLines = modified.getLinesContent();
-        var diffComputer = new DiffComputer(originalLines, modifiedLines, {
-            shouldComputeCharChanges: true,
-            shouldPostProcessCharChanges: true,
-            shouldIgnoreTrimWhitespace: ignoreTrimWhitespace,
-            shouldMakePrettyDiff: true
-        });
-        var changes = diffComputer.computeDiff();
-        var identical = (changes.length > 0 ? false : this._modelsAreIdentical(original, modified));
-        return Promise.resolve({
-            identical: identical,
-            changes: changes
-        });
-    };
-    BaseEditorSimpleWorker.prototype._modelsAreIdentical = function (original, modified) {
-        var originalLineCount = original.getLineCount();
-        var modifiedLineCount = modified.getLineCount();
-        if (originalLineCount !== modifiedLineCount) {
+    PrefixSumComputer.prototype.insertValues = function (insertIndex, insertValues) {
+        insertIndex = Object(_core_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint32"])(insertIndex);
+        var oldValues = this.values;
+        var oldPrefixSum = this.prefixSum;
+        var insertValuesLen = insertValues.length;
+        if (insertValuesLen === 0) {
             return false;
         }
-        for (var line = 1; line <= originalLineCount; line++) {
-            var originalLine = original.getLineContent(line);
-            var modifiedLine = modified.getLineContent(line);
-            if (originalLine !== modifiedLine) {
-                return false;
-            }
+        this.values = new Uint32Array(oldValues.length + insertValuesLen);
+        this.values.set(oldValues.subarray(0, insertIndex), 0);
+        this.values.set(oldValues.subarray(insertIndex), insertIndex + insertValuesLen);
+        this.values.set(insertValues, insertIndex);
+        if (insertIndex - 1 < this.prefixSumValidIndex[0]) {
+            this.prefixSumValidIndex[0] = insertIndex - 1;
+        }
+        this.prefixSum = new Uint32Array(this.values.length);
+        if (this.prefixSumValidIndex[0] >= 0) {
+            this.prefixSum.set(oldPrefixSum.subarray(0, this.prefixSumValidIndex[0] + 1));
         }
         return true;
     };
-    BaseEditorSimpleWorker.prototype.computeMoreMinimalEdits = function (modelUrl, edits) {
-        var model = this._getModel(modelUrl);
-        if (!model) {
-            return Promise.resolve(edits);
+    PrefixSumComputer.prototype.changeValue = function (index, value) {
+        index = Object(_core_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint32"])(index);
+        value = Object(_core_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint32"])(value);
+        if (this.values[index] === value) {
+            return false;
         }
-        var result = [];
-        var lastEol = undefined;
-        edits = mergeSort(edits, function (a, b) {
-            if (a.range && b.range) {
-                return range_Range.compareRangesUsingStarts(a.range, b.range);
-            }
-            // eol only changes should go to the end
-            var aRng = a.range ? 0 : 1;
-            var bRng = b.range ? 0 : 1;
-            return aRng - bRng;
-        });
-        for (var _i = 0, edits_1 = edits; _i < edits_1.length; _i++) {
-            var _a = edits_1[_i], range = _a.range, text = _a.text, eol = _a.eol;
-            if (typeof eol === 'number') {
-                lastEol = eol;
-            }
-            if (range_Range.isEmpty(range) && !text) {
-                // empty change
-                continue;
-            }
-            var original = model.getValueInRange(range);
-            text = text.replace(/\r\n|\n|\r/g, model.eol);
-            if (original === text) {
-                // noop
-                continue;
-            }
-            // make sure diff won't take too long
-            if (Math.max(text.length, original.length) > BaseEditorSimpleWorker._diffLimit) {
-                result.push({ range: range, text: text });
-                continue;
-            }
-            // compute diff between original and edit.text
-            var changes = stringDiff(original, text, false);
-            var editOffset = model.offsetAt(range_Range.lift(range).getStartPosition());
-            for (var _b = 0, changes_1 = changes; _b < changes_1.length; _b++) {
-                var change = changes_1[_b];
-                var start = model.positionAt(editOffset + change.originalStart);
-                var end = model.positionAt(editOffset + change.originalStart + change.originalLength);
-                var newEdit = {
-                    text: text.substr(change.modifiedStart, change.modifiedLength),
-                    range: { startLineNumber: start.lineNumber, startColumn: start.column, endLineNumber: end.lineNumber, endColumn: end.column }
-                };
-                if (model.getValueInRange(newEdit.range) !== newEdit.text) {
-                    result.push(newEdit);
-                }
-            }
+        this.values[index] = value;
+        if (index - 1 < this.prefixSumValidIndex[0]) {
+            this.prefixSumValidIndex[0] = index - 1;
         }
-        if (typeof lastEol === 'number') {
-            result.push({ eol: lastEol, text: '', range: { startLineNumber: 0, startColumn: 0, endLineNumber: 0, endColumn: 0 } });
-        }
-        return Promise.resolve(result);
+        return true;
     };
-    // ---- END minimal edits ---------------------------------------------------------------
-    BaseEditorSimpleWorker.prototype.computeLinks = function (modelUrl) {
-        var model = this._getModel(modelUrl);
-        if (!model) {
-            return Promise.resolve(null);
+    PrefixSumComputer.prototype.removeValues = function (startIndex, cnt) {
+        startIndex = Object(_core_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint32"])(startIndex);
+        cnt = Object(_core_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint32"])(cnt);
+        var oldValues = this.values;
+        var oldPrefixSum = this.prefixSum;
+        if (startIndex >= oldValues.length) {
+            return false;
         }
-        return Promise.resolve(computeLinks(model));
+        var maxCnt = oldValues.length - startIndex;
+        if (cnt >= maxCnt) {
+            cnt = maxCnt;
+        }
+        if (cnt === 0) {
+            return false;
+        }
+        this.values = new Uint32Array(oldValues.length - cnt);
+        this.values.set(oldValues.subarray(0, startIndex), 0);
+        this.values.set(oldValues.subarray(startIndex + cnt), startIndex);
+        this.prefixSum = new Uint32Array(this.values.length);
+        if (startIndex - 1 < this.prefixSumValidIndex[0]) {
+            this.prefixSumValidIndex[0] = startIndex - 1;
+        }
+        if (this.prefixSumValidIndex[0] >= 0) {
+            this.prefixSum.set(oldPrefixSum.subarray(0, this.prefixSumValidIndex[0] + 1));
+        }
+        return true;
     };
-    BaseEditorSimpleWorker.prototype.textualSuggest = function (modelUrl, position, wordDef, wordDefFlags) {
-        var model = this._getModel(modelUrl);
-        if (!model) {
-            return Promise.resolve(null);
+    PrefixSumComputer.prototype.getTotalValue = function () {
+        if (this.values.length === 0) {
+            return 0;
         }
-        var seen = Object.create(null);
-        var suggestions = [];
-        var wordDefRegExp = new RegExp(wordDef, wordDefFlags);
-        var wordUntil = model.getWordUntilPosition(position, wordDefRegExp);
-        var wordAt = model.getWordAtPosition(position, wordDefRegExp);
-        if (wordAt) {
-            seen[model.getValueInRange(wordAt)] = true;
+        return this._getAccumulatedValue(this.values.length - 1);
+    };
+    PrefixSumComputer.prototype.getAccumulatedValue = function (index) {
+        if (index < 0) {
+            return 0;
         }
-        for (var iter = model.createWordIterator(wordDefRegExp), e = iter.next(); !e.done && suggestions.length <= BaseEditorSimpleWorker._suggestionsLimit; e = iter.next()) {
-            var word = e.value;
-            if (seen[word]) {
-                continue;
+        index = Object(_core_uint_js__WEBPACK_IMPORTED_MODULE_0__["toUint32"])(index);
+        return this._getAccumulatedValue(index);
+    };
+    PrefixSumComputer.prototype._getAccumulatedValue = function (index) {
+        if (index <= this.prefixSumValidIndex[0]) {
+            return this.prefixSum[index];
+        }
+        var startIndex = this.prefixSumValidIndex[0] + 1;
+        if (startIndex === 0) {
+            this.prefixSum[0] = this.values[0];
+            startIndex++;
+        }
+        if (index >= this.values.length) {
+            index = this.values.length - 1;
+        }
+        for (var i = startIndex; i <= index; i++) {
+            this.prefixSum[i] = this.prefixSum[i - 1] + this.values[i];
+        }
+        this.prefixSumValidIndex[0] = Math.max(this.prefixSumValidIndex[0], index);
+        return this.prefixSum[index];
+    };
+    PrefixSumComputer.prototype.getIndexOf = function (accumulatedValue) {
+        accumulatedValue = Math.floor(accumulatedValue); //@perf
+        // Compute all sums (to get a fully valid prefixSum)
+        this.getTotalValue();
+        var low = 0;
+        var high = this.values.length - 1;
+        var mid = 0;
+        var midStop = 0;
+        var midStart = 0;
+        while (low <= high) {
+            mid = low + ((high - low) / 2) | 0;
+            midStop = this.prefixSum[mid];
+            midStart = midStop - this.values[mid];
+            if (accumulatedValue < midStart) {
+                high = mid - 1;
             }
-            seen[word] = true;
-            if (!isNaN(Number(word))) {
-                continue;
+            else if (accumulatedValue >= midStop) {
+                low = mid + 1;
             }
-            suggestions.push({
-                kind: 18 /* Text */,
-                label: word,
-                insertText: word,
-                range: { startLineNumber: position.lineNumber, startColumn: wordUntil.startColumn, endLineNumber: position.lineNumber, endColumn: wordUntil.endColumn }
-            });
-        }
-        return Promise.resolve({ suggestions: suggestions });
-    };
-    // ---- END suggest --------------------------------------------------------------------------
-    //#region -- word ranges --
-    BaseEditorSimpleWorker.prototype.computeWordRanges = function (modelUrl, range, wordDef, wordDefFlags) {
-        var model = this._getModel(modelUrl);
-        if (!model) {
-            return Promise.resolve(Object.create(null));
-        }
-        var wordDefRegExp = new RegExp(wordDef, wordDefFlags);
-        var result = Object.create(null);
-        for (var line = range.startLineNumber; line < range.endLineNumber; line++) {
-            var words = model.getLineWords(line, wordDefRegExp);
-            for (var _i = 0, words_1 = words; _i < words_1.length; _i++) {
-                var word = words_1[_i];
-                if (!isNaN(Number(word.word))) {
-                    continue;
-                }
-                var array = result[word.word];
-                if (!array) {
-                    array = [];
-                    result[word.word] = array;
-                }
-                array.push({
-                    startLineNumber: line,
-                    startColumn: word.startColumn,
-                    endLineNumber: line,
-                    endColumn: word.endColumn
-                });
+            else {
+                break;
             }
         }
-        return Promise.resolve(result);
+        return new PrefixSumIndexOfResult(mid, accumulatedValue - midStart);
     };
-    //#endregion
-    BaseEditorSimpleWorker.prototype.navigateValueSet = function (modelUrl, range, up, wordDef, wordDefFlags) {
-        var model = this._getModel(modelUrl);
-        if (!model) {
-            return Promise.resolve(null);
-        }
-        var wordDefRegExp = new RegExp(wordDef, wordDefFlags);
-        if (range.startColumn === range.endColumn) {
-            range = {
-                startLineNumber: range.startLineNumber,
-                startColumn: range.startColumn,
-                endLineNumber: range.endLineNumber,
-                endColumn: range.endColumn + 1
-            };
-        }
-        var selectionText = model.getValueInRange(range);
-        var wordRange = model.getWordAtPosition({ lineNumber: range.startLineNumber, column: range.startColumn }, wordDefRegExp);
-        if (!wordRange) {
-            return Promise.resolve(null);
-        }
-        var word = model.getValueInRange(wordRange);
-        var result = BasicInplaceReplace.INSTANCE.navigateValueSet(range, selectionText, wordRange, word, up);
-        return Promise.resolve(result);
-    };
-    // ---- BEGIN foreign module support --------------------------------------------------------------------------
-    BaseEditorSimpleWorker.prototype.loadForeignModule = function (moduleId, createData) {
-        var _this = this;
-        var ctx = {
-            getMirrorModels: function () {
-                return _this._getModels();
-            }
-        };
-        if (this._foreignModuleFactory) {
-            this._foreignModule = this._foreignModuleFactory(ctx, createData);
-            // static foreing module
-            var methods = [];
-            for (var _i = 0, _a = getAllPropertyNames(this._foreignModule); _i < _a.length; _i++) {
-                var prop = _a[_i];
-                if (typeof this._foreignModule[prop] === 'function') {
-                    methods.push(prop);
-                }
-            }
-            return Promise.resolve(methods);
-        }
-        // ESM-comment-begin
-        // 		return new Promise<any>((resolve, reject) => {
-        // 			require([moduleId], (foreignModule: { create: IForeignModuleFactory }) => {
-        // 				this._foreignModule = foreignModule.create(ctx, createData);
-        // 
-        // 				let methods: string[] = [];
-        // 				for (const prop of getAllPropertyNames(this._foreignModule)) {
-        // 					if (typeof this._foreignModule[prop] === 'function') {
-        // 						methods.push(prop);
-        // 					}
-        // 				}
-        // 
-        // 				resolve(methods);
-        // 
-        // 			}, reject);
-        // 		});
-        // ESM-comment-end
-        // ESM-uncomment-begin
-        return Promise.reject(new Error("Unexpected usage"));
-        // ESM-uncomment-end
-    };
-    // foreign method request
-    BaseEditorSimpleWorker.prototype.fmr = function (method, args) {
-        if (!this._foreignModule || typeof this._foreignModule[method] !== 'function') {
-            return Promise.reject(new Error('Missing requestHandler or method: ' + method));
-        }
-        try {
-            return Promise.resolve(this._foreignModule[method].apply(this._foreignModule, args));
-        }
-        catch (e) {
-            return Promise.reject(e);
-        }
-    };
-    // ---- END diff --------------------------------------------------------------------------
-    // ---- BEGIN minimal edits ---------------------------------------------------------------
-    BaseEditorSimpleWorker._diffLimit = 100000;
-    // ---- BEGIN suggest --------------------------------------------------------------------------
-    BaseEditorSimpleWorker._suggestionsLimit = 10000;
-    return BaseEditorSimpleWorker;
+    return PrefixSumComputer;
 }());
 
-/**
- * @internal
- */
-var editorSimpleWorker_EditorSimpleWorkerImpl = /** @class */ (function (_super) {
-    editorSimpleWorker_extends(EditorSimpleWorkerImpl, _super);
-    function EditorSimpleWorkerImpl(foreignModuleFactory) {
-        var _this = _super.call(this, foreignModuleFactory) || this;
-        _this._models = Object.create(null);
-        return _this;
+var PrefixSumComputerWithCache = /** @class */ (function () {
+    function PrefixSumComputerWithCache(values) {
+        this._cacheAccumulatedValueStart = 0;
+        this._cache = null;
+        this._actual = new PrefixSumComputer(values);
+        this._bustCache();
     }
-    EditorSimpleWorkerImpl.prototype.dispose = function () {
-        this._models = Object.create(null);
+    PrefixSumComputerWithCache.prototype._bustCache = function () {
+        this._cacheAccumulatedValueStart = 0;
+        this._cache = null;
     };
-    EditorSimpleWorkerImpl.prototype._getModel = function (uri) {
-        return this._models[uri];
-    };
-    EditorSimpleWorkerImpl.prototype._getModels = function () {
-        var _this = this;
-        var all = [];
-        Object.keys(this._models).forEach(function (key) { return all.push(_this._models[key]); });
-        return all;
-    };
-    EditorSimpleWorkerImpl.prototype.acceptNewModel = function (data) {
-        this._models[data.url] = new editorSimpleWorker_MirrorModel(uri_URI.parse(data.url), data.lines, data.EOL, data.versionId);
-    };
-    EditorSimpleWorkerImpl.prototype.acceptModelChanged = function (strURL, e) {
-        if (!this._models[strURL]) {
-            return;
+    PrefixSumComputerWithCache.prototype.insertValues = function (insertIndex, insertValues) {
+        if (this._actual.insertValues(insertIndex, insertValues)) {
+            this._bustCache();
         }
-        var model = this._models[strURL];
-        model.onEvents(e);
     };
-    EditorSimpleWorkerImpl.prototype.acceptRemovedModel = function (strURL) {
-        if (!this._models[strURL]) {
-            return;
+    PrefixSumComputerWithCache.prototype.changeValue = function (index, value) {
+        if (this._actual.changeValue(index, value)) {
+            this._bustCache();
         }
-        delete this._models[strURL];
     };
-    return EditorSimpleWorkerImpl;
-}(editorSimpleWorker_BaseEditorSimpleWorker));
+    PrefixSumComputerWithCache.prototype.removeValues = function (startIndex, cnt) {
+        if (this._actual.removeValues(startIndex, cnt)) {
+            this._bustCache();
+        }
+    };
+    PrefixSumComputerWithCache.prototype.getTotalValue = function () {
+        return this._actual.getTotalValue();
+    };
+    PrefixSumComputerWithCache.prototype.getAccumulatedValue = function (index) {
+        return this._actual.getAccumulatedValue(index);
+    };
+    PrefixSumComputerWithCache.prototype.getIndexOf = function (accumulatedValue) {
+        accumulatedValue = Math.floor(accumulatedValue); //@perf
+        if (this._cache !== null) {
+            var cacheIndex = accumulatedValue - this._cacheAccumulatedValueStart;
+            if (cacheIndex >= 0 && cacheIndex < this._cache.length) {
+                // Cache hit!
+                return this._cache[cacheIndex];
+            }
+        }
+        // Cache miss!
+        return this._actual.getIndexOf(accumulatedValue);
+    };
+    /**
+     * Gives a hint that a lot of requests are about to come in for these accumulated values.
+     */
+    PrefixSumComputerWithCache.prototype.warmUpCache = function (accumulatedValueStart, accumulatedValueEnd) {
+        var newCache = [];
+        for (var accumulatedValue = accumulatedValueStart; accumulatedValue <= accumulatedValueEnd; accumulatedValue++) {
+            newCache[accumulatedValue - accumulatedValueStart] = this.getIndexOf(accumulatedValue);
+        }
+        this._cache = newCache;
+        this._cacheAccumulatedValueStart = accumulatedValueStart;
+    };
+    return PrefixSumComputerWithCache;
+}());
 
-/**
- * Called on the worker side
- * @internal
- */
-function editorSimpleWorker_create() {
-    return new editorSimpleWorker_EditorSimpleWorkerImpl(null);
-}
-if (typeof importScripts === 'function') {
-    // Running in a web worker
-    globals.monaco = createMonacoBaseAPI();
-}
 
-// CONCATENATED MODULE: ./node_modules/monaco-editor/esm/vs/editor/editor.worker.js
+
+/***/ }),
+
+/***/ "./node_modules/monaco-editor/esm/vs/editor/editor.worker.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/monaco-editor/esm/vs/editor/editor.worker.js ***!
+  \*******************************************************************/
+/*! exports provided: initialize */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initialize", function() { return initialize; });
+/* harmony import */ var _base_common_worker_simpleWorker_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../base/common/worker/simpleWorker.js */ "./node_modules/monaco-editor/esm/vs/base/common/worker/simpleWorker.js");
+/* harmony import */ var _common_services_editorSimpleWorker_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/services/editorSimpleWorker.js */ "./node_modules/monaco-editor/esm/vs/editor/common/services/editorSimpleWorker.js");
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -7519,8 +8395,8 @@ function initialize(foreignModule) {
         return;
     }
     initialized = true;
-    var editorWorker = new editorSimpleWorker_EditorSimpleWorkerImpl(foreignModule);
-    var simpleWorker = new simpleWorker_SimpleWorkerServer(function (msg) {
+    var editorWorker = new _common_services_editorSimpleWorker_js__WEBPACK_IMPORTED_MODULE_1__["EditorSimpleWorkerImpl"](foreignModule);
+    var simpleWorker = new _base_common_worker_simpleWorker_js__WEBPACK_IMPORTED_MODULE_0__["SimpleWorkerServer"](function (msg) {
         self.postMessage(msg);
     }, editorWorker);
     self.onmessage = function (e) {
@@ -7535,303 +8411,7 @@ self.onmessage = function (e) {
 };
 
 
-/***/ }),
-
-/***/ "URDS":
-/***/ (function(module, exports, __webpack_require__) {
-
-/*!
-Copyright (c) 2014 Taylor Hakes
-Copyright (c) 2014 Forbes Lindesay
- */
-(function (global, factory) {
-	 true ? factory() :
-		undefined;
-}(this, (function () {
-	'use strict';
-
-	/**
-	 * @this {Promise}
-	 */
-	function finallyConstructor(callback) {
-		var constructor = this.constructor;
-		return this.then(
-			function (value) {
-				return constructor.resolve(callback()).then(function () {
-					return value;
-				});
-			},
-			function (reason) {
-				return constructor.resolve(callback()).then(function () {
-					return constructor.reject(reason);
-				});
-			}
-		);
-	}
-
-	// Store setTimeout reference so promise-polyfill will be unaffected by
-	// other code modifying setTimeout (like sinon.useFakeTimers())
-	var setTimeoutFunc = setTimeout;
-
-	function noop() { }
-
-	// Polyfill for Function.prototype.bind
-	function bind(fn, thisArg) {
-		return function () {
-			fn.apply(thisArg, arguments);
-		};
-	}
-
-	/**
-	 * @constructor
-	 * @param {Function} fn
-	 */
-	function Promise(fn) {
-		if (!(this instanceof Promise))
-			throw new TypeError('Promises must be constructed via new');
-		if (typeof fn !== 'function') throw new TypeError('not a function');
-		/** @type {!number} */
-		this._state = 0;
-		/** @type {!boolean} */
-		this._handled = false;
-		/** @type {Promise|undefined} */
-		this._value = undefined;
-		/** @type {!Array<!Function>} */
-		this._deferreds = [];
-
-		doResolve(fn, this);
-	}
-
-	function handle(self, deferred) {
-		while (self._state === 3) {
-			self = self._value;
-		}
-		if (self._state === 0) {
-			self._deferreds.push(deferred);
-			return;
-		}
-		self._handled = true;
-		Promise._immediateFn(function () {
-			var cb = self._state === 1 ? deferred.onFulfilled : deferred.onRejected;
-			if (cb === null) {
-				(self._state === 1 ? resolve : reject)(deferred.promise, self._value);
-				return;
-			}
-			var ret;
-			try {
-				ret = cb(self._value);
-			} catch (e) {
-				reject(deferred.promise, e);
-				return;
-			}
-			resolve(deferred.promise, ret);
-		});
-	}
-
-	function resolve(self, newValue) {
-		try {
-			// Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
-			if (newValue === self)
-				throw new TypeError('A promise cannot be resolved with itself.');
-			if (
-				newValue &&
-				(typeof newValue === 'object' || typeof newValue === 'function')
-			) {
-				var then = newValue.then;
-				if (newValue instanceof Promise) {
-					self._state = 3;
-					self._value = newValue;
-					finale(self);
-					return;
-				} else if (typeof then === 'function') {
-					doResolve(bind(then, newValue), self);
-					return;
-				}
-			}
-			self._state = 1;
-			self._value = newValue;
-			finale(self);
-		} catch (e) {
-			reject(self, e);
-		}
-	}
-
-	function reject(self, newValue) {
-		self._state = 2;
-		self._value = newValue;
-		finale(self);
-	}
-
-	function finale(self) {
-		if (self._state === 2 && self._deferreds.length === 0) {
-			Promise._immediateFn(function () {
-				if (!self._handled) {
-					Promise._unhandledRejectionFn(self._value);
-				}
-			});
-		}
-
-		for (var i = 0, len = self._deferreds.length; i < len; i++) {
-			handle(self, self._deferreds[i]);
-		}
-		self._deferreds = null;
-	}
-
-	/**
-	 * @constructor
-	 */
-	function Handler(onFulfilled, onRejected, promise) {
-		this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
-		this.onRejected = typeof onRejected === 'function' ? onRejected : null;
-		this.promise = promise;
-	}
-
-	/**
-	 * Take a potentially misbehaving resolver function and make sure
-	 * onFulfilled and onRejected are only called once.
-	 *
-	 * Makes no guarantees about asynchrony.
-	 */
-	function doResolve(fn, self) {
-		var done = false;
-		try {
-			fn(
-				function (value) {
-					if (done) return;
-					done = true;
-					resolve(self, value);
-				},
-				function (reason) {
-					if (done) return;
-					done = true;
-					reject(self, reason);
-				}
-			);
-		} catch (ex) {
-			if (done) return;
-			done = true;
-			reject(self, ex);
-		}
-	}
-
-	Promise.prototype['catch'] = function (onRejected) {
-		return this.then(null, onRejected);
-	};
-
-	Promise.prototype.then = function (onFulfilled, onRejected) {
-		// @ts-ignore
-		var prom = new this.constructor(noop);
-
-		handle(this, new Handler(onFulfilled, onRejected, prom));
-		return prom;
-	};
-
-	Promise.prototype['finally'] = finallyConstructor;
-
-	Promise.all = function (arr) {
-		return new Promise(function (resolve, reject) {
-			if (!arr || typeof arr.length === 'undefined')
-				throw new TypeError('Promise.all accepts an array');
-			var args = Array.prototype.slice.call(arr);
-			if (args.length === 0) return resolve([]);
-			var remaining = args.length;
-
-			function res(i, val) {
-				try {
-					if (val && (typeof val === 'object' || typeof val === 'function')) {
-						var then = val.then;
-						if (typeof then === 'function') {
-							then.call(
-								val,
-								function (val) {
-									res(i, val);
-								},
-								reject
-							);
-							return;
-						}
-					}
-					args[i] = val;
-					if (--remaining === 0) {
-						resolve(args);
-					}
-				} catch (ex) {
-					reject(ex);
-				}
-			}
-
-			for (var i = 0; i < args.length; i++) {
-				res(i, args[i]);
-			}
-		});
-	};
-
-	Promise.resolve = function (value) {
-		if (value && typeof value === 'object' && value.constructor === Promise) {
-			return value;
-		}
-
-		return new Promise(function (resolve) {
-			resolve(value);
-		});
-	};
-
-	Promise.reject = function (value) {
-		return new Promise(function (resolve, reject) {
-			reject(value);
-		});
-	};
-
-	Promise.race = function (values) {
-		return new Promise(function (resolve, reject) {
-			for (var i = 0, len = values.length; i < len; i++) {
-				values[i].then(resolve, reject);
-			}
-		});
-	};
-
-	// Use polyfill for setImmediate for performance gains
-	Promise._immediateFn =
-		(typeof setImmediate === 'function' &&
-			function (fn) {
-				setImmediate(fn);
-			}) ||
-		function (fn) {
-			setTimeoutFunc(fn, 0);
-		};
-
-	Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
-		if (typeof console !== 'undefined' && console) {
-			console.warn('Possible Unhandled Promise Rejection:', err); // eslint-disable-line no-console
-		}
-	};
-
-	/** @suppress {undefinedVars} */
-	var globalNS = (function () {
-		// the only reliable means to get the global object is
-		// `Function('return this')()`
-		// However, this causes CSP violations in Chrome apps.
-		if (typeof self !== 'undefined') {
-			return self;
-		}
-		if (typeof window !== 'undefined') {
-			return window;
-		}
-		if (typeof global !== 'undefined') {
-			return global;
-		}
-		throw new Error('unable to locate global object');
-	})();
-
-	if (!('Promise' in globalNS)) {
-		globalNS['Promise'] = Promise;
-	} else if (!globalNS.Promise.prototype['finally']) {
-		globalNS.Promise.prototype['finally'] = finallyConstructor;
-	}
-
-})));
-
-
 /***/ })
 
 /******/ });
+//# sourceMappingURL=editor.worker.js.map
