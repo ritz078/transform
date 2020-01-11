@@ -29,6 +29,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       createFormatter(config)
     );
     const schema = generator.createSchema("*");
+
+    fs.unlink(filePath, () => {});
     res.status(200).send(schema);
   } catch (e) {
     res.status(500).send(e.message);
