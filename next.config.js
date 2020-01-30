@@ -6,6 +6,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 const config = {
+  experimental: {
+    modern: false
+  },
   webpack(config, options) {
     config.node = {
       fs: "empty",
