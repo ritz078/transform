@@ -7,8 +7,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 const config = {
   experimental: {
-    modern: false
+    modern: true
   },
+
   webpack(config, options) {
     config.node = {
       fs: "empty",
@@ -63,7 +64,7 @@ const config = {
       }
     });
 
-    config.output.globalObject = 'typeof self !== "object" ? self : this';
+    // config.output.globalObject = 'typeof self !== "object" ? self : this';
 
     // Temporary fix for https://github.com/zeit/next.js/issues/8071
     config.plugins.forEach(plugin => {
