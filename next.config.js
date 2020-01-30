@@ -7,7 +7,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 const config = {
   experimental: {
-    modern: false
+    modern: true
   },
   webpack(config, options) {
     config.node = {
