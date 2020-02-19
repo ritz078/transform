@@ -25,7 +25,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       declaration: true,
       emitDeclarationOnly: true,
       module: ts.ModuleKind.ESNext,
-      jsx: "react",
+      jsx: ts.JsxEmit.Preserve,
       skipDefaultLibCheck: true,
       skipLibCheck: true
     };
