@@ -2,9 +2,20 @@ import { NextApiRequest, NextApiResponse } from "next";
 import convert from "@khanacademy/flow-to-ts";
 import * as ts from "typescript";
 import * as fs from "fs";
+import * as path from "path";
+import getConfig from "next/config";
+const { serverRuntimeConfig } = getConfig();
 
 const libSource = fs
-  .readFileSync("./node_modules/typescript/lib/lib.d.ts")
+  .readFileSync(
+    path.join(
+      serverRuntimeConfig.PROJECT_ROOT,
+      "node_modules",
+      "typescript",
+      "lib",
+      "lib.d.ts"
+    )
+  )
   .toString();
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
