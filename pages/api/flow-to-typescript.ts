@@ -1,22 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import convert from "@khanacademy/flow-to-ts";
 import * as ts from "typescript";
-import * as fs from "fs";
-import * as path from "path";
-import getConfig from "next/config";
-const { serverRuntimeConfig } = getConfig();
-
-const libSource = fs
-  .readFileSync(
-    path.join(
-      serverRuntimeConfig.PROJECT_ROOT,
-      "node_modules",
-      "typescript",
-      "lib",
-      "lib.d.ts"
-    )
-  )
-  .toString();
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -47,8 +31,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       if (filename === "file.ts") {
         return ts.createSourceFile(filename, tsCode, undefined);
       }
-      if (filename === "lib.d.ts")
-        return ts.createSourceFile(filename, libSource, undefined);
 
       return ts.createSourceFile(filename, "", undefined);
     };

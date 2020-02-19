@@ -73,11 +73,7 @@ const config = {
 
     return config;
   },
-  target: "serverless",
-
-  serverRuntimeConfig: {
-    PROJECT_ROOT: __dirname
-  }
+  target: "serverless"
 };
 
 module.exports = withBundleAnalyzer(withCSS(config));
