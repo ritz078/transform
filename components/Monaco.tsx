@@ -1,7 +1,12 @@
 import React from "react";
-import { editor } from "monaco-editor";
+import { editor, languages } from "monaco-editor";
 import { Pane } from "evergreen-ui";
 import { lightEditor } from "@utils/theme";
+
+languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+  noSemanticValidation: true,
+  noSyntaxValidation: true
+});
 
 // @ts-ignore
 self.MonacoEnvironment = {
