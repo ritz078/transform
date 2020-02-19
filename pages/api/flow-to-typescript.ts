@@ -19,7 +19,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       allowJs: true,
       declaration: true,
       emitDeclarationOnly: true,
-      module: ts.ModuleKind.ESNext,
       jsx: ts.JsxEmit.Preserve,
       skipDefaultLibCheck: true,
       skipLibCheck: true

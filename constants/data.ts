@@ -106,8 +106,8 @@ export type AlertProps = {
   testId: string,
 }
 
-type AlertTypeIconMap = {
-  AlertType: ?IconType,
+export type AlertTypeIconMap = {
+  success: 'tick' | 'started',
 }
 
 const Alert = ({ type, text, testId }: AlertProps) => {
