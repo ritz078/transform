@@ -19,7 +19,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       allowJs: true,
       declaration: true,
       emitDeclarationOnly: true,
-      jsx: ts.JsxEmit.Preserve,
+      jsx: ts.JsxEmit.React,
       skipDefaultLibCheck: true,
       skipLibCheck: true
     };
