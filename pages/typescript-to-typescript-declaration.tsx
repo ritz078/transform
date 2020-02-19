@@ -9,7 +9,8 @@ export default function() {
     ({ value }) =>
       request("/api/flow-to-typescript", {
         value,
-        declarationOnly: false
+        declarationOnly: true,
+        isTS: true
       }),
     []
   );
@@ -17,11 +18,10 @@ export default function() {
   return (
     <ConversionPanel
       transformer={transformer}
-      editorTitle="Flow"
-      editorLanguage="plaintext"
-      editorDefaultValue="flow"
+      editorTitle="TypeScript"
+      editorLanguage="typescript"
       resultTitle="TypeScript"
-      resultLanguage={"typescript"}
+      resultLanguage="typescript"
       resultEditorProps={{
         topNotifications: () => (
           <Alert

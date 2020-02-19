@@ -106,8 +106,8 @@ export type AlertProps = {
   testId: string,
 }
 
-type AlertTypeIconMap = {
-  +[AlertType]: IconType,
+export type AlertTypeIconMap = {
+  success: 'tick' | 'started',
 }
 
 const Alert = ({ type, text, testId }: AlertProps) => {
@@ -296,30 +296,56 @@ export const jsonLdContext = `{
   "@context": "https://schema.org/"
 }`;
 
-export const typescript = `export interface PaneProps {
-    elevation?: number;
-    className?: string;
-    css?: any;
-    is?: any;
-  }
+export const typescript = `
+import React from 'react';
+export interface Props {
+  /** The user's name */
+  name: string;
+  /** Should the name be rendered in bold */
+  priority?: boolean
+}
 
-  type Intent = "none" | "success" | "warning" | "danger";
-  type Appearance = "minimal" | "primary" | "default";
+export interface FauxactClassComponent<Props extends {}, State = {}> {
+  props: Props
+  state: State
 
-  export interface ButtonProps {
-    intent?: Intent;
-    appearance?: Appearance;
-    isLoading?: boolean;
-    isActive?: boolean;
-    iconBefore?: string;
-    iconAfter?: string;
-    disabled?: boolean;
-    theme?: any;
-    className?: string;
-    children: any;
-    is?: string;
-    href?: string;
-    onClick?: () => void;
-    css?: any;
-  }
-`;
+  setState: (prevState: State, props: Props) => Props
+  callback?: () => void
+  render(): FauxactClassComponent<any> | null
+}
+
+export const PrintName: React.FC<Props> = (props) => {
+  return (
+    <div>
+      <p style={{ fontWeight: props.priority ? "bold" : "normal" }}>{props.name}</p>
+    </div>
+  )
+}
+
+export const ShowUser: React.FC<Props> = (props) => {
+  return <PrintName name="Ned" />
+}
+
+let username = "Cersei"
+export const ShowStoredUser: React.FC<Props> = (props) => {
+  return <PrintName name={username} priority />
+}
+
+import { useState, useEffect } from 'react';
+
+export const CounterExample = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    document.title = \`You clicked $\{count\} times\`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}`;

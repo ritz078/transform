@@ -36,6 +36,7 @@
     "@graphql-codegen/typescript-resolvers": "^1.4.0",
     "@graphql-codegen/typescript-stencil-apollo": "^1.4.0",
     "@graphql-codegen/typescript-urql": "^1.4.0",
+    "@khanacademy/flow-to-ts": "^0.1.6",
     "@svgr/core": "^4.3.2",
     "@svgr/plugin-jsx": "^4.3.2",
     "@types/jsonld": "^1.5.0",
@@ -45,7 +46,6 @@
     "babel-standalone": "^6.26.0",
     "clipboard-copy": "^3.1.0",
     "evergreen-ui": "^4.18.1",
-    "flow-to-ts": "gist:3f49c8bd7a2b71429dcae28f2c2d1d97",
     "flowgen": "^1.10.0",
     "formik": "^1.5.8",
     "generate-schema": "^2.6.0",
@@ -85,6 +85,7 @@
     "text-encoding-utf-8": "^1.0.2",
     "transform-json-types": "^0.7.0",
     "ts-json-schema-generator": "^0.58.1",
+    "typescript": "3.5.3",
     "xml-js": "^1.6.11",
     "yaml": "^1.7.2"
   },
@@ -106,7 +107,6 @@
     "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
-    "typescript": "3.5.3",
     "ui-box": "2.1.0",
     "webpack": "^4.38.0",
     "worker-loader": "^2.0.0"

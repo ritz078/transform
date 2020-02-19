@@ -273,6 +273,10 @@ export const categorizedRoutes = [
         packageUrl: "https://github.com/joarwilk/flowgen"
       },
       {
+        label: "to TypeScript Declaration",
+        path: "/typescript-to-typescript-declaration"
+      },
+      {
         label: "to JSON Schema",
         path: "/typescript-to-json-schema",
         packageName: "ts-json-schema-generator",
@@ -281,19 +285,23 @@ export const categorizedRoutes = [
     ]
   },
   {
-    category: "Others",
+    category: "Flow",
     iconName: "",
     content: [
       {
-        label: "Flow to TypeScript",
+        label: "to TypeScript",
         path: "/flow-to-typescript"
       },
       {
-        label: "TypeScript to Flow",
-        path: "/typescript-to-flow",
-        packageName: "flowgen",
-        packageUrl: "https://github.com/joarwilk/flowgen"
-      },
+        label: "to TypeScript Declaration",
+        path: "/flow-to-typescript-declaration"
+      }
+    ]
+  },
+  {
+    category: "Others",
+    iconName: "",
+    content: [
       {
         label: "XML to JSON",
         path: "/xml-to-json",
