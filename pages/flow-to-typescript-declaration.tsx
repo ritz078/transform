@@ -9,7 +9,7 @@ export default function() {
     ({ value }) =>
       request("/api/flow-to-typescript", {
         value,
-        declarationOnly: false
+        declarationOnly: true
       }),
     []
   );
@@ -20,7 +20,7 @@ export default function() {
       editorTitle="Flow"
       editorLanguage="plaintext"
       editorDefaultValue="flow"
-      resultTitle="TypeScript"
+      resultTitle="TypeScript Declarations"
       resultLanguage={"typescript"}
       resultEditorProps={{
         topNotifications: () => (
