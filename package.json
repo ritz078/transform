@@ -66,7 +66,7 @@
     "lodash": "^4.17.15",
     "markdown": "^0.5.0",
     "monaco-editor": "0.17.1",
-    "next": "9.1.1",
+    "next": "9.3.2",
     "nprogress": "^0.2.0",
     "postcss": "^7.0.26",
     "postcss-js": "^2.0.3",
