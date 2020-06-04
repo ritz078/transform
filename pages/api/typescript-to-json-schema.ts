@@ -9,7 +9,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     const filePath = tempy.writeSync(req.body, { extension: "ts" });
     const config: Config = {
       path: filePath,
-      expose: "none",
+      expose: "all",
       jsDoc: "extended",
       type: "*"
     };
