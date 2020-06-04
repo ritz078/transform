@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import * as ts from "typescript";
 import { Config } from "ts-json-schema-generator/dist/src/Config";
 import tempy from "tempy";
 import * as tsj from "ts-json-schema-generator";
