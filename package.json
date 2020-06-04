@@ -85,7 +85,7 @@
     "text-encoding-utf-8": "^1.0.2",
     "transform-json-types": "^0.7.0",
     "ts-json-schema-generator": "^0.58.1",
-    "typescript": "3.5.3",
+    "typescript": "3.9.2",
     "xml-js": "^1.6.11",
     "yaml": "^1.7.2"
   },
