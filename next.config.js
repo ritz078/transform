@@ -68,7 +68,10 @@ const config = {
 
     return config;
   },
-  target: "serverless"
+  target: "serverless",
+  experimental: {
+    jsConfig: true
+  }
 };
 
 module.exports = withBundleAnalyzer(withCSS(config));
