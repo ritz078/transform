@@ -349,3 +349,17 @@ export const CounterExample = () => {
     </div>
   );
 }`;
+
+export const typeScriptInterface = `export interface Root {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+export interface Props {
+  /** The user's name */
+  name: string;
+  /** Should the name be rendered in bold */
+  priority?: boolean
+}`;

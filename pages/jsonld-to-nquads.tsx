@@ -5,9 +5,9 @@ import { toRDF } from "jsonld";
 
 export default function() {
   const transformer = useCallback(async ({ value }) => {
-    return toRDF(JSON.parse(value), {
+    return (toRDF(JSON.parse(value), {
       format: "application/n-quads"
-    }) as Promise<string>;
+    }) as unknown) as Promise<string>;
   }, []);
 
   return (

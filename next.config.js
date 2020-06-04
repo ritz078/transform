@@ -40,12 +40,7 @@ const config = {
           "java",
           "pug"
         ],
-        features: [
-          "folding",
-          "goToDefinitionMouse",
-          "referenceSearch",
-          "coreCommands"
-        ]
+        features: ["folding"]
       })
     );
 

@@ -36,7 +36,7 @@ export default function() {
         sessionId: Math.random()
           .toString(36)
           .substr(2, 8),
-        sdkVersion: "33.0.0"
+        sdkVersion: "37.0.0"
       });
 
       snackSession.current.startAsync();

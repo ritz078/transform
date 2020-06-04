@@ -3,8 +3,7 @@ import * as React from "react";
 import { useCallback } from "react";
 import { useSettings } from "@hooks/useSettings";
 import Form, { InputType } from "@components/Form";
-import html2pug from "html2pug";
-import minify from "@assets/vendor/html-minifier";
+import request from "@utils/request";
 
 const formFields = [
   {
@@ -55,10 +54,12 @@ export default function() {
   }, []);
 
   const transformer = useCallback(
-    async ({ value }) => {
-      return html2pug(value, minify, settings);
-    },
-    [settings, minify]
+    ({ value }) =>
+      request("/api/html-to-pug", {
+        value,
+        settings
+      }),
+    [settings]
   );
 
   return (

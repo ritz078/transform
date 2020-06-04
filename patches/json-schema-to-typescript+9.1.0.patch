@@ -14,10 +14,10 @@ index 1c2c709..ccc647b 100644
  exports.format = format;
  //# sourceMappingURL=formatter.js.map
 diff --git a/node_modules/json-schema-to-typescript/dist/src/index.js b/node_modules/json-schema-to-typescript/dist/src/index.js
-index 068d6dc..b7c5ac9 100644
+index c3e750a..0acfe57 100644
 --- a/node_modules/json-schema-to-typescript/dist/src/index.js
 +++ b/node_modules/json-schema-to-typescript/dist/src/index.js
-@@ -59,9 +59,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
+@@ -60,9 +60,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
      }
  };
  Object.defineProperty(exports, "__esModule", { value: true });
@@ -27,9 +27,9 @@ index 068d6dc..b7c5ac9 100644
  var formatter_1 = require("./formatter");
  var generator_1 = require("./generator");
  var normalizer_1 = require("./normalizer");
-@@ -88,17 +86,7 @@ exports.DEFAULT_OPTIONS = {
-     },
-     unreachableDefinitions: false
+@@ -91,17 +89,7 @@ exports.DEFAULT_OPTIONS = {
+     unreachableDefinitions: false,
+     unknownAny: true
  };
 -function compileFromFile(filename, options) {
 -    if (options === void 0) { options = exports.DEFAULT_OPTIONS; }
