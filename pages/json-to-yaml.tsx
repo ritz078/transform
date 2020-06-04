@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import * as React from "react";
 import { stringify } from "yaml";
 
-export default function() {
+export default function () {
   const transformer = useCallback(({ value }) => {
     return stringify(JSON.parse(value));
   }, []);

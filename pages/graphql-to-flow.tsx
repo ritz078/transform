@@ -8,10 +8,10 @@ import { GraphqlTransforms } from "@constants/graphqlTransforms";
 let graphqlWorker;
 
 const props = {
-  acceptFiles: ".graphql, .gql"
+  acceptFiles: ".graphql, .gql",
 };
 
-export default function() {
+export default function () {
   const transformer = useCallback<Transformer>(
     async ({ value, splitEditorValue }) => {
       graphqlWorker = graphqlWorker || getWorker(GrapqlWorker);
@@ -19,7 +19,7 @@ export default function() {
       return graphqlWorker.send({
         type: GraphqlTransforms.TO_FLOW,
         value,
-        document: splitEditorValue
+        document: splitEditorValue,
       });
     },
     []

@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import SearchBox from "@components/Searchbox";
 import loadScript from "load-script";
 
-export default function() {
+export default function () {
   const router = useRouter();
 
   useEffect(() => {
     if (!IS_DEV)
       loadScript("https://codefund.io/properties/367/funder.js", {
-        async: true
+        async: true,
       });
   }, []);
 
@@ -36,7 +36,7 @@ export default function() {
         flexDirection="column"
         paddingBottom={10}
       >
-        {categorizedRoutes.map(route => {
+        {categorizedRoutes.map((route) => {
           return (
             <Fragment key={route.category}>
               <Pane paddingX={10} marginTop={15} marginBottom={2}>
@@ -53,7 +53,7 @@ export default function() {
                     <Link key={a.label} href={a.path} prefetch={false}>
                       <a
                         style={{
-                          textDecoration: "none"
+                          textDecoration: "none",
                         }}
                       >
                         <Pane
@@ -67,8 +67,8 @@ export default function() {
                           }
                           css={{
                             "&:hover": {
-                              backgroundColor: "#f5f5f5"
-                            }
+                              backgroundColor: "#f5f5f5",
+                            },
                           }}
                         >
                           <Text fontSize={13}>{a.label}</Text>

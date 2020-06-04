@@ -9,7 +9,7 @@ const plugins = [
   require("prettier/parser-markdown"),
   require("prettier/parser-yaml"),
   require("prettier/parser-flow"),
-  require("prettier/parser-typescript")
+  require("prettier/parser-typescript"),
 ];
 
 export async function prettify(language: string, value: string) {
@@ -22,7 +22,7 @@ export async function prettify(language: string, value: string) {
   } else {
     result = prettier.format(value, {
       parser: prettierParsers[language] || language,
-      plugins
+      plugins,
     });
   }
 

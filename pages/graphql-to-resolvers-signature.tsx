@@ -9,16 +9,16 @@ import { Select } from "evergreen-ui";
 let graphqlWorker;
 
 const props = {
-  acceptFiles: ".graphql, .gql"
+  acceptFiles: ".graphql, .gql",
 };
 
 const langMap = {
   [GraphqlTransforms.TO_FLOW_RESOLVERS_SIGNATURE]: "flow",
   [GraphqlTransforms.TO_TYPESCRIPT_RESOLVERS_SIGNATURE]: "typescript",
-  [GraphqlTransforms.TO_JAVA_RESOLVERS_SIGNATURE]: "java"
+  [GraphqlTransforms.TO_JAVA_RESOLVERS_SIGNATURE]: "java",
 };
 
-export default function() {
+export default function () {
   const [output, setOutput] = useState(
     GraphqlTransforms.TO_TYPESCRIPT_RESOLVERS_SIGNATURE.toString(10)
   );
@@ -34,7 +34,7 @@ export default function() {
           output ===
           GraphqlTransforms.TO_TYPESCRIPT_RESOLVERS_SIGNATURE.toString(10)
             ? splitEditorValue
-            : undefined
+            : undefined,
       });
     },
     [output]
@@ -45,7 +45,7 @@ export default function() {
       settings={output}
       transformer={transformer}
       resultTitle={
-        <Select value={output} onChange={e => setOutput(e.target.value)}>
+        <Select value={output} onChange={(e) => setOutput(e.target.value)}>
           <option value={GraphqlTransforms.TO_TYPESCRIPT_RESOLVERS_SIGNATURE}>
             TypeScript Resolvers Signature
           </option>

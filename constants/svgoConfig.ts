@@ -40,7 +40,7 @@ export const nativeRequiredSettings = {
   removeXMLProcInst: false,
   removeComments: true,
   removeMetadata: true,
-  removeDimensions: false
+  removeDimensions: false,
 };
 
 export const defaultSettings = {
@@ -73,7 +73,7 @@ export const defaultSettings = {
   removeRasterImages: true,
   mergePaths: true,
   convertShapeToPath: true,
-  sortAttrs: true
+  sortAttrs: true,
 };
 
 export const defaultNativeSettings = omit(
@@ -81,15 +81,15 @@ export const defaultNativeSettings = omit(
   Object.keys(nativeRequiredSettings)
 );
 
-export const formFields = settings =>
+export const formFields = (settings) =>
   Object.keys(settings).map((property: keyof Settings) => ({
     label: lowerCase(property),
     type: InputType.SWITCH,
     key: property,
     ...(property !== "optimizeSvg"
       ? {
-          isDisabled: values => !values.optimizeSvg,
-          props: { paddingLeft: 20, borderLeft: "2px solid #FDF8F3" }
+          isDisabled: (values) => !values.optimizeSvg,
+          props: { paddingLeft: 20, borderLeft: "2px solid #FDF8F3" },
         }
-      : {})
+      : {}),
   }));

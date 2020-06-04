@@ -70,28 +70,28 @@ _self.onmessage = async ({ data: { id, payload } }) => {
       schema: parse(value),
       // @ts-ignore
       plugins: plugins.map((_plugin, i) => ({
-        [i + 1]: {}
+        [i + 1]: {},
       })),
       documents: document.trim()
         ? [
             {
               filePath: "",
-              content: parse(document)
-            }
+              content: parse(document),
+            },
           ]
         : [],
       config: {},
-      pluginMap
+      pluginMap,
     });
 
     _self.postMessage({
       id,
-      payload: result
+      payload: result,
     });
   } catch (e) {
     _self.postMessage({
       id,
-      err: e.message
+      err: e.message,
     });
   }
 };

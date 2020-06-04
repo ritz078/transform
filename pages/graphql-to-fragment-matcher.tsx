@@ -8,16 +8,16 @@ import { GraphqlTransforms } from "@constants/graphqlTransforms";
 let graphqlWorker;
 
 const props = {
-  acceptFiles: ".graphql, .gql"
+  acceptFiles: ".graphql, .gql",
 };
 
-export default function() {
+export default function () {
   const transformer = useCallback<Transformer>(async ({ value }) => {
     graphqlWorker = graphqlWorker || getWorker(GrapqlWorker);
 
     return graphqlWorker.send({
       type: GraphqlTransforms.TO_FRAGMENT_MATCHER,
-      value
+      value,
     });
   }, []);
 

@@ -15,7 +15,7 @@ export default class MyDocument extends Document<DocumentProps> {
     return {
       ...page,
       css,
-      hydrationScript
+      hydrationScript,
     };
   }
 

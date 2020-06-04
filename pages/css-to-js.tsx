@@ -5,13 +5,13 @@ import PostCssWorker from "@workers/postcss.worker";
 import { useSettings } from "@hooks/useSettings";
 
 let postCssWorker;
-export default function() {
+export default function () {
   const name = "CSS to JS";
 
   // TODO
   const [settings, setSettings] = useSettings(name, {
     reactNativeCompatible: false,
-    cleanPropertyNames: false
+    cleanPropertyNames: false,
   });
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
@@ -29,7 +29,7 @@ export default function() {
       editorLanguage="css"
       resultLanguage="javascript"
       editorProps={{
-        acceptFiles: "text/css"
+        acceptFiles: "text/css",
       }}
     />
   );

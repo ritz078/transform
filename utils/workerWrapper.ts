@@ -9,9 +9,9 @@ function sendMsg(payload, worker: Worker) {
   const msgId = globalMsgId++;
   const msg = {
     id: msgId,
-    payload
+    payload,
   };
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     // save callbacks for later
     resolves[msgId] = resolve;
     rejects[msgId] = reject;

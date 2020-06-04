@@ -16,21 +16,21 @@ const _self = self as any;
 _self.onmessage = ({
   data: {
     payload: { value, language },
-    id
-  }
+    id,
+  },
 }: Data) => {
-  (async function() {
+  (async function () {
     try {
       const payload = await prettify(language, value);
 
       _self.postMessage({
         id,
-        payload
+        payload,
       });
     } catch (e) {
       _self.postMessage({
         id,
-        err: e.message
+        err: e.message,
       });
     }
   })();
