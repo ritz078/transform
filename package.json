@@ -118,8 +118,7 @@
   },
   "lint-staged": {
     "./assets/*/*.svg": [
-      "imagemin-lint-staged",
-      "git add"
+      "imagemin-lint-staged"
     ]
   }
 }
