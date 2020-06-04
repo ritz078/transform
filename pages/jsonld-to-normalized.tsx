@@ -5,7 +5,7 @@ import { normalize } from "jsonld";
 
 export default function() {
   const transformer = useCallback(async ({ value }) => {
-    return (await normalize(JSON.parse(value))) as Promise<string>;
+    return normalize(JSON.parse(value));
   }, []);
 
   return (
