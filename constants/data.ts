@@ -349,3 +349,10 @@ export const CounterExample = () => {
     </div>
   );
 }`;
+
+export const typeScriptInterface = `export interface Root {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}`;

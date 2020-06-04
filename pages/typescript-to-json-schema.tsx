@@ -15,6 +15,7 @@ export default function() {
       transformer={transformer}
       editorTitle="TypeScript"
       editorLanguage="typescript"
+      editorDefaultValue="typeScriptInterface"
       resultTitle="JSON Schema"
       resultLanguage={"json"}
       resultEditorProps={{
