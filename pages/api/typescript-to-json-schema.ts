@@ -10,7 +10,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       path: filePath,
       expose: "all",
       jsDoc: "extended",
-      type: "*"
+      type: "*",
     };
 
     const schema = tsj.createGenerator(config).createSchema(config.type);

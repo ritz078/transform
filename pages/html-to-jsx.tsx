@@ -18,21 +18,21 @@ const formFields = [
   {
     type: InputType.SWITCH,
     key: "createClass",
-    label: "Create Class"
+    label: "Create Class",
   },
   {
     type: InputType.TEXT_INPUT,
     key: "outputClassName",
-    label: "Output Class Name"
-  }
+    label: "Output Class Name",
+  },
 ];
 
-export default function() {
+export default function () {
   const name = "HTML to JSX";
 
   const [settings, setSettings] = useSettings(name, {
     createClass: false,
-    outputClassName: "TransformedComponent"
+    outputClassName: "TransformedComponent",
   });
 
   const [_isSvg, setSvg] = useState(false);
@@ -92,9 +92,7 @@ export default function() {
                 </>
               }
             />
-          ) : (
-            undefined
-          )
+          ) : undefined,
       }}
     />
   );

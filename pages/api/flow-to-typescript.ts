@@ -21,12 +21,12 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       emitDeclarationOnly: true,
       jsx: ts.JsxEmit.React,
       skipDefaultLibCheck: true,
-      skipLibCheck: true
+      skipLibCheck: true,
     };
 
     const host = ts.createCompilerHost(options);
 
-    host.getSourceFile = filename => {
+    host.getSourceFile = (filename) => {
       if (filename === "file.ts") {
         return ts.createSourceFile(filename, tsCode, undefined);
       }

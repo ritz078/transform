@@ -4,9 +4,10 @@ import * as React from "react";
 import { stringify } from "yaml";
 
 export default function() {
-  const transformer = useCallback(({ value }) => {
-    return stringify(JSON.parse(value));
-  }, []);
+  const transformer = useCallback(
+    ({ value }) => Promise.resolve(stringify(JSON.parse(value))),
+    []
+  );
 
   return (
     <ConversionPanel

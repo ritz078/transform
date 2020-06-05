@@ -4,7 +4,7 @@ export const prettierParsers = {
   jsx: "babel",
   svg: "html",
   xml: "html",
-  typescript: "typescript"
+  typescript: "typescript",
 };
 
 export const supportedLanguages = [
@@ -17,5 +17,5 @@ export const supportedLanguages = [
   "yaml",
   "typescript",
   "flow",
-  ...Object.keys(prettierParsers)
+  ...Object.keys(prettierParsers),
 ];

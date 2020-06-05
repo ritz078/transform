@@ -6,18 +6,18 @@ import { useRouter } from "next/router";
 const SearchBox: React.FunctionComponent<{}> = () => {
   const router = useRouter();
 
-  const onSearchSelect = useCallback(changedItem => {
-    const route = routes.find(route => changedItem === route.searchTerm);
+  const onSearchSelect = useCallback((changedItem) => {
+    const route = routes.find((route) => changedItem === route.searchTerm);
     router.push(route.path);
   }, []);
 
   return (
     <Autocomplete
       onChange={onSearchSelect}
-      items={routes.map(a => a.searchTerm)}
+      items={routes.map((a) => a.searchTerm)}
       width="100%"
     >
-      {props => {
+      {(props) => {
         const { getInputProps, getRef, inputValue } = props;
         return (
           <SearchInput

@@ -75,8 +75,8 @@ _self.onmessage = async ({ data: { id, payload } }) => {
       documents: document.trim()
         ? [
             {
-              filePath: "",
-              content: parse(document)
+              location: "",
+              document: parse(document)
             }
           ]
         : [],

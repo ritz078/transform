@@ -25,14 +25,14 @@ async function handleJsonToProptypes(value, id) {
   }
 
   const result = transform(`const propTypes = ${JSON.stringify(code)}`, {
-    plugins: [jsonToProptypes]
+    plugins: [jsonToProptypes],
   }).code;
 
   const prettyCode = await prettify("javascript", result);
 
   _self.postMessage({
     id,
-    payload: prettyCode
+    payload: prettyCode,
   });
 }
 
@@ -40,8 +40,8 @@ function objectStylesToTemplate(value, id, settings) {
   _self.postMessage({
     id,
     payload: transform(value, {
-      plugins: [[objStylesToTemplate, settings]]
-    }).code
+      plugins: [[objStylesToTemplate, settings]],
+    }).code,
   });
 }
 
@@ -49,8 +49,8 @@ function jsonToMobx(value, id) {
   _self.postMessage({
     id,
     payload: transform(`const myModel = ${value}`, {
-      plugins: [jsonToMobxTree]
-    }).code
+      plugins: [jsonToMobxTree],
+    }).code,
   });
 }
 
@@ -71,7 +71,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
     }
     _self.postMessage({
       id,
-      err: e.message
+      err: e.message,
     });
   }
 };

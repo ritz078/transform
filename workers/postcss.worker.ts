@@ -9,12 +9,12 @@ _self.onmessage = ({ data: { payload, id } }) => {
 
     _self.postMessage({
       id,
-      payload: JSON.stringify(postcssJs.objectify(root))
+      payload: JSON.stringify(postcssJs.objectify(root)),
     });
   } catch (e) {
     _self.postMessage({
       id,
-      err: e.message
+      err: e.message,
     });
   }
 };

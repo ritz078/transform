@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import request from "@utils/request";
 import { Alert } from "evergreen-ui";
 
-export default function() {
+export default function () {
   const transformer = useCallback(
     ({ value }) => request("/api/typescript-to-json-schema", value),
     []
@@ -24,7 +24,7 @@ export default function() {
             backgroundColor="#e7f7ff"
             title="This code is converted on the server."
           />
-        )
+        ),
       }}
     />
   );
