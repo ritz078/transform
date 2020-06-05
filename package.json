@@ -61,6 +61,7 @@
     "json-ts": "^1.6.4",
     "json_typegen_wasm": "^0.4.0",
     "jsonld": "^3.1.1",
+    "jsonschema-protobuf": "^1.0.2",
     "load-script": "^1.0.0",
     "lodash": "^4.17.15",
     "markdown": "^0.5.0",
