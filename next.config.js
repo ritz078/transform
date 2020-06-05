@@ -1,9 +1,6 @@
 const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true"
-});
 
 const config = {
   webpack(config, options) {
@@ -74,4 +71,4 @@ const config = {
   }
 };
 
-module.exports = withBundleAnalyzer(withCSS(config));
+module.exports = withCSS(config);
