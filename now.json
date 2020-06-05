@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "name": "transform",
-  "alias": "transform.tools",
-  "builds": [{ "src": "next.config.js", "use": "@now/next" }],
   "routes": [
     {
       "src": "/svg-to-jsx",
