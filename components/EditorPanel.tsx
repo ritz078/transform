@@ -11,7 +11,7 @@ import {
   Spinner,
   TextInput,
   toaster,
-  Tooltip,
+  Tooltip
 } from "evergreen-ui";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
@@ -64,10 +64,10 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
     >
       <Spinner />
     </Pane>
-  ),
+  )
 });
 
-export default function ({
+export default function({
   editable = true,
   title,
   settingElement,
@@ -82,7 +82,7 @@ export default function ({
   defaultValue,
   onChange,
   id,
-  packageDetails,
+  packageDetails
 }: EditorPanelProps) {
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
   const [showPreview, setPreviewVisibility] = useState(true);
@@ -96,10 +96,10 @@ export default function ({
     codeLens: false,
     fontFamily: "Menlo, Consolas, monospace, sans-serif",
     minimap: {
-      enabled: false,
+      enabled: false
     },
     quickSuggestions: false,
-    lineNumbers: "on",
+    lineNumbers: "on"
   };
 
   const _toggleSettingsDialog = useCallback(
@@ -126,7 +126,7 @@ export default function ({
 
         {settingElement({
           toggle: _toggleSettingsDialog,
-          open: showSettingsDialogue,
+          open: showSettingsDialogue
         })}
       </>
     ),
@@ -146,19 +146,19 @@ export default function ({
   }, []);
 
   const { getRootProps } = useDropzone({
-    onDrop: (files) => onFilePicked(files),
+    onDrop: files => onFilePicked(files),
     disabled: !editable,
     accept: acceptFiles,
     onDropRejected: () =>
       toaster.danger("This file type is not supported.", {
-        id,
-      }),
+        id
+      })
   });
 
   const copyValue = useCallback(() => {
     copy(value);
     toaster.success("Copied to clipboard.", {
-      id,
+      id
     });
   }, [value]);
 
@@ -166,7 +166,7 @@ export default function ({
     prettierWorker
       .send({
         language,
-        value,
+        value
       })
       .then(setValue);
   }, [language, value]);
@@ -176,7 +176,7 @@ export default function ({
   }, [showPreview]);
 
   const fetchFile = useCallback(
-    (close) => {
+    close => {
       (async () => {
         if (!fetchingUrl) return;
         const res = await fetch(fetchingUrl);
@@ -229,7 +229,7 @@ export default function ({
                 <FilePicker
                   width={"100%"}
                   name="filepicker"
-                  onChange={(files) => onFilePicked(files, close)}
+                  onChange={files => onFilePicked(files, close)}
                   accept={acceptFiles}
                 />
 
@@ -293,7 +293,7 @@ export default function ({
           <a
             href={packageDetails.url}
             style={{
-              display: "inline-flex",
+              display: "inline-flex"
             }}
             target="_blank"
           >
@@ -327,21 +327,21 @@ export default function ({
           display: "flex",
           flexDirection: "column",
           flex: 1,
-          overflow: "hidden",
+          overflow: "hidden"
         }}
         {...getRootProps()}
       >
         {topNotifications &&
           topNotifications({
             isSettingsOpen: showSettingsDialogue,
-            toggleSettings: _toggleSettingsDialog,
+            toggleSettings: _toggleSettingsDialog
           })}
 
         <Monaco
           language={language}
           value={value}
           options={options}
-          onChange={(value) => {
+          onChange={value => {
             setValue(value);
             onChange(value);
           }}

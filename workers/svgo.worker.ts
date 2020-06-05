@@ -16,20 +16,20 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   delete payload.settings.optimizeSvg;
 
   const plugins = Object.keys(payload.settings).filter(
-    (key) => payload.settings[key]
+    key => payload.settings[key]
   );
 
   try {
     const svgo = new SVGO({
       full: true,
       // @ts-ignore
-      plugins,
+      plugins
     });
 
-    svgo.optimize(payload.value).then((result) => {
+    svgo.optimize(payload.value).then(result => {
       _self.postMessage({
         id,
-        payload: result.data,
+        payload: result.data
       });
     });
   } catch (e) {
@@ -38,7 +38,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
     }
     _self.postMessage({
       id,
-      err: e.message,
+      err: e.message
     });
   }
 };

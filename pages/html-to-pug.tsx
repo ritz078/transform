@@ -9,33 +9,33 @@ const formFields = [
   {
     key: "tabs",
     type: InputType.SWITCH,
-    label: "Use Tabs",
+    label: "Use Tabs"
   },
   {
     key: "commas",
     type: InputType.SWITCH,
-    label: "Commas",
+    label: "Commas"
   },
   {
     key: "doubleQuotes",
     type: InputType.SWITCH,
-    label: "Use double quotes",
+    label: "Use double quotes"
   },
   {
     key: "fragment",
     type: InputType.SWITCH,
-    label: "Use Fragment",
-  },
+    label: "Use Fragment"
+  }
 ];
 
 const defaultSettings = {
   tabs: true,
   commas: true,
   doubleQuotes: false,
-  fragment: false,
+  fragment: false
 };
 
-export default function () {
+export default function() {
   const name = "HTML to Pug";
 
   const [settings, setSettings] = useSettings(name, defaultSettings);
@@ -57,7 +57,7 @@ export default function () {
     ({ value }) =>
       request("/api/html-to-pug", {
         value,
-        settings,
+        settings
       }),
     [settings]
   );

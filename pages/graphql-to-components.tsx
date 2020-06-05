@@ -9,10 +9,10 @@ import { Select } from "evergreen-ui";
 let graphqlWorker;
 
 const props = {
-  acceptFiles: ".graphql, .gql",
+  acceptFiles: ".graphql, .gql"
 };
 
-export default function () {
+export default function() {
   const [output, setOutput] = useState(
     GraphqlTransforms.TO_REACT_APOLLO.toString(10)
   );
@@ -24,7 +24,7 @@ export default function () {
       return graphqlWorker.send({
         type: parseInt(output, 10),
         value,
-        document: splitEditorValue,
+        document: splitEditorValue
       });
     },
     [output]
@@ -35,7 +35,7 @@ export default function () {
       settings={output}
       transformer={transformer}
       resultTitle={
-        <Select value={output} onChange={(e) => setOutput(e.target.value)}>
+        <Select value={output} onChange={e => setOutput(e.target.value)}>
           <option value={GraphqlTransforms.TO_REACT_APOLLO}>
             TypeScript React Apollo
           </option>

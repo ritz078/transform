@@ -7,7 +7,7 @@ import { Pane, Heading, Link } from "evergreen-ui";
 import {
   defaultNativeSettings,
   formFields,
-  nativeRequiredSettings,
+  nativeRequiredSettings
 } from "@constants/svgoConfig";
 import isSvg from "is-svg";
 import { getWorker } from "@utils/workerWrapper";
@@ -21,7 +21,7 @@ if (IN_BROWSER) {
 }
 
 let svgo, _babelWorker, svgr;
-export default function () {
+export default function() {
   const name = "SVG to React Native";
   const [value, setValue] = useState("");
   const [url, setUrl] = useState("");
@@ -30,11 +30,13 @@ export default function () {
   const snackSession = useRef<any>();
 
   useEffect(() => {
-    (async function () {
+    (async function() {
       snackSession.current = new SnackSession({
         files: { "App.js": { contents: "", type: "CODE" } },
-        sessionId: Math.random().toString(36).substr(2, 8),
-        sdkVersion: "37.0.0",
+        sessionId: Math.random()
+          .toString(36)
+          .substr(2, 8),
+        sdkVersion: "37.0.0"
       });
 
       snackSession.current.startAsync();
@@ -48,9 +50,9 @@ export default function () {
   }, []);
 
   useEffect(() => {
-    (async function () {
+    (async function() {
       await snackSession.current.sendCodeAsync({
-        "App.js": { contents: value, type: "CODE" },
+        "App.js": { contents: value, type: "CODE" }
       });
     })();
   }, [value]);
@@ -66,8 +68,8 @@ export default function () {
         value,
         settings: {
           ...(settings.optimizeSvg ? settings : {}),
-          ...nativeRequiredSettings,
-        },
+          ...nativeRequiredSettings
+        }
       });
 
       // set optimized value in state to be used by preview.
@@ -77,7 +79,7 @@ export default function () {
 
       _value = await svgr.send({
         native: true,
-        value: _value,
+        value: _value
       });
 
       setValue(_value);

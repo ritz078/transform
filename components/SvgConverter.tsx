@@ -23,7 +23,7 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
   formFields,
   optimizedValue,
   settings,
-  setSettings,
+  setSettings
 }) => {
   const getSettingsPanel = useCallback<EditorPanelProps["settingElement"]>(
     ({ open, toggle }) => {
@@ -73,14 +73,14 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
               }
             />
           ),
-        previewElement: (value) => (
+        previewElement: value => (
           <Pane display="flex" flexDirection="row" flex={1}>
             <Pane display={"flex"} flex={1} position="relative">
               <img
                 style={{
                   flex: 1,
                   width: "100%",
-                  borderRight: "1px solid #eee",
+                  borderRight: "1px solid #eee"
                 }}
                 src={svgToDataUrl(value)}
                 alt="original"
@@ -101,7 +101,7 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
                 <img
                   style={{
                     flex: 1,
-                    width: "100%",
+                    width: "100%"
                   }}
                   src={svgToDataUrl(optimizedValue)}
                   alt="optimized"
@@ -120,7 +120,7 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
             </Pane>
           </Pane>
         ),
-        acceptFiles: "image/svg+xml",
+        acceptFiles: "image/svg+xml"
       }}
     />
   );

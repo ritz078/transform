@@ -12,7 +12,7 @@ let prettierWorker;
 
 function getEditorLanguage(lang: Language) {
   const mapping = {
-    flow: "typescript",
+    flow: "typescript"
   };
 
   return mapping[lang] || lang;
@@ -42,7 +42,7 @@ export interface ConversionPanelProps {
   settings?: any;
 }
 
-const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function ({
+const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function({
   splitEditorProps,
   editorProps,
   resultEditorProps,
@@ -57,7 +57,7 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function 
   settings,
   editorDefaultValue,
   splitEditorDefaultValue,
-  resultSettingsElement,
+  resultSettingsElement
 }) {
   const [value, setValue] = useData(editorDefaultValue || editorLanguage);
   const [splitValue, setSplitValue] = useData(
@@ -79,7 +79,7 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function 
       packageName && packageUrl
         ? {
             name: packageName,
-            url: packageUrl,
+            url: packageUrl
           }
         : undefined;
   }
@@ -92,12 +92,12 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function 
 
         const result = await transformer({
           value,
-          splitEditorValue: splitTitle ? splitValue : undefined,
+          splitEditorValue: splitTitle ? splitValue : undefined
         });
 
         const prettyResult = await prettierWorker.send({
           value: result,
-          language: resultLanguage,
+          language: resultLanguage
         });
         setResult(prettyResult);
         setMessage("");
@@ -172,8 +172,8 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function 
               <Spinner
                 css={{
                   "& circle": {
-                    stroke: "#0e7ccf",
-                  },
+                    stroke: "#0e7ccf"
+                  }
                 }}
                 size={32}
               />

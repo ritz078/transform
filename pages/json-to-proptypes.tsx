@@ -4,12 +4,12 @@ import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import { getWorker } from "@utils/workerWrapper";
 import { BabelTransforms } from "@constants/babelTransforms";
 
-export default function () {
+export default function() {
   const transformer = useCallback<Transformer>(async ({ value }) => {
     const Worker = require("@workers/babel.worker");
     return getWorker(Worker).send({
       value,
-      type: BabelTransforms.JSON_TO_PROPTYPES,
+      type: BabelTransforms.JSON_TO_PROPTYPES
     });
   }, []);
 

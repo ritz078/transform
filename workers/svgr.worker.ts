@@ -9,17 +9,17 @@ _self.onmessage = async ({ data: { payload, id } }) => {
     const result = await convert(value, {
       plugins: [require("@svgr/plugin-jsx").default],
       svgo: false,
-      native,
+      native
     });
 
     _self.postMessage({
       payload: result,
-      id,
+      id
     });
   } catch (e) {
     _self.postMessage({
       id,
-      error: e.message,
+      error: e.message
     });
   }
 };

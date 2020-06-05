@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function () {
+export default function() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@ export default function () {
       xmlSpace="preserve"
       height={20}
       style={{
-        marginRight: 10,
+        marginRight: 10
       }}
     >
       <style dangerouslySetInnerHTML={{ __html: ".st0{fill:#C12127;}" }} />

@@ -5,7 +5,7 @@ import { Dialog, Heading, Pane, Switch, TextInput, Select } from "evergreen-ui";
 export enum InputType {
   SWITCH = 1,
   TEXT_INPUT,
-  SELECT,
+  SELECT
 }
 
 interface FormProps<T> {
@@ -30,7 +30,7 @@ const Form = <T extends object>({
   title,
   formsFields,
   open,
-  toggle,
+  toggle
 }: FormProps<T> & { children?: React.ReactNode }) => {
   return (
     <Formik
@@ -41,11 +41,11 @@ const Form = <T extends object>({
             title={title}
             isShown={open}
             onCloseComplete={toggle}
-            onConfirm={(close) => {
+            onConfirm={close => {
               props.submitForm();
               close();
             }}
-            onCancel={(close) => {
+            onCancel={close => {
               props.resetForm();
               close();
             }}
@@ -120,7 +120,7 @@ const Form = <T extends object>({
           </Dialog>
         );
       }}
-      onSubmit={(values) => {
+      onSubmit={values => {
         onSubmit(values);
       }}
     />

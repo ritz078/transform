@@ -3,10 +3,10 @@ import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import * as React from "react";
 import { useCallback } from "react";
 
-export default function () {
+export default function() {
   const transformer = useCallback<Transformer>(async ({ value }) => {
     const code = transform(value, {
-      lang: "io-ts",
+      lang: "io-ts"
     });
 
     return `import * as t from "io-ts";\n\n${code}`;

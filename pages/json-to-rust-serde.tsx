@@ -18,19 +18,19 @@ const formFields = [
       "SCREAMING_SNAKE_CASE",
       "kebab-case",
       "SCREAMING-KEBAB-CASE",
-      "UPPERCASE",
-    ].map((value) => ({
+      "UPPERCASE"
+    ].map(value => ({
       label: value,
-      value,
-    })),
-  },
+      value
+    }))
+  }
 ];
 
 const defaultSettings = {
-  property_name_format: "camelCase",
+  property_name_format: "camelCase"
 };
 
-export default function () {
+export default function() {
   const name = "json-to-rust-serde";
 
   const [settings, setSettings] = useSettings(name, defaultSettings);
@@ -43,7 +43,7 @@ export default function () {
         value,
         JSON.stringify({
           output_mode: "rust",
-          property_name_format: settings.property_name_format,
+          property_name_format: settings.property_name_format
         })
       );
     },

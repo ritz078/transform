@@ -21,7 +21,7 @@ const logo = (
     height="19px"
     viewBox="0 0 306 62"
     style={{
-      marginTop: -4,
+      marginTop: -4
     }}
   >
     <path
@@ -41,10 +41,10 @@ function renderHeadWay() {
   const HW_config = {
     selector: ".transform-changelog", // CSS selector where to inject the badge
     account: "J0B24x",
-    trigger: ".transform-changelog",
+    trigger: ".transform-changelog"
   };
 
-  (function (src) {
+  (function(src) {
     const tag = document.createElement("script");
     tag.async = false;
     tag.src = src;
@@ -60,7 +60,7 @@ function renderHeadWay() {
 export default class extends App {
   timer: any;
 
-  private stopProgress = (pathname) => {
+  private stopProgress = pathname => {
     reactGa && reactGa.pageview(pathname);
     clearTimeout(this.timer);
     NProgress.done();
@@ -126,7 +126,7 @@ export default class extends App {
               height={40}
               className="transform-changelog"
               css={{
-                color: "#fff !important",
+                color: "#fff !important"
               }}
             >
               Changelog
@@ -136,7 +136,7 @@ export default class extends App {
                 appearance="minimal"
                 height={40}
                 css={{
-                  color: "#fff !important",
+                  color: "#fff !important"
                 }}
               >
                 GitHub

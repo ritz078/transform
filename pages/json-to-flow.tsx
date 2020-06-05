@@ -11,27 +11,27 @@ const formFields = [
   {
     type: InputType.TEXT_INPUT,
     key: "namespace",
-    label: "Namespace",
+    label: "Namespace"
   },
   {
     type: InputType.TEXT_INPUT,
     key: "prefix",
-    label: "prefix",
+    label: "prefix"
   },
   {
     type: InputType.TEXT_INPUT,
     key: "rootName",
-    label: "Root Name",
-  },
+    label: "Root Name"
+  }
 ];
 
 const defaultSettings = {
   namespace: "",
   prefix: "I",
-  rootName: "RootObject",
+  rootName: "RootObject"
 };
 
-export default function () {
+export default function() {
   const name = "json-to-flow";
 
   const [settings, setSettings] = useSettings(name, defaultSettings);

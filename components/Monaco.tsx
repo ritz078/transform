@@ -5,12 +5,12 @@ import { lightEditor } from "@utils/theme";
 
 languages.typescript.typescriptDefaults.setDiagnosticsOptions({
   noSemanticValidation: true,
-  noSyntaxValidation: true,
+  noSyntaxValidation: true
 });
 
 // @ts-ignore
 self.MonacoEnvironment = {
-  getWorkerUrl: function (_moduleId, label) {
+  getWorkerUrl: function(_moduleId, label) {
     if (label === "json") {
       return `/static/monaco/json.worker.js`;
     }
@@ -24,7 +24,7 @@ self.MonacoEnvironment = {
       return `/static/monaco/typescript.worker.js`;
     }
     return `/static/monaco/editor.worker.js`;
-  },
+  }
 };
 
 function noop() {}
@@ -57,7 +57,7 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
     language: "javascript",
     options: {},
     editorDidMount: noop,
-    theme: "light",
+    theme: "light"
   };
 
   public reLayout = () => {
@@ -115,7 +115,7 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
       this.editor = editor.create(this.containerElement.current, {
         value,
         language,
-        ...options,
+        ...options
       });
 
       editor.defineTheme("light", lightEditor);
@@ -130,7 +130,7 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
 
   editorDidMount(editor) {
     this.props.editorDidMount(editor);
-    editor.onDidChangeModelContent((event) => {
+    editor.onDidChangeModelContent(event => {
       const value = editor.getValue();
 
       // Only invoking when user input changed
@@ -146,7 +146,7 @@ export class MonacoEditor extends React.PureComponent<MonacoProps> {
     const fixedHeight = processSize(height);
     const style = {
       width: fixedWidth,
-      height: fixedHeight,
+      height: fixedHeight
     };
 
     return (

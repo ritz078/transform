@@ -17,21 +17,21 @@ const formFields = [
   {
     label: "Transpile css tags",
     key: "css",
-    type: InputType.SWITCH,
+    type: InputType.SWITCH
   },
   {
     label: "Transpile styled tags",
     key: "styled",
-    type: InputType.SWITCH,
-  },
+    type: InputType.SWITCH
+  }
 ];
 
 let babelWorker;
-export default function () {
+export default function() {
   const name = "object-styles-to-template-literal";
   const [settings, setSettings] = useSettings(name, {
     css: true,
-    styled: true,
+    styled: true
   });
 
   const transformer = useCallback<Transformer>(
@@ -41,7 +41,7 @@ export default function () {
       return babelWorker.send({
         value,
         type: BabelTransforms.OBJECT_STYLES_TO_TEMPLATE,
-        settings,
+        settings
       });
     },
     [settings]
@@ -79,7 +79,7 @@ export default function () {
                 settings.styled ? "" : ",styled"
               } tags transpilation. Change it in settings.`}
             />
-          ),
+          )
       }}
       settings={settings}
     />
