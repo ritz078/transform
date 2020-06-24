@@ -40,6 +40,7 @@ export default function() {
       });
 
       snackSession.current.startAsync();
+      await snackSession.current.addModuleAsync("react-native-svg", "12.x.x");
       const url = await snackSession.current.getUrlAsync();
       setUrl(url);
     })();
