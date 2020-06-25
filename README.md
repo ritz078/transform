@@ -52,12 +52,12 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://guilhermeesteves.com"><img src="https://avatars3.githubusercontent.com/u/2166045?v=4" width="100px;" alt=""/><br /><sub><b>Guilherme Esteves</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=guilhermesteves" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/p-racoon"><img src="https://avatars2.githubusercontent.com/u/13845070?v=4" width="100px;" alt=""/><br /><sub><b>Prasham Ashesh</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=p-racoon" title="Code">💻</a></td>
     <td align="center"><a href="https://ghuser.io/jamesgeorge007"><img src="https://avatars2.githubusercontent.com/u/25279263?v=4" width="100px;" alt=""/><br /><sub><b>James George</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=jamesgeorge007" title="Code">💻</a></td>
+    <td align="center"><a href="https://chaitanyagadodia.github.io/"><img src="https://avatars1.githubusercontent.com/u/10559670?v=4" width="100px;" alt=""/><br /><sub><b>Chaitanya Gadodia</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=ChaitanyaGadodia" title="Code">💻</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
