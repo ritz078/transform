@@ -6,7 +6,7 @@ import Error500 from "@assets/svgs/Error500";
 
 export default function Error({ statusCode }) {
   return (
-    <Pane display="flex" flex={1} paddingTop={200}>
+    <Pane display="flex" flex={1} alignItems="center">
       <Pane display="flex" flexDirection="column" alignItems="center" flex={1}>
         {statusCode === 404 ? (
           <>
