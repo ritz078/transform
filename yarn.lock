@@ -1530,14 +1530,14 @@
     pascal-case "3.1.1"
     tslib "~2.0.0"
 
-"@graphql-codegen/typescript-resolvers@^1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-1.15.4.tgz#f97a43385aed3460c408b198d6004f6e3c8b060a"
-  integrity sha512-I36jmNLVDPeb2DJwYTq1cL/EhUrhZT02mihZEwgjbvntAnbkY1Ed+sKGNmpLvfJVvEiKZd1m7CNWbatDr0PBSw==
+"@graphql-codegen/typescript-resolvers@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-1.16.0.tgz#27a00bdbbe2f89b0a540c150f6d176094ca825fe"
+  integrity sha512-RnOOHl9awWk6er/7bVbc8QRNvyL7tF4g5w1fXgpxJoSu7tXyqq8EAxiXU80KTrTxwWh9Bu3y/oNB5tTRfF45Jw==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.15.4"
-    "@graphql-codegen/typescript" "1.15.4"
-    "@graphql-codegen/visitor-plugin-common" "1.15.4"
+    "@graphql-codegen/plugin-helpers" "1.16.0"
+    "@graphql-codegen/typescript" "1.16.0"
+    "@graphql-codegen/visitor-plugin-common" "1.16.0"
     "@graphql-tools/utils" "^6.0.0"
     auto-bind "~4.0.0"
     tslib "~2.0.0"
