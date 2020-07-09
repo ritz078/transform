@@ -24,7 +24,7 @@
     "@graphql-codegen/flow-operations": "^1.15.4",
     "@graphql-codegen/flow-resolvers": "^1.16.0",
     "@graphql-codegen/fragment-matcher": "^1.16.0",
-    "@graphql-codegen/introspection": "^1.15.4",
+    "@graphql-codegen/introspection": "^1.16.3",
     "@graphql-codegen/java": "^1.15.4",
     "@graphql-codegen/java-resolvers": "^1.15.4",
     "@graphql-codegen/schema-ast": "^1.15.4",
