@@ -63,7 +63,7 @@
     "jsonld": "^3.1.1",
     "jsonschema-protobuf": "^1.0.2",
     "load-script": "^1.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "markdown": "^0.5.0",
     "monaco-editor": "0.17.1",
     "next": "9.4.4",
