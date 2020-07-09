@@ -1542,13 +1542,13 @@
     auto-bind "~4.0.0"
     tslib "~2.0.0"
 
-"@graphql-codegen/typescript-stencil-apollo@^1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-stencil-apollo/-/typescript-stencil-apollo-1.15.4.tgz#15231ecea993b668062fd24e5b6dd1a139e76107"
-  integrity sha512-Aq6POZaITd0E/9bQ6Af0CkETWlpWDuAD5FXu6L3vVPeDCLIhYEafhStBEjBttui7XfI918bQLo9rAfJ4UWospg==
+"@graphql-codegen/typescript-stencil-apollo@^1.16.3":
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-stencil-apollo/-/typescript-stencil-apollo-1.16.3.tgz#4445a262f252ec84e329fb496e5a74e21651e598"
+  integrity sha512-OGfYRUG8tTdAWZV+z9338bA6MM4yinVCm7mREtYlAavCFUAG45eoxU5Iew3jUpqYEhusSJWfhEarjyuQMVrrmg==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.15.4"
-    "@graphql-codegen/visitor-plugin-common" "1.15.4"
+    "@graphql-codegen/plugin-helpers" "1.16.3"
+    "@graphql-codegen/visitor-plugin-common" "1.16.3"
     auto-bind "~4.0.0"
     param-case "3.0.3"
     pascal-case "3.1.1"
@@ -1563,16 +1563,6 @@
     "@graphql-codegen/visitor-plugin-common" "1.15.4"
     auto-bind "~4.0.0"
     pascal-case "3.1.1"
-    tslib "~2.0.0"
-
-"@graphql-codegen/typescript@1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript/-/typescript-1.15.4.tgz#0240b97a0f2d482927aa47af90b3b76276ada8fd"
-  integrity sha512-oqFh/FtPF47ZsAb84X5s6oQwXM28hoBIDGnvlTJwXlD7HK9+BaiqGy9a92OzTy3pa701jmR5gOH2E5PWSckysA==
-  dependencies:
-    "@graphql-codegen/plugin-helpers" "1.15.4"
-    "@graphql-codegen/visitor-plugin-common" "1.15.4"
-    auto-bind "~4.0.0"
     tslib "~2.0.0"
 
 "@graphql-codegen/typescript@1.16.0":
