@@ -1346,25 +1346,35 @@
     auto-bind "~4.0.0"
     tslib "~2.0.0"
 
-"@graphql-codegen/flow-resolvers@^1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/flow-resolvers/-/flow-resolvers-1.15.4.tgz#1a6da34cb89fa0e819e702199b525a4382851fe0"
-  integrity sha512-T97YEEN1RZqaSpqJ9Zx0qoi/qCKQEd28uQIkv82zpW+5oFrgwM4JRzu/vsnzb8/BRVxbCxW+gI8NkdbO4+VVCA==
+"@graphql-codegen/flow-resolvers@^1.16.0":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/flow-resolvers/-/flow-resolvers-1.16.0.tgz#fc63ea09d54a49dab45aa5352def41218854b053"
+  integrity sha512-icsHVYkWKvzi6P6MJDsIq48cehGO8Kwv21SxP+fXGBdmPlHB53yiha0Aeu09SEEy9Z//Wa17xg/H+7S8vyMbug==
   dependencies:
-    "@graphql-codegen/flow" "1.15.4"
-    "@graphql-codegen/plugin-helpers" "1.15.4"
-    "@graphql-codegen/visitor-plugin-common" "1.15.4"
+    "@graphql-codegen/flow" "1.16.0"
+    "@graphql-codegen/plugin-helpers" "1.16.0"
+    "@graphql-codegen/visitor-plugin-common" "1.16.0"
     "@graphql-tools/utils" "^6.0.0"
     auto-bind "~4.0.0"
     tslib "~2.0.0"
 
-"@graphql-codegen/flow@1.15.4", "@graphql-codegen/flow@^1.15.4":
+"@graphql-codegen/flow@1.15.4":
   version "1.15.4"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/flow/-/flow-1.15.4.tgz#538dd24175a21731cf9ef44c950bf880b65bb05a"
   integrity sha512-LbzcPkXa7Zb9U/Y05VMfxWVjp9y1v/VViR2QWskoihq9ifgVXH/S0bE/YSOWeIk4VSSO+7o9HswuNCzl50lyOw==
   dependencies:
     "@graphql-codegen/plugin-helpers" "1.15.4"
     "@graphql-codegen/visitor-plugin-common" "1.15.4"
+    auto-bind "~4.0.0"
+    tslib "~2.0.0"
+
+"@graphql-codegen/flow@1.16.0", "@graphql-codegen/flow@^1.15.4":
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/flow/-/flow-1.16.0.tgz#15225192f3b9875c4bc85599cfd0ef2ec9a26bd5"
+  integrity sha512-ZNj4sothtF5a/1LbybfxkUMP25xpO34TwmLrZDgfhUiofqre5n7XuaBuF5hR8SWLiMRZfKjBHJHDafd/hhONqA==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.16.0"
+    "@graphql-codegen/visitor-plugin-common" "1.16.0"
     auto-bind "~4.0.0"
     tslib "~2.0.0"
 
