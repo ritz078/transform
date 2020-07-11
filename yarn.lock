@@ -1554,13 +1554,13 @@
     pascal-case "3.1.1"
     tslib "~2.0.0"
 
-"@graphql-codegen/typescript-urql@^1.15.4":
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-urql/-/typescript-urql-1.15.4.tgz#2c8e1c33967180aff4cd3fbd53252dd5582ef240"
-  integrity sha512-ARkp2g0lHnnAWyc6DaUM/SYGLmV4EWxHlxmV+JHbyzYhDal6pYh8FK2GLd9A5YSk4H1MY+S3kFyrr5S3N32uCQ==
+"@graphql-codegen/typescript-urql@^1.16.3":
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-urql/-/typescript-urql-1.16.3.tgz#963b7a4ccc4134474af00d1a3178a027bcb3bd11"
+  integrity sha512-UgUv12mfv/4kmo0u6dJubjRHqrUoC12yRDVDidak5WdOXB/Ui52pi/j6pDoMaB4SgQFIUHwDep1NN8CRlSMNww==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.15.4"
-    "@graphql-codegen/visitor-plugin-common" "1.15.4"
+    "@graphql-codegen/plugin-helpers" "1.16.3"
+    "@graphql-codegen/visitor-plugin-common" "1.16.3"
     auto-bind "~4.0.0"
     pascal-case "3.1.1"
     tslib "~2.0.0"
