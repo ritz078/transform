@@ -1368,13 +1368,23 @@
     auto-bind "~4.0.0"
     tslib "~2.0.0"
 
-"@graphql-codegen/flow@1.16.0", "@graphql-codegen/flow@^1.15.4":
+"@graphql-codegen/flow@1.16.0":
   version "1.16.0"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/flow/-/flow-1.16.0.tgz#15225192f3b9875c4bc85599cfd0ef2ec9a26bd5"
   integrity sha512-ZNj4sothtF5a/1LbybfxkUMP25xpO34TwmLrZDgfhUiofqre5n7XuaBuF5hR8SWLiMRZfKjBHJHDafd/hhONqA==
   dependencies:
     "@graphql-codegen/plugin-helpers" "1.16.0"
     "@graphql-codegen/visitor-plugin-common" "1.16.0"
+    auto-bind "~4.0.0"
+    tslib "~2.0.0"
+
+"@graphql-codegen/flow@^1.17.0":
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/flow/-/flow-1.17.0.tgz#be3d8b0116f7f5edea5cb14edde10f8f6416d983"
+  integrity sha512-wJBJUe08jD8PuVSZYBmwz4xIRn95eN0R1MKbH7umKLzslIX+XvyfX/BPUbzbDR2UcqF/b2uhu8ecz7c0kPS+Dg==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "1.17.0"
+    "@graphql-codegen/visitor-plugin-common" "1.17.0"
     auto-bind "~4.0.0"
     tslib "~2.0.0"
 
