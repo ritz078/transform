@@ -1,21 +1,21 @@
 {
   "version": 2,
-  "routes": [
+  "redirects": [
     {
-      "src": "/svg-to-jsx",
-      "dest": "/"
+      "source": "/svg-to-jsx",
+      "destination": "/"
     },
     {
-      "src": "/json-to-flow-types",
-      "dest": "/json-to-flow"
+      "source": "/json-to-flow-types",
+      "destination": "/json-to-flow"
     },
     {
-      "src": "/json-to-ts-interface",
-      "dest": "/json-to-typescript"
+      "source": "/json-to-ts-interface",
+      "destination": "/json-to-typescript"
     },
     {
-      "src": "/json-schema-to-ts",
-      "dest": "/json-schema-to-typescript"
+      "source": "/json-schema-to-ts",
+      "destination": "/json-schema-to-typescript"
     }
   ]
 }
