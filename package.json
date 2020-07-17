@@ -18,7 +18,7 @@
     "node": "12.x"
   },
   "dependencies": {
-    "@babel/standalone": "^7.10.3",
+    "@babel/standalone": "^7.10.4",
     "@graphql-codegen/core": "^1.15.4",
     "@graphql-codegen/flow": "^1.17.0",
     "@graphql-codegen/flow-operations": "^1.15.4",
