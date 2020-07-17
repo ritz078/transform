@@ -1,5 +1,5 @@
 diff --git a/node_modules/json-schema-to-typescript/dist/src/formatter.js b/node_modules/json-schema-to-typescript/dist/src/formatter.js
-index 1c2c709..ccc647b 100644
+index 1c2c709..b3eb9e1 100644
 --- a/node_modules/json-schema-to-typescript/dist/src/formatter.js
 +++ b/node_modules/json-schema-to-typescript/dist/src/formatter.js
 @@ -11,9 +11,8 @@ var __assign = (this && this.__assign) || function () {
@@ -13,8 +13,9 @@ index 1c2c709..ccc647b 100644
  }
  exports.format = format;
  //# sourceMappingURL=formatter.js.map
+\ No newline at end of file
 diff --git a/node_modules/json-schema-to-typescript/dist/src/index.js b/node_modules/json-schema-to-typescript/dist/src/index.js
-index c3e750a..0acfe57 100644
+index c3e750a..1d871dd 100644
 --- a/node_modules/json-schema-to-typescript/dist/src/index.js
 +++ b/node_modules/json-schema-to-typescript/dist/src/index.js
 @@ -60,9 +60,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
