@@ -6,3 +6,6 @@ updates:
     interval: weekly
     time: "23:30"
   open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "ui-box"
+  - dependency-name: "prettier"
