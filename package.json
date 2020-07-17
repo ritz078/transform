@@ -104,7 +104,7 @@
     "patch-package": "^6.1.2",
     "postinstall-postinstall": "^2.0.0",
     "pretty-quick": "^2.0.1",
-    "ui-box": "2.1.0",
+    "ui-box": "3.3.1",
     "webpack": "^4.38.0",
     "worker-loader": "^2.0.0"
   },

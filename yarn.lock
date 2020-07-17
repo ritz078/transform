@@ -10250,16 +10250,7 @@ uglify-js@^3.5.1:
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.10.0.tgz#397a7e6e31ce820bfd1cb55b804ee140c587a9e7"
   integrity sha512-Esj5HG5WAyrLIdYU74Z3JdG2PxdIusvj6IWHMtlyESxc7kcDz7zYlYjpnSokn1UbpV0d/QX9fan7gkCNd/9BQA==
 
-ui-box@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ui-box/-/ui-box-2.1.0.tgz#b967eafb80d1304d4e4bf5aae3b8f25caf949c92"
-  integrity sha512-2ARy6sjCHP7hithU0VlpYNZQzFs/EB/FRIUOX7qxL/96OnudwXMbJPyvWv+b4dAV1xxerSXlbMSJS43mVKviSQ==
-  dependencies:
-    "@emotion/hash" "^0.7.1"
-    inline-style-prefixer "^5.0.4"
-    prop-types "^15.7.2"
-
-ui-box@^3.2.0:
+ui-box@3.3.1, ui-box@^3.2.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/ui-box/-/ui-box-3.3.1.tgz#39733d55507053ac2bc3fd1fc184d0d648ff682d"
   integrity sha512-bzaFMdtzeSz1YcMRjE1A5a1/ExRWVSu5c42f9YeDAhlVfgNSGCrQMEEAiq3XvEVKlVgnf6GxDfGrvzBZA3w2GA==
