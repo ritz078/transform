@@ -70,7 +70,7 @@
     "nprogress": "^0.2.0",
     "postcss": "^7.0.32",
     "postcss-js": "^2.0.3",
-    "prettier": "^1.18.2",
+    "prettier": "^2.0.5",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
