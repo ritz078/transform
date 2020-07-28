@@ -105,7 +105,7 @@
     "postinstall-postinstall": "^2.0.0",
     "pretty-quick": "^2.0.1",
     "ui-box": "2.1.0",
-    "webpack": "^4.38.0",
+    "webpack": "^4.44.0",
     "worker-loader": "^2.0.0"
   },
   "husky": {
