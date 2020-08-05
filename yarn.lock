@@ -1162,18 +1162,6 @@
     "@graphql-codegen/plugin-helpers" "1.17.0"
     tslib "~2.0.0"
 
-"@graphql-codegen/java-common@1.17.0":
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/java-common/-/java-common-1.17.0.tgz#16537e99111fadb6653467f3263b2b51d4317408"
-  integrity sha512-NS8xu2BPOQ2SAPotRB7HYQzxQiaOTgpIpCYvTwkhDN5SqL866aHx6PgXOPWNgv4RJEkoET5aLf447DLhCwZXKA==
-  dependencies:
-    "@graphql-codegen/plugin-helpers" "1.17.0"
-    "@graphql-codegen/visitor-plugin-common" "1.17.0"
-    auto-bind "~4.0.0"
-    strip-indent "3.0.0"
-    tslib "~2.0.0"
-    unixify "1.0.0"
-
 "@graphql-codegen/java-common@1.17.7":
   version "1.17.7"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/java-common/-/java-common-1.17.7.tgz#36c4b651d627e0195d1bab0a9e0f3a872692bb04"
@@ -1196,14 +1184,14 @@
     "@graphql-codegen/visitor-plugin-common" "1.17.7"
     tslib "~2.0.0"
 
-"@graphql-codegen/java@^1.15.4":
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/java/-/java-1.17.0.tgz#505c44bf05995fbef82ce64a110f5a8177afd87d"
-  integrity sha512-BrrHX7hm3Hgez5p5o8AgQYC8cPajQRtAQDkJbdjCZBr3x/HldbNfVvuVVqvPL2OiuvRNIWhkaeW0eFI2f9pnag==
+"@graphql-codegen/java@^1.17.7":
+  version "1.17.7"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/java/-/java-1.17.7.tgz#f2b781766435ec127dc2fb9009146ec5ad070599"
+  integrity sha512-UZ2oxcs1fjrfDqnrojJQR3b01diTDKR3kft90O+hedwfL7SL591Ipd6d2iJe7E8TFJiXi/iOBn4OR6kKj+W0CQ==
   dependencies:
-    "@graphql-codegen/java-common" "1.17.0"
-    "@graphql-codegen/plugin-helpers" "1.17.0"
-    "@graphql-codegen/visitor-plugin-common" "1.17.0"
+    "@graphql-codegen/java-common" "1.17.7"
+    "@graphql-codegen/plugin-helpers" "1.17.7"
+    "@graphql-codegen/visitor-plugin-common" "1.17.7"
     tslib "~2.0.0"
 
 "@graphql-codegen/plugin-helpers@1.17.0":
