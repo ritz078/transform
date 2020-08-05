@@ -1239,12 +1239,12 @@
     tslib "~2.0.0"
     upper-case "2.0.1"
 
-"@graphql-codegen/schema-ast@^1.15.4":
-  version "1.17.0"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/schema-ast/-/schema-ast-1.17.0.tgz#67f27bd5ead42a51ebf6ee378c367a34840ff3ad"
-  integrity sha512-X8XLgaDOWfKdtj1MrsQhL1UmVCg3w6S1kMVydurP/sbvHpaPQ8rpZM+VyWsj4p42u32CRjSDqeFB9cweQVNSjA==
+"@graphql-codegen/schema-ast@^1.17.7":
+  version "1.17.7"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/schema-ast/-/schema-ast-1.17.7.tgz#f24bd0ca6861d09d49b68f96d0198dbab8f9723e"
+  integrity sha512-fQbp8Fz0KruoZ2aTtBpk3wBUJMsSUBmRQq201eQyt+ANUIY7PoSAGIlOKgze0JRwhlU6zN8mIS95RFzDyJUPkg==
   dependencies:
-    "@graphql-codegen/plugin-helpers" "1.17.0"
+    "@graphql-codegen/plugin-helpers" "1.17.7"
     "@graphql-tools/utils" "^6.0.0"
     tslib "~2.0.0"
 
@@ -1411,7 +1411,7 @@
     "@ardatan/aggregate-error" "0.0.1"
     camel-case "4.1.1"
 
-"@graphql-tools/utils@6.0.14", "@graphql-tools/utils@^6.0.0":
+"@graphql-tools/utils@6.0.14":
   version "6.0.14"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-6.0.14.tgz#20f90dee8e898acc0a46e62bbd53af01ac1f102e"
   integrity sha512-2VCOJtbVOde5m553JJE8NhP/eYR63Zqo/YdSlhZkpTGmWXg0sJKIIJ0c1eozCm+JSVMu3P08BatgnEC7DIl92A==
@@ -1419,7 +1419,7 @@
     "@ardatan/aggregate-error" "0.0.1"
     camel-case "4.1.1"
 
-"@graphql-tools/utils@6.0.15":
+"@graphql-tools/utils@6.0.15", "@graphql-tools/utils@^6.0.0":
   version "6.0.15"
   resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-6.0.15.tgz#6d54d383285bea3c22797531933b62a408e78e49"
   integrity sha512-VG5cMLPgh9RDLGHamGpXVnBrNw7bZGT46LrxK7IIqDZI9H0GPsRCo8+p+CfDkw0IlDiEECb624WVCpm9IYNecA==
