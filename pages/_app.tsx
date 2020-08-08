@@ -121,6 +121,18 @@ export default class extends App {
           </Pane>
 
           <Pane display="flex" alignItems={"center"}>
+            <a
+              style={{
+                display: "inline-block",
+                height: 20
+              }}
+              href="https://github.com/ritz078/transform"
+            >
+              <img
+                src="https://img.shields.io/github/stars/ritz078/transform?style=social"
+                alt=""
+              />
+            </a>
             <Button
               appearance="minimal"
               height={40}
