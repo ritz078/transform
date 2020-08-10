@@ -14,9 +14,6 @@
     "postinstall": "patch-package",
     "build:analyze": "ANALYZE=true yarn build"
   },
-  "engines": {
-    "node": "12.x"
-  },
   "dependencies": {
     "@babel/standalone": "^7.11.2",
     "@graphql-codegen/core": "^1.17.7",
@@ -46,6 +43,7 @@
     "babel-plugin-object-styles-to-template": "^0.2.2",
     "babel-standalone": "^6.26.0",
     "clipboard-copy": "^3.1.0",
+    "css-to-tailwind": "file:../css-to-tailwind",
     "evergreen-ui": "^4.28.0",
     "flowgen": "^1.11.0",
     "formik": "^2.1.4",
