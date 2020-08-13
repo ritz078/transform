@@ -53,7 +53,7 @@ export const css2 = `.alert {
 
 .logo {
   margin-bottom: 1.6rem;
-  min-height: 4rem;
+  background: url('logo.svg') no-repeat;
   display: flex;
   justify-content: center;
 }

@@ -13,7 +13,7 @@ export default function() {
         let output = `/* ℹ️ ${selector} */`;
 
         if (tailwind.length) {
-          output += `\n/* ✨ TailwindCSS classes: "${tailwind}" */`;
+          output += `\n/* ✨ "${tailwind}" */`;
 
           if (missing.length) {
             output += `\n/* ⚠️ Some rules could not have been tranformed. Use @apply to extend base classes: */
@@ -21,8 +21,6 @@ export default function() {
     @apply ${tailwind};
     ${missing.map(([prop, value]) => `${prop}: ${value};`).join("\n  ")}
   }`;
-          } else {
-            output += `\n/* ✅ All rules are transformed successfully. */`;
           }
         } else {
           output += `\n/* ❌ Could not match any Tailwind classes. */`;
