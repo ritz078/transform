@@ -248,6 +248,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "miklosme",
+      "name": "Miklos Megyes",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/8769273?v=4",
+      "profile": "https://miklos.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
