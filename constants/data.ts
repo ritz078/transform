@@ -41,6 +41,78 @@ li {
 }
 `;
 
+export const css2 = `.alert {
+  position: relative;
+  padding: 1.6rem 4.6rem;
+  margin-bottom: 1.6rem;
+  border: 1px solid #9ae6b4;
+  color: #fff;
+  border-radius: 0.2rem;
+  width: 100%;
+}
+
+.logo {
+  margin-bottom: 1.6rem;
+  background: url('logo.svg') no-repeat;
+  display: flex;
+  justify-content: center;
+}
+
+.separator {
+  background: unset;
+}
+
+.container {
+  background: #ffffff;
+  border: 1px solid #fff5f5;
+  border-radius: 0.2rem;
+}
+
+.header {
+  font-weight: 400;
+  font-size: 2rem;
+  letter-spacing: 0.03rem;
+  padding: 2.4rem;
+  border-bottom: 1px solid #fff5f5;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse;
+  padding: 2.4rem 3rem;
+  border-top: 1px solid #fff5f5;
+}
+
+.content--with-side-content {
+  width: 50%;
+}
+
+.content--with-separator {
+  border-right: 1px solid #fff5f5;
+}
+
+.content-inner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0;
+  padding: 3rem;
+}
+
+.side-content {
+  width: 50%;
+  background: #425634;
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+`;
+
 export const javascript = `const container = css({
   flex: 1,
   padding: 10,
