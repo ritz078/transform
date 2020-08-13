@@ -3509,10 +3509,10 @@ css-selector-tokenizer@^0.7.0:
     fastparse "^1.1.2"
     regexpu-core "^4.6.0"
 
-css-to-tailwind@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/css-to-tailwind/-/css-to-tailwind-0.1.1.tgz#0a953c232a494b618a4b119d4d390e2f32e20639"
-  integrity sha512-qtd+cmxQBzuJbrVeLvi3/nkTUwM7sFFOqKSukLWsD8xG9ovlTS3ddlA4IA8U3XwQOcPyLpgmHdbSYXM6oN7mqg==
+css-to-tailwind@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/css-to-tailwind/-/css-to-tailwind-0.1.2.tgz#cd641e40727558fc45f2869b5cc9c46ccb1cde8f"
+  integrity sha512-tNkzI6xxCbutd7iN0/q6pw6Gb5tefDbltVARxp6WN6+XIi+s/rKY+q/Udh2kmGUXjKCju17o0fIOVaNuLzpsOQ==
   dependencies:
     autoprefixer "^9.8.6"
     chalk "^4.1.0"

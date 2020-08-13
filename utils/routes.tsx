@@ -4,30 +4,6 @@ import find from "lodash/find";
 
 export const categorizedRoutes = [
   {
-    category: "CSS",
-    content: [
-      {
-        label: "to JS Objects",
-        path: "/css-to-js",
-        packageName: "transform-css-to-js",
-        packageUrl: "https://github.com/transform-it/transform-css-to-js"
-      },
-      {
-        label: "to template literal",
-        path: "/object-styles-to-template-literal",
-        packageUrl:
-          "https://github.com/satya164/babel-plugin-object-styles-to-template",
-        packageName: "babel-plugin-object-styles-to-template"
-      },
-      {
-        label: "to TailwindCSS",
-        path: "/css-to-tailwind",
-        packageUrl: "https://github.com/miklosme/css-to-tailwind",
-        packageName: "css-to-tailwind"
-      }
-    ]
-  },
-  {
     category: "SVG",
     content: [
       {
@@ -182,6 +158,30 @@ export const categorizedRoutes = [
         path: "json-schema-to-protobuf",
         packageName: "jsonschema-protobuf",
         packageUrl: "https://github.com/okdistribute/jsonschema-protobuf"
+      }
+    ]
+  },
+  {
+    category: "CSS",
+    content: [
+      {
+        label: "to JS Objects",
+        path: "/css-to-js",
+        packageName: "transform-css-to-js",
+        packageUrl: "https://github.com/transform-it/transform-css-to-js"
+      },
+      {
+        label: "to template literal",
+        path: "/object-styles-to-template-literal",
+        packageUrl:
+          "https://github.com/satya164/babel-plugin-object-styles-to-template",
+        packageName: "babel-plugin-object-styles-to-template"
+      },
+      {
+        label: "to TailwindCSS",
+        path: "/css-to-tailwind",
+        packageUrl: "https://github.com/miklosme/css-to-tailwind",
+        packageName: "css-to-tailwind"
       }
     ]
   },
