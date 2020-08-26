@@ -30,14 +30,6 @@ declare module "@workers/postcss.worker" {
   export default WebpackWorker;
 }
 
-declare module "@workers/tailwind.worker" {
-  class WebpackWorker extends Worker {
-    constructor();
-  }
-
-  export default WebpackWorker;
-}
-
 declare module "@workers/graphql.worker" {
   class WebpackWorker extends Worker {
     constructor();

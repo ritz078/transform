@@ -113,6 +113,47 @@ export const css2 = `.alert {
 }
 `;
 
+export const css3 = `
+.baz {
+  padding: 1.6rem 4.6rem;
+  background: url('logo.svg') no-repeat;
+}
+
+.foo {
+  position: relative;
+  padding: 1.6rem 4.6rem;
+  margin-bottom: 1.6rem;
+  border: 1px solid #FAD0D0;
+  color: #fff;
+  border-radius: 0.2rem;
+  width: 100%;
+} 
+
+.bar {
+  position: relative;
+  padding: 1.6rem 4.6rem;
+}
+
+.foo:hover {
+  background: #cccccc;
+}
+
+.foo:focus {
+  border-color: #e2f2f0;
+}
+
+@media (min-width: 1280px) {
+  .bar {
+    padding: 3rem 7rem;
+    margin-bottom: 2.4rem;
+  } 
+}
+
+.bar::placeholder {
+  color: #e6e6e6;
+}
+`;
+
 export const javascript = `const container = css({
   flex: 1,
   padding: 10,
