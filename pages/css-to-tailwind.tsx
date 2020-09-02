@@ -15,13 +15,21 @@ function formatOutput(results) {
       if (tailwind.length) {
         output += `\n/* ✨ "${tailwind}" */`;
 
-        if (missing.default && missing.default.length) {
+        const { default: def, ...missingVariants } = missing;
+
+        if (def && def.length) {
           output += `\n/* ⚠️ Some rules could not have been tranformed. Use @apply to extend base classes: */
 ${selector} {
   @apply ${tailwind};
-  ${missing.default.map(([prop, value]) => `${prop}: ${value};`).join("\n  ")}
+  ${def.map(([prop, value]) => `${prop}: ${value};`).join("\n  ")}
 }`;
         }
+
+        Object.entries(missingVariants).forEach(([variant, values]) => {
+          output += `\n/* ⚠️ The following rules are not supported with the "${variant}" variant:\n  ${values
+            .map(([prop, value]) => `${prop}: ${value};`)
+            .join("\n  ")} */`;
+        });
       } else {
         output += `\n/* ❌ Could not match any Tailwind classes. */`;
       }
