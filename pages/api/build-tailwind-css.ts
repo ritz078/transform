@@ -5,11 +5,11 @@ import autoprefixer from "autoprefixer";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { tailwindConfig, input } = JSON.parse(req.body);
+    const { tailwindConfig, postCssInput } = JSON.parse(req.body);
     const { css: tailwindCss } = await postcss([
       tailwindcss,
       autoprefixer
-    ]).process(input, { from: "tailwind.css" });
+    ]).process(postCssInput, { from: "tailwind.css" });
 
     res.status(200).send(tailwindCss);
   } catch (e) {
