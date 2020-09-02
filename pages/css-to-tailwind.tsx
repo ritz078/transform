@@ -45,9 +45,8 @@ export default function() {
     [tailwindConfig, input]
   );
   const transformer = useCallback<Transformer>(async ({ value }) => {
-    const results = await cssToTailwind(value, {
-      COMPILE_TAILWIND_CSS: () => tailwindCompiler
-    });
+    const tailwindCss = await tailwindCompiler;
+    const results = await cssToTailwind(value, tailwindCss);
 
     return formatOutput(results);
   }, []);
