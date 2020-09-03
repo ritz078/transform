@@ -15,7 +15,10 @@ const config = {
       new webpack.DefinePlugin({
         "process.env.DEV": JSON.stringify(options.dev),
         IN_BROWSER: !options.isServer,
-        IS_DEV: options.dev
+        IS_DEV: options.dev,
+        "process.env.BASE_URL": JSON.stringify(
+          options.dev ? "http://localhost:3000" : ""
+        )
       }),
       new MonacoWebpackPlugin({
         output: "../../public/static/monaco",

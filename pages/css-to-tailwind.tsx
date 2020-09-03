@@ -5,7 +5,15 @@ import { useState, useCallback, useMemo } from "react";
 import request from "@utils/request";
 import cssToTailwind from "css-to-tailwind/browser";
 import { useSettings } from "@hooks/useSettings";
-import { Dialog, Pane, Tablist, Tab } from "evergreen-ui";
+import {
+  Dialog,
+  Pane,
+  Tablist,
+  Tab,
+  Alert,
+  Button,
+  toaster
+} from "evergreen-ui";
 import tailwindResolve from "tailwindcss/resolveConfig";
 import dynamic from "next/dynamic";
 
@@ -24,6 +32,19 @@ const options: editor.IEditorOptions = {
   quickSuggestions: false,
   lineNumbers: "on"
 };
+
+const defaultTailwindConfig = `// tailwind.config.js
+module.exports = {
+  purge: [],
+  theme: {
+    extend: {},
+  },
+  variants: {},
+  plugins: [],
+}`;
+
+const defaultPostCssInput =
+  "@tailwind base;\n@tailwind components;\n@tailwind utilities;";
 
 function resolveTailwindConfig(configAsString) {
   return tailwindResolve(
@@ -52,7 +73,7 @@ function CssToTailwindSettings({
   const [postCssInputValue, setPostCssInputValue] = useState(postCssInput);
   return (
     <Dialog
-      title="CSS to Tailwind Settings"
+      title="CSS to TailwindCSS Settings"
       isShown={open}
       onCloseComplete={toggle}
       onConfirm={close => {
@@ -62,7 +83,12 @@ function CssToTailwindSettings({
           );
           setResolvedTailwindConfig(resolvedTailwindConfig);
         } catch (e) {
-          // TODO show error
+          toaster.danger(
+            "Something went wrong trying to resolve TailwindCSS config",
+            {
+              description: e.message
+            }
+          );
           close();
           return;
         }
@@ -133,7 +159,7 @@ ${selector} {
             .join("\n  ")} */`;
         });
       } else {
-        output += `\n/* ❌ Could not match any Tailwind classes. */`;
+        output += `\n/* ❌ Could not match any TailwindCSS classes. */`;
       }
 
       return output;
@@ -145,26 +171,36 @@ ${selector} {
   return `/* ${success.length}/${results.length} rules are converted successfully. */\n\n${content}`;
 }
 
-export default function() {
-  const [tailwindConfig, setTailwindConfig] = useState(`// tailwind.config.js
-module.exports = {
-  purge: [],
-  theme: {
-    extend: {},
-  },
-  variants: {},
-  plugins: [],
-}`);
+export default function({ defaultTailwindCss }) {
+  const [tailwindConfig, setTailwindConfig] = useState(defaultTailwindConfig);
+  const [postCssInput, setPostCssInput] = useState(defaultPostCssInput);
   const [resolvedTailwindConfig, setResolvedTailwindConfig] = useState({});
-  const [postCssInput, setPostCssInput] = useState(
-    "@tailwind base;\n@tailwind components;\n@tailwind utilities;"
-  );
 
-  const tailwindCompiler = useMemo(() => {
-    return request("/api/build-tailwind-css", {
-      tailwindConfig: resolvedTailwindConfig,
-      postCssInput
-    });
+  const isDefaultConfig =
+    tailwindConfig === defaultTailwindConfig &&
+    postCssInput === defaultPostCssInput;
+
+  const tailwindCompiler = useMemo(async () => {
+    if (isDefaultConfig) {
+      return defaultTailwindCss;
+    }
+
+    try {
+      const result = await request("/api/build-tailwind-css", {
+        tailwindConfig: resolvedTailwindConfig,
+        postCssInput
+      });
+      toaster.success("Custom TailwindCSS config is successfully applied");
+      return result;
+    } catch (e) {
+      toaster.danger(
+        "Something went wrong trying to build TailwindCSS with custom config",
+        {
+          description: "Now default config is used instead"
+        }
+      );
+      return defaultTailwindCss;
+    }
   }, [tailwindConfig, postCssInput]);
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
@@ -172,6 +208,11 @@ module.exports = {
     const results = await cssToTailwind(value, tailwindCss);
 
     return formatOutput(results);
+  }, []);
+
+  const resetSettings = useCallback(() => {
+    setTailwindConfig(defaultTailwindConfig);
+    setPostCssInput(defaultPostCssInput);
   }, []);
 
   return (
@@ -195,8 +236,42 @@ module.exports = {
               setResolvedTailwindConfig={setResolvedTailwindConfig}
             />
           );
+        },
+        topNotifications: () => {
+          return !isDefaultConfig ? (
+            <Alert
+              intent="warning"
+              backgroundColor="#FEF8E7"
+              title={
+                <>
+                  Custom config is applied to TailwindCSS{" "}
+                  <Button
+                    appearance="minimal"
+                    intent="warning"
+                    onClick={resetSettings}
+                  >
+                    Reset
+                  </Button>
+                </>
+              }
+            />
+          ) : null;
         }
       }}
     />
   );
+}
+
+export async function getStaticProps() {
+  return {
+    props: {
+      defaultTailwindCss: await request(
+        `${process.env.BASE_URL}/api/build-tailwind-css`,
+        {
+          tailwindConfig: resolveTailwindConfig(defaultTailwindConfig),
+          postCssInput: defaultPostCssInput
+        }
+      )
+    }
+  };
 }
