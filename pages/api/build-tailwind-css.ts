@@ -7,7 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { tailwindConfig, postCssInput } = JSON.parse(req.body);
     const { css: tailwindCss } = await postcss([
-      tailwindcss,
+      tailwindcss(tailwindConfig),
       autoprefixer
     ]).process(postCssInput, { from: "tailwind.css" });
 

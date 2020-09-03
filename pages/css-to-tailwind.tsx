@@ -5,7 +5,8 @@ import { useState, useCallback, useMemo } from "react";
 import request from "@utils/request";
 import cssToTailwind from "css-to-tailwind/browser";
 import { useSettings } from "@hooks/useSettings";
-import { Dialog, Pane, Spinner } from "evergreen-ui";
+import { Dialog, Pane, Tablist, Tab } from "evergreen-ui";
+import tailwindResolve from "tailwindcss/resolveConfig";
 import dynamic from "next/dynamic";
 
 const Monaco = dynamic(() => import("../components/Monaco"), {
@@ -23,6 +24,88 @@ const options: editor.IEditorOptions = {
   quickSuggestions: false,
   lineNumbers: "on"
 };
+
+function resolveTailwindConfig(configAsString) {
+  return tailwindResolve(
+    eval(`const module = {}; ${configAsString}; module.exports;`)
+  );
+}
+
+const tabs = [
+  { label: "TailwindCSS Config", language: "javascript" },
+  { label: "PostCSS Input", language: "css" }
+];
+
+function CssToTailwindSettings({
+  open,
+  toggle,
+  postCssInput,
+  setPostCssInput,
+  tailwindConfig,
+  setTailwindConfig,
+  setResolvedTailwindConfig
+}) {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [tailwindConfigValue, setTailwindConfigValue] = useState(
+    tailwindConfig
+  );
+  const [postCssInputValue, setPostCssInputValue] = useState(postCssInput);
+  return (
+    <Dialog
+      title="CSS to Tailwind Settings"
+      isShown={open}
+      onCloseComplete={toggle}
+      onConfirm={close => {
+        try {
+          const resolvedTailwindConfig = resolveTailwindConfig(
+            tailwindConfigValue
+          );
+          setResolvedTailwindConfig(resolvedTailwindConfig);
+        } catch (e) {
+          // TODO show error
+          close();
+          return;
+        }
+        setTailwindConfig(tailwindConfigValue);
+        setPostCssInput(postCssInputValue);
+        close();
+      }}
+      onCancel={close => {
+        close();
+      }}
+    >
+      <Tablist marginBottom={16} flexBasis={240} marginRight={24}>
+        {tabs.map(({ label }, index) => (
+          <Tab
+            key={label}
+            id={label}
+            onSelect={() => setSelectedIndex(index)}
+            isSelected={index === selectedIndex}
+          >
+            {label}
+          </Tab>
+        ))}
+      </Tablist>
+      <Pane padding={16} flex="1">
+        <Pane height={300}>
+          <Monaco
+            language={tabs[selectedIndex].language}
+            value={
+              selectedIndex === 0 ? tailwindConfigValue : postCssInputValue
+            }
+            onChange={
+              selectedIndex === 0
+                ? setTailwindConfigValue
+                : setPostCssInputValue
+            }
+            options={options}
+            height="300"
+          />
+        </Pane>
+      </Pane>
+    </Dialog>
+  );
+}
 
 function formatOutput(results) {
   const content = results
@@ -63,15 +146,26 @@ ${selector} {
 }
 
 export default function() {
-  const [tailwindConfig] = useState(null);
+  const [tailwindConfig, setTailwindConfig] = useState(`// tailwind.config.js
+module.exports = {
+  purge: [],
+  theme: {
+    extend: {},
+  },
+  variants: {},
+  plugins: [],
+}`);
+  const [resolvedTailwindConfig, setResolvedTailwindConfig] = useState({});
   const [postCssInput, setPostCssInput] = useState(
     "@tailwind base;\n@tailwind components;\n@tailwind utilities;"
   );
 
-  const tailwindCompiler = useMemo(
-    () => request("/api/build-tailwind-css", { tailwindConfig, postCssInput }),
-    [tailwindConfig, postCssInput]
-  );
+  const tailwindCompiler = useMemo(() => {
+    return request("/api/build-tailwind-css", {
+      tailwindConfig: resolvedTailwindConfig,
+      postCssInput
+    });
+  }, [tailwindConfig, postCssInput]);
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
     const tailwindCss = await tailwindCompiler;
@@ -91,29 +185,15 @@ export default function() {
       editorProps={{
         settingElement: ({ open, toggle }) => {
           return (
-            <Dialog
-              title="CSS to Tailwind Settings"
-              isShown={open}
-              onCloseComplete={toggle}
-              onConfirm={close => {
-                // props.submitForm();
-                close();
-              }}
-              onCancel={close => {
-                // props.submitForm();
-                close();
-              }}
-            >
-              <Pane height={300}>
-                <Monaco
-                  language="css"
-                  value={postCssInput}
-                  options={options}
-                  height="300"
-                  onChange={setPostCssInput}
-                />
-              </Pane>
-            </Dialog>
+            <CssToTailwindSettings
+              open={open}
+              toggle={toggle}
+              postCssInput={postCssInput}
+              setPostCssInput={setPostCssInput}
+              tailwindConfig={tailwindConfig}
+              setTailwindConfig={setTailwindConfig}
+              setResolvedTailwindConfig={setResolvedTailwindConfig}
+            />
           );
         }
       }}
