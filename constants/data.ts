@@ -113,8 +113,7 @@ export const css2 = `.alert {
 }
 `;
 
-export const css3 = `
-.baz {
+export const css3 = `.baz {
   padding: 1.6rem 4.6rem;
   background: url('logo.svg') no-repeat;
 }

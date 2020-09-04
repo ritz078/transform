@@ -60,13 +60,12 @@ const tabs = [
 function CssToTailwindSettings({
   open,
   toggle,
+  onConfirm,
   postCssInput,
-  setPostCssInput,
-  tailwindConfig,
-  setTailwindConfig,
-  setResolvedTailwindConfig
+  tailwindConfig
 }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isConfirmLoading, setConfirmLoading] = useState(false);
   const [tailwindConfigValue, setTailwindConfigValue] = useState(
     tailwindConfig
   );
@@ -75,28 +74,22 @@ function CssToTailwindSettings({
     <Dialog
       title="CSS to TailwindCSS Settings"
       isShown={open}
+      isConfirmLoading={isConfirmLoading}
       onCloseComplete={toggle}
-      onConfirm={close => {
-        try {
-          const resolvedTailwindConfig = resolveTailwindConfig(
-            tailwindConfigValue
-          );
-          setResolvedTailwindConfig(resolvedTailwindConfig);
-        } catch (e) {
-          toaster.danger(
-            "Something went wrong trying to resolve TailwindCSS config",
-            {
-              description: e.message
-            }
-          );
+      onConfirm={async close => {
+        setConfirmLoading(true);
+        const isSuccess = await onConfirm({
+          tailwindConfigValue,
+          postCssInputValue
+        });
+        setConfirmLoading(false);
+        if (isSuccess) {
           close();
-          return;
         }
-        setTailwindConfig(tailwindConfigValue);
-        setPostCssInput(postCssInputValue);
-        close();
       }}
       onCancel={close => {
+        setTailwindConfigValue(tailwindConfig);
+        setPostCssInputValue(postCssInput);
         close();
       }}
     >
@@ -171,40 +164,77 @@ ${selector} {
   return `/* ${success.length}/${results.length} rules are converted successfully. */\n\n${content}`;
 }
 
+const name = "css-to-tailwind";
+
 export default function({ defaultTailwindCss }) {
-  const [tailwindConfig, setTailwindConfig] = useState(defaultTailwindConfig);
-  const [postCssInput, setPostCssInput] = useState(defaultPostCssInput);
-  const [resolvedTailwindConfig, setResolvedTailwindConfig] = useState({});
+  const [tailwindConfig, setTailwindConfig] = useSettings(
+    `${name}-tailwind-config`,
+    defaultTailwindConfig
+  );
+  const [postCssInput, setPostCssInput] = useSettings(
+    `${name}-postcss-input`,
+    defaultPostCssInput
+  );
+  const [tailwindCss, setTailwindCss] = useSettings(
+    `${name}-tailwind-css`,
+    defaultTailwindCss
+  );
 
   const isDefaultConfig =
     tailwindConfig === defaultTailwindConfig &&
     postCssInput === defaultPostCssInput;
 
-  const tailwindCompiler = useMemo(async () => {
-    if (isDefaultConfig) {
-      return defaultTailwindCss;
-    }
-
-    try {
-      const result = await request("/api/build-tailwind-css", {
-        tailwindConfig: resolvedTailwindConfig,
+  // TODO memo does not work here
+  const tailwindCompiler = useMemo(
+    () => ({ tailwindConfig, postCssInput }) =>
+      request("/api/build-tailwind-css", {
+        tailwindConfig,
         postCssInput
-      });
-      toaster.success("Custom TailwindCSS config is successfully applied");
-      return result;
-    } catch (e) {
-      toaster.danger(
-        "Something went wrong trying to build TailwindCSS with custom config",
-        {
-          description: "Now default config is used instead"
+      }),
+    [tailwindConfig, postCssInput]
+  );
+
+  const onSettingsSubmit = useCallback(
+    async ({ tailwindConfigValue, postCssInputValue }) => {
+      try {
+        const resolvedTailwindConfig = resolveTailwindConfig(
+          tailwindConfigValue
+        );
+
+        try {
+          const tailwindCss = await tailwindCompiler({
+            tailwindConfig: resolvedTailwindConfig,
+            postCssInput: postCssInputValue
+          });
+          toaster.success("Custom TailwindCSS config is successfully applied");
+
+          setTailwindCss(tailwindCss);
+          setTailwindConfig(tailwindConfigValue);
+          setPostCssInput(postCssInputValue);
+
+          // indicate submit was successful
+          return true;
+        } catch (e) {
+          toaster.danger(
+            "Something went wrong trying to build TailwindCSS with custom config",
+            {
+              description: "Now the default config is used instead"
+            }
+          );
         }
-      );
-      return defaultTailwindCss;
-    }
-  }, [tailwindConfig, postCssInput]);
+      } catch (e) {
+        toaster.danger(
+          "Something went wrong trying to resolve TailwindCSS config",
+          {
+            description: e.message
+          }
+        );
+      }
+    },
+    []
+  );
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
-    const tailwindCss = await tailwindCompiler;
     const results = await cssToTailwind(value, tailwindCss);
 
     return formatOutput(results);
@@ -213,6 +243,7 @@ export default function({ defaultTailwindCss }) {
   const resetSettings = useCallback(() => {
     setTailwindConfig(defaultTailwindConfig);
     setPostCssInput(defaultPostCssInput);
+    setTailwindCss(defaultTailwindCss);
   }, []);
 
   return (
@@ -229,34 +260,44 @@ export default function({ defaultTailwindCss }) {
             <CssToTailwindSettings
               open={open}
               toggle={toggle}
+              onConfirm={onSettingsSubmit}
               postCssInput={postCssInput}
-              setPostCssInput={setPostCssInput}
               tailwindConfig={tailwindConfig}
-              setTailwindConfig={setTailwindConfig}
-              setResolvedTailwindConfig={setResolvedTailwindConfig}
             />
           );
-        },
-        topNotifications: () => {
-          return !isDefaultConfig ? (
-            <Alert
-              intent="warning"
-              backgroundColor="#FEF8E7"
-              title={
-                <>
-                  Custom config is applied to TailwindCSS{" "}
-                  <Button
-                    appearance="minimal"
-                    intent="warning"
-                    onClick={resetSettings}
-                  >
-                    Reset
-                  </Button>
-                </>
-              }
-            />
-          ) : null;
         }
+        //   return (
+        //     <CssToTailwindSettings
+        //       open={open}
+        //       toggle={toggle}
+        //       postCssInput={postCssInput}
+        //       setPostCssInput={setPostCssInput}
+        //       tailwindConfig={tailwindConfig}
+        //       setTailwindConfig={setTailwindConfig}
+        //       setResolvedTailwindConfig={setResolvedTailwindConfig}
+        //     />
+        //   );
+        // },
+        // topNotifications: () => {
+        //   return !isDefaultConfig ? (
+        //     <Alert
+        //       intent="warning"
+        //       backgroundColor="#FEF8E7"
+        //       title={
+        //         <>
+        //           Custom config is applied to TailwindCSS{" "}
+        //           <Button
+        //             appearance="minimal"
+        //             intent="warning"
+        //             onClick={resetSettings}
+        //           >
+        //             Reset
+        //           </Button>
+        //         </>
+        //       }
+        //     />
+        //   ) : null;
+        // }
       }}
     />
   );
