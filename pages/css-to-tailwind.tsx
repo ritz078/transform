@@ -1,4 +1,5 @@
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
+import NoSSR from "@components/NoSSR";
 import { editor } from "monaco-editor";
 import * as React from "react";
 import { useState, useCallback, useMemo } from "react";
@@ -122,6 +123,40 @@ function CssToTailwindSettings({ open, toggle, onConfirm, settings }) {
   );
 }
 
+function SettingsInfo({ isDefaultConfig, resetSettings }) {
+  if (isDefaultConfig) {
+    return null;
+  }
+  return (
+    <NoSSR>
+      <Alert
+        intent="warning"
+        backgroundColor="#FEF8E7"
+        title={
+          <>
+            Custom config is applied to TailwindCSS
+            <Pane
+              display="inline-block"
+              position="absolute"
+              right="10px"
+              marginTop="-2px"
+            >
+              <Button
+                appearance="minimal"
+                intent="warning"
+                height={24}
+                onClick={resetSettings}
+              >
+                Reset
+              </Button>
+            </Pane>
+          </>
+        }
+      />
+    </NoSSR>
+  );
+}
+
 function formatOutput(results) {
   const content = results
     .map(result => {
@@ -160,8 +195,6 @@ ${selector} {
   return `/* ${success.length}/${results.length} rules are converted successfully. */\n\n${content}`;
 }
 
-const name = "css-to-tailwind";
-
 export default function({ defaultTailwindCss }) {
   const [settings, setSettings] = useSettings("css-to-tailwind", {
     tailwindConfig: defaultTailwindConfig,
@@ -169,9 +202,9 @@ export default function({ defaultTailwindCss }) {
     tailwindCss: defaultTailwindCss
   });
 
-  // const isDefaultConfig =
-  //   tailwindConfig === defaultTailwindConfig &&
-  //   postCssInput === defaultPostCssInput;
+  const isDefaultConfig =
+    settings.tailwindConfig === defaultTailwindConfig &&
+    settings.postCssInput === defaultPostCssInput;
 
   const onSettingsSubmit = useCallback(
     async ({ tailwindConfigValue, postCssInputValue }) => {
@@ -241,33 +274,22 @@ export default function({ defaultTailwindCss }) {
         settingElement: ({ open, toggle }) => {
           return (
             <CssToTailwindSettings
+              key={`${settings.tailwindConfig}${settings.postCssInput}`}
               open={open}
               toggle={toggle}
               onConfirm={onSettingsSubmit}
               settings={settings}
             />
           );
+        },
+        topNotifications: () => {
+          return (
+            <SettingsInfo
+              isDefaultConfig={isDefaultConfig}
+              resetSettings={resetSettings}
+            />
+          );
         }
-        // topNotifications: () => {
-        //   return !isDefaultConfig ? (
-        //     <Alert
-        //       intent="warning"
-        //       backgroundColor="#FEF8E7"
-        //       title={
-        //         <>
-        //           Custom config is applied to TailwindCSS{" "}
-        //           <Button
-        //             appearance="minimal"
-        //             intent="warning"
-        //             onClick={resetSettings}
-        //           >
-        //             Reset
-        //           </Button>
-        //         </>
-        //       }
-        //     />
-        //   ) : null;
-        // }
       }}
     />
   );
