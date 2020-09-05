@@ -127,6 +127,7 @@ function SettingsInfo({ isDefaultConfig, resetSettings }) {
   if (isDefaultConfig) {
     return null;
   }
+  // opting out from SSR, because something goes wrong with the Alert component otherwise
   return (
     <NoSSR>
       <Alert
