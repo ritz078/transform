@@ -57,19 +57,15 @@ const tabs = [
   { label: "PostCSS Input", language: "css" }
 ];
 
-function CssToTailwindSettings({
-  open,
-  toggle,
-  onConfirm,
-  postCssInput,
-  tailwindConfig
-}) {
+function CssToTailwindSettings({ open, toggle, onConfirm, settings }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isConfirmLoading, setConfirmLoading] = useState(false);
   const [tailwindConfigValue, setTailwindConfigValue] = useState(
-    tailwindConfig
+    settings.tailwindConfig
   );
-  const [postCssInputValue, setPostCssInputValue] = useState(postCssInput);
+  const [postCssInputValue, setPostCssInputValue] = useState(
+    settings.postCssInput
+  );
   return (
     <Dialog
       title="CSS to TailwindCSS Settings"
@@ -88,8 +84,8 @@ function CssToTailwindSettings({
         }
       }}
       onCancel={close => {
-        setTailwindConfigValue(tailwindConfig);
-        setPostCssInputValue(postCssInput);
+        setTailwindConfigValue(settings.tailwindConfig);
+        setPostCssInputValue(settings.postCssInput);
         close();
       }}
     >
@@ -167,32 +163,15 @@ ${selector} {
 const name = "css-to-tailwind";
 
 export default function({ defaultTailwindCss }) {
-  const [tailwindConfig, setTailwindConfig] = useSettings(
-    `${name}-tailwind-config`,
-    defaultTailwindConfig
-  );
-  const [postCssInput, setPostCssInput] = useSettings(
-    `${name}-postcss-input`,
-    defaultPostCssInput
-  );
-  const [tailwindCss, setTailwindCss] = useSettings(
-    `${name}-tailwind-css`,
-    defaultTailwindCss
-  );
+  const [settings, setSettings] = useSettings("css-to-tailwind", {
+    tailwindConfig: defaultTailwindConfig,
+    postCssInput: defaultPostCssInput,
+    tailwindCss: defaultTailwindCss
+  });
 
-  const isDefaultConfig =
-    tailwindConfig === defaultTailwindConfig &&
-    postCssInput === defaultPostCssInput;
-
-  // TODO memo does not work here
-  const tailwindCompiler = useMemo(
-    () => ({ tailwindConfig, postCssInput }) =>
-      request("/api/build-tailwind-css", {
-        tailwindConfig,
-        postCssInput
-      }),
-    [tailwindConfig, postCssInput]
-  );
+  // const isDefaultConfig =
+  //   tailwindConfig === defaultTailwindConfig &&
+  //   postCssInput === defaultPostCssInput;
 
   const onSettingsSubmit = useCallback(
     async ({ tailwindConfigValue, postCssInputValue }) => {
@@ -202,15 +181,17 @@ export default function({ defaultTailwindCss }) {
         );
 
         try {
-          const tailwindCss = await tailwindCompiler({
+          const newTailwindCss = await request("/api/build-tailwind-css", {
             tailwindConfig: resolvedTailwindConfig,
             postCssInput: postCssInputValue
           });
           toaster.success("Custom TailwindCSS config is successfully applied");
 
-          setTailwindCss(tailwindCss);
-          setTailwindConfig(tailwindConfigValue);
-          setPostCssInput(postCssInputValue);
+          setSettings({
+            tailwindConfig: tailwindConfigValue,
+            postCssInput: postCssInputValue,
+            tailwindCss: newTailwindCss
+          });
 
           // indicate submit was successful
           return true;
@@ -235,15 +216,17 @@ export default function({ defaultTailwindCss }) {
   );
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
-    const results = await cssToTailwind(value, tailwindCss);
+    const results = await cssToTailwind(value, settings.tailwindCss);
 
     return formatOutput(results);
   }, []);
 
   const resetSettings = useCallback(() => {
-    setTailwindConfig(defaultTailwindConfig);
-    setPostCssInput(defaultPostCssInput);
-    setTailwindCss(defaultTailwindCss);
+    setSettings({
+      tailwindConfig: defaultTailwindConfig,
+      postCssInput: defaultPostCssInput,
+      tailwindCss: defaultTailwindCss
+    });
   }, []);
 
   return (
@@ -261,23 +244,10 @@ export default function({ defaultTailwindCss }) {
               open={open}
               toggle={toggle}
               onConfirm={onSettingsSubmit}
-              postCssInput={postCssInput}
-              tailwindConfig={tailwindConfig}
+              settings={settings}
             />
           );
         }
-        //   return (
-        //     <CssToTailwindSettings
-        //       open={open}
-        //       toggle={toggle}
-        //       postCssInput={postCssInput}
-        //       setPostCssInput={setPostCssInput}
-        //       tailwindConfig={tailwindConfig}
-        //       setTailwindConfig={setTailwindConfig}
-        //       setResolvedTailwindConfig={setResolvedTailwindConfig}
-        //     />
-        //   );
-        // },
         // topNotifications: () => {
         //   return !isDefaultConfig ? (
         //     <Alert
