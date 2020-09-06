@@ -5,6 +5,7 @@ import * as React from "react";
 import { useState, useCallback, useMemo } from "react";
 import request from "@utils/request";
 import cssToTailwind from "css-to-tailwind/browser";
+import isEqual from "lodash/isEqual";
 import { useSettings } from "@hooks/useSettings";
 import {
   Dialog,
@@ -17,6 +18,8 @@ import {
 } from "evergreen-ui";
 import tailwindResolve from "tailwindcss/resolveConfig";
 import dynamic from "next/dynamic";
+import { promises as fs } from "fs";
+import path from "path";
 
 const Monaco = dynamic(() => import("../components/Monaco"), {
   ssr: false
@@ -33,25 +36,6 @@ const options: editor.IEditorOptions = {
   quickSuggestions: false,
   lineNumbers: "on"
 };
-
-const defaultTailwindConfig = `// tailwind.config.js
-module.exports = {
-  purge: [],
-  theme: {
-    extend: {},
-  },
-  variants: {},
-  plugins: [],
-}`;
-
-const defaultPostCssInput =
-  "@tailwind base;\n@tailwind components;\n@tailwind utilities;";
-
-function resolveTailwindConfig(configAsString) {
-  return tailwindResolve(
-    eval(`const module = {}; ${configAsString}; module.exports;`)
-  );
-}
 
 const tabs = [
   { label: "TailwindCSS Config", language: "javascript" },
@@ -72,6 +56,7 @@ function CssToTailwindSettings({ open, toggle, onConfirm, settings }) {
       title="CSS to TailwindCSS Settings"
       isShown={open}
       isConfirmLoading={isConfirmLoading}
+      confirmLabel={isConfirmLoading ? "Running PostCSS..." : "Confirm"}
       onCloseComplete={toggle}
       onConfirm={async close => {
         setConfirmLoading(true);
@@ -196,22 +181,17 @@ ${selector} {
   return `/* ${success.length}/${results.length} rules are converted successfully. */\n\n${content}`;
 }
 
-export default function({ defaultTailwindCss }) {
-  const [settings, setSettings] = useSettings("css-to-tailwind", {
-    tailwindConfig: defaultTailwindConfig,
-    postCssInput: defaultPostCssInput,
-    tailwindCss: defaultTailwindCss
-  });
-
-  const isDefaultConfig =
-    settings.tailwindConfig === defaultTailwindConfig &&
-    settings.postCssInput === defaultPostCssInput;
+export default function({ defaultSettings }) {
+  const [settings, setSettings] = useSettings(
+    "css-to-tailwind",
+    defaultSettings
+  );
 
   const onSettingsSubmit = useCallback(
     async ({ tailwindConfigValue, postCssInputValue }) => {
       try {
-        const resolvedTailwindConfig = resolveTailwindConfig(
-          tailwindConfigValue
+        const resolvedTailwindConfig = tailwindResolve(
+          eval(`const module = {}; ${tailwindConfigValue}; module.exports;`)
         );
 
         try {
@@ -256,11 +236,7 @@ export default function({ defaultTailwindCss }) {
   }, []);
 
   const resetSettings = useCallback(() => {
-    setSettings({
-      tailwindConfig: defaultTailwindConfig,
-      postCssInput: defaultPostCssInput,
-      tailwindCss: defaultTailwindCss
-    });
+    setSettings(defaultSettings);
   }, []);
 
   return (
@@ -286,7 +262,7 @@ export default function({ defaultTailwindCss }) {
         topNotifications: () => {
           return (
             <SettingsInfo
-              isDefaultConfig={isDefaultConfig}
+              isDefaultConfig={isEqual(settings, defaultSettings)}
               resetSettings={resetSettings}
             />
           );
@@ -297,15 +273,25 @@ export default function({ defaultTailwindCss }) {
 }
 
 export async function getStaticProps() {
+  const tailwindConfig = await fs.readFile(
+    path.resolve("./node_modules/tailwindcss/stubs/simpleConfig.stub.js"),
+    "utf-8"
+  );
+  const postCssInput = await fs.readFile(
+    path.resolve("./node_modules/tailwindcss/tailwind.css"),
+    "utf-8"
+  );
+  const tailwindCss = await request(
+    `${process.env.BASE_URL}/api/build-tailwind-css`,
+    { tailwindConfig: null, postCssInput }
+  );
   return {
     props: {
-      defaultTailwindCss: await request(
-        `${process.env.BASE_URL}/api/build-tailwind-css`,
-        {
-          tailwindConfig: resolveTailwindConfig(defaultTailwindConfig),
-          postCssInput: defaultPostCssInput
-        }
-      )
+      defaultSettings: {
+        tailwindConfig,
+        postCssInput,
+        tailwindCss
+      }
     }
   };
 }
