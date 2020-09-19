@@ -69,7 +69,7 @@
     "next": "9.4.4",
     "nprogress": "^0.2.0",
     "postcss": "^7.0.32",
-    "postcss-js": "^2.0.3",
+    "postcss-js": "^3.0.0",
     "prettier": "^1.18.2",
     "qrcode.react": "^1.0.0",
     "react": "^16.13.1",
