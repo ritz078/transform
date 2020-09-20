@@ -54,6 +54,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <td align="center"><a href="https://ghuser.io/jamesgeorge007"><img src="https://avatars2.githubusercontent.com/u/25279263?v=4" width="100px;" alt=""/><br /><sub><b>James George</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=jamesgeorge007" title="Code">💻</a></td>
     <td align="center"><a href="https://chaitanyagadodia.github.io/"><img src="https://avatars1.githubusercontent.com/u/10559670?v=4" width="100px;" alt=""/><br /><sub><b>Chaitanya Gadodia</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=ChaitanyaGadodia" title="Code">💻</a></td>
     <td align="center"><a href="https://miklos.dev"><img src="https://avatars3.githubusercontent.com/u/8769273?v=4" width="100px;" alt=""/><br /><sub><b>Miklos Megyes</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=miklosme" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Rishabh-Rathod"><img src="https://avatars0.githubusercontent.com/u/23132741?v=4" width="100px;" alt=""/><br /><sub><b>Rishabh Rathod</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=Rishabh-Rathod" title="Code">💻</a></td>
   </tr>
 </table>
 
