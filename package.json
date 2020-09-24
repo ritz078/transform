@@ -75,7 +75,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.1",
-    "react-ga": "^3.0.0",
     "rust-keywords": "^1.1.0",
     "sha1": "^1.1.1",
     "snack-sdk": "^2.6.3",
