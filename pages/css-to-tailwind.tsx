@@ -150,10 +150,10 @@ function formatOutput(results) {
     .map(result => {
       const { selector, tailwind, missing } = result;
 
-      let output = `/* ℹ️ ${selector} */`;
+      let output = `/* ℹ️ Base selector: ${selector} */`;
 
       if (tailwind.length) {
-        output += `\n/* ✨ "${tailwind}" */`;
+        output += `\n/* ✨ TailwindCSS: "${tailwind}" */`;
 
         const { base, ...missingVariants } = missing;
 
@@ -183,11 +183,11 @@ ${selector} {
     })
     .join("\n\n");
 
-  console.log(content);
-
   const success = results.filter(result => result.tailwind.length);
 
-  return `/* ${success.length}/${results.length} base rules are converted successfully. */\n\n${content}`;
+  window.cssToTailwindResults = results;
+
+  return `/* ${success.length}/${results.length} base rules are converted successfully. */\n/* Gather results from the console with \`copy(window.cssToTailwindResults)\` */\n\n${content}`;
 }
 
 export default function({ defaultSettings }) {
