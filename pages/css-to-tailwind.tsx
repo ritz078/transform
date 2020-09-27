@@ -115,30 +115,32 @@ function SettingsInfo({ isDefaultConfig, resetSettings }) {
   // opting out from SSR, because something goes wrong with the Alert component otherwise
   return (
     <NoSSR>
-      <Alert
-        intent="warning"
-        backgroundColor="#FEF8E7"
-        title={
-          <>
-            Custom config is applied to TailwindCSS
-            <Pane
-              display="inline-block"
-              position="absolute"
-              right="10px"
-              marginTop="-2px"
-            >
-              <Button
-                appearance="minimal"
-                intent="warning"
-                height={24}
-                onClick={resetSettings}
+      <div style={{ minHeight: 20 }}>
+        <Alert
+          intent="warning"
+          backgroundColor="#FEF8E7"
+          title={
+            <>
+              Custom config is applied to TailwindCSS
+              <Pane
+                display="inline-block"
+                position="absolute"
+                right="10px"
+                marginTop="-2px"
               >
-                Reset
-              </Button>
-            </Pane>
-          </>
-        }
-      />
+                <Button
+                  appearance="minimal"
+                  intent="warning"
+                  height={24}
+                  onClick={resetSettings}
+                >
+                  Reset
+                </Button>
+              </Pane>
+            </>
+          }
+        />
+      </div>
     </NoSSR>
   );
 }
