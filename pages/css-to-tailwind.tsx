@@ -153,21 +153,26 @@ function formatOutput(results) {
       if (tailwind.length) {
         output += `\n/* ✨ "${tailwind}" */`;
 
-        const { default: def, ...missingVariants } = missing;
+        const { base, ...missingVariants } = missing;
 
-        if (def && def.length) {
-          output += `\n/* ⚠️ Some rules could not have been tranformed. Use @apply to extend base classes: */
+        if (base && base.length) {
+          output += `\n/* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
 ${selector} {
   @apply ${tailwind};
-  ${def.map(([prop, value]) => `${prop}: ${value};`).join("\n  ")}
+  ${base.map(([prop, value]) => `${prop}: ${value};`).join("\n  ")}
 }`;
         }
 
-        Object.entries(missingVariants).forEach(([variant, values]) => {
-          output += `\n/* ⚠️ The following rules are not supported with the "${variant}" variant:\n  ${values
-            .map(([prop, value]) => `${prop}: ${value};`)
-            .join("\n  ")} */`;
-        });
+        if (Object.keys(missingVariants).length) {
+          output += `\n/* ⚠️ Some properties are requiring specific variants, but the variant does not support those. Consider extending your Tailwind config.\n`;
+          Object.entries(missingVariants).forEach(([variant, values]) => {
+            const properties = values
+              .map(([prop, value]) => `\t${prop}: ${value};`)
+              .join("\n  ");
+            output += `${variant}:\n${properties}\n`;
+          });
+          output += "*/";
+        }
       } else {
         output += `\n/* ❌ Could not match any TailwindCSS classes. */`;
       }
@@ -176,9 +181,11 @@ ${selector} {
     })
     .join("\n\n");
 
+  console.log(content);
+
   const success = results.filter(result => result.tailwind.length);
 
-  return `/* ${success.length}/${results.length} rules are converted successfully. */\n\n${content}`;
+  return `/* ${success.length}/${results.length} base rules are converted successfully. */\n\n${content}`;
 }
 
 export default function({ defaultSettings }) {
@@ -244,7 +251,7 @@ export default function({ defaultSettings }) {
       transformer={transformer}
       editorTitle="CSS"
       editorLanguage="css"
-      editorDefaultValue="css3"
+      editorDefaultValue="css2"
       resultTitle="TailwindCSS"
       resultLanguage={"css"}
       editorProps={{
