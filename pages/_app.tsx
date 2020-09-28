@@ -7,12 +7,7 @@ import "@styles/main.css";
 import NProgress from "nprogress";
 import Router from "next/router";
 import { activeRouteData } from "@utils/routes";
-
-let reactGa;
-if (IN_BROWSER && !IS_DEV) {
-  reactGa = require("react-ga");
-  reactGa.initialize("UA-60624235-8");
-}
+import Head from "next/head";
 
 const logo = (
   <svg
@@ -60,8 +55,7 @@ function renderHeadWay() {
 export default class extends App {
   timer: any;
 
-  private stopProgress = pathname => {
-    reactGa && reactGa.pageview(pathname);
+  private stopProgress = () => {
     clearTimeout(this.timer);
     NProgress.done();
   };
@@ -75,7 +69,6 @@ export default class extends App {
   };
 
   componentDidMount(): void {
-    reactGa && reactGa.pageview(Router.pathname);
     Router.events.on("routeChangeStart", this.showProgressBar);
   }
 
@@ -97,11 +90,14 @@ export default class extends App {
 
     return (
       <>
-        <title>
-          {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
-        </title>
-        <meta name="description" content={activeRoute && activeRoute.desc} />
-        <meta name="viewport" content="width=1024" />
+        <Head>
+          <title>
+            {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
+          </title>
+          <meta name="description" content={activeRoute && activeRoute.desc} />
+          <meta name="viewport" content="width=1024" />
+          <script async src="https://unpkg.com/thesemetrics@latest" />
+        </Head>
         <Pane
           display="flex"
           alignItems="center"
