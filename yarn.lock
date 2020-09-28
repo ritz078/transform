@@ -3553,10 +3553,10 @@ css-selector-tokenizer@^0.7.0:
     cssesc "^3.0.0"
     fastparse "^1.1.2"
 
-css-to-tailwind@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/css-to-tailwind/-/css-to-tailwind-1.0.0.tgz#12aec2c0fe52b3b0529f059164cf07c9f8115107"
-  integrity sha512-ZzhlUBGyI89nF2MMm+krO0N8Clei3/djQsgYNdMUm7iYN6jX/fQrzMG1Puz//HHazKQoBhwPgO6uCMX/IOzGrw==
+css-to-tailwind@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/css-to-tailwind/-/css-to-tailwind-1.0.1.tgz#0de408238151fae38e00b51bf6846fd89e8b468c"
+  integrity sha512-iU62Siw61DoYJVRVHlTpuY3D81AEDDSpYjDKpzuNfB3PJv5sLnOG5da5l38yW/g42S9LR8DaCLqVxIo2c9kW0w==
   dependencies:
     autoprefixer "^9.8.6"
     css-color-converter "^1.1.1"
