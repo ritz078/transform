@@ -3553,13 +3553,14 @@ css-selector-tokenizer@^0.7.0:
     cssesc "^3.0.0"
     fastparse "^1.1.2"
 
-css-to-tailwind@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/css-to-tailwind/-/css-to-tailwind-1.0.2.tgz#a7f1f5027d5e85de6125f303d1ceb48a050ecab5"
-  integrity sha512-pGzt2Q748qcuFudSgLaIok4HvTIUmDW7YVIc3OLk7kuQWf3qdPELWSfIrLNoj/H/Dxk9jyALXwOZjkDWSrGNgA==
+css-to-tailwind@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/css-to-tailwind/-/css-to-tailwind-1.0.3.tgz#19c1c96d454f9ea1f11a06d57b786b39cb43f0bd"
+  integrity sha512-avGBxIfUtHY+DXToB3yVhCvT+skJQ82aw+Ud8BFjW+OC/iDMXN2bpOi8rV7N+ziktlq6fbaVWq6oexAhtkyq0w==
   dependencies:
     autoprefixer "^9.8.6"
     css-color-converter "^1.1.1"
+    cssstyle "^2.3.0"
     euclidean-distance "^1.0.0"
     lodash.flow "^3.5.0"
     lodash.isequal "^4.5.0"
@@ -3694,7 +3695,7 @@ csso@^4.0.2:
   dependencies:
     css-tree "1.0.0-alpha.39"
 
-cssom@0.3.x, "cssom@>= 0.3.0 < 0.4.0":
+cssom@0.3.x, "cssom@>= 0.3.0 < 0.4.0", cssom@~0.3.6:
   version "0.3.8"
   resolved "https://registry.yarnpkg.com/cssom/-/cssom-0.3.8.tgz#9f1276f5b2b463f2114d3f2c75250af8c1a36f4a"
   integrity sha512-b0tGHbfegbhPJpxpiBPU2sCkigAqtM9O121le6bbOlgyV+NyGyCmVfJ6QW9eRjz8CpNfWEOYBIMIGRYkLwsIYg==
@@ -3705,6 +3706,13 @@ cssom@0.3.x, "cssom@>= 0.3.0 < 0.4.0":
   integrity sha1-VBCXI0yyUTyDzu06zdwn/yeYfVQ=
   dependencies:
     cssom "0.3.x"
+
+cssstyle@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-2.3.0.tgz#ff665a0ddbdc31864b09647f34163443d90b0852"
+  integrity sha512-AZL67abkUzIuvcHqk7c09cezpGNcxUxU4Ioi/05xHk4DQeTkWmGYftIE6ctU6AEt+Gn4n1lDStOtj7FKycP71A==
+  dependencies:
+    cssom "~0.3.6"
 
 csstype@^3.0.2:
   version "3.0.3"
