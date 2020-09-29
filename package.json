@@ -48,7 +48,7 @@
     "clipboard-copy": "^3.1.0",
     "css-to-tailwind": "^0.1.3",
     "evergreen-ui": "^4.28.0",
-    "flowgen": "^1.11.0",
+    "flowgen": "^1.9.2",
     "formik": "^2.1.4",
     "generate-schema": "^2.6.0",
     "gofmt.js": "^0.0.2",
