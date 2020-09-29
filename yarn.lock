@@ -4746,7 +4746,7 @@ find-yarn-workspace-root@^1.2.1:
     fs-extra "^4.0.3"
     micromatch "^3.1.4"
 
-flowgen@^1.9.2:
+flowgen@^1.11.0:
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/flowgen/-/flowgen-1.11.0.tgz#3d9e36bb1dcbc9ffd849e7b375295e6bb29a0465"
   integrity sha512-WpoBjzcZadnAw5FatlUbvFWUWXkI2/LjrwTl5fl3MVDh+KdvYgFzgRXDDKH/O2uUlwjfpveiJJJx8TwL7Se84A==
