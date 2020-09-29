@@ -405,17 +405,15 @@ export const ShowStoredUser: React.FC<Props> = (props) => {
 
 import { useState, useEffect } from 'react';
 
-export const CounterExample = () => {
+export const CounterExample: React.FC<{}> = () => {
   const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    document.title = \`You clicked $\{count\} times\`;
-  });
+  
+  const handleClick = () => setCount(count + 1)
 
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
+      <button onClick={handleClick}>
         Click me
       </button>
     </div>
