@@ -4,6 +4,9 @@ import { editor } from "monaco-editor";
 import * as React from "react";
 import { useState, useCallback, useMemo } from "react";
 import request from "@utils/request";
+import tailwindCss from "@utils/tailwindcss";
+import { promises as fs } from "fs";
+import path from "path";
 import cssToTailwind from "css-to-tailwind/browser";
 import isEqual from "lodash/isEqual";
 import { useSettings } from "@hooks/useSettings";
@@ -18,8 +21,6 @@ import {
 } from "evergreen-ui";
 import tailwindResolve from "tailwindcss/resolveConfig";
 import dynamic from "next/dynamic";
-import { promises as fs } from "fs";
-import path from "path";
 
 const Monaco = dynamic(() => import("../components/Monaco"), {
   ssr: false
@@ -75,35 +76,36 @@ function CssToTailwindSettings({ open, toggle, onConfirm, settings }) {
         close();
       }}
     >
-      <Tablist marginBottom={16} flexBasis={240} marginRight={24}>
-        {tabs.map(({ label }, index) => (
-          <Tab
-            key={label}
-            id={label}
-            onSelect={() => setSelectedIndex(index)}
-            isSelected={index === selectedIndex}
-          >
-            {label}
-          </Tab>
-        ))}
-      </Tablist>
-      <Pane padding={16} flex="1">
-        <Pane height={300}>
-          <Monaco
-            language={tabs[selectedIndex].language}
-            value={
-              selectedIndex === 0 ? tailwindConfigValue : postCssInputValue
-            }
-            onChange={
-              selectedIndex === 0
-                ? setTailwindConfigValue
-                : setPostCssInputValue
-            }
-            options={options}
-            height="300"
-          />
+      <>
+        <Tablist marginBottom={16} flexBasis={240} marginRight={24}>
+          {tabs.map(({ label }, index) => (
+            <Tab
+              key={label}
+              onSelect={() => setSelectedIndex(index)}
+              isSelected={index === selectedIndex}
+            >
+              {label}
+            </Tab>
+          ))}
+        </Tablist>
+        <Pane padding={16} flex="1">
+          <Pane height={300}>
+            <Monaco
+              language={tabs[selectedIndex].language}
+              value={
+                selectedIndex === 0 ? tailwindConfigValue : postCssInputValue
+              }
+              onChange={
+                selectedIndex === 0
+                  ? setTailwindConfigValue
+                  : setPostCssInputValue
+              }
+              options={options}
+              height="300"
+            />
+          </Pane>
         </Pane>
-      </Pane>
+      </>
     </Dialog>
   );
 }
@@ -168,7 +170,7 @@ ${selector} {
         if (Object.keys(missingVariants).length) {
           output += `\n/* ⚠️ Some properties are requiring specific variants, but the variant does not support those. Consider extending your Tailwind config.\n`;
           Object.entries(missingVariants).forEach(([variant, values]) => {
-            const properties = values
+            const properties = (values as [string, string])
               .map(([prop, value]) => `\t${prop}: ${value};`)
               .join("\n  ");
             output += `${variant}:\n${properties}\n`;
@@ -185,7 +187,7 @@ ${selector} {
 
   const success = results.filter(result => result.tailwind.length);
 
-  window.cssToTailwindResults = results;
+  (window as any).cssToTailwindResults = results;
 
   return `/* ${success.length}/${results.length} base rules are converted successfully. */\n/* Gather results from the console with \`copy(window.cssToTailwindResults)\` */\n\n${content}`;
 }
@@ -290,16 +292,14 @@ export async function getStaticProps() {
     path.resolve("./node_modules/tailwindcss/tailwind.css"),
     "utf-8"
   );
-  const tailwindCss = await request(
-    `${process.env.BASE_URL}/api/build-tailwind-css`,
-    { tailwindConfig: null, postCssInput }
-  );
+  const config = eval(`const module = {}; ${tailwindConfig}; module.exports;`);
+  const css = await tailwindCss(config, postCssInput);
   return {
     props: {
       defaultSettings: {
         tailwindConfig,
         postCssInput,
-        tailwindCss
+        tailwindCss: css
       }
     }
   };

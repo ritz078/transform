@@ -165,7 +165,7 @@ export default React.memo(
   ({
     innerRef,
     ...props
-  }: MonacoProps & { innerRef: React.RefObject<MonacoEditor> }) => (
+  }: MonacoProps & { innerRef?: React.RefObject<MonacoEditor> }) => (
     <MonacoEditor {...props} ref={innerRef} />
   )
 );
