@@ -17,6 +17,8 @@ import {
   Tab,
   Alert,
   Button,
+  Icon,
+  Tooltip,
   toaster
 } from "evergreen-ui";
 import tailwindResolve from "tailwindcss/resolveConfig";
@@ -54,7 +56,20 @@ function CssToTailwindSettings({ open, toggle, onConfirm, settings }) {
   );
   return (
     <Dialog
-      title="CSS to TailwindCSS Settings"
+      title={
+        <>
+          TailwindCSS Settings
+          <a
+            href="https://tailwindcss.com/docs/configuration"
+            target="_blank"
+            style={{ verticalAlign: "middle" }}
+          >
+            <Tooltip content="Open the TailwindCSS docs...">
+              <Icon icon="help" color="info" marginLeft={16} />
+            </Tooltip>
+          </a>
+        </>
+      }
       isShown={open}
       isConfirmLoading={isConfirmLoading}
       confirmLabel={isConfirmLoading ? "Running PostCSS..." : "Confirm"}

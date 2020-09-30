@@ -8,6 +8,12 @@ languages.typescript.typescriptDefaults.setDiagnosticsOptions({
   noSyntaxValidation: true
 });
 
+languages.css.cssDefaults.setDiagnosticsOptions({
+  lint: {
+    unknownAtRules: "ignore"
+  } as any
+});
+
 // @ts-ignore
 self.MonacoEnvironment = {
   getWorkerUrl: function(_moduleId, label) {
