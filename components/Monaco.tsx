@@ -8,6 +8,12 @@ languages.typescript.typescriptDefaults.setDiagnosticsOptions({
   noSyntaxValidation: true
 });
 
+languages.css.cssDefaults.setDiagnosticsOptions({
+  lint: {
+    unknownAtRules: "ignore"
+  } as any
+});
+
 // @ts-ignore
 self.MonacoEnvironment = {
   getWorkerUrl: function(_moduleId, label) {
@@ -165,7 +171,7 @@ export default React.memo(
   ({
     innerRef,
     ...props
-  }: MonacoProps & { innerRef: React.RefObject<MonacoEditor> }) => (
+  }: MonacoProps & { innerRef?: React.RefObject<MonacoEditor> }) => (
     <MonacoEditor {...props} ref={innerRef} />
   )
 );
