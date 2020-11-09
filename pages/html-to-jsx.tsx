@@ -18,7 +18,7 @@ const formFields = [
   {
     type: InputType.SWITCH,
     key: "createFunction",
-    label: "Wrap in function"
+    label: "Create function component"
   }
 ];
 
