@@ -1,5 +1,5 @@
 diff --git a/node_modules/htmltojsx/src/htmltojsx.js b/node_modules/htmltojsx/src/htmltojsx.js
-index afe4c85..4485459 100644
+index afe4c85..f59564c 100644
 --- a/node_modules/htmltojsx/src/htmltojsx.js
 +++ b/node_modules/htmltojsx/src/htmltojsx.js
 @@ -326,18 +326,10 @@ HTMLtoJSX.prototype = {
@@ -23,7 +23,7 @@ index afe4c85..4485459 100644
  
      if (this._onlyOneTopLevel(containerEl)) {
        // Only one top-level element, the component can return it directly
-@@ -347,18 +339,14 @@ HTMLtoJSX.prototype = {
+@@ -347,17 +339,19 @@ HTMLtoJSX.prototype = {
        // More than one top-level element, need to wrap the whole thing in a
        // container.
        this.output += this.config.indent + this.config.indent + this.config.indent;
@@ -38,11 +38,14 @@ index afe4c85..4485459 100644
 -      this.output += '});';
 -    } else {
 -      this.output = this._removeJSXClassIndention(this.output, this.config.indent);
--    }
--    return this.output;
 +    this.output = this._removeJSXClassIndention(this.output, this.config.indent);
 +
-+    return wrap ? this.output.replace("<null>", "<>").replace("</null>", "</>") : this.output;
++    if (this.output.startsWith("{") || this.output.endsWith("}")) {
++      this.output = `<>${this.output}</>`
++    } else if (wrap) {
++      this.output.replace("<null>", "<>").replace("</null>", "</>")
+     }
++
+     return this.output;
    },
  
-   /**
