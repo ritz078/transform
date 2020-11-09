@@ -9,7 +9,7 @@ export const json = JSON.stringify(
   2
 );
 
-export const html = `<!-- Hello world -->
+export const html = `
 <div class="awesome" style="border: 1px solid red">
   <label for="name">Enter your name: </label>
   <input type="text" id="name" />
