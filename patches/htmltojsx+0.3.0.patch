@@ -1,8 +1,8 @@
 diff --git a/node_modules/htmltojsx/src/htmltojsx.js b/node_modules/htmltojsx/src/htmltojsx.js
-index afe4c85..f59564c 100644
+index afe4c85..b326beb 100644
 --- a/node_modules/htmltojsx/src/htmltojsx.js
 +++ b/node_modules/htmltojsx/src/htmltojsx.js
-@@ -326,18 +326,10 @@ HTMLtoJSX.prototype = {
+@@ -326,19 +326,9 @@ HTMLtoJSX.prototype = {
    convert: function(html) {
      this.reset();
  
@@ -19,16 +19,11 @@ index afe4c85..f59564c 100644
 -      this.output += this.config.indent + 'render: function() {' + "\n";
 -      this.output += this.config.indent + this.config.indent + 'return (\n';
 -    }
-+    let wrap = false
- 
+-
      if (this._onlyOneTopLevel(containerEl)) {
        // Only one top-level element, the component can return it directly
-@@ -347,17 +339,19 @@ HTMLtoJSX.prototype = {
-       // More than one top-level element, need to wrap the whole thing in a
-       // container.
-       this.output += this.config.indent + this.config.indent + this.config.indent;
-+      wrap = true
-       this.level++;
+       // No need to actually visit the container element
+@@ -351,13 +341,14 @@ HTMLtoJSX.prototype = {
        this._visit(containerEl);
      }
      this.output = this.output.trim() + '\n';
@@ -40,10 +35,10 @@ index afe4c85..f59564c 100644
 -      this.output = this._removeJSXClassIndention(this.output, this.config.indent);
 +    this.output = this._removeJSXClassIndention(this.output, this.config.indent);
 +
-+    if (this.output.startsWith("{") || this.output.endsWith("}")) {
-+      this.output = `<>${this.output}</>`
-+    } else if (wrap) {
-+      this.output.replace("<null>", "<>").replace("</null>", "</>")
++    if (this.output.trim().startsWith("{") || this.output.trim().endsWith("}")) {
++      this.output = `<>\n${this.output}</>`
++    } else if (this.output.trim().startsWith("<null>") && this.output.trim().endsWith("</null>")) {
++      this.output = this.output.replace("<null>", "<>").replace("</null>", "</>")
      }
 +
      return this.output;

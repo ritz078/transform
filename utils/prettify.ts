@@ -22,7 +22,8 @@ export async function prettify(language: string, value: string) {
   } else {
     result = prettier.format(value, {
       parser: prettierParsers[language] || language,
-      plugins
+      plugins,
+      semi: false
     });
   }
 
