@@ -10,20 +10,15 @@ import { Alert, Heading } from "evergreen-ui";
 import Router from "next/router";
 
 interface Settings {
-  createClass: boolean;
-  outputClassName: string;
+  createFunction: boolean;
+  outputFunctionName: string;
 }
 
 const formFields = [
   {
     type: InputType.SWITCH,
-    key: "createClass",
-    label: "Create Class"
-  },
-  {
-    type: InputType.TEXT_INPUT,
-    key: "outputClassName",
-    label: "Output Class Name"
+    key: "createFunction",
+    label: "Create function component"
   }
 ];
 
@@ -31,8 +26,7 @@ export default function() {
   const name = "HTML to JSX";
 
   const [settings, setSettings] = useSettings(name, {
-    createClass: false,
-    outputClassName: "TransformedComponent"
+    createFunction: false
   });
 
   const [_isSvg, setSvg] = useState(false);
@@ -41,9 +35,16 @@ export default function() {
     async ({ value }) => {
       setSvg(isSvg(value));
 
-      const converter = new HtmlToJsx(settings);
+      const converter = new HtmlToJsx({
+        createClass: false
+      });
+      let result = converter.convert(value);
 
-      return converter.convert(value);
+      if (settings.createFunction) {
+        result = `export const Foo = () => (${result})`;
+      }
+
+      return result;
     },
     [settings]
   );
@@ -68,7 +69,7 @@ export default function() {
     <ConversionPanel
       transformer={transformer}
       editorTitle="HTML"
-      resultLanguage="javascript"
+      resultLanguage={settings.createFunction ? "javascript" : "text"}
       resultTitle="JSX"
       editorLanguage="html"
       editorSettingsElement={getSettingsElement}
