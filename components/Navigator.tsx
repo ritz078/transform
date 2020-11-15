@@ -75,6 +75,17 @@ export default function() {
       </Pane>
 
       <Pane borderTop>
+        <a href="https://www.buymeacoffee.com/ritz078" target="_blank">
+          <img
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+            alt="Buy Me A Coffee"
+            style={{
+              height: 40,
+              display: "block",
+              margin: "10px auto 0"
+            }}
+          />
+        </a>
         <Heading size={400} paddingY={15} textAlign="center">
           Created by{" "}
           <a href="https://twitter.com/ritz078" target="_blank">
