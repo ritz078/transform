@@ -30,28 +30,6 @@ const logo = (
   </svg>
 );
 
-function renderHeadWay() {
-  if (!IN_BROWSER) return;
-
-  const HW_config = {
-    selector: ".transform-changelog", // CSS selector where to inject the badge
-    account: "J0B24x",
-    trigger: ".transform-changelog"
-  };
-
-  (function(src) {
-    const tag = document.createElement("script");
-    tag.async = false;
-    tag.src = src;
-    document.getElementsByTagName("body")[0].appendChild(tag);
-
-    tag.onload = () => {
-      // @ts-ignore
-      window.Headway.init(HW_config);
-    };
-  })("https://cdn.headwayapp.co/widget.js");
-}
-
 export default class extends App {
   timer: any;
 
@@ -82,8 +60,6 @@ export default class extends App {
   render(): JSX.Element {
     const { Component, pageProps } = this.props;
 
-    renderHeadWay();
-
     const activeRoute = IN_BROWSER
       ? activeRouteData(Router.pathname)
       : undefined;
@@ -96,7 +72,6 @@ export default class extends App {
           </title>
           <meta name="description" content={activeRoute && activeRoute.desc} />
           <meta name="viewport" content="width=1024" />
-          <script async src="https://unpkg.com/thesemetrics@latest" />
         </Head>
         <Pane
           display="flex"
@@ -129,16 +104,6 @@ export default class extends App {
                 alt=""
               />
             </a>
-            <Button
-              appearance="minimal"
-              height={40}
-              className="transform-changelog"
-              css={{
-                color: "#fff !important"
-              }}
-            >
-              Changelog
-            </Button>
             <a href="https://github.com/ritz078/transform" target="_blank">
               <Button
                 appearance="minimal"
