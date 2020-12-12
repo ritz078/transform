@@ -77,7 +77,7 @@ export default function() {
       <Pane borderTop>
         <a href="https://www.buymeacoffee.com/ritz078" target="_blank">
           <img
-            src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png"
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
             alt="Buy Me A Coffee"
             style={{
               height: 40,
