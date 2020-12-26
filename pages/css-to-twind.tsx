@@ -5,10 +5,13 @@ import * as React from "react";
 import { useState, useCallback } from "react";
 import request from "@utils/request";
 import tailwindCss from "@utils/tailwindcss";
+import { getWorker } from "@utils/workerWrapper";
+import PostCssWorker from "@workers/postcss.worker";
 import { promises as fs } from "fs";
 import path from "path";
 import cssToTailwind from "css-to-tailwind/browser";
 import isEqual from "lodash/isEqual";
+import camelCase from "camelcase";
 import { useSettings } from "@hooks/useSettings";
 import {
   Dialog,
@@ -23,6 +26,15 @@ import {
 } from "evergreen-ui";
 import tailwindResolve from "tailwindcss/resolveConfig";
 import dynamic from "next/dynamic";
+
+type TransformResult = {
+  selector: string;
+  tailwind: string;
+  // FIXME: for modern TS: `missing: { base: [prop: string, value: string][]; [key: string]: [prop: string, value: string][] };`
+  missing: { base: [string, string][]; [key: string]: [string, string][] };
+};
+
+let postCssWorker;
 
 const Monaco = dynamic(() => import("../components/Monaco"), {
   ssr: false
@@ -45,6 +57,7 @@ const tabs = [
   { label: "PostCSS Input", language: "css" }
 ];
 
+// TODO: figure out what to do with custom config for twind
 function CssToTailwindSettings({ open, toggle, onConfirm, settings }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isConfirmLoading, setConfirmLoading] = useState(false);
@@ -162,49 +175,62 @@ function SettingsInfo({ isDefaultConfig, resetSettings }) {
   );
 }
 
-function formatOutput(results) {
-  const content = results
-    .map(result => {
-      const { selector, tailwind, missing } = result;
+const transformCss = async (value: string) => {
+  postCssWorker = postCssWorker || getWorker(PostCssWorker);
+  return (await postCssWorker.send(value)) as string;
+};
 
-      let output = `/* ℹ️ Base selector: ${selector} */`;
+async function transformSelector(result: TransformResult) {
+  const { selector, tailwind, missing } = result;
 
-      if (tailwind.length) {
-        output += `\n/* ✨ TailwindCSS: "${tailwind}" */`;
+  const varName = camelCase(selector.replace(/[\W_]/g, "_"));
 
-        const { base, ...missingVariants } = missing;
+  const { base, ...missingVariants } = missing;
 
-        if (base && base.length) {
-          output += `\n/* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
-${selector} {
-  @apply ${tailwind};
-  ${base.map(([prop, value]) => `${prop}: ${value};`).join("\n  ")}
-}`;
-        }
+  let css = "";
+  if (base && base.length) {
+    css = await transformCss(
+      base.map(([prop, value]) => `${prop}: ${value}`).join(";")
+    );
+    css = `css(${css})`;
+  }
 
-        if (Object.keys(missingVariants).length) {
-          output += `\n/* ⚠️ Some properties are requiring specific variants, but the variant does not support those. Consider extending your Tailwind config.\n`;
-          Object.entries(missingVariants).forEach(([variant, values]) => {
-            const properties = (values as [string, string])
-              .map(([prop, value]) => `\t${prop}: ${value};`)
-              .join("\n  ");
-            output += `${variant}:\n${properties}\n`;
-          });
-          output += "*/";
-        }
-      } else {
-        output += `\n/* ❌ Could not match any TailwindCSS classes. */`;
-      }
+  let value = `'';`;
+  let good = "";
 
-      return output;
-    })
-    .join("\n\n");
+  if (tailwind && css) {
+    value = `tw\`${tailwind} \$\{${css}}}\`;`;
+  } else if (css) {
+    value = `${css};`;
+  } else if (tailwind) {
+    value = `tw\`${tailwind}\`;`;
+    good = ` ✨`;
+  }
 
-  const success = results.filter(result => result.tailwind.length);
+  let output = `// ${selector}${good}\nconst ${varName} = ${value}`;
+
+  if (Object.keys(missingVariants).length) {
+    output += `\n/* ⚠️ Some properties are requiring specific variants, but the variant does not support those. Consider extending your Tailwind config.\n`;
+    Object.entries(missingVariants).forEach(([variant, values]) => {
+      const properties = values
+        .map(([prop, value]) => `\t${prop}: ${value};`)
+        .join("\n  ");
+      output += `${variant}:\n${properties}\n`;
+    });
+    output += "*/";
+  }
+
+  return output;
+}
+
+async function formatOutput(results: TransformResult[]) {
+  const content = (
+    await Promise.all(results.map(result => transformSelector(result)))
+  ).join("\n\n");
 
   (window as any).cssToTailwindResults = results;
 
-  return `/* ${success.length}/${results.length} base rules are converted successfully. */\n/* Gather results from the console with \`copy(window.cssToTailwindResults)\` */\n\n${content}`;
+  return `/* Gather css-to-tailwind results from the console with \`copy(window.cssToTailwindResults)\` */\n\n${content}`;
 }
 
 export default function({ defaultSettings }) {
@@ -256,9 +282,12 @@ export default function({ defaultSettings }) {
   );
 
   const transformer = useCallback<Transformer>(async ({ value }) => {
-    const results = await cssToTailwind(value, settings.tailwindCss);
+    const results: TransformResult[] = await cssToTailwind(
+      value,
+      settings.tailwindCss
+    );
 
-    return formatOutput(results);
+    return await formatOutput(results);
   }, []);
 
   const resetSettings = useCallback(() => {
@@ -271,8 +300,8 @@ export default function({ defaultSettings }) {
       editorTitle="CSS"
       editorLanguage="css"
       editorDefaultValue="css2"
-      resultTitle="TailwindCSS"
-      resultLanguage={"css"}
+      resultTitle="Twind"
+      resultLanguage={"typescript"}
       editorProps={{
         settingElement: ({ open, toggle }) => {
           return (
