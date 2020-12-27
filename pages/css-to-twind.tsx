@@ -30,8 +30,8 @@ import dynamic from "next/dynamic";
 type TransformResult = {
   selector: string;
   tailwind: string;
-  // FIXME: for modern TS: `missing: { base: [prop: string, value: string][]; [key: string]: [prop: string, value: string][] };`
-  missing: { base: [string, string][]; [key: string]: [string, string][] };
+  // FIXME: for modern TS: `missing: { [variantName: string]: [prop: string, value: string][] };`
+  missing: { [variantName: string]: [string, string][] };
 };
 
 let postCssWorker;
@@ -180,47 +180,47 @@ const transformCss = async (value: string) => {
   return (await postCssWorker.send(value)) as string;
 };
 
+const variantToCss = async (values: TransformResult["missing"][string]) => {
+  if (values && values.length) {
+    let css = await transformCss(
+      values.map(([prop, value]) => `${prop}: ${value}`).join(";")
+    );
+    return `css(${css})`;
+  }
+};
+
 async function transformSelector(result: TransformResult) {
   const { selector, tailwind, missing } = result;
 
   const varName = camelCase(selector.replace(/[\W_]/g, "_"));
 
-  const { base, ...missingVariants } = missing;
+  let canBeSimple = true;
+  const variants = Object.entries(missing).map(async ([variant, values]) => {
+    if (variant !== "base") {
+      canBeSimple = false;
+    }
+    const css = await variantToCss(values);
+    const prefix = variant === "base" ? "" : `${variant}:`;
+    return `${prefix}\$\{${css}}`;
+  });
 
-  let css = "";
-  if (base && base.length) {
-    css = await transformCss(
-      base.map(([prop, value]) => `${prop}: ${value}`).join(";")
-    );
-    css = `css(${css})`;
-  }
+  const css = (await Promise.all(variants)).join(" ");
 
   let value = `'';`;
   let good = "";
 
-  if (tailwind && css) {
-    value = `tw\`${tailwind} \$\{${css}}}\`;`;
-  } else if (css) {
-    value = `${css};`;
-  } else if (tailwind) {
-    value = `tw\`${tailwind}\`;`;
-    good = ` ✨`;
+  if (canBeSimple && !tailwind && css) {
+    // simplify in case of class that is css-only
+    value = `${css.replace(/^\${(.*)}$/, "$1")};`;
+  } else if (tailwind || css) {
+    const rules = [tailwind, css].join(" ");
+    if (!css) {
+      good = ` ✨`;
+    }
+    value = `tw\`${rules}\`;`;
   }
 
-  let output = `// ${selector}${good}\nconst ${varName} = ${value}`;
-
-  if (Object.keys(missingVariants).length) {
-    output += `\n/* ⚠️ Some properties are requiring specific variants, but the variant does not support those. Consider extending your Tailwind config.\n`;
-    Object.entries(missingVariants).forEach(([variant, values]) => {
-      const properties = values
-        .map(([prop, value]) => `\t${prop}: ${value};`)
-        .join("\n  ");
-      output += `${variant}:\n${properties}\n`;
-    });
-    output += "*/";
-  }
-
-  return output;
+  return `// ${selector}${good}\nconst ${varName} = ${value}`;
 }
 
 async function formatOutput(results: TransformResult[]) {
