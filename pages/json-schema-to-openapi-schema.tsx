@@ -1,18 +1,12 @@
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import * as React from "react";
 import { useCallback } from "react";
-import toOpenApi from "@openapi-contrib/json-schema-to-openapi-schema";
+import request from "@utils/request";
+import { Alert } from "evergreen-ui";
 
 export default function() {
-  const transformer = useCallback<Transformer>(
-    async ({ value }) =>
-      JSON.stringify(
-        toOpenApi(JSON.parse(value), {
-          cloneSchema: true
-        }),
-        null,
-        2
-      ),
+  const transformer = useCallback(
+    ({ value }) => request("/api/json-schema-to-openapi-schema", value),
     []
   );
 
@@ -24,6 +18,14 @@ export default function() {
       editorDefaultValue="jsonSchema"
       resultTitle="Open API Schema"
       resultLanguage={"json"}
+      resultEditorProps={{
+        topNotifications: () => (
+          <Alert
+            backgroundColor="#e7f7ff"
+            title="This code is converted on the server."
+          />
+        )
+      }}
     />
   );
 }
