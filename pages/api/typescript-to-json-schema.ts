@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Config } from "ts-json-schema-generator/dist/src/Config";
+import { Config } from "ts-json-schema-generator";
 import * as tsj from "ts-json-schema-generator";
 import os from "os";
 import crypto from "crypto";
@@ -23,7 +23,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     };
 
     const schema = tsj.createGenerator(config).createSchema(config.type);
+    console.log("before", { schema, config });
     res.status(200).send(JSON.stringify(schema, null, 2));
+    console.log("after");
   } catch (e) {
     res.status(500).send(e.message);
   }
