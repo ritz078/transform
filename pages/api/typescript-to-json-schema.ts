@@ -19,7 +19,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     });
     const config: Config = {
       path: programPath,
-      tsconfig: "tsconfig.json",
+      tsconfig: "./tsconfig.json",
       expose: "all",
       jsDoc: "extended",
       type: "*"
