@@ -19,7 +19,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     });
     const config: Config = {
       path: programPath,
-      tsconfig: "./tsconfig.json",
+      // tsconfig: "./tsconfig.json",
       expose: "all",
       jsDoc: "extended",
       type: "*"
@@ -36,10 +36,10 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           read,
           // schema,
           config,
-          files: fs.readdirSync("."),
-          tsconfig: fs.readFileSync("./tsconfig.json", { encoding: "utf-8" }),
-          "next-env": fs.readFileSync("./next-env.d.ts", { encoding: "utf-8" }),
-          typings: fs.readFileSync("./typings.d.ts", { encoding: "utf-8" })
+          files: fs.readdirSync(".")
+          // tsconfig: fs.readFileSync("./tsconfig.json", { encoding: "utf-8" }),
+          // "next-env": fs.readFileSync("./next-env.d.ts", { encoding: "utf-8" }),
+          // typings: fs.readFileSync("./typings.d.ts", { encoding: "utf-8" })
         },
         null,
         2
