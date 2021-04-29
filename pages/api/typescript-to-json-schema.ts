@@ -37,9 +37,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           // schema,
           config,
           files: fs.readdirSync("."),
-          tsconfig: fs.readFileSync("tsconfig.json", { encoding: "utf-8" }),
-          "next-env": fs.readFileSync("next-env.d.ts", { encoding: "utf-8" }),
-          typings: fs.readFileSync("typings.d.ts", { encoding: "utf-8" })
+          tsconfig: fs.readFileSync("./tsconfig.json", { encoding: "utf-8" }),
+          "next-env": fs.readFileSync("./next-env.d.ts", { encoding: "utf-8" }),
+          typings: fs.readFileSync("./typings.d.ts", { encoding: "utf-8" })
         },
         null,
         2
