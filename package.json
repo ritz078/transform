@@ -88,7 +88,6 @@
     "text-encoding-utf-8": "^1.0.2",
     "transform-json-types": "^0.7.0",
     "ts-json-schema-generator": "^0.70.2",
-    "typescript": "3.9.7",
     "xml-js": "^1.6.11",
     "yaml": "^1.10.0"
   },
@@ -109,7 +108,8 @@
     "pretty-quick": "^2.0.1",
     "ui-box": "2.1.0",
     "webpack": "^4.44.1",
-    "worker-loader": "^2.0.0"
+    "worker-loader": "^2.0.0",
+    "typescript": "3.9.7"
   },
   "husky": {
     "hooks": {
