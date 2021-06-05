@@ -89,7 +89,6 @@
     "transform-json-types": "^0.7.0",
     "ts-json-schema-generator": "^0.70.2",
     "typescript": "3.9.7",
-    "typescript-json-schema": "^0.50.1",
     "xml-js": "^1.6.11",
     "yaml": "^1.10.0"
   },
