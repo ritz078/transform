@@ -86,7 +86,8 @@ export default function EditorPanel({
       enabled: false
     },
     quickSuggestions: false,
-    lineNumbers: "on"
+    lineNumbers: "on",
+    renderValidationDecorations: "off"
   };
 
   const _toggleSettingsDialog = useCallback(
