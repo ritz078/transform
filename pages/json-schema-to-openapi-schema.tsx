@@ -5,10 +5,13 @@ import request from "@utils/request";
 import { Alert } from "evergreen-ui";
 
 export default function JsonSchemaToOpenapiSchema() {
-  const transformer = useCallback(
-    ({ value }) => request("/api/json-schema-to-openapi-schema", value),
-    []
-  );
+  const transformer = useCallback(async ({ value }) => {
+    const json = await request(
+      "/api/json-schema-to-openapi-schema",
+      JSON.parse(value)
+    );
+    return JSON.stringify(json, null, 2);
+  }, []);
 
   return (
     <ConversionPanel

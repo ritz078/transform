@@ -44,6 +44,7 @@
     "@types/jsonld": "^1.5.1",
     "@walmartlabs/json-to-simple-graphql-schema": "^2.0.3",
     "autoprefixer": "^9.8.6",
+    "axios": "^0.21.1",
     "babel-plugin-json-to-proptypes": "^0.1.0",
     "babel-plugin-object-styles-to-template": "^0.2.2",
     "babel-standalone": "^6.26.0",

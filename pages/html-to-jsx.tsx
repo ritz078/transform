@@ -69,7 +69,7 @@ export default function HtmlToJsxComponent() {
     <ConversionPanel
       transformer={transformer}
       editorTitle="HTML"
-      resultLanguage={settings.createFunction ? "javascript" : "text"}
+      resultLanguage={"javascript"}
       resultTitle="JSX"
       editorLanguage="html"
       editorSettingsElement={getSettingsElement}

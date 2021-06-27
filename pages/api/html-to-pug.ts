@@ -3,7 +3,8 @@ import html2pug from "html2pug";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { value, settings } = JSON.parse(req.body);
+    const { value, settings } = req.body;
+
     const result = html2pug(value, settings);
     res.status(200).send(result);
   } catch (e) {
