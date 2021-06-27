@@ -12,6 +12,5 @@ export default async function buildTailwindCss(
     autoprefixer
   ]).process(postCssInput, { from: "tailwind.css" });
 
-  console.log(css);
   return css;
 }
