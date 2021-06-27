@@ -67,7 +67,7 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
   )
 });
 
-export default function({
+export default function EditorPanel({
   editable = true,
   title,
   settingElement,

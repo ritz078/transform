@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import request from "@utils/request";
 import { Alert } from "evergreen-ui";
 
-export default function() {
+export default function JsonSchemaToOpenapiSchema() {
   const transformer = useCallback(
     ({ value }) => request("/api/json-schema-to-openapi-schema", value),
     []

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import SearchBox from "@components/Searchbox";
 
-export default function() {
+export default function Navigator() {
   const router = useRouter();
 
   return (
