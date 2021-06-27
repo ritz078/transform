@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import convert from "@khanacademy/flow-to-ts";
+import { convert } from "@khanacademy/flow-to-ts";
 import * as ts from "typescript";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
