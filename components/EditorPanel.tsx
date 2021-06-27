@@ -44,18 +44,7 @@ export interface EditorPanelProps {
 }
 
 const Monaco = dynamic(() => import("../components/Monaco"), {
-  ssr: false,
-  loading: () => (
-    <Pane
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      height={400}
-      flex={1}
-    >
-      <Spinner />
-    </Pane>
-  )
+  ssr: false
 });
 
 export default function EditorPanel({
