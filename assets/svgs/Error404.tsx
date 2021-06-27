@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function() {
+export default function Error404() {
   return (
     <svg
       data-name="Layer 1"

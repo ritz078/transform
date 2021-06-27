@@ -22,7 +22,7 @@ const formFields = [
   }
 ];
 
-export default function() {
+export default function HtmlToJsxComponent() {
   const name = "HTML to JSX";
 
   const [settings, setSettings] = useSettings(name, {
@@ -69,7 +69,7 @@ export default function() {
     <ConversionPanel
       transformer={transformer}
       editorTitle="HTML"
-      resultLanguage={settings.createFunction ? "javascript" : "text"}
+      resultLanguage={"javascript"}
       resultTitle="JSX"
       editorLanguage="html"
       editorSettingsElement={getSettingsElement}

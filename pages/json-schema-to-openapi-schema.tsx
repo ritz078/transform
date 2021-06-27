@@ -4,11 +4,14 @@ import { useCallback } from "react";
 import request from "@utils/request";
 import { Alert } from "evergreen-ui";
 
-export default function() {
-  const transformer = useCallback(
-    ({ value }) => request("/api/json-schema-to-openapi-schema", value),
-    []
-  );
+export default function JsonSchemaToOpenapiSchema() {
+  const transformer = useCallback(async ({ value }) => {
+    const json = await request(
+      "/api/json-schema-to-openapi-schema",
+      JSON.parse(value)
+    );
+    return JSON.stringify(json, null, 2);
+  }, []);
 
   return (
     <ConversionPanel

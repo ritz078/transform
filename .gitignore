@@ -6,3 +6,4 @@ dist
 .DS_Store
 public/static/monaco/*.worker.js.map
 .tool-versions
+heroku
