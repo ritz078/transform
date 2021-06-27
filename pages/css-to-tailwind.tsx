@@ -1,6 +1,5 @@
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import NoSSR from "@components/NoSSR";
-import { editor } from "monaco-editor";
 import * as React from "react";
 import { useState, useCallback, useMemo } from "react";
 import request from "@utils/request";
@@ -28,7 +27,7 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
   ssr: false
 });
 
-const options: editor.IEditorOptions = {
+const options = {
   fontSize: 14,
   readOnly: false,
   codeLens: false,
