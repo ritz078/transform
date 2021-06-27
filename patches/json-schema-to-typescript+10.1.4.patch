@@ -1,34 +1,36 @@
 diff --git a/node_modules/json-schema-to-typescript/dist/src/formatter.js b/node_modules/json-schema-to-typescript/dist/src/formatter.js
-index 1c2c709..b3eb9e1 100644
+index a9362fa..b3fef5a 100644
 --- a/node_modules/json-schema-to-typescript/dist/src/formatter.js
 +++ b/node_modules/json-schema-to-typescript/dist/src/formatter.js
-@@ -11,9 +11,8 @@ var __assign = (this && this.__assign) || function () {
-     return __assign.apply(this, arguments);
+@@ -12,12 +12,11 @@ var __assign = (this && this.__assign) || function () {
  };
  Object.defineProperty(exports, "__esModule", { value: true });
+ exports.format = void 0;
 -var prettier_1 = require("prettier");
  function format(code, options) {
+     if (!options.format) {
+         return code;
+     }
 -    return prettier_1.format(code, __assign({ parser: 'typescript' }, options.style));
-+    return code;
++    return code
  }
  exports.format = format;
  //# sourceMappingURL=formatter.js.map
-\ No newline at end of file
 diff --git a/node_modules/json-schema-to-typescript/dist/src/index.js b/node_modules/json-schema-to-typescript/dist/src/index.js
-index c3e750a..1d871dd 100644
+index f880f17..0ef8b27 100644
 --- a/node_modules/json-schema-to-typescript/dist/src/index.js
 +++ b/node_modules/json-schema-to-typescript/dist/src/index.js
-@@ -60,9 +60,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
-     }
+@@ -61,9 +61,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
  };
  Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ValidationError = exports.compile = exports.compileFromFile = exports.DEFAULT_OPTIONS = void 0;
 -var fs_1 = require("fs");
  var lodash_1 = require("lodash");
 -var path_1 = require("path");
  var formatter_1 = require("./formatter");
  var generator_1 = require("./generator");
  var normalizer_1 = require("./normalizer");
-@@ -91,17 +89,7 @@ exports.DEFAULT_OPTIONS = {
+@@ -95,17 +93,6 @@ exports.DEFAULT_OPTIONS = {
      unreachableDefinitions: false,
      unknownAny: true
  };
@@ -43,7 +45,6 @@ index c3e750a..1d871dd 100644
 -    return compile(schema, utils_1.stripExtension(filename), __assign({ cwd: path_1.dirname(filename) }, options));
 -}
 -exports.compileFromFile = compileFromFile;
-+
  function compile(schema, name, options) {
      if (options === void 0) { options = {}; }
      return __awaiter(this, void 0, void 0, function () {

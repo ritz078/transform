@@ -6,7 +6,7 @@ import { Alert } from "evergreen-ui";
 
 export default function TypescriptToFlow() {
   const transformer = useCallback(
-    ({ value }) => request("/api/typescript-to-flow", value),
+    ({ value }) => request("/api/typescript-to-flow", value, "plain/text"),
     []
   );
 
