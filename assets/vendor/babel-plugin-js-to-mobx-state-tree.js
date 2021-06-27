@@ -6,7 +6,7 @@ import isEmpty from "lodash/isEmpty";
  * @param t
  * @returns {{visitor: {ArrayExpression: (function(*)), NullLiteral: (function(*)), StringLiteral: (function(*)), NumericLiteral: (function(*)), ArrowFunctionExpression: (function(*)), FunctionExpression: (function(*)), BooleanLiteral: (function(*)), Program: (function(*, *)), ObjectExpression: (function(*))}}}
  */
-export default function({ types: t }) {
+export default function BabelPluginJsToMobxStateTree({ types: t }) {
   return {
     visitor: {
       ArrayExpression(path) {

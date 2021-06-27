@@ -1,8 +1,20 @@
-export default async function request(url: string, data: any) {
-  const res = await fetch(url, {
-    method: "POST",
-    body: typeof data === "object" ? JSON.stringify(data) : data
+import axios, { CancelTokenSource } from "axios";
+import { type } from "os";
+
+let cancelTokenSource: CancelTokenSource;
+export default async function request(
+  url: string,
+  data: any,
+  contentType = "application/json"
+) {
+  if (cancelTokenSource) cancelTokenSource.cancel();
+  cancelTokenSource = axios.CancelToken.source();
+
+  const res = await axios.post(url, data, {
+    cancelToken: cancelTokenSource.token,
+    headers: { "Content-Type": contentType }
   });
 
-  return await res.text();
+  cancelTokenSource = null;
+  return res.data;
 }

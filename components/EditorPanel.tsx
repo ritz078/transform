@@ -1,10 +1,8 @@
-import { editor } from "monaco-editor";
 import {
   Button,
   FilePicker,
   Heading,
   HTMLInputEvent,
-  Icon,
   IconButton,
   Pane,
   Popover,
@@ -16,7 +14,6 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import copy from "clipboard-copy";
-import { getWorker, Wrapper } from "@utils/workerWrapper";
 import Npm from "@assets/svgs/Npm";
 import { supportedLanguages } from "@utils/prettier";
 import { useDropzone } from "react-dropzone";
@@ -46,12 +43,6 @@ export interface EditorPanelProps {
   };
 }
 
-let prettierWorker: Wrapper;
-if (IN_BROWSER) {
-  const PrettierWorker = require("@workers/prettier.worker");
-  prettierWorker = getWorker(PrettierWorker);
-}
-
 const Monaco = dynamic(() => import("../components/Monaco"), {
   ssr: false,
   loading: () => (
@@ -67,16 +58,14 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
   )
 });
 
-export default function({
+export default function EditorPanel({
   editable = true,
   title,
   settingElement,
   hasLoad,
   acceptFiles,
   hasClear,
-  previewElement,
   hasCopy = true,
-  hasPrettier = true,
   topNotifications,
   language,
   defaultValue,
@@ -85,12 +74,10 @@ export default function({
   packageDetails
 }: EditorPanelProps) {
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
-  const [showPreview, setPreviewVisibility] = useState(true);
   const [value, setValue] = useState(defaultValue);
-  const editorRef = useRef(null);
   const [fetchingUrl, setFetchingUrl] = useState("");
 
-  const options: editor.IEditorOptions = {
+  const options = {
     fontSize: 14,
     readOnly: !editable,
     codeLens: false,
@@ -99,7 +86,8 @@ export default function({
       enabled: false
     },
     quickSuggestions: false,
-    lineNumbers: "on"
+    lineNumbers: "on",
+    renderValidationDecorations: "off"
   };
 
   const _toggleSettingsDialog = useCallback(
@@ -161,19 +149,6 @@ export default function({
       id
     });
   }, [value]);
-
-  const prettify = useCallback(() => {
-    prettierWorker
-      .send({
-        language,
-        value
-      })
-      .then(setValue);
-  }, [language, value]);
-
-  useEffect(() => {
-    editorRef.current && editorRef.current.reLayout();
-  }, [showPreview]);
 
   const fetchFile = useCallback(
     close => {
@@ -277,18 +252,6 @@ export default function({
           </Tooltip>
         )}
 
-        {previewElement && (
-          <Tooltip content="Preview">
-            <IconButton
-              height={28}
-              icon={"eye-open"}
-              marginRight={10}
-              isActive={showPreview}
-              onClick={() => setPreviewVisibility(!showPreview)}
-            />
-          </Tooltip>
-        )}
-
         {packageDetails && (
           <a
             href={packageDetails.url}
@@ -312,12 +275,6 @@ export default function({
             height={28}
           >
             Copy
-          </Button>
-        )}
-
-        {hasPrettier && supportedLanguages.includes(language) && (
-          <Button appearance="primary" onClick={prettify} height={28}>
-            Prettify
           </Button>
         )}
       </Pane>
@@ -345,45 +302,8 @@ export default function({
             setValue(value);
             onChange(value);
           }}
-          innerRef={editorRef}
         />
       </div>
-
-      {IN_BROWSER && showPreview && previewElement && (
-        <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
-          <Pane
-            height={50}
-            backgroundColor="#fff"
-            zIndex={2}
-            borderTop
-            position={"relative"}
-            alignItems={"center"}
-            display="flex"
-            paddingX={20}
-          >
-            <Heading size={500} flex={1}>
-              Preview
-            </Heading>
-            <Icon
-              size={20}
-              cursor="pointer"
-              icon="cross"
-              onClick={() => setPreviewVisibility(false)}
-            />
-          </Pane>
-          <Pane
-            height={"40vh"}
-            display="flex"
-            width={"100%"}
-            borderTop
-            backgroundColor="#fff"
-            zIndex={2}
-            overflow="hidden"
-          >
-            {previewElement(value)}
-          </Pane>
-        </Pane>
-      )}
     </Pane>
   );
 }

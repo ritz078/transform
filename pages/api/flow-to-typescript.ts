@@ -4,7 +4,7 @@ import * as ts from "typescript";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { value, declarationOnly, isTS } = JSON.parse(req.body);
+    const { value, declarationOnly, isTS } = req.body;
 
     const tsCode = isTS ? value : convert(value);
 
