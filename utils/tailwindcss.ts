@@ -1,7 +1,7 @@
-import postcss from "postcss";
-import tailwindcss from "tailwindcss";
-import defaultConfig from "tailwindcss/stubs/simpleConfig.stub.js";
-import autoprefixer from "autoprefixer";
+import postcss from "postcss7";
+import tailwindcss from "tailwindcss1";
+import defaultConfig from "tailwindcss1/stubs/simpleConfig.stub.js";
+import autoprefixer from "autoprefixer9";
 
 export default async function buildTailwindCss(
   tailwindConfig: any,
@@ -12,5 +12,6 @@ export default async function buildTailwindCss(
     autoprefixer
   ]).process(postCssInput, { from: "tailwind.css" });
 
+  console.log(css);
   return css;
 }

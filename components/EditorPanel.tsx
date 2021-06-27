@@ -6,7 +6,6 @@ import {
   IconButton,
   Pane,
   Popover,
-  Spinner,
   TextInput,
   toaster,
   Tooltip
@@ -15,7 +14,6 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import copy from "clipboard-copy";
 import Npm from "@assets/svgs/Npm";
-import { supportedLanguages } from "@utils/prettier";
 import { useDropzone } from "react-dropzone";
 
 export interface EditorPanelProps {
