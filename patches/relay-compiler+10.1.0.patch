@@ -1,0 +1,13 @@
+diff --git a/node_modules/relay-compiler/lib/core/GraphQLCompilerProfiler.js b/node_modules/relay-compiler/lib/core/GraphQLCompilerProfiler.js
+index 77a0cad..a8e73d5 100644
+--- a/node_modules/relay-compiler/lib/core/GraphQLCompilerProfiler.js
++++ b/node_modules/relay-compiler/lib/core/GraphQLCompilerProfiler.js
+@@ -189,6 +189,8 @@ function instrumentWait(fn, name) {
+   return instrumented;
+ }
+ 
++process.hrtime = () => null
++
+ var T_ZERO = process.hrtime(); // Return a Uint32 of microtime duration since program start.
+ 
+ function microtime() {
