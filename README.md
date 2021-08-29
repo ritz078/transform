@@ -59,6 +59,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
   <tr>
     <td align="center"><a href="https://github.com/agent515"><img src="https://avatars.githubusercontent.com/u/46898603?v=4?s=100" width="100px;" alt=""/><br /><sub><b>agent515</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=agent515" title="Code">💻</a></td>
     <td align="center"><a href="http://JFSIII.org"><img src="https://avatars.githubusercontent.com/u/57655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>John Schulz</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=jfsiii" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/nasrul21"><img src="https://avatars.githubusercontent.com/u/15046792?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nasrul Faizin</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=nasrul21" title="Code">💻</a></td>
   </tr>
 </table>
 
