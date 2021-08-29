@@ -339,6 +339,12 @@ export const categorizedRoutes = [
         path: "/markdown-to-html",
         packageName: "markdown",
         packageUrl: "https://github.com/evilstreak/markdown-js"
+      },
+      {
+        label: "TOML to JSON",
+        path: "/toml-to-json",
+        packageUrl: "https://www.npmjs.com/package/@iarna/toml",
+        packageName: "@iarna/toml"
       }
     ]
   }
