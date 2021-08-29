@@ -135,6 +135,12 @@ export const categorizedRoutes = [
         path: "/json-to-json-schema",
         packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
         packageName: "json_typegen_wasm"
+      },
+      {
+        label: "to TOML",
+        path: "/json-to-toml",
+        packageUrl: "https://www.npmjs.com/package/@iarna/toml",
+        packageName: "@iarna/toml"
       }
     ]
   },
@@ -151,7 +157,8 @@ export const categorizedRoutes = [
         label: "to OpenAPI Schema",
         path: "json-schema-to-openapi-schema",
         packageName: "json-schema-to-openapi-schema",
-        packageUrl: "https://github.com/openapi-contrib/json-schema-to-openapi-schema"
+        packageUrl:
+          "https://github.com/openapi-contrib/json-schema-to-openapi-schema"
       },
       {
         label: "to Protobuf",
@@ -332,6 +339,12 @@ export const categorizedRoutes = [
         path: "/markdown-to-html",
         packageName: "markdown",
         packageUrl: "https://github.com/evilstreak/markdown-js"
+      },
+      {
+        label: "TOML to JSON",
+        path: "/toml-to-json",
+        packageUrl: "https://www.npmjs.com/package/@iarna/toml",
+        packageName: "@iarna/toml"
       }
     ]
   }

@@ -433,3 +433,12 @@ export interface Props {
   /** Should the name be rendered in bold */
   priority?: boolean
 }`;
+
+export const toml = `userId = 1
+id = 1
+title = "delectus aut autem"
+completed = false
+
+[company]
+id = 12
+name = "Transform Inc"`;
