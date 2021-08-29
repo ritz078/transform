@@ -36,6 +36,7 @@
     "@graphql-codegen/typescript-resolvers": "^1.19.4",
     "@graphql-codegen/typescript-stencil-apollo": "^1.18.7",
     "@graphql-codegen/typescript-urql": "^2.0.9",
+    "@iarna/toml": "^2.2.5",
     "@khanacademy/flow-to-ts": "^0.5.2",
     "@monaco-editor/react": "^4.2.1",
     "@openapi-contrib/json-schema-to-openapi-schema": "^2.0.0",
