@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import * as React from "react";
 import { stringify } from "@iarna/toml";
 
-export default function JsonToYaml() {
+export default function JsonToToml() {
   const transformer = useCallback(
     ({ value }) => Promise.resolve(stringify(JSON.parse(value))),
     []
