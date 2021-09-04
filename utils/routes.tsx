@@ -327,12 +327,15 @@ export const categorizedRoutes = [
         packageName: "xml-js",
         packageUrl: "https://github.com/nashwaan/xml-js"
       },
-
       {
         label: "YAML to JSON",
         path: "/yaml-to-json",
         packageName: "yaml",
         packageUrl: "https://github.com/tj/js-yaml"
+      },
+      {
+        label: "YAML to TOML",
+        path: "/yaml-to-toml"
       },
       {
         label: "Markdown to HTML",
