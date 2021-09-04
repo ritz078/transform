@@ -348,6 +348,10 @@ export const categorizedRoutes = [
         path: "/toml-to-json",
         packageUrl: "https://www.npmjs.com/package/@iarna/toml",
         packageName: "@iarna/toml"
+      },
+      {
+        label: "TOML to YAML",
+        path: "/toml-to-yaml"
       }
     ]
   }
