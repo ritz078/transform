@@ -4,7 +4,7 @@ import * as React from "react";
 import yaml from "yaml";
 import toml from "@iarna/toml";
 
-export default function YamlToJson() {
+export default function YamlToToml() {
   const transformer = useCallback(async ({ value }) => {
     return toml.stringify(yaml.parse(value));
   }, []);
