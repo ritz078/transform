@@ -65,12 +65,21 @@ export default function App(props) {
 
   return (
     <>
-      <Meta
-        title={activeRoute?.searchTerm}
-        url={`https://transform.tools${router.pathname}`}
-        description={activeRoute?.desc}
-        image={"https://transform.tools/cover.png"}
-      />
+      {router.pathname === "/" || !router.pathname ? (
+        <Meta
+          title={"Transform"}
+          url={`https://transform.tools${router.pathname}`}
+          description={
+            "A polyglot web converter that helps you in converting code from language to another."
+          }
+        />
+      ) : (
+        <Meta
+          title={activeRoute?.searchTerm}
+          url={`https://transform.tools${router.pathname}`}
+          description={activeRoute?.desc}
+        />
+      )}
       <Pane
         display="flex"
         alignItems="center"
