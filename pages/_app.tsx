@@ -68,9 +68,9 @@ export default class extends App {
     return (
       <>
         <Meta
-          title={activeRoute.searchTerm}
-          url={IN_BROWSER && `${window.location.origin}${activeRoute.path}`}
-          description={activeRoute.desc}
+          title={activeRoute?.searchTerm}
+          url={IN_BROWSER && `${window.location.origin}${activeRoute?.path}`}
+          description={activeRoute?.desc}
           image={"https://transform.tools/cover.png"}
         />
         <Pane
