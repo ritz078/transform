@@ -388,6 +388,8 @@ export function activeRouteData(
   path: string;
   searchTerm: string;
   desc: string;
+  packageUrl?: string;
+  packageName?: string;
 } {
   return find(routes, o => o.path === pathname);
 }
