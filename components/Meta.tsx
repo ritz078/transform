@@ -1,4 +1,5 @@
 import Head from "next/head";
+import React from "react";
 
 export const Meta = ({ title, description, url, image }) => {
   return (
@@ -15,6 +16,7 @@ export const Meta = ({ title, description, url, image }) => {
       <meta name="twitter:image" content={image} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:creator" content="ritz078" />
+      <link rel="manifest" href="/static/site.webmanifest" />
     </Head>
   );
 };
