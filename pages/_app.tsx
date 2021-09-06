@@ -8,6 +8,7 @@ import NProgress from "nprogress";
 import Router from "next/router";
 import { activeRouteData } from "@utils/routes";
 import Head from "next/head";
+import { Meta } from "@components/Meta";
 
 const logo = (
   <svg
@@ -66,13 +67,12 @@ export default class extends App {
 
     return (
       <>
-        <Head>
-          <title>
-            {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
-          </title>
-          <meta name="description" content={activeRoute && activeRoute.desc} />
-          <meta name="viewport" content="width=1024" />
-        </Head>
+        <Meta
+          title={activeRoute.searchTerm}
+          url={IN_BROWSER && `${window.location.origin}${activeRoute.path}`}
+          description={activeRoute.desc}
+          image={"https://transform.tools/cover.png"}
+        />
         <Pane
           display="flex"
           alignItems="center"

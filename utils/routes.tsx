@@ -381,6 +381,13 @@ export const routes = flatten(
   )
 );
 
-export function activeRouteData(pathname) {
+export function activeRouteData(
+  pathname
+): {
+  label: string;
+  path: string;
+  searchTerm: string;
+  desc: string;
+} {
   return find(routes, o => o.path === pathname);
 }
