@@ -1,13 +1,13 @@
-import React from "react";
-import App from "next/app";
+import React, { useEffect } from "react";
 import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
 import NProgress from "nprogress";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
 import Head from "next/head";
+import { Meta } from "@components/Meta";
 
 const logo = (
   <svg
@@ -30,98 +30,90 @@ const logo = (
   </svg>
 );
 
-export default class extends App {
-  timer: any;
+export default function App(props) {
+  const router = useRouter();
 
-  private stopProgress = () => {
-    clearTimeout(this.timer);
-    NProgress.done();
-  };
+  useEffect(() => {
+    let timer;
 
-  private startProgress = () => NProgress.start();
+    const stopProgress = () => {
+      clearTimeout(timer);
+      NProgress.done();
+    };
 
-  private showProgressBar = () => {
-    this.timer = setTimeout(this.startProgress, 300);
-    Router.events.on("routeChangeComplete", this.stopProgress);
-    Router.events.on("routeChangeError", this.stopProgress);
-  };
+    const startProgress = () => NProgress.start();
 
-  componentDidMount(): void {
-    Router.events.on("routeChangeStart", this.showProgressBar);
-  }
+    const showProgressBar = () => {
+      timer = setTimeout(startProgress, 300);
+      router.events.on("routeChangeComplete", stopProgress);
+      router.events.on("routeChangeError", stopProgress);
+    };
 
-  componentWillUnmount(): void {
-    Router.events.off("routeChangeComplete", this.stopProgress);
-    Router.events.off("routeChangeError", this.stopProgress);
-    Router.events.off("routeChangeStart", this.showProgressBar);
-    this.timer && clearTimeout(this.timer);
-  }
+    router.events.on("routeChangeStart", showProgressBar);
 
-  render(): JSX.Element {
-    const { Component, pageProps } = this.props;
+    return () => {
+      router.events.off("routeChangeComplete", stopProgress);
+      router.events.off("routeChangeError", stopProgress);
+      router.events.off("routeChangeStart", showProgressBar);
+      timer && clearTimeout(timer);
+    };
+  }, []);
 
-    const activeRoute = IN_BROWSER
-      ? activeRouteData(Router.pathname)
-      : undefined;
+  const { Component, pageProps } = props;
 
-    return (
-      <>
-        <Head>
-          <title>
-            {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
-          </title>
-          <meta name="description" content={activeRoute && activeRoute.desc} />
-          <meta name="viewport" content="width=1024" />
-        </Head>
-        <Pane
-          display="flex"
-          alignItems="center"
-          flexDirection="row"
-          is="header"
-          height={40}
-          backgroundColor="#0e7ccf"
-          paddingRight={20}
-        >
-          <Pane
-            flex={1}
-            display="flex"
-            paddingX={20}
-            className="logo-transform"
+  const activeRoute = activeRouteData(router.pathname);
+
+  return (
+    <>
+      <Meta
+        title={activeRoute?.searchTerm}
+        url={`https://transform.tools${router.pathname}`}
+        description={activeRoute?.desc}
+        image={"https://transform.tools/cover.png"}
+      />
+      <Pane
+        display="flex"
+        alignItems="center"
+        flexDirection="row"
+        is="header"
+        height={40}
+        backgroundColor="#0e7ccf"
+        paddingRight={20}
+      >
+        <Pane flex={1} display="flex" paddingX={20} className="logo-transform">
+          {logo}
+        </Pane>
+
+        <Pane display="flex" alignItems={"center"}>
+          <a
+            style={{
+              display: "inline-block",
+              height: 20
+            }}
+            href="https://github.com/ritz078/transform"
           >
-            {logo}
-          </Pane>
-
-          <Pane display="flex" alignItems={"center"}>
-            <a
-              style={{
-                display: "inline-block",
-                height: 20
+            <img
+              src="https://img.shields.io/github/stars/ritz078/transform?style=social"
+              alt=""
+            />
+          </a>
+          <a href="https://github.com/ritz078/transform" target="_blank">
+            <Button
+              appearance="minimal"
+              height={40}
+              css={{
+                color: "#fff !important"
               }}
-              href="https://github.com/ritz078/transform"
             >
-              <img
-                src="https://img.shields.io/github/stars/ritz078/transform?style=social"
-                alt=""
-              />
-            </a>
-            <a href="https://github.com/ritz078/transform" target="_blank">
-              <Button
-                appearance="minimal"
-                height={40}
-                css={{
-                  color: "#fff !important"
-                }}
-              >
-                GitHub
-              </Button>
-            </a>
-          </Pane>
+              GitHub
+            </Button>
+          </a>
         </Pane>
-        <Pane display="flex" flexDirection="row">
-          <Navigator />
-          <Component {...pageProps} />
-        </Pane>
-      </>
-    );
-  }
+      </Pane>
+      <Pane display="flex" flexDirection="row">
+        <Navigator />
+        <Component {...pageProps} />
+      </Pane>
+    </>
+  );
 }

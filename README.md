@@ -1,4 +1,4 @@
-![Demo](demo.png)
+![Demo](public/cover.png)
 
 ---
 
