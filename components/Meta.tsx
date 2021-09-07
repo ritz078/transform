@@ -5,6 +5,7 @@ export const Meta = ({ title, description, url }) => {
   return (
     <Head>
       <title>{title}</title>
+      <link rel="icon" href="/static/favicon.png" type="image/png" />
       <meta content={description} name="description" />
       <meta name="og:url" content={url} />
       <meta name="og:title" content={title} />
