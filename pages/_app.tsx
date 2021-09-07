@@ -70,7 +70,7 @@ export default function App(props) {
           title={"Transform"}
           url={`https://transform.tools${router.pathname}`}
           description={
-            "A polyglot web converter that helps you in converting code from language to another."
+            "A polyglot web converter that's going to save you a lot of time."
           }
         />
       ) : (
