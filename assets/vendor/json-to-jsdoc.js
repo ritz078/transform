@@ -167,11 +167,9 @@ function printTheTypeDef(obj, jsonObjects) {
 
   output = `/** @typedef {${getUnique(jsonTypes)}} ${jsonDef} \n`;
 
-  Object.keys(obj)
-    .sort()
-    .forEach(key => {
-      output += `* @property {${obj[key].join("|")}} ${key} \n`;
-    });
+  Object.keys(obj).forEach(key => {
+    output += `* @property {${obj[key].join("|")}} ${key} \n`;
+  });
 
   output += "*/";
 
