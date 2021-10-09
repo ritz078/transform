@@ -82,8 +82,7 @@ function getTypeOfValue(value) {
     .toLowerCase();
 
   if (!currentType) currentType = "*";
-
-  return currentType[0].toUpperCase() + currentType.substr(1);
+  return currentType;
 }
 /**
  * @param {Array} array - The array that we want to parse
