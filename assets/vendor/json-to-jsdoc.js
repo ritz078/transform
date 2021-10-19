@@ -82,8 +82,7 @@ function getTypeOfValue(value) {
     .toLowerCase();
 
   if (!currentType) currentType = "*";
-
-  return currentType[0].toUpperCase() + currentType.substr(1);
+  return currentType;
 }
 /**
  * @param {Array} array - The array that we want to parse
@@ -125,6 +124,12 @@ function parseObject(obj, objectName, doNotReinsert = false) {
     const currentPrefix = `${prefix}${propertyName}`;
     let result = null;
 
+    // Root Object don't have a objectName
+    if (!doNotReinsert && objectName) {
+      if (!(objectName in this)) this[objectName] = [];
+      this[objectName].push("object");
+    }
+
     // If it's Array, we need the values inside.
     if (propertyType === "array")
       parseArray.bind(this, currentValue, currentPrefix)();
@@ -136,11 +141,6 @@ function parseObject(obj, objectName, doNotReinsert = false) {
       this[currentPrefix].push(result);
     }
   });
-  // Root Object don't have a objectName
-  if (!doNotReinsert && objectName) {
-    if (!(objectName in this)) this[objectName] = [];
-    this[objectName].push("object");
-  }
 }
 
 function ParseRootDefinition(obj) {
