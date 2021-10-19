@@ -65,7 +65,7 @@
     "json-schema-to-typescript": "^10.1.4",
     "json-to-go": "gist:0d0b8324131c80eeb7e1df20001be32f",
     "json-ts": "^1.6.4",
-    "json_typegen_wasm": "^0.6.1",
+    "json_typegen_wasm": "^0.7.0",
     "jsonld": "^5.2.0",
     "jsonschema-protobuf": "^1.0.2",
     "lodash": "^4.17.21",
