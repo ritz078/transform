@@ -1,13 +1,13 @@
-import React from "react";
-import App from "next/app";
+import React, { useEffect } from "react";
 import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
 import NProgress from "nprogress";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
 import Head from "next/head";
+import { Meta } from "@components/Meta";
 
 const logo = (
   <svg
@@ -30,133 +30,99 @@ const logo = (
   </svg>
 );
 
-function renderHeadWay() {
-  if (!IN_BROWSER) return;
+export default function App(props) {
+  const router = useRouter();
 
-  const HW_config = {
-    selector: ".transform-changelog", // CSS selector where to inject the badge
-    account: "J0B24x",
-    trigger: ".transform-changelog"
-  };
+  useEffect(() => {
+    let timer;
 
-  (function(src) {
-    const tag = document.createElement("script");
-    tag.async = false;
-    tag.src = src;
-    document.getElementsByTagName("body")[0].appendChild(tag);
-
-    tag.onload = () => {
-      // @ts-ignore
-      window.Headway.init(HW_config);
+    const stopProgress = () => {
+      clearTimeout(timer);
+      NProgress.done();
     };
-  })("https://cdn.headwayapp.co/widget.js");
-}
 
-export default class extends App {
-  timer: any;
+    const startProgress = () => NProgress.start();
 
-  private stopProgress = () => {
-    clearTimeout(this.timer);
-    NProgress.done();
-  };
+    const showProgressBar = () => {
+      timer = setTimeout(startProgress, 300);
+      router.events.on("routeChangeComplete", stopProgress);
+      router.events.on("routeChangeError", stopProgress);
+    };
 
-  private startProgress = () => NProgress.start();
+    router.events.on("routeChangeStart", showProgressBar);
 
-  private showProgressBar = () => {
-    this.timer = setTimeout(this.startProgress, 300);
-    Router.events.on("routeChangeComplete", this.stopProgress);
-    Router.events.on("routeChangeError", this.stopProgress);
-  };
+    return () => {
+      router.events.off("routeChangeComplete", stopProgress);
+      router.events.off("routeChangeError", stopProgress);
+      router.events.off("routeChangeStart", showProgressBar);
+      timer && clearTimeout(timer);
+    };
+  }, []);
 
-  componentDidMount(): void {
-    Router.events.on("routeChangeStart", this.showProgressBar);
-  }
+  const { Component, pageProps } = props;
 
-  componentWillUnmount(): void {
-    Router.events.off("routeChangeComplete", this.stopProgress);
-    Router.events.off("routeChangeError", this.stopProgress);
-    Router.events.off("routeChangeStart", this.showProgressBar);
-    this.timer && clearTimeout(this.timer);
-  }
+  const activeRoute = activeRouteData(router.pathname);
 
-  render(): JSX.Element {
-    const { Component, pageProps } = this.props;
+  return (
+    <>
+      {router.pathname === "/" || !router.pathname ? (
+        <Meta
+          title={"Transform"}
+          url={`https://transform.tools${router.pathname}`}
+          description={
+            "A polyglot web converter that's going to save you a lot of time."
+          }
+        />
+      ) : (
+        <Meta
+          title={activeRoute?.searchTerm}
+          url={`https://transform.tools${router.pathname}`}
+          description={activeRoute?.desc}
+        />
+      )}
+      <Pane
+        display="flex"
+        alignItems="center"
+        flexDirection="row"
+        is="header"
+        height={40}
+        backgroundColor="#0e7ccf"
+        paddingRight={20}
+      >
+        <Pane flex={1} display="flex" paddingX={20} className="logo-transform">
+          {logo}
+        </Pane>
 
-    renderHeadWay();
-
-    const activeRoute = IN_BROWSER
-      ? activeRouteData(Router.pathname)
-      : undefined;
-
-    return (
-      <>
-        <Head>
-          <title>
-            {activeRoute && (activeRoute.title || activeRoute.searchTerm)}
-          </title>
-          <meta name="description" content={activeRoute && activeRoute.desc} />
-          <meta name="viewport" content="width=1024" />
-          <script async src="https://unpkg.com/thesemetrics@latest" />
-        </Head>
-        <Pane
-          display="flex"
-          alignItems="center"
-          flexDirection="row"
-          is="header"
-          height={40}
-          backgroundColor="#0e7ccf"
-          paddingRight={20}
-        >
-          <Pane
-            flex={1}
-            display="flex"
-            paddingX={20}
-            className="logo-transform"
+        <Pane display="flex" alignItems={"center"}>
+          <a
+            style={{
+              display: "inline-block",
+              height: 20
+            }}
+            href="https://github.com/ritz078/transform"
           >
-            {logo}
-          </Pane>
-
-          <Pane display="flex" alignItems={"center"}>
-            <a
-              style={{
-                display: "inline-block",
-                height: 20
-              }}
-              href="https://github.com/ritz078/transform"
-            >
-              <img
-                src="https://img.shields.io/github/stars/ritz078/transform?style=social"
-                alt=""
-              />
-            </a>
+            <img
+              src="https://img.shields.io/github/stars/ritz078/transform?style=social"
+              alt=""
+            />
+          </a>
+          <a href="https://github.com/ritz078/transform" target="_blank">
             <Button
               appearance="minimal"
               height={40}
-              className="transform-changelog"
               css={{
                 color: "#fff !important"
               }}
             >
-              Changelog
+              GitHub
             </Button>
-            <a href="https://github.com/ritz078/transform" target="_blank">
-              <Button
-                appearance="minimal"
-                height={40}
-                css={{
-                  color: "#fff !important"
-                }}
-              >
-                GitHub
-              </Button>
-            </a>
-          </Pane>
+          </a>
         </Pane>
-        <Pane display="flex" flexDirection="row">
-          <Navigator />
-          <Component {...pageProps} />
-        </Pane>
-      </>
-    );
-  }
+      </Pane>
+      <Pane display="flex" flexDirection="row">
+        <Navigator />
+        <Component {...pageProps} />
+      </Pane>
+    </>
+  );
 }

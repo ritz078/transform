@@ -135,6 +135,12 @@ export const categorizedRoutes = [
         path: "/json-to-json-schema",
         packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
         packageName: "json_typegen_wasm"
+      },
+      {
+        label: "to TOML",
+        path: "/json-to-toml",
+        packageUrl: "https://www.npmjs.com/package/@iarna/toml",
+        packageName: "@iarna/toml"
       }
     ]
   },
@@ -151,7 +157,8 @@ export const categorizedRoutes = [
         label: "to OpenAPI Schema",
         path: "json-schema-to-openapi-schema",
         packageName: "json-schema-to-openapi-schema",
-        packageUrl: "https://github.com/wework/json-schema-to-openapi-schema"
+        packageUrl:
+          "https://github.com/openapi-contrib/json-schema-to-openapi-schema"
       },
       {
         label: "to Protobuf",
@@ -320,7 +327,6 @@ export const categorizedRoutes = [
         packageName: "xml-js",
         packageUrl: "https://github.com/nashwaan/xml-js"
       },
-
       {
         label: "YAML to JSON",
         path: "/yaml-to-json",
@@ -328,10 +334,24 @@ export const categorizedRoutes = [
         packageUrl: "https://github.com/tj/js-yaml"
       },
       {
+        label: "YAML to TOML",
+        path: "/yaml-to-toml"
+      },
+      {
         label: "Markdown to HTML",
         path: "/markdown-to-html",
         packageName: "markdown",
         packageUrl: "https://github.com/evilstreak/markdown-js"
+      },
+      {
+        label: "TOML to JSON",
+        path: "/toml-to-json",
+        packageUrl: "https://www.npmjs.com/package/@iarna/toml",
+        packageName: "@iarna/toml"
+      },
+      {
+        label: "TOML to YAML",
+        path: "/toml-to-yaml"
       }
     ]
   }
@@ -355,12 +375,21 @@ export const routes = flatten(
         ...x,
         category: a.category,
         searchTerm: _label,
-        desc: x.desc || `An online Repl to convert ${_label}`
+        desc: x.desc || `An online playground to convert ${_label}`
       };
     })
   )
 );
 
-export function activeRouteData(pathname) {
+export function activeRouteData(
+  pathname
+): {
+  label: string;
+  path: string;
+  searchTerm: string;
+  desc: string;
+  packageUrl?: string;
+  packageName?: string;
+} {
   return find(routes, o => o.path === pathname);
 }

@@ -266,6 +266,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "agent515",
+      "name": "agent515",
+      "avatar_url": "https://avatars.githubusercontent.com/u/46898603?v=4",
+      "profile": "https://github.com/agent515",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jfsiii",
+      "name": "John Schulz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57655?v=4",
+      "profile": "http://JFSIII.org",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nasrul21",
+      "name": "Nasrul Faizin",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15046792?v=4",
+      "profile": "https://github.com/nasrul21",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

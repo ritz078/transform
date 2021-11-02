@@ -1,0 +1,17 @@
+diff --git a/node_modules/json_typegen_wasm/json_typegen_wasm_bg.js b/node_modules/json_typegen_wasm/json_typegen_wasm_bg.js
+index 8bbefdb..b6167a1 100644
+--- a/node_modules/json_typegen_wasm/json_typegen_wasm_bg.js
++++ b/node_modules/json_typegen_wasm/json_typegen_wasm_bg.js
+@@ -14,6 +14,12 @@ const lTextEncoder = typeof TextEncoder === 'undefined' ? (0, module.require)('u
+ 
+ let cachedTextEncoder = new lTextEncoder('utf-8');
+ 
++if (IN_BROWSER && !window.TextEncoder) {
++        const encoding = require("text-encoding-utf-8");
++        window.TextEncoder = encoding.TextEncoder;
++        window.TextDecoder = encoding.TextDecoder;
++    }
++
+ const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
+     ? function (arg, view) {
+     return cachedTextEncoder.encodeInto(arg, view);

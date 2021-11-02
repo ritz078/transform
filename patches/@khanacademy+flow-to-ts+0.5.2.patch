@@ -1,0 +1,8 @@
+diff --git a/node_modules/@khanacademy/flow-to-ts/.DS_Store b/node_modules/@khanacademy/flow-to-ts/.DS_Store
+new file mode 100644
+index 0000000..c88a062
+Binary files /dev/null and b/node_modules/@khanacademy/flow-to-ts/.DS_Store differ
+diff --git a/node_modules/@khanacademy/flow-to-ts/dist/convert.bundle.js b/node_modules/@khanacademy/flow-to-ts/dist/convert.js
+similarity index 100%
+rename from node_modules/@khanacademy/flow-to-ts/dist/convert.bundle.js
+rename to node_modules/@khanacademy/flow-to-ts/dist/convert.js

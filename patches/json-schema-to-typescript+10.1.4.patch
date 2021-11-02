@@ -1,0 +1,50 @@
+diff --git a/node_modules/json-schema-to-typescript/dist/src/formatter.js b/node_modules/json-schema-to-typescript/dist/src/formatter.js
+index a9362fa..b3fef5a 100644
+--- a/node_modules/json-schema-to-typescript/dist/src/formatter.js
++++ b/node_modules/json-schema-to-typescript/dist/src/formatter.js
+@@ -12,12 +12,11 @@ var __assign = (this && this.__assign) || function () {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.format = void 0;
+-var prettier_1 = require("prettier");
+ function format(code, options) {
+     if (!options.format) {
+         return code;
+     }
+-    return prettier_1.format(code, __assign({ parser: 'typescript' }, options.style));
++    return code
+ }
+ exports.format = format;
+ //# sourceMappingURL=formatter.js.map
+diff --git a/node_modules/json-schema-to-typescript/dist/src/index.js b/node_modules/json-schema-to-typescript/dist/src/index.js
+index f880f17..0ef8b27 100644
+--- a/node_modules/json-schema-to-typescript/dist/src/index.js
++++ b/node_modules/json-schema-to-typescript/dist/src/index.js
+@@ -61,9 +61,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
+ };
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.ValidationError = exports.compile = exports.compileFromFile = exports.DEFAULT_OPTIONS = void 0;
+-var fs_1 = require("fs");
+ var lodash_1 = require("lodash");
+-var path_1 = require("path");
+ var formatter_1 = require("./formatter");
+ var generator_1 = require("./generator");
+ var normalizer_1 = require("./normalizer");
+@@ -95,17 +93,6 @@ exports.DEFAULT_OPTIONS = {
+     unreachableDefinitions: false,
+     unknownAny: true
+ };
+-function compileFromFile(filename, options) {
+-    if (options === void 0) { options = exports.DEFAULT_OPTIONS; }
+-    var contents = utils_1.Try(function () { return fs_1.readFileSync(filename); }, function () {
+-        throw new ReferenceError("Unable to read file \"" + filename + "\"");
+-    });
+-    var schema = utils_1.Try(function () { return JSON.parse(contents.toString()); }, function () {
+-        throw new TypeError("Error parsing JSON in file \"" + filename + "\"");
+-    });
+-    return compile(schema, utils_1.stripExtension(filename), __assign({ cwd: path_1.dirname(filename) }, options));
+-}
+-exports.compileFromFile = compileFromFile;
+ function compile(schema, name, options) {
+     if (options === void 0) { options = {}; }
+     return __awaiter(this, void 0, void 0, function () {

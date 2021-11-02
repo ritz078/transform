@@ -1,6 +1,4 @@
-const withCSS = require("@zeit/next-css");
 const webpack = require("webpack");
-const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
 const config = {
   webpack(config, options) {
@@ -16,28 +14,6 @@ const config = {
         "process.env.DEV": JSON.stringify(options.dev),
         IN_BROWSER: !options.isServer,
         IS_DEV: options.dev
-      }),
-      new MonacoWebpackPlugin({
-        output: "../../public/static/monaco",
-        languages: [
-          "json",
-          "typescript",
-          "css",
-          "javascript",
-          "html",
-          "sql",
-          "xml",
-          "yaml",
-          "rust",
-          "markdown",
-          "go",
-          "graphql",
-          "scala",
-          "plaintext",
-          "java",
-          "pug"
-        ],
-        features: ["folding"]
       })
     );
 
@@ -67,4 +43,4 @@ const config = {
   }
 };
 
-module.exports = withCSS(config);
+module.exports = config;
