@@ -300,6 +300,12 @@ export const categorizedRoutes = [
         path: "/typescript-to-json-schema",
         packageName: "ts-json-schema-generator",
         packageUrl: "https://github.com/vega/ts-json-schema-generator"
+      },
+      {
+        label: "to JavaScript",
+        path: "/typescript-to-javascript"
+        // packageName: "flowgen",
+        // packageUrl: "https://github.com/joarwilk/flowgen"
       }
     ]
   },
