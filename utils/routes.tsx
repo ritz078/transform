@@ -302,7 +302,7 @@ export const categorizedRoutes = [
         packageUrl: "https://github.com/vega/ts-json-schema-generator"
       },
       {
-        label: "to JavaScript",
+        label: "to plain JavaScript",
         path: "/typescript-to-javascript"
       }
     ]
@@ -320,7 +320,7 @@ export const categorizedRoutes = [
         path: "/flow-to-typescript-declaration"
       },
       {
-        label: "to JavaScript",
+        label: "to plain JavaScript",
         path: "/flow-to-javascript"
       }
     ]
