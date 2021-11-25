@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.16.0",
     "@babel/plugin-transform-typescript": "^7.16.1",
     "@babel/preset-env": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
