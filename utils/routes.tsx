@@ -304,8 +304,6 @@ export const categorizedRoutes = [
       {
         label: "to JavaScript",
         path: "/typescript-to-javascript"
-        // packageName: "flowgen",
-        // packageUrl: "https://github.com/joarwilk/flowgen"
       }
     ]
   },
@@ -320,6 +318,10 @@ export const categorizedRoutes = [
       {
         label: "to TypeScript Declaration",
         path: "/flow-to-typescript-declaration"
+      },
+      {
+        label: "to JavaScript",
+        path: "/flow-to-javascript"
       }
     ]
   },

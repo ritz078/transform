@@ -15,6 +15,7 @@ export default function FlowToJavascript() {
       transformer={transformer}
       editorTitle="Flow"
       editorLanguage="plaintext"
+      editorDefaultValue="flow"
       resultTitle="JavaScript"
       resultLanguage={"javascript"}
       resultEditorProps={{

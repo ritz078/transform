@@ -16,6 +16,7 @@ export default function TypescriptToJavascript() {
       transformer={transformer}
       editorTitle="TypeScript"
       editorLanguage="typescript"
+      editorDefaultValue="typescript"
       resultTitle="JavaScript"
       resultLanguage={"javascript"}
       resultEditorProps={{
