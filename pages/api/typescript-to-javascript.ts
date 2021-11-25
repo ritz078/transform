@@ -2,27 +2,21 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { parse, print } from "recast";
 import { transformFromAstSync, parseSync } from "@babel/core";
 import transformTypescript from "@babel/plugin-transform-typescript";
+import getBabelOptions from "recast/parsers/_babel_options";
+import { parser } from "recast/parsers/babel";
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const ast = parse(req.body, {
       parser: {
-        parse: source => {
-          debugger;
-          return parseSync(source, {
-            presets: [
-              "@babel/preset-react",
-              "@babel/preset-env",
-              "@babel/preset-typescript"
-            ],
-            filename: "filename.ts", // recast needs this
-            parserOpts: {
-              tokens: true // recast needs this
-            }
-          });
+        parse: (source, options) => {
+          const babelOptions = getBabelOptions(options);
+          babelOptions.plugins.push("typescript", "jsx");
+          return parser.parse(source, babelOptions);
         }
       }
     });
+
     const options = {
       cloneInputAst: false,
       code: false,
