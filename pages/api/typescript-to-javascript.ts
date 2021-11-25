@@ -18,7 +18,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const options = {
-      cloneInputAst: false,
+      cloneInputAst: false, // recast stores metadata in AST nodes, so disable cloning will preserve the original code style
       code: false,
       ast: true,
       plugins: [transformTypescript],
