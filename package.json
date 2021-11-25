@@ -18,6 +18,8 @@
     "node": "12.x"
   },
   "dependencies": {
+    "@babel/plugin-transform-flow-strip-types": "^7.16.0",
+    "@babel/plugin-transform-typescript": "^7.16.1",
     "@babel/standalone": "^7.14.7",
     "@graphql-codegen/core": "^1.17.10",
     "@graphql-codegen/flow": "^1.19.3",
@@ -79,6 +81,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.0.1",
+    "recast": "^0.20.5",
     "rust-keywords": "^1.1.0",
     "sha1": "^1.1.1",
     "stringify-object": "^3.3.0",
