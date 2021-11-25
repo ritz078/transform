@@ -18,12 +18,8 @@
     "node": "12.x"
   },
   "dependencies": {
-    "@babel/core": "^7.16.0",
     "@babel/plugin-transform-flow-strip-types": "^7.16.0",
     "@babel/plugin-transform-typescript": "^7.16.1",
-    "@babel/preset-env": "^7.16.0",
-    "@babel/preset-react": "^7.16.0",
-    "@babel/preset-typescript": "^7.16.0",
     "@babel/standalone": "^7.14.7",
     "@graphql-codegen/core": "^1.17.10",
     "@graphql-codegen/flow": "^1.19.3",
