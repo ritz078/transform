@@ -7,7 +7,7 @@ export const json = JSON.stringify(
   },
   null,
   2
-);
+)
 
 export const html = `<!-- Hello world -->
 <div class="awesome" style="border: 1px solid red">
