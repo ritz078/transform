@@ -95,10 +95,15 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
           splitEditorValue: splitTitle ? splitValue : undefined
         });
 
-        const prettyResult = await prettierWorker.send({
+        let prettyResult = await prettierWorker.send({
           value: result,
           language: resultLanguage
         });
+
+        // Fix for #319
+        if (prettyResult.startsWith(";<")) {
+          prettyResult = prettyResult.slice(1);
+        }
         setResult(prettyResult);
         setMessage("");
       } catch (e) {
