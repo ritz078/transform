@@ -2,12 +2,19 @@ import React, { useEffect } from "react";
 import { Button, Pane } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
+import Ganalytics from "ganalytics";
 
 import NProgress from "nprogress";
 import Router, { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
 import Head from "next/head";
 import { Meta } from "@components/Meta";
+
+let ga;
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  ga = Ganalytics("UA-60624235-8", { aid: 1 });
+}
 
 const logo = (
   <svg
@@ -33,6 +40,8 @@ const logo = (
 export default function App(props) {
   const router = useRouter();
 
+  useEffect(() => {}, []);
+
   useEffect(() => {
     let timer;
 
@@ -41,7 +50,10 @@ export default function App(props) {
       NProgress.done();
     };
 
-    const startProgress = () => NProgress.start();
+    const startProgress = () => {
+      ga.send("pageview");
+      return NProgress.start();
+    };
 
     const showProgressBar = () => {
       timer = setTimeout(startProgress, 300);
