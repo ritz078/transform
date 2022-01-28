@@ -12,6 +12,7 @@ import { Meta } from "@components/Meta";
 
 let ga;
 if (typeof window !== "undefined") {
+  // @ts-ignore
   ga = Ganalytics("UA-60624235-8", { aid: 1 });
 }
 
