@@ -4642,11 +4642,6 @@ fuzzaldrin-plus@^0.6.0:
   resolved "https://registry.yarnpkg.com/fuzzaldrin-plus/-/fuzzaldrin-plus-0.6.0.tgz#832f6489fbe876769459599c914a670ec22947ee"
   integrity sha1-gy9kifvodnaUWVmckUpnDsIpR+4=
 
-ganalytics@^3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/ganalytics/-/ganalytics-3.1.3.tgz#523e41d73eef8fff9dabd29e93a3a59e01871ca7"
-  integrity sha512-A+cqBDJgT2ELZlJKF31fEhPGnMw1dVPeUyjaMv66l33dFu4du7QmXbrzXqblCOx/EyhONWx/vBbkUnJ5QpHpOA==
-
 generate-schema@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/generate-schema/-/generate-schema-2.6.0.tgz#9ac037550fd4243783a9f7681d39bee8870bcec2"
