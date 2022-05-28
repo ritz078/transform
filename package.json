@@ -15,7 +15,7 @@
     "build:analyze": "ANALYZE=true yarn build"
   },
   "engines": {
-    "node": "14.x"
+    "node": "16.x"
   },
   "dependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.16.0",
@@ -93,7 +93,6 @@
     "text-encoding-utf-8": "^1.0.2",
     "transform-json-types": "^0.7.0",
     "ts-json-schema-generator": "^0.93.0",
-    "typescript": "4.3.4",
     "xml-js": "^1.6.11",
     "yaml": "^1.10.2"
   },
@@ -109,6 +108,7 @@
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.0.0",
     "pretty-quick": "^3.1.1",
+    "typescript": "4.3.4",
     "ui-box": "2.1.0",
     "webpack": "^4.44.1",
     "worker-loader": "^2.0.0"
