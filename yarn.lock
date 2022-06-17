@@ -5997,6 +5997,13 @@ json-stringify-safe@^5.0.1, json-stringify-safe@~5.0.1:
   version "1.0.0"
   resolved "https://gist.github.com/0d0b8324131c80eeb7e1df20001be32f.git#3c19dec6061daff466b13783fea94c49e4f62e86"
 
+json-to-zod@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/json-to-zod/-/json-to-zod-1.1.2.tgz#626d4432f329c51089120858c9404234567dda1b"
+  integrity sha512-6YDvnY8oOS5v1H1CWUvfNJkCI3SGbmCwWMytndPHzwyrr1K9ayNXL4rvOSf7WCy3c3Pxu2brvt4idZCkKh9gfQ==
+  dependencies:
+    prettier "^2.3.2"
+
 json-ts@^1.6.4:
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/json-ts/-/json-ts-1.6.4.tgz#e4423b8ccdb3069306f4727d6a579790675abbd0"
@@ -7852,6 +7859,11 @@ prettier@^2.1.1, prettier@^2.2.0:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
   integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
+
+prettier@^2.3.2:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
+  integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
 
 pretty-hrtime@^1.0.3:
   version "1.0.3"

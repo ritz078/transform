@@ -141,6 +141,12 @@ export const categorizedRoutes = [
         path: "/json-to-toml",
         packageUrl: "https://www.npmjs.com/package/@iarna/toml",
         packageName: "@iarna/toml"
+      },
+      {
+        label: "to Zod Schema",
+        path: "/json-to-zod",
+        packageUrl: "https://github.com/rsinohara/json-to-zod",
+        packageName: "json-to-zod"
       }
     ]
   },
