@@ -316,6 +316,12 @@ export const categorizedRoutes = [
       {
         label: "to plain JavaScript",
         path: "/typescript-to-javascript"
+      },
+      {
+        label: "to Zod Schema",
+        path: "/typescript-to-zod",
+        packageName: "ts-to-zod",
+        packageUrl: "https://github.com/fabien0102/ts-to-zod"
       }
     ]
   },
