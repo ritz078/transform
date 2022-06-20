@@ -145,7 +145,7 @@ export const categorizedRoutes = [
       {
         label: "to Zod Schema",
         path: "/json-to-zod",
-        packageUrl: "https://github.com/rsinohara/json-to-zod",
+        packageUrl: "https://www.npmjs.com/package/json-to-zod",
         packageName: "json-to-zod"
       }
     ]
@@ -176,7 +176,7 @@ export const categorizedRoutes = [
         label: "to Zod Schema",
         path: "json-schema-to-zod",
         packageName: "json-schema-to-zod",
-        packageUrl: "https://github.com/StefanTerdell/json-schema-to-zod"
+        packageUrl: "https://www.npmjs.com/package/json-schema-to-zod"
       }
     ]
   },
@@ -321,7 +321,7 @@ export const categorizedRoutes = [
         label: "to Zod Schema",
         path: "/typescript-to-zod",
         packageName: "ts-to-zod",
-        packageUrl: "https://github.com/fabien0102/ts-to-zod"
+        packageUrl: "https://www.npmjs.com/package/ts-to-zod"
       }
     ]
   },
