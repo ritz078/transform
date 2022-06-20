@@ -171,6 +171,12 @@ export const categorizedRoutes = [
         path: "json-schema-to-protobuf",
         packageName: "jsonschema-protobuf",
         packageUrl: "https://github.com/okdistribute/jsonschema-protobuf"
+      },
+      {
+        label: "to Zod Schema",
+        path: "json-schema-to-zod",
+        packageName: "json-schema-to-zod",
+        packageUrl: "https://github.com/StefanTerdell/json-schema-to-zod"
       }
     ]
   },

@@ -1483,6 +1483,11 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.7.tgz#98a993516c859eb0d5c4c8f098317a9ea68db9ad"
   integrity sha512-cxWFQVseBm6O9Gbw1IWb8r6OS4OhSt3hPZLkFApLjM8TEXROBuQGLAH2i2gZpcXdLBIrpXuTDhH7Vbm1iXmNGA==
 
+"@types/json-schema@^7.0.9":
+  version "7.0.11"
+  resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"
+  integrity sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==
+
 "@types/jsonld@^1.5.5":
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/@types/jsonld/-/jsonld-1.5.5.tgz#c2238462a83e90f003929cef6a36eded2ceed069"
@@ -5943,7 +5948,7 @@ json-parse-even-better-errors@^2.3.0:
   resolved "https://registry.yarnpkg.com/json-parse-even-better-errors/-/json-parse-even-better-errors-2.3.0.tgz#371873c5ffa44304a6ba12419bcfa95f404ae081"
   integrity sha512-o3aP+RsWDJZayj1SbHNQAI8x0v3T3SKiGoZlNYfbUP1S3omJQ6i9CnqADqkSPaOAxwua4/1YWx5CM7oiChJt2Q==
 
-json-schema-ref-parser@^9.0.6:
+json-schema-ref-parser@^9.0.6, json-schema-ref-parser@^9.0.9:
   version "9.0.9"
   resolved "https://registry.yarnpkg.com/json-schema-ref-parser/-/json-schema-ref-parser-9.0.9.tgz#66ea538e7450b12af342fa3d5b8458bc1e1e013f"
   integrity sha512-qcP2lmGy+JUoQJ4DOQeLaZDqH9qSkeGCK3suKWxJXS82dg728Mn3j97azDMaOUmJAN4uCq91LdPx4K7E8F1a7Q==
@@ -5970,6 +5975,15 @@ json-schema-to-typescript@^10.1.4:
     mkdirp "^1.0.4"
     mz "^2.7.0"
     prettier "^2.2.0"
+
+json-schema-to-zod@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/json-schema-to-zod/-/json-schema-to-zod-0.1.2.tgz#8a2dfd87fa720c0f6f8e0083c84906d12831f5e1"
+  integrity sha512-V9Ixdu+1DfemGZiq//zj3ED4NSM4SIZp+F3sGpoPeDAGALjoqExN1XFT2xhVpx1MjJPzGVDtX6UAQI3p9tXU3w==
+  dependencies:
+    "@types/json-schema" "^7.0.9"
+    json-schema-ref-parser "^9.0.9"
+    prettier "^2.4.1"
 
 json-schema-traverse@^0.4.1:
   version "0.4.1"
@@ -7860,7 +7874,7 @@ prettier@^2.1.1, prettier@^2.2.0:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
   integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
 
-prettier@^2.3.2:
+prettier@^2.3.2, prettier@^2.4.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.7.1.tgz#e235806850d057f97bb08368a4f7d899f7760c64"
   integrity sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==
