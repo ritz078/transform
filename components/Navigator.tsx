@@ -75,10 +75,13 @@ export default function Navigator() {
       </Pane>
 
       <Pane borderTop>
-        <a href="https://www.buymeacoffee.com/ritz078" target="_blank">
+        <a
+          href="https://vercel.com?utm_source=ritz078&utm_campaign=oss"
+          target="_blank"
+        >
           <img
-            src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png"
-            alt="Buy Me A Coffee"
+            src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg"
+            alt="Vercel"
             style={{
               height: 40,
               display: "block",

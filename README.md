@@ -4,6 +4,8 @@
 
 <a href="https://www.producthunt.com/posts/transform-2-0?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-transform-2-0" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=161868&theme=light" alt="Transform 2.0 - A polyglot web converter | Product Hunt Embed" style="width: 250px; height: 54px;" width="250px" height="54px" /></a>
 
+<a href="https://vercel.com?utm_source=ritz078&utm_campaign=oss" target="_blank"><img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" alt="Vercel" style="height:40px;"/></a>
+
 ## Credits
 
 The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
