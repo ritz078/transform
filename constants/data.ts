@@ -442,3 +442,11 @@ completed = false
 [company]
 id = 12
 name = "Transform Inc"`;
+
+export const cadence = `pub struct Root {
+  pub let userId: UInt64
+  pub let id: UInt64
+  pub let title: String
+  pub let completed: Bool
+}
+`
