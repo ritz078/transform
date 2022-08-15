@@ -54,7 +54,6 @@ async function cadenceToGo(value: string): Promise<string> {
     }
     ret += decRet
   }
-  console.log(ret)
   return ret
 }
 
