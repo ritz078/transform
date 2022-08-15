@@ -40,7 +40,6 @@ async function cadenceToGo(value: string): Promise<string> {
   const declarations = program.Declarations
   let ret = ''
   for (const dec of declarations) {
-    console.log(dec)
     let decRet = ''
     // only struct can be converted
     if (dec.CompositeKind === "CompositeKindStructure") {
