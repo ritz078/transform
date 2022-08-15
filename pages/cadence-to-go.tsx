@@ -69,7 +69,7 @@ export default function CadenceToGo() {
     <ConversionPanel
       transformer={transformer}
       editorTitle="Cadence"
-      editorLanguage="cadence"
+      editorLanguage="text"
       editorDefaultValue="cadence"
       resultTitle="Go struct"
       resultLanguage={"go"}
