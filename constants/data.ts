@@ -442,3 +442,51 @@ completed = false
 [company]
 id = 12
 name = "Transform Inc"`;
+
+export const cadence = `pub struct StructContainsManyType {
+	pub var intValue: Int
+	pub var int8Value: Int8
+	pub var int16Value: Int16
+	pub var int32Value: Int32
+	pub var int64Value: Int64
+	pub var int128Value: Int128
+	pub var int256Value: Int256
+	pub var uintValue: UInt
+	pub var uint8Value: UInt8
+	pub var uint16Value: UInt16
+	pub var uint32Value: UInt32
+	pub var uint64Value: UInt64
+	pub var uint128Value: UInt128
+	pub var uint256Value: UInt256
+	pub var stringValue: String
+	pub var addressValue: Address
+	pub var boolValue: Bool
+  pub var characterValue: Character
+  pub var pathValue: Path
+
+	init() {
+		self.intValue = 127
+		self.int8Value = 127
+		self.int16Value = 127
+		self.int32Value = 127
+		self.int64Value = 127
+		self.int128Value = 127
+		self.int256Value = 127
+		self.uintValue = 127
+		self.uint8Value = 127
+		self.uint16Value = 127
+		self.uint32Value = 127
+		self.uint64Value = 127
+		self.uint128Value = 127
+		self.uint256Value = 127
+		self.stringValue = "LemonNeko"
+		self.addressValue = 0x0
+		self.boolValue = true
+    self.characterValue = "a"
+    self.pathValue = /storage/CollectionStorage
+	}
+}
+pub fun main(): StructContainsManyType {
+	return StructContainsManyType()
+}
+`

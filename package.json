@@ -101,6 +101,7 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
+    "@lemonneko/flow__cadence-parser": "^0.24.1",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.5",
     "@types/prettier": "^2.3.0",
