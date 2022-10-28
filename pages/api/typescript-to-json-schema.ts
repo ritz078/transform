@@ -18,7 +18,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       encoding: "utf-8"
     });
 
-    const stdout = await _exec(`typescript-json-schema ${filePath} Root`);
+    const stdout = await _exec(
+      `./node_modules/.bin/typescript-json-schema ${filePath} Root`
+    );
     res.status(200).send(stdout.stdout);
   } catch (e) {
     res.status(500).send(e.message);
