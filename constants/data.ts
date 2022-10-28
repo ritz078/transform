@@ -489,4 +489,4 @@ export const cadence = `pub struct StructContainsManyType {
 pub fun main(): StructContainsManyType {
 	return StructContainsManyType()
 }
-`
+`;

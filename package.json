@@ -94,9 +94,9 @@
     "tempy": "^1.0.1",
     "text-encoding-utf-8": "^1.0.2",
     "transform-json-types": "^0.7.0",
-    "ts-json-schema-generator": "^0.93.0",
     "ts-to-zod": "^1.11.0",
     "typescript": "4.3.4",
+    "typescript-json-schema": "^0.54.0",
     "xml-js": "^1.6.11",
     "yaml": "^1.10.2"
   },
