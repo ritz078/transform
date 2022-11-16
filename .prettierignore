@@ -1,1 +1,4 @@
-public/static/monaco
+node_modules
+.idea
+.next
+.vscode
