@@ -20,6 +20,7 @@ export default function JsonToJava() {
     let variableTypes: string[] = [];
 
     kotlinTransformationLines.forEach((line: string) => {
+      const originalLine = line;
       line = line.trim();
 
       if (line === ")") {
@@ -116,7 +117,7 @@ export default function JsonToJava() {
         javaTransformation += `${line};`;
       } else {
         // If there's any other line, it is most probably a 'next line character', so just append it
-        javaTransformation += line;
+        javaTransformation += originalLine;
       }
 
       javaTransformation += "\n";
