@@ -80,10 +80,14 @@ export default function JsonToJava() {
           variableEndIndex
         );
         const typeStartIndex = processedLine.indexOf(":") + 2;
-        const type = processedLine.substring(
+        let type: string = processedLine.substring(
           typeStartIndex,
           processedLine.length - 1
         );
+
+        // Update kotlin generic typing to Java generic typing
+        type = type.replace("<Any>?", "<?>");
+        type = type.replace("<Any>", "<?>");
 
         // Save variables and their types to be later used in constructor, getter, setter generation
         variableNames.push(variable);
@@ -108,6 +112,8 @@ export default function JsonToJava() {
         const constructor = `\tpublic ${className}(${type} ${variable}) {\n\t\tthis.${variable} = ${variable};\n\t}\n`;
         javaTransformation += `public class ${className} {\n\tprivate ${type} ${variable};\n`;
         javaTransformation += `\n${constructor}\n${getters}${setters}}`;
+      } else if (line.startsWith("import")) {
+        javaTransformation += `${line};`;
       } else {
         // If there's any other line, it is most probably a 'next line character', so just append it
         javaTransformation += line;
