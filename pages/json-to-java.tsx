@@ -105,7 +105,7 @@ export default function JsonToJava() {
         const titleCaseVariable = className;
         const getters = `\tpublic ${type} get${titleCaseVariable}() {\n\t\treturn this.${variable};\n\t}\n\n`;
         const setters = `\tpublic void set${titleCaseVariable}(${type} ${variable}) {\n\t\tthis.${variable} = ${variable};\n\t}\n\n`;
-        const constructor = `\tpublic ${className}(${type} ${variable}) {\n\t\tthis.${variable} = ${variable}\n\t}\n`;
+        const constructor = `\tpublic ${className}(${type} ${variable}) {\n\t\tthis.${variable} = ${variable};\n\t}\n`;
         javaTransformation += `public class ${className} {\n\tprivate ${type} ${variable};\n`;
         javaTransformation += `\n${constructor}\n${getters}${setters}}`;
       } else {
