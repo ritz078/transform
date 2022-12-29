@@ -131,6 +131,12 @@ export const categorizedRoutes = [
         packageName: "json_typegen_wasm"
       },
       {
+        label: "to Java",
+        path: "/json-to-java",
+        packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
+        packageName: "json_typegen_wasm"
+      },
+      {
         label: "to JSON Schema",
         path: "/json-to-json-schema",
         packageUrl: "https://www.npmjs.com/package/json_typegen_wasm",
