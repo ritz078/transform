@@ -16,6 +16,7 @@ export default function Navigator() {
       display="flex"
       flexDirection="column"
       paddingTop={20}
+      backgroundColor="#FFFFFF"
     >
       <Pane paddingX={15}>
         <SearchBox />

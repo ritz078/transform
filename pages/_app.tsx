@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Pane } from "evergreen-ui";
+import { Button, IconButton, Pane, Tooltip } from "evergreen-ui";
 import Navigator from "@components/Navigator";
 import "@styles/main.css";
 
@@ -8,6 +8,7 @@ import Router, { useRouter } from "next/router";
 import { activeRouteData } from "@utils/routes";
 import Head from "next/head";
 import { Meta } from "@components/Meta";
+import { useDarkMode } from "@hooks/useDarkMode";
 
 const logo = (
   <svg
@@ -31,6 +32,7 @@ const logo = (
 );
 
 export default function App(props) {
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
   const router = useRouter();
 
   useEffect(() => {
@@ -92,7 +94,16 @@ export default function App(props) {
         <Pane flex={1} display="flex" paddingX={20} className="logo-transform">
           {logo}
         </Pane>
-
+        <Pane display="flex" alignItems={"center"}>
+          <Tooltip content="Toggle dark mode">
+            <IconButton
+              height={20}
+              marginRight={10}
+              icon="moon"
+              onClick={toggleDarkMode}
+            />
+          </Tooltip>
+        </Pane>
         <Pane display="flex" alignItems={"center"}>
           <a
             style={{
@@ -106,6 +117,7 @@ export default function App(props) {
               alt=""
             />
           </a>
+
           <a href="https://github.com/ritz078/transform" target="_blank">
             <Button
               appearance="minimal"
@@ -119,7 +131,13 @@ export default function App(props) {
           </a>
         </Pane>
       </Pane>
-      <Pane display="flex" flexDirection="row">
+
+      <Pane
+        backgroundColor="#FFFFFF"
+        className={isDarkMode ? "dark" : "light"}
+        display="flex"
+        flexDirection="row"
+      >
         <Navigator />
         <Component {...pageProps} />
       </Pane>
