@@ -6,10 +6,6 @@
 
 <a href="https://vercel.com?utm_source=ritz078&utm_campaign=oss" target="_blank"><img src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg" alt="Vercel" style="height:40px;"/></a>
 
-## Credits
-
-The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
-
 ## Sponsors
 
 <table>
@@ -19,6 +15,10 @@ The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
     </tr>
   </tbody>
 </table>
+
+## Credits
+
+The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
 
 ## License
 
