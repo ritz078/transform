@@ -10,6 +10,16 @@
 
 The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
 
+## Sponsors
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SuttonJack"><img src="https://avatars.githubusercontent.com/u/92991945?v=4?s=100" width="100px;" alt="Jack Sutton"/><br /><sub><b>Jack Sutton</b></sub></a></td>
+    </tr>
+  </tbody>
+</table>
+
 ## License
 
 MIT @ Ritesh Kumar
