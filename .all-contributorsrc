@@ -329,6 +329,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "SuttonJack",
+      "name": "Jack Sutton",
+      "avatar_url": "https://avatars.githubusercontent.com/u/92991945?v=4",
+      "profile": "https://github.com/SuttonJack",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
