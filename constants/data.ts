@@ -113,6 +113,62 @@ export const css2 = `.alert {
 }
 `;
 
+export const css3 = `:root {
+  --some-color: #090909;
+}
+
+.foo {
+  padding: 0.875em 256px;
+  margin-left: 16px;
+  text-align: center;
+  font-size: 12px;
+  transition: color, background-color, border-color, text-decoration-color, fill,
+    stroke 200ms cubic-bezier(0, 0, 0.2, 1);
+  animation-delay: 200ms;
+
+  &:hover {
+    filter: blur(4px) brightness(0.5) sepia(100%) contrast(1) hue-rotate(30deg)
+      invert(0) opacity(0.05) saturate(1.5);
+    color: hsl(27, 96%, 61%);
+    font-size: 1.25rem;
+  }
+
+  &[aria-disabled="true"] {
+    width: 25%;
+    color: var(--some-color);
+    font-size: 1em;
+  }
+
+  @media (min-width: 768px) {
+    top: auto;
+    bottom: auto;
+    left: 25%;
+    right: 25%;
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    min-width: 100%;
+    margin-right: -24px;
+  }
+
+  @supports (display: grid) {
+    display: grid;
+    grid-column: span 1 / span 1;
+  }
+}
+
+.foo.bar {
+  padding: 0.875rem 256px 15%;
+  transform: translateX(12px) translateY(-0.5em) skew(1deg, 3deg)
+    scale(-0.75, 1.05) rotate(-0.25turn);
+
+  &::after {
+    content: "*";
+    animation: spin 1s linear infinite;
+  }
+}
+`;
+
 export const javascript = `const container = css({
   flex: 1,
   padding: 10,
@@ -489,4 +545,4 @@ export const cadence = `pub struct StructContainsManyType {
 pub fun main(): StructContainsManyType {
 	return StructContainsManyType()
 }
-`
+`;
