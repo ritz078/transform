@@ -3540,10 +3540,10 @@ css-to-tailwind@^1.0.3:
     postcss-selector-parser "^6.0.2"
     tailwindcss "^1.6.2"
 
-css-to-tailwindcss@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/css-to-tailwindcss/-/css-to-tailwindcss-0.2.3.tgz#3dd9102d4c1aaef37528d2c9797b33b39d424c95"
-  integrity sha512-9bGJgrmT2z+iuoiKDfvZunfDMahfpX/tFn1mB0lxPNPXQGOBah4Qut8UeqMT+Y9V7b7TxSfBZUKBZawSlPpdug==
+css-to-tailwindcss@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/css-to-tailwindcss/-/css-to-tailwindcss-0.2.4.tgz#7a3ca9049f0da0d89abf44115053de814889b296"
+  integrity sha512-9B1TB5D32rZL6hag12J2znglE93q1IPOXBTWD0za6qBxyU1mUg6kZXFyhsyLGMKo/VycSQijjqshOw1rmDc3Sg==
   dependencies:
     colord "^2.9.3"
     css-what "^6.1.0"
@@ -9909,6 +9909,7 @@ symbol@^0.2.1:
     resolve "^1.14.2"
 
 "tailwindcss3@npm:tailwindcss@3.x.x", tailwindcss@^3.2.4:
+  name tailwindcss3
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.2.4.tgz#afe3477e7a19f3ceafb48e4b083e292ce0dc0250"
   integrity sha512-AhwtHCKMtR71JgeYDaswmZXhPcW9iuI9Sp2LvZPo9upDZ7231ZJ7eA9RaURbhpXGVlrjX4cFNlB4ieTetEb7hQ==

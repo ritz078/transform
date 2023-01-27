@@ -54,7 +54,7 @@
     "babel-standalone": "^6.26.0",
     "clipboard-copy": "^4.0.1",
     "css-to-tailwind": "^1.0.3",
-    "css-to-tailwindcss": "^0.2.3",
+    "css-to-tailwindcss": "^0.2.4",
     "evergreen-ui": "^4.28.0",
     "flowgen": "^1.14.1",
     "formik": "^2.2.9",
