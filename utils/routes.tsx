@@ -203,14 +203,8 @@ export const categorizedRoutes = [
         packageName: "babel-plugin-object-styles-to-template"
       },
       {
-        label: "to TailwindCSS 1",
+        label: "to TailwindCSS",
         path: "/css-to-tailwind",
-        packageUrl: "https://github.com/miklosme/css-to-tailwind",
-        packageName: "css-to-tailwind"
-      },
-      {
-        label: "to TailwindCSS 3",
-        path: "/css-to-tailwind3",
         packageUrl: "https://github.com/Jackardios/css-to-tailwindcss",
         packageName: "css-to-tailwindcss"
       }
