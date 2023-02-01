@@ -3433,10 +3433,10 @@ css-select@^2.0.0:
     domutils "^1.7.0"
     nth-check "^1.0.2"
 
-css-to-tailwindcss@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/css-to-tailwindcss/-/css-to-tailwindcss-0.2.5.tgz#eeaf61bfec563a6ed5c09cb6eb122a80fa13f699"
-  integrity sha512-XpaDq1hwehqrDqCA2Y2jtYoigNUnzskhJdxUk5WTtR/bDiy6z4vMQX30mDO+l9OVqw9IYjMWjQocdx9Wc3bZ8w==
+css-to-tailwindcss@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/css-to-tailwindcss/-/css-to-tailwindcss-1.0.1.tgz#61d05b3221f82c7bc5f7ee9c2b849b584aaaf951"
+  integrity sha512-ENo1Ti/RBk3v7sdAi1ut2BbcKunN+C4Bi/A5kVmAQHAVbjZotLeLz336qfvb61nyEJ7jo3sS+qUbZcxGP5oIYg==
   dependencies:
     colord "^2.9.3"
     css-what "^6.1.0"
