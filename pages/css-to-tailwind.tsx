@@ -34,6 +34,15 @@ const evalConfig = (configValue: string) =>
 
 const DEFAULT_POSTCSS_PLUGINS = [require("postcss-nested")];
 
+function decorateResult(result: string) {
+  return `/*
+  Based on TailwindCSS recommendations,
+  consider using classes instead of the \`@apply\` directive
+  @see https://tailwindcss.com/docs/reusing-styles#avoiding-premature-abstraction
+*/
+${result}`;
+}
+
 function CssToTailwindSettings({
   open,
   toggle,
@@ -201,9 +210,9 @@ export default function CssToTailwind3({ defaultSettings }) {
   const transformer = useCallback<Transformer>(
     async ({ value }) => {
       try {
-        return (
-          await tailwindConverter.convertCSS(value)
-        ).convertedRoot.toString();
+        return decorateResult(
+          (await tailwindConverter.convertCSS(value)).convertedRoot.toString()
+        );
       } catch (e) {
         toaster.danger("Unable to convert CSS", {
           description: e.message
