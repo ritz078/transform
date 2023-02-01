@@ -11,7 +11,8 @@ import {
   toaster,
   TextInput,
   Heading,
-  Text
+  Text,
+  Switch
 } from "evergreen-ui";
 import { TailwindConverter, TailwindConverterConfig } from "css-to-tailwindcss";
 
@@ -25,6 +26,7 @@ const Monaco = dynamic(() => import("../components/Monaco"), {
 interface RawSettings {
   tailwindConfig?: string;
   remInPx?: string | null;
+  arbitraryPropertiesIsEnabled?: boolean;
 }
 
 const evalConfig = (configValue: string) =>
@@ -43,11 +45,16 @@ function CssToTailwindSettings({
   onConfirm: (props: {
     tailwindConfig: string;
     remInPx: string;
+    arbitraryPropertiesIsEnabled: boolean;
   }) => boolean | Promise<boolean>;
   settings: RawSettings;
 }) {
   const [tailwindConfig, setTailwindConfig] = useState(settings.tailwindConfig);
   const [remInPx, setRemInPx] = useState(settings.remInPx);
+  const [
+    arbitraryPropertiesIsEnabled,
+    setArbitraryPropertiesIsEnabled
+  ] = useState(settings.arbitraryPropertiesIsEnabled || false);
 
   return (
     <Dialog
@@ -57,7 +64,8 @@ function CssToTailwindSettings({
       onConfirm={async close => {
         const isSuccess = await onConfirm({
           tailwindConfig,
-          remInPx
+          remInPx,
+          arbitraryPropertiesIsEnabled
         });
         if (isSuccess) {
           close();
@@ -78,8 +86,30 @@ function CssToTailwindSettings({
           placeholder="Enter URL"
           onChange={e => setRemInPx(e.target.value)}
           value={remInPx || ""}
+          marginTop="4px"
         />
-        <Heading marginTop={30}>
+
+        <Heading marginTop={24}>
+          Enable arbitrary properties
+          <a
+            href="https://tailwindcss.com/docs/adding-custom-styles#arbitrary-properties"
+            target="_blank"
+            style={{ verticalAlign: "middle" }}
+          >
+            <Tooltip content="Open the TailwindCSS docs...">
+              <Icon icon="help" color="info" marginLeft={8} size={16} />
+            </Tooltip>
+          </a>
+        </Heading>
+        <Switch
+          checked={arbitraryPropertiesIsEnabled}
+          onChange={e =>
+            setArbitraryPropertiesIsEnabled((e.target as any).checked)
+          }
+          marginTop="4px"
+        />
+
+        <Heading marginTop={24}>
           Tailwind configuration
           <a
             href="https://tailwindcss.com/docs/configuration"
@@ -87,7 +117,7 @@ function CssToTailwindSettings({
             style={{ verticalAlign: "middle" }}
           >
             <Tooltip content="Open the TailwindCSS docs...">
-              <Icon icon="help" color="info" marginLeft={16} size={16} />
+              <Icon icon="help" color="info" marginLeft={8} size={16} />
             </Tooltip>
           </a>
         </Heading>
@@ -124,7 +154,8 @@ export default function CssToTailwind3({ defaultSettings }) {
 
   const converterConfig = useMemo(() => {
     const config: Partial<TailwindConverterConfig> = {
-      remInPx: rawSettings.remInPx ? parseInt(rawSettings.remInPx, 10) : null
+      remInPx: rawSettings.remInPx ? parseInt(rawSettings.remInPx, 10) : null,
+      arbitraryPropertiesIsEnabled: !!rawSettings.arbitraryPropertiesIsEnabled
     };
 
     if (isNaN(config["remInPx"])) {
@@ -150,10 +181,21 @@ export default function CssToTailwind3({ defaultSettings }) {
   }, [rawSettings]);
 
   const tailwindConverter = useMemo(() => {
-    return new TailwindConverter({
-      postCSSPlugins: DEFAULT_POSTCSS_PLUGINS,
-      ...converterConfig
-    });
+    try {
+      return new TailwindConverter({
+        postCSSPlugins: DEFAULT_POSTCSS_PLUGINS,
+        ...converterConfig
+      });
+    } catch (e) {
+      toaster.danger(
+        "Unable to create TailwindConverter. Invalid configuration passed",
+        {
+          description: e.message
+        }
+      );
+
+      return new TailwindConverter({ postCSSPlugins: DEFAULT_POSTCSS_PLUGINS });
+    }
   }, [converterConfig]);
 
   const transformer = useCallback<Transformer>(
@@ -215,7 +257,8 @@ export async function getStaticProps() {
     props: {
       defaultSettings: {
         tailwindConfig: rawTailwindConfig,
-        remInPx: "16"
+        remInPx: "16",
+        arbitraryPropertiesIsEnabled: false
       } as RawSettings
     }
   };
