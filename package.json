@@ -53,7 +53,7 @@
     "babel-plugin-object-styles-to-template": "^0.2.2",
     "babel-standalone": "^6.26.0",
     "clipboard-copy": "^4.0.1",
-    "css-to-tailwindcss": "^1.0.1",
+    "css-to-tailwindcss": "^1.0.2",
     "evergreen-ui": "^4.28.0",
     "flowgen": "^1.14.1",
     "formik": "^2.2.9",
