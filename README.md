@@ -24,6 +24,14 @@ The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
 
 MIT @ Ritesh Kumar
 
+## Development
+
+- Run `yarn && yarn dev` for development.
+
+## Self Hosting
+
+- You can self-host the project by running `yarn && yarn build && yarn start`
+
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
