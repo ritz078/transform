@@ -160,6 +160,12 @@ export const categorizedRoutes = [
     category: "JSON Schema",
     content: [
       {
+        label: "to BigQuery Schema",
+        path: "/json-schema-to-bigquery",
+        packageName: "json-schema-to-bigquery",
+        packageUrl: "https://github.com/aalokkamble/transform"
+      },
+      {
         label: "to TypeScript",
         path: "/json-schema-to-typescript",
         packageName: "json-schema-to-typescript",
