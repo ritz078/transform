@@ -73,14 +73,14 @@ export const css2 = `.alert {
   .button {
     padding: 0.5rem 1rem;
     width: 100%;
-  } 
+  }
 }
 
 @media (min-width: 1280px) {
   .button {
     padding: 3rem 7rem;
     margin-bottom: 2.4rem;
-  } 
+  }
 }
 
 .username {
@@ -99,7 +99,7 @@ export const css2 = `.alert {
 @media (min-width: 1280px) {
   .username {
     width: 50%;
-  } 
+  }
 }
 
 .footer {
@@ -335,7 +335,7 @@ export const graphqlMongodb = `type User @entity {
   chats: [Chat!]! @link
 }
 
-type Profile @entity(embedded: true, 
+type Profile @entity(embedded: true,
   additionalFields: [
     { path: "dateOfBirth", type: "string" }
   ]) {
@@ -463,7 +463,7 @@ import { useState, useEffect } from 'react';
 
 export const CounterExample: React.FC<{}> = () => {
   const [count, setCount] = useState(0);
-  
+
   const handleClick = () => setCount(count + 1)
 
   return (
@@ -499,50 +499,48 @@ completed = false
 id = 12
 name = "Transform Inc"`;
 
-export const cadence = `pub struct StructContainsManyType {
-	pub var intValue: Int
-	pub var int8Value: Int8
-	pub var int16Value: Int16
-	pub var int32Value: Int32
-	pub var int64Value: Int64
-	pub var int128Value: Int128
-	pub var int256Value: Int256
-	pub var uintValue: UInt
-	pub var uint8Value: UInt8
-	pub var uint16Value: UInt16
-	pub var uint32Value: UInt32
-	pub var uint64Value: UInt64
-	pub var uint128Value: UInt128
-	pub var uint256Value: UInt256
-	pub var stringValue: String
-	pub var addressValue: Address
-	pub var boolValue: Bool
-  pub var characterValue: Character
-  pub var pathValue: Path
+export const cadence = `pub contract UserProfiles {
+  pub struct HeaderPictures {
+      pub(set) var smallUrl: String
+      pub(set) var mediumUrl: String
+      pub(set) var bigUrl: String
 
-	init() {
-		self.intValue = 127
-		self.int8Value = 127
-		self.int16Value = 127
-		self.int32Value = 127
-		self.int64Value = 127
-		self.int128Value = 127
-		self.int256Value = 127
-		self.uintValue = 127
-		self.uint8Value = 127
-		self.uint16Value = 127
-		self.uint32Value = 127
-		self.uint64Value = 127
-		self.uint128Value = 127
-		self.uint256Value = 127
-		self.stringValue = "LemonNeko"
-		self.addressValue = 0x0
-		self.boolValue = true
-    self.characterValue = "a"
-    self.pathValue = /storage/CollectionStorage
-	}
-}
-pub fun main(): StructContainsManyType {
-	return StructContainsManyType()
+      init() {
+          self.smallUrl = ""
+          self.mediumUrl = ""
+          self.bigUrl = ""
+      }
+  }
+
+  pub event UsernameUpdate(_ name: String)
+
+  priv let usernames: {Address:String}
+  priv let headerPics: {Address: HeaderPictures}
+
+  pub fun setName(user acc: AuthAccount, to name: String) {
+      self.usernames[acc.address] = name
+      emit UsernameUpdate(name)
+  }
+
+  pub fun getName(_ addr: Address): String {
+      return self.usernames[addr] ?? ""
+  }
+
+  pub fun getHeaderPics(_ addr: Address): HeaderPictures? {
+      return self.headerPics[addr]
+  }
+
+  pub fun setHeaderPics(_ acc: AuthAccount, _ smallUrl: String, _ mediumUrl: String, _ bigUrl: String) {
+      let headerPics = self.getHeaderPics(acc.address) ?? HeaderPictures()
+      headerPics.bigUrl = bigUrl
+      headerPics.mediumUrl = mediumUrl
+      headerPics.smallUrl = smallUrl
+      self.headerPics[acc.address] = headerPics;
+  }
+
+  init() {
+      self.usernames = {}
+      self.headerPics = {}
+  }
 }
 `;

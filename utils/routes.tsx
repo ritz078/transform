@@ -386,7 +386,7 @@ export const categorizedRoutes = [
         path: "/toml-to-yaml"
       },
       {
-        label: "Cadence struct to Go struct",
+        label: "Cadence contract ineraction code for Go",
         path: "/cadence-to-go"
       }
     ]
