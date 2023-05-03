@@ -499,48 +499,34 @@ completed = false
 id = 12
 name = "Transform Inc"`;
 
-export const cadence = `pub contract UserProfiles {
-  pub struct HeaderPictures {
-      pub(set) var smallUrl: String
-      pub(set) var mediumUrl: String
-      pub(set) var bigUrl: String
+export const cadence = `// Do not remove top level contract
+// Just paste your structs in this contract
+pub contract Example {
+  pub struct ExampleStruct {
+      pub var url: String
+      pub twoCapacityArray: [String;2]
+      pub deeeeepArray: [[[[String]]]]
+
+      pub struct ExampleEmbed {
+        pub var aNumber: Int
+
+        init() {
+          self.aNumber = 0
+        }
+      }
 
       init() {
-          self.smallUrl = ""
-          self.mediumUrl = ""
-          self.bigUrl = ""
+          self.url = ""
+          self.twoCapacityArray = []
+          self.deeeeepArray = []
       }
   }
 
-  pub event UsernameUpdate(_ name: String)
+  pub event ExampleEvent(_ name: String, _ aDeeeeeepMap: {String:{String:{String:{String:String}}}})
 
-  priv let usernames: {Address:String}
-  priv let headerPics: {Address: HeaderPictures}
-
-  pub fun setName(user acc: AuthAccount, to name: String) {
-      self.usernames[acc.address] = name
-      emit UsernameUpdate(name)
-  }
-
-  pub fun getName(_ addr: Address): String {
-      return self.usernames[addr] ?? ""
-  }
-
-  pub fun getHeaderPics(_ addr: Address): HeaderPictures? {
-      return self.headerPics[addr]
-  }
-
-  pub fun setHeaderPics(_ acc: AuthAccount, _ smallUrl: String, _ mediumUrl: String, _ bigUrl: String) {
-      let headerPics = self.getHeaderPics(acc.address) ?? HeaderPictures()
-      headerPics.bigUrl = bigUrl
-      headerPics.mediumUrl = mediumUrl
-      headerPics.smallUrl = smallUrl
-      self.headerPics[acc.address] = headerPics;
-  }
-
-  init() {
-      self.usernames = {}
-      self.headerPics = {}
+  // This function will be ignored if 'Generate Interaction Code With Functions' disabled
+  pub fun hello(): String {
+    return "Hello"
   }
 }
 `;

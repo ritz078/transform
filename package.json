@@ -40,7 +40,7 @@
     "@graphql-codegen/typescript-urql": "^2.0.9",
     "@iarna/toml": "^3.0.0",
     "@khanacademy/flow-to-ts": "^0.5.2",
-    "@lemonneko/easi-gen": "^0.0.35",
+    "@lemonneko/easi-gen": "^0.0.36",
     "@monaco-editor/react": "^4.2.1",
     "@openapi-contrib/json-schema-to-openapi-schema": "^2.0.0",
     "@svgr/core": "^5.5.0",

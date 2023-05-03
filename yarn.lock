@@ -1199,10 +1199,10 @@
     prettier "2.2.1"
     trim-right "^1.0.1"
 
-"@lemonneko/easi-gen@^0.0.35":
-  version "0.0.35"
-  resolved "https://registry.npmjs.org/@lemonneko/easi-gen/-/easi-gen-0.0.35.tgz#bce6a2ca371ad55cf165abf245e0ac6ea7a4317e"
-  integrity sha512-EJocCvUWyI9BI+Qw0+p8WgqDZhrFwBoO/nwHwIR0Wwx0VGxSn0/40KDbEfW0hyVphDCgtooe5+JmOMMNjB1YdQ==
+"@lemonneko/easi-gen@^0.0.36":
+  version "0.0.36"
+  resolved "https://registry.npmjs.org/@lemonneko/easi-gen/-/easi-gen-0.0.36.tgz#14461ed3b3df2e9c9057e1f9044d1cf8409a119e"
+  integrity sha512-ius5OBLoBkgX0GtBg3YBwKKHsOArGQu0OggWqmSh8nF53Yc6McPJrWC54L0oTalViHpJX1d+wbx7HUZOm09scA==
 
 "@monaco-editor/loader@^1.1.1":
   version "1.1.1"
