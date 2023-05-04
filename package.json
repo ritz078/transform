@@ -40,6 +40,7 @@
     "@graphql-codegen/typescript-urql": "^2.0.9",
     "@iarna/toml": "^3.0.0",
     "@khanacademy/flow-to-ts": "^0.5.2",
+    "@lemonneko/easi-gen": "^0.0.36",
     "@monaco-editor/react": "^4.2.1",
     "@openapi-contrib/json-schema-to-openapi-schema": "^2.0.0",
     "@svgr/core": "^5.5.0",
@@ -100,7 +101,6 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
-    "@lemonneko/flow__cadence-parser": "^0.24.1",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.5",
     "@types/prettier": "^2.3.0",
