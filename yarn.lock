@@ -1199,12 +1199,10 @@
     prettier "2.2.1"
     trim-right "^1.0.1"
 
-"@lemonneko/flow__cadence-parser@^0.24.1":
-  version "0.24.1"
-  resolved "https://registry.npmjs.org/@lemonneko/flow__cadence-parser/-/flow__cadence-parser-0.24.1.tgz#5c22aa59c241930b35cd6889487c2aaeebe67684"
-  integrity sha512-WsZp5NqtGWsq38j0XYAPOPe0YWwaVlUi5rBJygc7Ty1gcTZDLb+OdiDygkbPRnMlRsbEV9n/u17yf8zivm2jjg==
-  dependencies:
-    get-random-values "^2.0.0"
+"@lemonneko/easi-gen@^0.0.36":
+  version "0.0.36"
+  resolved "https://registry.npmjs.org/@lemonneko/easi-gen/-/easi-gen-0.0.36.tgz#14461ed3b3df2e9c9057e1f9044d1cf8409a119e"
+  integrity sha512-ius5OBLoBkgX0GtBg3YBwKKHsOArGQu0OggWqmSh8nF53Yc6McPJrWC54L0oTalViHpJX1d+wbx7HUZOm09scA==
 
 "@monaco-editor/loader@^1.1.1":
   version "1.1.1"
@@ -3808,11 +3806,6 @@ dom-serializer@0:
     domelementtype "^2.0.1"
     entities "^2.0.0"
 
-dom-walk@^0.1.0:
-  version "0.1.2"
-  resolved "https://registry.npmjs.org/dom-walk/-/dom-walk-0.1.2.tgz#0c548bef048f4d1f2a97249002236060daa3fd84"
-  integrity sha512-6QvTW9mrGeIegrFXdtQi9pk7O/nSK6lSdXW2eqUspN5LWD7UTji2Fqw5V2YLjBpHEoU9Xl/eUWNpDeZvoyOv2w==
-
 domain-browser@4.19.0:
   version "4.19.0"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-4.19.0.tgz#1093e17c0a17dbd521182fe90d49ac1370054af1"
@@ -4864,13 +4857,6 @@ get-proxy@^2.0.0:
   dependencies:
     npm-conf "^1.1.0"
 
-get-random-values@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npmjs.org/get-random-values/-/get-random-values-2.0.0.tgz#d4ae7033b7dbd3c1298a06c4c387353a56ed81a2"
-  integrity sha512-wWq8YlpDqoduAzHDnjwh1sX0xxsbChAHFhWK9sDlaxMi3SJchPOhFdMf3/J/xfpzSRcE4UE5BjfFZVDKmGRh/g==
-  dependencies:
-    global "^4.4.0"
-
 get-stdin@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-4.0.1.tgz#b968c6b0a04384324902e8bf1a5df32579a450fe"
@@ -5020,14 +5006,6 @@ glob@^7.1.7:
     minimatch "^3.0.4"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
-
-global@^4.4.0:
-  version "4.4.0"
-  resolved "https://registry.npmjs.org/global/-/global-4.4.0.tgz#3e7b105179006a323ed71aafca3e9c57a5cc6406"
-  integrity sha512-wv/LAoHdRE3BeTGz53FAamhGlPLhlssK45usmGFThIi4XqnBmjKQ16u+RNbP7WvigRZDxUsM0J3gcQ5yicaL0w==
-  dependencies:
-    min-document "^2.19.0"
-    process "^0.11.10"
 
 globals@^11.1.0:
   version "11.12.0"
@@ -6847,13 +6825,6 @@ mimic-response@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
   integrity sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
-
-min-document@^2.19.0:
-  version "2.19.0"
-  resolved "https://registry.npmjs.org/min-document/-/min-document-2.19.0.tgz#7bd282e3f5842ed295bb748cdd9f1ffa2c824685"
-  integrity sha512-9Wy1B3m3f66bPPmU5hdA4DR4PB2OfDU/+GS3yAB7IQozE3tqXaVv2zOjgla7MEGSRv95+ILmOuvhLkOK6wJtCQ==
-  dependencies:
-    dom-walk "^0.1.0"
 
 min-indent@1.0.1:
   version "1.0.1"
