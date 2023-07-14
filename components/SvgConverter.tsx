@@ -4,7 +4,17 @@ import { EditorPanelProps } from "@components/EditorPanel";
 import Form from "@components/Form";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import { Alert, Badge, Heading, Pane } from "evergreen-ui";
-import svgToDataUrl from "svg-to-dataurl";
+
+const svgToDataUrl = (svgStr: string) => {
+  const encoded = encodeURIComponent(svgStr)
+    .replace(/'/g, "%27")
+    .replace(/"/g, "%22");
+
+  const header = "data:image/svg+xml,";
+  const dataUrl = header + encoded;
+
+  return dataUrl;
+};
 
 interface SvgConverterProps {
   name: string;
