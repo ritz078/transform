@@ -355,6 +355,26 @@ export const categorizedRoutes = [
     ]
   },
   {
+    category: "YAML",
+    iconName: "",
+    content: [
+      {
+        label: "to JSON",
+        path: "/yaml-to-json",
+        packageName: "yaml",
+        packageUrl: "https://github.com/tj/js-yaml"
+      },
+      {
+        label: "to TOML",
+        path: "/yaml-to-toml"
+      },
+      {
+        label: "to Zod Schema",
+        path: "/yaml-to-zod"
+      }
+    ]
+  },
+  {
     category: "Others",
     iconName: "",
     content: [
@@ -363,16 +383,6 @@ export const categorizedRoutes = [
         path: "/xml-to-json",
         packageName: "xml-js",
         packageUrl: "https://github.com/nashwaan/xml-js"
-      },
-      {
-        label: "YAML to JSON",
-        path: "/yaml-to-json",
-        packageName: "yaml",
-        packageUrl: "https://github.com/tj/js-yaml"
-      },
-      {
-        label: "YAML to TOML",
-        path: "/yaml-to-toml"
       },
       {
         label: "Markdown to HTML",
@@ -385,10 +395,6 @@ export const categorizedRoutes = [
         path: "/toml-to-json",
         packageUrl: "https://www.npmjs.com/package/@iarna/toml",
         packageName: "@iarna/toml"
-      },
-      {
-        label: "TOML to YAML",
-        path: "/toml-to-yaml"
       },
       {
         label: "Cadence to Go",
