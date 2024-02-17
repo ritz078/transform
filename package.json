@@ -15,7 +15,7 @@
     "build:analyze": "ANALYZE=true yarn build"
   },
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "dependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.16.0",
