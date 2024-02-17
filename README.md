@@ -91,6 +91,7 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/SuttonJack"><img src="https://avatars.githubusercontent.com/u/92991945?v=4?s=100" width="100px;" alt="Jack Sutton"/><br /><sub><b>Jack Sutton</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=SuttonJack" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://t.me/jackardios"><img src="https://avatars.githubusercontent.com/u/24757335?v=4?s=100" width="100px;" alt="Salakhutdinov Salavat"/><br /><sub><b>Salakhutdinov Salavat</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=Jackardios" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/salman0ansari"><img src="https://avatars.githubusercontent.com/u/30106022?v=4?s=100" width="100px;" alt="Mohd Salman"/><br /><sub><b>Mohd Salman</b></sub></a><br /><a href="https://github.com/ritz078/transform/commits?author=salman0ansari" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
