@@ -347,8 +347,18 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "salman0ansari",
+      "name": "Mohd Salman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30106022?v=4",
+      "profile": "https://github.com/salman0ansari",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs"
 }
