@@ -6,15 +6,25 @@ export function useDarkMode() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const toggleDarkMode = () => {
-    setIsDarkMode(prev => !prev);
-    /** Persist in local storage */
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(!isDarkMode));
+    const next = !isDarkMode;
+    setIsDarkMode(next);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
   };
 
   useEffect(() => {
-    /** Use persisted local storage value if present */
-    setIsDarkMode(JSON.parse(localStorage.getItem(STORAGE_KEY) || "false"));
+    /** Retrieve saved preference or use system setting */
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const dark =
+      saved !== null
+        ? JSON.parse(saved)
+        : (window.matchMedia &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches) ||
+        false;
+
+    setIsDarkMode(dark);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(dark));
   }, []);
+
 
   return { isDarkMode, toggleDarkMode };
 }
