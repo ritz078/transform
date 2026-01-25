@@ -1,5 +1,4 @@
 {
-  "version": 2,
   "build": {
     "env": {
       "NODE_OPTIONS": "--openssl-legacy-provider"
