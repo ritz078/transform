@@ -1,5 +1,13 @@
 {
   "version": 2,
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--openssl-legacy-provider"
+    }
+  },
+  "engines": {
+    "node": "20.x"
+  },
   "redirects": [
     {
       "source": "/svg-to-jsx",
