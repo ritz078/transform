@@ -9,13 +9,13 @@
     "dev": "next dev",
     "start": "next start",
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
     "now-build": "next build",
     "postinstall": "patch-package",
     "build:analyze": "ANALYZE=true yarn build"
   },
   "engines": {
-    "node": "16.x"
+    "node": ">=20.17.0"
   },
   "dependencies": {
     "@babel/plugin-transform-flow-strip-types": "^7.16.0",
@@ -124,5 +124,6 @@
     "./assets/*/*.svg": [
       "imagemin-lint-staged"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
