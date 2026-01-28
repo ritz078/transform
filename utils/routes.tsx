@@ -223,6 +223,12 @@ export const categorizedRoutes = [
         path: "/js-object-to-typescript",
         desc: "An online REPL for converting JS Object to Typescript."
       },
+      {
+        label: "to Zod Schema",
+        path: "/js-object-to-zod",
+        packageUrl: "https://www.npmjs.com/package/json-to-zod",
+        packageName: "json-to-zod"
+      }
     ]
   },
   {
