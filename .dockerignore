@@ -1,0 +1,11 @@
+.git
+.github
+.dockerignore
+
+# python virtualenv
+venv
+.venv
+
+node_modules
+
+
