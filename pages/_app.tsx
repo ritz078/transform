@@ -110,15 +110,15 @@ export default function App(props) {
               display: "inline-block",
               height: 20
             }}
-            href="https://github.com/ritz078/transform"
+            href="https://github.com/NoFacePeace/transform"
           >
             <img
-              src="https://img.shields.io/github/stars/ritz078/transform?style=social"
+              src="https://img.shields.io/github/stars/NoFacePeace/transform?style=social"
               alt=""
             />
           </a>
 
-          <a href="https://github.com/ritz078/transform" target="_blank">
+          <a href="https://github.com/NoFacePeace/transform" target="_blank">
             <Button
               appearance="minimal"
               height={40}

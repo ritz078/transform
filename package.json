@@ -12,7 +12,8 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
     "now-build": "next build",
     "postinstall": "patch-package",
-    "build:analyze": "ANALYZE=true yarn build"
+    "build:analyze": "ANALYZE=true yarn build",
+    "export": "next export"
   },
   "engines": {
     "node": "20.x"

@@ -43,4 +43,6 @@ const config = {
   }
 };
 
+config.output = "export";
+
 module.exports = config;

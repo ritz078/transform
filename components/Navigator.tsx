@@ -75,7 +75,7 @@ export default function Navigator() {
         })}
       </Pane>
 
-      <Pane borderTop>
+      {/* <Pane borderTop>
         <a
           href="https://vercel.com?utm_source=ritz078&utm_campaign=oss"
           target="_blank"
@@ -96,7 +96,7 @@ export default function Navigator() {
             @ritz078
           </a>
         </Heading>
-      </Pane>
+      </Pane> */}
     </Pane>
   );
 }

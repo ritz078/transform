@@ -530,3 +530,14 @@ pub contract Example {
   }
 }
 `;
+export const square = `[
+    [1, 2, 3],
+    [2, 3, 1],
+    [3, 1, 2],
+]`;
+
+export const index = "Hello, World!";
+
+export const stringjson = '"{\\"name\\":\\"Tom\\",\\"age\\":18}"';
+
+export const jsonformat = `{ "userId": 1, "id": 1, "title": "delectus aut autem", "completed": false }`;
