@@ -18,6 +18,10 @@ export const categorizedRoutes = [
         path: "/svg-to-react-native",
         packageName: "@svgr/core",
         packageUrl: "https://github.com/smooth-code/svgr"
+      },
+      {
+        label: "to Vue SFC",
+        path: "/svg-to-vue-sfc"
       }
     ]
   },
@@ -222,7 +226,7 @@ export const categorizedRoutes = [
         label: "to Typescript",
         path: "/js-object-to-typescript",
         desc: "An online REPL for converting JS Object to Typescript."
-      },
+      }
     ]
   },
   {
