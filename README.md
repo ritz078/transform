@@ -33,6 +33,7 @@ MIT @ Ritesh Kumar
 ## Self Hosting
 
 - You can self-host the project by running `yarn && yarn build && yarn start`
+- You can also use docker to build and run transform using `docker build -t transform . && docker run -d --name transform -p 3000:3000 transform`
 
 ## Contributors
 
