@@ -8,6 +8,7 @@ import { useSettings } from "@hooks/useSettings";
 import isSvg from "is-svg";
 import { Alert, Heading } from "evergreen-ui";
 import Router from "next/router";
+import { BOOLEAN_ATTRIBUTES_REGEX } from "@constants/jsxAttributes";
 
 interface Settings {
   createFunction: boolean;
@@ -39,6 +40,7 @@ export default function HtmlToJsxComponent() {
         createClass: false
       });
       let result = converter.convert(value);
+      result = result.replace(BOOLEAN_ATTRIBUTES_REGEX, "$1");
 
       if (settings.createFunction) {
         result = `export const Foo = () => (${result})`;
