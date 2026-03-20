@@ -99,7 +99,7 @@ export default function App(props) {
             <IconButton
               height={20}
               marginRight={10}
-              icon="moon"
+              icon={isDarkMode ? "moon" : "sun"}
               onClick={toggleDarkMode}
             />
           </Tooltip>
