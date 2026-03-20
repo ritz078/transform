@@ -53,6 +53,7 @@ export default function EditorPanel({
   acceptFiles,
   hasClear,
   hasCopy = true,
+  hasPrettier = true,
   topNotifications,
   language,
   defaultValue,
@@ -63,6 +64,7 @@ export default function EditorPanel({
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
   const [value, setValue] = useState(defaultValue);
   const [fetchingUrl, setFetchingUrl] = useState("");
+  const editorRef = useRef<any>(null);
 
   const options = {
     fontSize: 14,
@@ -136,6 +138,17 @@ export default function EditorPanel({
       id
     });
   }, [value]);
+
+  const prettifyValue = useCallback(async () => {
+    if (!editorRef.current) return;
+    const action = editorRef.current.getAction("editor.action.formatDocument");
+    if (!action) {
+      toaster.warning("Formatter not available for this input.", { id });
+      return;
+    }
+
+    await action.run();
+  }, [id]);
 
   const fetchFile = useCallback(
     close => {
@@ -255,6 +268,17 @@ export default function EditorPanel({
           </a>
         )}
 
+        {hasPrettier && editable && (
+          <Button
+            marginRight={10}
+            iconBefore="clean"
+            onClick={prettifyValue}
+            height={28}
+          >
+            Prettify
+          </Button>
+        )}
+
         {hasCopy && (
           <Button
             appearance="primary"
@@ -287,6 +311,9 @@ export default function EditorPanel({
           language={language}
           value={value}
           options={options}
+          onMount={editor => {
+            editorRef.current = editor;
+          }}
           onChange={value => {
             setValue(value);
             onChange(value);

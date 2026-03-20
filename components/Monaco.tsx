@@ -15,6 +15,7 @@ interface MonacoProps {
   options?: any;
   defaultValue?: string;
   onChange: (value: string) => void;
+  onMount?: (editor: any) => void;
 }
 
 export const Monaco: React.FC<MonacoProps> = ({
@@ -24,7 +25,8 @@ export const Monaco: React.FC<MonacoProps> = ({
   height,
   width,
   options,
-  onChange
+  onChange,
+  onMount
 }) => {
   return (
     <Editor
@@ -35,6 +37,7 @@ export const Monaco: React.FC<MonacoProps> = ({
       width={width}
       options={options}
       onChange={onChange}
+      onMount={onMount}
       loading={
         <Pane
           display="flex"
