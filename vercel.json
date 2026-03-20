@@ -4,6 +4,11 @@
       "NODE_OPTIONS": "--openssl-legacy-provider"
     }
   },
+  "functions": {
+    "api/typescript-to-json-schema.ts": {
+      "includeFiles": "node_modules/typescript/lib/**"
+    }
+  },
   "redirects": [
     {
       "source": "/svg-to-jsx",
