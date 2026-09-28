@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js --host 127.0.0.1",
     "dev:inspect": "NODE_OPTIONS=--inspect vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-typescript-libs.mjs",
     "start": "node .output/server/index.mjs",
     "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
     "test:api": "node --test tests/api.test.mjs",
