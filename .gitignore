@@ -15,3 +15,6 @@ heroku
 .playwright-cli
 test-results
 playwright-report
+
+# PR Lens writes its previews here. They are rebuilt on demand.
+.pr-lens/
