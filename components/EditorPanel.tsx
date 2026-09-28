@@ -3,14 +3,12 @@ import {
   FilePicker,
   Heading,
   HTMLInputEvent,
-  IconButton,
   Pane,
   Popover,
   TextInput,
-  toaster,
-  Tooltip
+  toaster
 } from "evergreen-ui";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { lazy, Suspense } from "react";
 import copy from "clipboard-copy";
 import { useDropzone } from "react-dropzone";
@@ -41,6 +39,8 @@ export interface EditorPanelProps {
 }
 
 const Monaco = lazy(() => import("./Monaco"));
+const toolbarIconClass =
+  "inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700";
 
 export default function EditorPanel({
   editable = true,
@@ -86,14 +86,19 @@ export default function EditorPanel({
   const getSettings = useCallback(
     () => (
       <>
-        <Button
-          marginRight={10}
-          iconBefore="cog"
+        <button
+          type="button"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 font-mono text-[11px] text-slate-500 hover:bg-slate-100 hover:text-slate-700"
           onClick={_toggleSettingsDialog}
-          height={28}
         >
+          <span
+            className="material-symbols-outlined text-sm"
+            aria-hidden="true"
+          >
+            tune
+          </span>
           Settings
-        </Button>
+        </button>
 
         {settingElement?.({
           toggle: _toggleSettingsDialog,
@@ -172,33 +177,21 @@ export default function EditorPanel({
   }, [defaultValue]);
 
   return (
-    <Pane
-      className={`editor-panel ${editable ? "input-panel" : "output-panel"}`}
-      display="flex"
-      flex={1}
-      flexDirection="column"
-      overflow="hidden"
-    >
-      <Pane
-        className="editor-header"
-        display="flex"
-        height={40}
-        paddingX={10}
-        alignItems={"center"}
-        borderBottom
-        zIndex={2}
-        backgroundColor="#FFFFFF"
-        flexShrink={0}
-      >
-        <Pane flex={1} className="editor-heading">
-          <span className="editor-heading-label">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-white">
+      <div className="z-10 flex h-10 shrink-0 items-center border-b border-slate-200 bg-[#fafbfc] px-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-400">
             {editable ? "Input" : "Output"}
           </span>
-          <span className="editor-heading-slash">/</span>
-          <Heading size={500} marginTop={0}>
+          <span className="font-mono text-xs text-slate-300">/</span>
+          <span
+            className={`truncate font-mono text-[11px] font-medium ${
+              editable ? "text-slate-600" : "text-[#635bff]"
+            }`}
+          >
             {title}
-          </Heading>
-        </Pane>
+          </span>
+        </div>
 
         {settingElement && getSettings()}
 
@@ -248,59 +241,78 @@ export default function EditorPanel({
             )}
             shouldCloseOnExternalClick
           >
-            <Tooltip content="Load File">
-              <IconButton height={28} marginRight={10} icon="upload" />
-            </Tooltip>
+            <button
+              type="button"
+              className={toolbarIconClass}
+              title="Load file or URL"
+              aria-label="Load file or URL"
+            >
+              <span
+                className="material-symbols-outlined text-sm"
+                aria-hidden="true"
+              >
+                upload
+              </span>
+            </button>
           </Popover>
         )}
 
         {hasClear && (
-          <Tooltip content="Clear">
-            <IconButton
-              height={28}
-              icon="trash"
-              intent="danger"
-              marginRight={10}
-              onClick={() => {
-                setValue("");
-                onChange?.("");
-              }}
-            />
-          </Tooltip>
+          <button
+            type="button"
+            className={toolbarIconClass}
+            title="Clear input"
+            aria-label="Clear input"
+            onClick={() => {
+              setValue("");
+              onChange?.("");
+            }}
+          >
+            <span
+              className="material-symbols-outlined text-sm"
+              aria-hidden="true"
+            >
+              delete
+            </span>
+          </button>
         )}
 
         {!editable && (
-          <Tooltip content="Download output">
-            <IconButton
-              className="editor-download-button"
-              height={28}
-              icon="download"
-              onClick={downloadValue}
-            />
-          </Tooltip>
+          <button
+            type="button"
+            className={toolbarIconClass}
+            title="Download output"
+            aria-label="Download output"
+            onClick={downloadValue}
+          >
+            <span
+              className="material-symbols-outlined text-sm"
+              aria-hidden="true"
+            >
+              download
+            </span>
+          </button>
         )}
 
         {hasCopy && (
-          <Button
-            className="editor-copy-button"
-            appearance="primary"
-            marginRight={10}
-            iconBefore={copied ? "tick" : "duplicate"}
+          <button
+            type="button"
+            className="inline-flex h-6 items-center gap-1.5 rounded-full bg-slate-900 px-2.5 font-mono text-[11px] font-medium text-white hover:bg-slate-800"
             onClick={copyValue}
-            height={28}
           >
+            <span
+              className="material-symbols-outlined text-[13px]"
+              aria-hidden="true"
+            >
+              {copied ? "check" : "content_copy"}
+            </span>
             {copied ? "Copied!" : "Copy"}
-          </Button>
+          </button>
         )}
-      </Pane>
+      </div>
 
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          overflow: "hidden"
-        }}
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
         {...getRootProps()}
       >
         {topNotifications &&
@@ -321,7 +333,7 @@ export default function EditorPanel({
           />
         </Suspense>
       </div>
-      <div className="editor-footer">
+      <div className="flex h-8 shrink-0 items-center justify-between border-t border-slate-200 bg-[#fafbfc] px-3 font-mono text-[10px] text-slate-500">
         <span>
           {editable
             ? `Source • ${new Blob([value]).size} B`
@@ -331,6 +343,7 @@ export default function EditorPanel({
               {" "}
               ·{" "}
               <a
+                className="text-[#635bff] no-underline hover:underline"
                 href={_packageDetails.url}
                 target="_blank"
                 rel="noreferrer"
@@ -341,7 +354,7 @@ export default function EditorPanel({
             </>
           )}
         </span>
-        <span>
+        <span className={editable ? "text-emerald-500" : "text-slate-400"}>
           {editable
             ? value
               ? "Ready to transform"
@@ -349,6 +362,6 @@ export default function EditorPanel({
             : "Generated output"}
         </span>
       </div>
-    </Pane>
+    </div>
   );
 }

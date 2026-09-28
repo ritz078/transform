@@ -118,22 +118,8 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
 
   return (
     <>
-      <Pane
-        className="conversion-workspace"
-        display="flex"
-        flexDirection="row"
-        overflow="hidden"
-        flex={1}
-        height={"100%"}
-      >
-        <Pane
-          className="conversion-input-column"
-          display="flex"
-          flex={1}
-          borderRight
-          flexDirection="column"
-          overflow="hidden"
-        >
+      <div className="flex h-full min-h-0 min-w-0 flex-1 overflow-hidden max-[800px]:flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-r border-slate-200 max-[800px]:border-r-0 max-[800px]:border-b">
           <EditorPanel
             language={getEditorLanguage(editorLanguage)}
             onChange={setValue}
@@ -148,7 +134,7 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
           />
 
           {splitTitle && (
-            <Pane display="flex" flex={1} borderTop>
+            <div className="flex min-h-0 flex-1 border-t border-slate-200">
               <EditorPanel
                 title={splitTitle}
                 defaultValue={splitValue}
@@ -160,15 +146,10 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
                 hasClear
                 {...splitEditorProps}
               />
-            </Pane>
+            </div>
           )}
-        </Pane>
-        <Pane
-          className="conversion-output-column"
-          display="flex"
-          flex={1}
-          position="relative"
-        >
+        </div>
+        <div className="relative flex min-h-0 min-w-0 flex-1">
           {showUpdateSpinner && (
             <Pane
               display="inline-flex"
@@ -203,8 +184,8 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
             packageDetails={packageDetails}
             {...resultEditorProps}
           />
-        </Pane>
-      </Pane>
+        </div>
+      </div>
 
       {message && (
         <Alert
