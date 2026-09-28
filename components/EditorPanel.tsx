@@ -13,7 +13,6 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { lazy, Suspense } from "react";
 import copy from "clipboard-copy";
-import Npm from "@assets/svgs/Npm";
 import { useDropzone } from "react-dropzone";
 
 export interface EditorPanelProps {
@@ -56,17 +55,21 @@ export default function EditorPanel({
   defaultValue,
   onChange,
   id,
-  packageDetails
+  packageDetails: _packageDetails
 }: EditorPanelProps) {
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
   const [value, setValue] = useState(defaultValue);
   const [fetchingUrl, setFetchingUrl] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const options = {
-    fontSize: 14,
+    fontSize: 12.5,
     readOnly: !editable,
     codeLens: false,
-    fontFamily: "Menlo, Consolas, monospace, sans-serif",
+    fontFamily: "JetBrains Mono, Menlo, Consolas, monospace",
+    lineHeight: 24,
+    padding: { top: 6, bottom: 6 },
+    scrollBeyondLastLine: false,
     minimap: {
       enabled: false
     },
@@ -125,10 +128,28 @@ export default function EditorPanel({
 
   const copyValue = useCallback(() => {
     copy(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
     toaster.success("Copied to clipboard.", {
       id
     });
   }, [value]);
+
+  const downloadValue = useCallback(() => {
+    const file = new Blob([value], { type: "text/plain" });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `transform-output.${
+      language === "typescript"
+        ? "ts"
+        : language === "javascript"
+        ? "jsx"
+        : language || "txt"
+    }`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [value, language]);
 
   const fetchFile = useCallback(
     close => {
@@ -151,8 +172,15 @@ export default function EditorPanel({
   }, [defaultValue]);
 
   return (
-    <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
+    <Pane
+      className={`editor-panel ${editable ? "input-panel" : "output-panel"}`}
+      display="flex"
+      flex={1}
+      flexDirection="column"
+      overflow="hidden"
+    >
       <Pane
+        className="editor-header"
         display="flex"
         height={40}
         paddingX={10}
@@ -162,7 +190,11 @@ export default function EditorPanel({
         backgroundColor="#FFFFFF"
         flexShrink={0}
       >
-        <Pane flex={1}>
+        <Pane flex={1} className="editor-heading">
+          <span className="editor-heading-label">
+            {editable ? "Input" : "Output"}
+          </span>
+          <span className="editor-heading-slash">/</span>
           <Heading size={500} marginTop={0}>
             {title}
           </Heading>
@@ -229,34 +261,35 @@ export default function EditorPanel({
               icon="trash"
               intent="danger"
               marginRight={10}
-              onClick={() => setValue("")}
+              onClick={() => {
+                setValue("");
+                onChange?.("");
+              }}
             />
           </Tooltip>
         )}
 
-        {packageDetails && (
-          <a
-            href={packageDetails.url}
-            style={{
-              display: "inline-flex"
-            }}
-            target="_blank"
-          >
-            <Tooltip content={packageDetails.name}>
-              <Npm />
-            </Tooltip>
-          </a>
+        {!editable && (
+          <Tooltip content="Download output">
+            <IconButton
+              className="editor-download-button"
+              height={28}
+              icon="download"
+              onClick={downloadValue}
+            />
+          </Tooltip>
         )}
 
         {hasCopy && (
           <Button
+            className="editor-copy-button"
             appearance="primary"
             marginRight={10}
-            iconBefore="duplicate"
+            iconBefore={copied ? "tick" : "duplicate"}
             onClick={copyValue}
             height={28}
           >
-            Copy
+            {copied ? "Copied!" : "Copy"}
           </Button>
         )}
       </Pane>
@@ -287,6 +320,34 @@ export default function EditorPanel({
             }}
           />
         </Suspense>
+      </div>
+      <div className="editor-footer">
+        <span>
+          {editable
+            ? `Source • ${new Blob([value]).size} B`
+            : `Target • ${language || "text"}`}
+          {!editable && _packageDetails && (
+            <>
+              {" "}
+              ·{" "}
+              <a
+                href={_packageDetails.url}
+                target="_blank"
+                rel="noreferrer"
+                title={`Powered by ${_packageDetails.name}`}
+              >
+                {_packageDetails.name}
+              </a>
+            </>
+          )}
+        </span>
+        <span>
+          {editable
+            ? value
+              ? "Ready to transform"
+              : "Empty input"
+            : "Generated output"}
+        </span>
       </div>
     </Pane>
   );

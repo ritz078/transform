@@ -119,13 +119,15 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
   return (
     <>
       <Pane
+        className="conversion-workspace"
         display="flex"
         flexDirection="row"
         overflow="hidden"
         flex={1}
-        height={"calc(100vh - 40px)"}
+        height={"100%"}
       >
         <Pane
+          className="conversion-input-column"
           display="flex"
           flex={1}
           borderRight
@@ -161,7 +163,12 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
             </Pane>
           )}
         </Pane>
-        <Pane display="flex" flex={1} position="relative">
+        <Pane
+          className="conversion-output-column"
+          display="flex"
+          flex={1}
+          position="relative"
+        >
           {showUpdateSpinner && (
             <Pane
               display="inline-flex"

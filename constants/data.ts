@@ -16,10 +16,9 @@ export const html = `<!-- Hello world -->
 </div>
 <p>Enter your HTML here</p>`;
 
-export const svg = `<svg style="flex:1;" xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
-  <rect x="10" y="10" height="100" width="100"
-    style="stroke:#ff0000; fill: #0000ff"/>
+export const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <rect x="2" y="2" width="20" height="20" rx="4" fill="none" stroke="#0E7CCF" stroke-width="2"/>
+  <path d="M7 12l3 3 7-7" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
 </svg>`;
 
 export const css = `.main-wrapper {

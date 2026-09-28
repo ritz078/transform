@@ -24,6 +24,17 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: stylesheet },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous"
+      },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:wght@100..700&display=swap"
+      },
       { rel: "icon", href: "/static/favicon.png", type: "image/png" },
       { rel: "manifest", href: "/static/site.webmanifest" }
     ]
@@ -66,7 +77,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: state => state.location.pathname });
   const route = activeRouteData(pathname);
   const title =
-    pathname === "/" ? "Transform" : route?.searchTerm || "Transform";
+    pathname === "/"
+      ? "transform.tools — Polyglot Code Transformer Workbench"
+      : `${route?.searchTerm || "Transform"} — transform.tools`;
   const description =
     pathname === "/"
       ? "A polyglot web converter that's going to save you a lot of time."

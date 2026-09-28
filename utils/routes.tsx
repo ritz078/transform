@@ -222,7 +222,7 @@ export const categorizedRoutes = [
         label: "to Typescript",
         path: "/js-object-to-typescript",
         desc: "An online REPL for converting JS Object to Typescript."
-      },
+      }
     ]
   },
   {
@@ -426,6 +426,7 @@ export function activeRouteData(
   pathname
 ): {
   label: string;
+  category: string;
   path: string;
   searchTerm: string;
   desc: string;

@@ -1,100 +1,62 @@
-import React, { Fragment } from "react";
-import { Heading, Pane, Text } from "evergreen-ui";
-import { categorizedRoutes, Route } from "@utils/routes";
+import React, { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import SearchBox from "@components/Searchbox";
+import { categorizedRoutes, routes } from "@utils/routes";
 
 export default function Navigator() {
   const pathname = useRouterState({ select: state => state.location.pathname });
-
+  const [filter, setFilter] = useState("");
   return (
-    <Pane
-      width={240}
-      height={"calc(100vh - 40px)"}
-      borderRight
-      display="flex"
-      flexDirection="column"
-      paddingTop={20}
-      backgroundColor="#FFFFFF"
-    >
-      <Pane paddingX={15}>
-        <SearchBox />
-      </Pane>
-
-      <Pane
-        display="flex"
-        flex={1}
-        overflowY="scroll"
-        flexDirection="column"
-        paddingBottom={10}
-      >
-        {categorizedRoutes.map(route => {
+    <aside className="workbench-sidebar" aria-label="Transformers">
+      <div className="sidebar-search">
+        <span className="material-symbols-outlined" aria-hidden="true">
+          search
+        </span>
+        <input
+          value={filter}
+          onChange={event => setFilter(event.target.value)}
+          placeholder="Filter transformers..."
+          aria-label="Filter transformers"
+        />
+      </div>
+      <nav className="sidebar-list">
+        {categorizedRoutes.map(group => {
+          const items = group.content.filter(item =>
+            `${group.category} ${item.label}`
+              .toLowerCase()
+              .includes(filter.toLowerCase())
+          );
+          if (!items.length) return null;
           return (
-            <Fragment key={route.category}>
-              <Pane paddingX={10} marginTop={15} marginBottom={2}>
-                <Heading marginLeft={5} size={400}>
-                  {route.category}
-                </Heading>
-              </Pane>
-
-              {(route.content as Route[])
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((a: Route) => {
-                  const isActive = pathname === a.path;
-                  return (
-                    <Link
-                      key={a.label}
-                      to={a.path}
-                      preload={false}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Pane
-                        paddingLeft={16}
-                        paddingY={3}
-                        backgroundColor={isActive ? "#f3f3f3" : undefined}
-                        borderLeft={
-                          isActive
-                            ? "3px solid #009688"
-                            : "3px solid transparent"
-                        }
-                        css={{
-                          "&:hover": {
-                            backgroundColor: "#f5f5f5"
-                          }
-                        }}
-                      >
-                        <Text fontSize={13}>{a.label}</Text>
-                      </Pane>
-                    </Link>
-                  );
-                })}
-            </Fragment>
+            <div className="sidebar-group" key={group.category}>
+              <div className="sidebar-group-title">
+                <span>{group.category}</span>
+                <span>{items.length}</span>
+              </div>
+              <div className="sidebar-group-items">
+                {items.map(item => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    preload={false}
+                    className={`sidebar-link ${
+                      pathname === item.path ? "active" : ""
+                    }`}
+                  >
+                    <span className="sidebar-link-dot" />
+                    {group.category === "Others"
+                      ? item.label
+                      : `${group.category} ${item.label}`}
+                  </Link>
+                ))}
+              </div>
+            </div>
           );
         })}
-      </Pane>
-
-      <Pane borderTop>
-        <a
-          href="https://vercel.com?utm_source=ritz078&utm_campaign=oss"
-          target="_blank"
-        >
-          <img
-            src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg"
-            alt="Vercel"
-            style={{
-              height: 40,
-              display: "block",
-              margin: "10px auto 0"
-            }}
-          />
-        </a>
-        <Heading size={400} paddingY={15} textAlign="center">
-          Created by{" "}
-          <a href="https://twitter.com/ritz078" target="_blank">
-            @ritz078
-          </a>
-        </Heading>
-      </Pane>
-    </Pane>
+      </nav>
+      <div className="sidebar-footer">
+        <span>{routes.length} Converters</span>
+        <span>v2.0.2</span>
+      </div>
+    </aside>
   );
 }
