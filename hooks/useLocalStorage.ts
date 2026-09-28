@@ -10,9 +10,10 @@ export function useLocalStorage(key, initialValue) {
   const [storedValue, setStoredValue] = useState(() => {
     try {
       // Get from local storage by key
-      const item = IN_BROWSER
-        ? window.localStorage.getItem(prefix + key) || initialValue
-        : initialValue;
+      const item =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem(prefix + key) || initialValue
+          : initialValue;
       // Parse stored json or if none return initialValue
       return JSON.parse(item);
     } catch (error) {
@@ -31,7 +32,7 @@ export function useLocalStorage(key, initialValue) {
       // Save state
       setStoredValue(valueToStore);
       // Save to local storage
-      if (IN_BROWSER)
+      if (typeof window !== "undefined")
         window.localStorage.setItem(prefix + key, JSON.stringify(valueToStore));
     } catch (error) {
       // A more advanced implementation would handle the error case

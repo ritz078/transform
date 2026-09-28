@@ -9,3 +9,9 @@ public/static/monaco/*.worker.js.map
 heroku
 
 .vercel
+
+.output
+.tanstack
+.playwright-cli
+test-results
+playwright-report

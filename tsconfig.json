@@ -1,10 +1,10 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "target": "esnext",
-    "jsx": "preserve",
+    "target": "ES2022",
+    "jsx": "react-jsx",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "noUnusedLocals": false,
@@ -31,8 +31,11 @@
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "strictNullChecks": true,
+    "types": ["vite/client", "node"],
+    "allowImportingTsExtensions": true
   },
-  "exclude": ["static", "public", ".next", "node_modules", "assets"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "exclude": ["node_modules", "dist", ".output", "assets"],
+  "include": ["**/*.ts", "**/*.tsx"]
 }

@@ -1,15 +1,37 @@
 diff --git a/node_modules/htmltojsx/src/htmltojsx.js b/node_modules/htmltojsx/src/htmltojsx.js
-index afe4c85..960e450 100644
+index afe4c85..da174a2 100644
 --- a/node_modules/htmltojsx/src/htmltojsx.js
 +++ b/node_modules/htmltojsx/src/htmltojsx.js
-@@ -326,19 +326,9 @@ HTMLtoJSX.prototype = {
+@@ -268,20 +268,7 @@ function isNumeric(input) {
+     && (typeof input === 'number' || parseInt(input, 10) == input);
+ }
+
+-var createElement;
+-if (typeof IN_BROWSER !== 'undefined' && IN_BROWSER) {
+-  // Browser environment, use document.createElement directly.
+-  createElement = function(tag) {
+-    return document.createElement(tag);
+-  };
+-} else {
+-  // Node.js-like environment, use jsdom.
+-  var jsdom = require('jsdom-no-contextify').jsdom;
+-  var window = jsdom().defaultView;
+-  createElement = function(tag) {
+-    return window.document.createElement(tag);
+-  };
+-}
++var createElement = function(tag) { return document.createElement(tag); };
+
+ var tempEl = createElement('div');
+ /**
+@@ -326,19 +313,9 @@ HTMLtoJSX.prototype = {
    convert: function(html) {
      this.reset();
- 
+
 -    var containerEl = createElement('div');
 +    var containerEl = createElement('null');
      containerEl.innerHTML = '\n' + this._cleanInput(html) + '\n';
- 
+
 -    if (this.config.createClass) {
 -      if (this.config.outputClassName) {
 -        this.output = 'var ' + this.config.outputClassName + ' = React.createClass({\n';
@@ -23,7 +45,7 @@ index afe4c85..960e450 100644
      if (this._onlyOneTopLevel(containerEl)) {
        // Only one top-level element, the component can return it directly
        // No need to actually visit the container element
-@@ -351,13 +341,14 @@ HTMLtoJSX.prototype = {
+@@ -351,13 +328,14 @@ HTMLtoJSX.prototype = {
        this._visit(containerEl);
      }
      this.output = this.output.trim() + '\n';
@@ -43,8 +65,8 @@ index afe4c85..960e450 100644
 +
      return this.output;
    },
- 
-@@ -627,6 +618,8 @@ HTMLtoJSX.prototype = {
+
+@@ -627,6 +605,8 @@ HTMLtoJSX.prototype = {
            result += '={' + attribute.value + '}';
          } else if (attribute.value.length > 0) {
            result += '="' + attribute.value.replace(/"/gm, '&quot;') + '"';

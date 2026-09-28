@@ -1,5 +1,6 @@
 export const prettierParsers = {
   css: "postcss",
+  flow: "babel",
   javascript: "babel",
   jsx: "babel",
   svg: "html",

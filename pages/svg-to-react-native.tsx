@@ -1,5 +1,5 @@
 import * as React from "react";
-import BabelWorker from "@workers/babel.worker";
+import BabelWorker from "@workers/babel.worker.ts?worker";
 import { SvgConverter } from "@components/SvgConverter";
 import { useCallback, useState } from "react";
 import {
@@ -9,9 +9,9 @@ import {
 } from "@constants/svgoConfig";
 import isSvg from "is-svg";
 import { getWorker } from "@utils/workerWrapper";
-import SvgoWorker from "@workers/svgo.worker";
+import SvgoWorker from "@workers/svgo.worker.ts?worker";
 import { Transformer } from "@components/ConversionPanel";
-import SvgrWorker from "@workers/svgr.worker";
+import SvgrWorker from "@workers/svgr.worker.ts?worker";
 
 let svgo, _babelWorker, svgr;
 export default function SvgToReactNative() {

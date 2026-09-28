@@ -36,21 +36,20 @@ export default function JsonToFlow() {
 
   const [settings, setSettings] = useSettings(name, defaultSettings);
 
-  const getSettingsElement = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => {
-      return (
-        <Form<Settings>
-          title="JSON to Flow"
-          onSubmit={setSettings}
-          open={open}
-          toggle={toggle}
-          formsFields={formFields}
-          initialValues={settings}
-        />
-      );
-    },
-    []
-  );
+  const getSettingsElement = useCallback<
+    NonNullable<EditorPanelProps["settingElement"]>
+  >(({ open, toggle }) => {
+    return (
+      <Form<Settings>
+        title="JSON to Flow"
+        onSubmit={setSettings}
+        open={open}
+        toggle={toggle}
+        formsFields={formFields}
+        initialValues={settings}
+      />
+    );
+  }, []);
 
   const transformer = useCallback(
     async ({ value }) => {

@@ -1,7 +1,7 @@
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import React, { useCallback } from "react";
 import { getWorker } from "@utils/workerWrapper";
-import PostCssWorker from "@workers/postcss.worker";
+import PostCssWorker from "@workers/postcss.worker.ts?worker";
 import { useSettings } from "@hooks/useSettings";
 
 let postCssWorker;

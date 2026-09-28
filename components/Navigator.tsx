@@ -1,12 +1,11 @@
 import React, { Fragment } from "react";
 import { Heading, Pane, Text } from "evergreen-ui";
 import { categorizedRoutes, Route } from "@utils/routes";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import SearchBox from "@components/Searchbox";
 
 export default function Navigator() {
-  const router = useRouter();
+  const pathname = useRouterState({ select: state => state.location.pathname });
 
   return (
     <Pane
@@ -41,32 +40,31 @@ export default function Navigator() {
               {(route.content as Route[])
                 .sort((a, b) => a.label.localeCompare(b.label))
                 .map((a: Route) => {
-                  const isActive = router.pathname === a.path;
+                  const isActive = pathname === a.path;
                   return (
-                    <Link key={a.label} href={a.path} prefetch={false}>
-                      <a
-                        style={{
-                          textDecoration: "none"
+                    <Link
+                      key={a.label}
+                      to={a.path}
+                      preload={false}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Pane
+                        paddingLeft={16}
+                        paddingY={3}
+                        backgroundColor={isActive ? "#f3f3f3" : undefined}
+                        borderLeft={
+                          isActive
+                            ? "3px solid #009688"
+                            : "3px solid transparent"
+                        }
+                        css={{
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5"
+                          }
                         }}
                       >
-                        <Pane
-                          paddingLeft={16}
-                          paddingY={3}
-                          backgroundColor={isActive ? "#f3f3f3" : undefined}
-                          borderLeft={
-                            isActive
-                              ? "3px solid #009688"
-                              : "3px solid transparent"
-                          }
-                          css={{
-                            "&:hover": {
-                              backgroundColor: "#f5f5f5"
-                            }
-                          }}
-                        >
-                          <Text fontSize={13}>{a.label}</Text>
-                        </Pane>
-                      </a>
+                        <Text fontSize={13}>{a.label}</Text>
+                      </Pane>
                     </Link>
                   );
                 })}

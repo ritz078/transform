@@ -66,7 +66,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
       jsonToMobx(value, id);
     }
   } catch (e) {
-    if (IS_DEV) {
+    if (import.meta.env.DEV) {
       console.error(e);
     }
     _self.postMessage({

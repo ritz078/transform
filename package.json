@@ -5,19 +5,22 @@
   "author": "ritz078 <rkritesh078@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev:inspect": "NODE_OPTIONS=\"--inspect\" next dev",
-    "dev": "next dev",
-    "start": "next start",
+    "dev": "node --max-old-space-size=8192 node_modules/vite/bin/vite.js --host 127.0.0.1",
+    "dev:inspect": "NODE_OPTIONS=--inspect vite",
+    "build": "vite build",
+    "start": "node .output/server/index.mjs",
+    "typecheck": "node node_modules/typescript/bin/tsc --noEmit",
+    "test:api": "node --test tests/api.test.mjs",
     "format": "prettier --write '**/*.ts' '**/*.tsx'",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
-    "now-build": "next build",
     "postinstall": "patch-package",
-    "build:analyze": "ANALYZE=true yarn build"
+    "test": "node --experimental-strip-types --test tests/http.test.ts",
+    "test:browser": "playwright test"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=22.12.0"
   },
   "dependencies": {
+    "@babel/core": "^7.16.0",
     "@babel/plugin-transform-flow-strip-types": "^7.16.0",
     "@babel/plugin-transform-typescript": "^7.16.1",
     "@babel/standalone": "^7.14.7",
@@ -45,6 +48,8 @@
     "@openapi-contrib/json-schema-to-openapi-schema": "^2.0.0",
     "@svgr/core": "^5.5.0",
     "@svgr/plugin-jsx": "^5.5.0",
+    "@tanstack/react-router": "1.170.40",
+    "@tanstack/react-start": "1.168.59",
     "@types/jsonld": "^1.5.5",
     "@walmartlabs/json-to-simple-graphql-schema": "^2.0.4",
     "autoprefixer": "^10.2.6",
@@ -75,15 +80,14 @@
     "jsonschema-protobuf": "^1.0.2",
     "lodash": "^4.17.21",
     "markdown": "^0.5.0",
-    "next": "10.2.3",
     "nprogress": "^0.2.0",
     "postcss": "^8.3.5",
     "postcss-js": "^3.0.3",
     "postcss-nested": "^6.0.0",
     "postcss7": "npm:postcss@7.x.x",
     "prettier": "^1.18.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-dropzone": "^11.0.1",
     "recast": "^0.20.5",
     "rust-keywords": "^1.1.0",
@@ -95,25 +99,31 @@
     "transform-json-types": "^0.7.0",
     "ts-json-schema-generator": "^0.93.0",
     "ts-to-zod": "^1.11.0",
-    "typescript": "4.3.4",
+    "typescript-converter": "npm:typescript@4.3.4",
     "xml-js": "^1.6.11",
     "yaml": "^1.10.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58",
     "@types/lodash": "^4.14.170",
-    "@types/node": "^15.12.5",
+    "@types/node": "^22.0.0",
     "@types/prettier": "^2.3.0",
-    "@types/react": "^17.0.11",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
     "@types/svgo": "^1.3.3",
+    "@vitejs/plugin-react": "^6",
     "husky": "^4.2.5",
     "imagemin-lint-staged": "^0.4.0",
     "lint-staged": "^11.0.0",
+    "nitro": "3.0.260903-beta",
+    "node-stdlib-browser": "^1.3.1",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.0.0",
     "pretty-quick": "^3.1.1",
+    "typescript": "~5.9.3",
     "ui-box": "2.1.0",
-    "webpack": "^4.44.1",
-    "worker-loader": "^2.0.0"
+    "vite": "^8",
+    "vite-plugin-wasm": "^3.5.0"
   },
   "husky": {
     "hooks": {
@@ -125,5 +135,6 @@
       "imagemin-lint-staged"
     ]
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "type": "module"
 }

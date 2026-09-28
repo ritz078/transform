@@ -11,7 +11,7 @@ import {
   Tooltip
 } from "evergreen-ui";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { lazy, Suspense } from "react";
 import copy from "clipboard-copy";
 import Npm from "@assets/svgs/Npm";
 import { useDropzone } from "react-dropzone";
@@ -41,9 +41,7 @@ export interface EditorPanelProps {
   };
 }
 
-const Monaco = dynamic(() => import("../components/Monaco"), {
-  ssr: false
-});
+const Monaco = lazy(() => import("./Monaco"));
 
 export default function EditorPanel({
   editable = true,
@@ -82,11 +80,6 @@ export default function EditorPanel({
     [showSettingsDialogue]
   );
 
-  useEffect(() => {
-    // @ts-ignore
-    window.__webpack_public_path__ = "/_next/static/";
-  }, []);
-
   const getSettings = useCallback(
     () => (
       <>
@@ -99,7 +92,7 @@ export default function EditorPanel({
           Settings
         </Button>
 
-        {settingElement({
+        {settingElement?.({
           toggle: _toggleSettingsDialog,
           open: showSettingsDialogue
         })}
@@ -115,7 +108,7 @@ export default function EditorPanel({
     reader.readAsText(file, "utf-8");
     reader.onload = () => {
       setValue(reader.result as string);
-      onChange(reader.result as string);
+      onChange?.(reader.result as string);
       close();
     };
   }, []);
@@ -146,7 +139,7 @@ export default function EditorPanel({
         setValue(value);
         setFetchingUrl("");
         close();
-        onChange(value);
+        onChange?.(value);
       })();
     },
     [fetchingUrl, onChange]
@@ -283,15 +276,17 @@ export default function EditorPanel({
             toggleSettings: _toggleSettingsDialog
           })}
 
-        <Monaco
-          language={language}
-          value={value}
-          options={options}
-          onChange={value => {
-            setValue(value);
-            onChange(value);
-          }}
-        />
+        <Suspense fallback={<div role="status">Loading editor…</div>}>
+          <Monaco
+            language={language}
+            value={value}
+            options={options}
+            onChange={value => {
+              setValue(value);
+              onChange?.(value);
+            }}
+          />
+        </Suspense>
       </div>
     </Pane>
   );

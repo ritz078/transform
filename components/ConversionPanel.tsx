@@ -3,19 +3,19 @@ import EditorPanel, { EditorPanelProps } from "@components/EditorPanel";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Language, useData } from "@hooks/useData";
-import { useRouter } from "next/router";
+import { useRouterState } from "@tanstack/react-router";
 import { activeRouteData } from "@utils/routes";
-import PrettierWorker from "@workers/prettier.worker";
+import PrettierWorker from "@workers/prettier.worker.ts?worker";
 import { getWorker } from "@utils/workerWrapper";
 
 let prettierWorker;
 
-function getEditorLanguage(lang: Language) {
+function getEditorLanguage(lang?: Language) {
   const mapping = {
     flow: "typescript"
   };
 
-  return mapping[lang] || lang;
+  return lang ? mapping[lang] || lang : lang;
 }
 
 export type Transformer = (args: {
@@ -67,8 +67,8 @@ const ConversionPanel: React.FunctionComponent<ConversionPanelProps> = function(
   const [message, setMessage] = useState("");
   const [showUpdateSpinner, toggleUpdateSpinner] = useState(false);
 
-  const router = useRouter();
-  const route = activeRouteData(router.pathname);
+  const pathname = useRouterState({ select: state => state.location.pathname });
+  const route = activeRouteData(pathname);
 
   let packageDetails;
 

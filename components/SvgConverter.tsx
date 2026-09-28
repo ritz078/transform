@@ -35,21 +35,20 @@ export const SvgConverter: React.FunctionComponent<SvgConverterProps> = ({
   settings,
   setSettings
 }) => {
-  const getSettingsPanel = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => {
-      return (
-        <Form<Partial<Settings>>
-          initialValues={settings}
-          open={open}
-          toggle={toggle}
-          title={"SVGO Settings"}
-          onSubmit={setSettings}
-          formsFields={formFields}
-        />
-      );
-    },
-    []
-  );
+  const getSettingsPanel = useCallback<
+    NonNullable<EditorPanelProps["settingElement"]>
+  >(({ open, toggle }) => {
+    return (
+      <Form<Partial<Settings>>
+        initialValues={settings}
+        open={open}
+        toggle={toggle}
+        title={"SVGO Settings"}
+        onSubmit={setSettings}
+        formsFields={formFields}
+      />
+    );
+  }, []);
 
   return (
     <ConversionPanel

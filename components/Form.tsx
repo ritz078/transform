@@ -59,7 +59,7 @@ const Form = <T extends object>({
                   let FormField, select;
                   if (type === InputType.TEXT_INPUT) FormField = TextInput;
                   else if (type === InputType.SWITCH) FormField = Switch;
-                  else if (type === InputType.SELECT)
+                  else if (type === InputType.SELECT && options)
                     select = (
                       <Select
                         value={props.values[key]}

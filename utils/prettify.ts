@@ -1,16 +1,15 @@
 import prettier from "prettier/standalone";
 import { prettierParsers, supportedLanguages } from "@utils/prettier";
 
-const plugins = [
-  require("prettier/parser-babylon"),
-  require("prettier/parser-html"),
-  require("prettier/parser-postcss"),
-  require("prettier/parser-graphql"),
-  require("prettier/parser-markdown"),
-  require("prettier/parser-yaml"),
-  require("prettier/parser-flow"),
-  require("prettier/parser-typescript")
-];
+import babylon from "prettier/parser-babylon";
+import html from "prettier/parser-html";
+import postcss from "prettier/parser-postcss";
+import graphql from "prettier/parser-graphql";
+import markdown from "prettier/parser-markdown";
+import yaml from "prettier/parser-yaml";
+import typescript from "prettier/parser-typescript";
+
+const plugins = [babylon, html, postcss, graphql, markdown, yaml, typescript];
 
 export async function prettify(language: string, value: string) {
   let result;

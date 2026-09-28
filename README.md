@@ -16,6 +16,35 @@
   </tbody>
 </table>
 
+## Development
+
+Requires Node.js 22.12 or newer and Yarn 1.22.
+
+```sh
+yarn install --frozen-lockfile
+yarn dev
+```
+
+Open http://127.0.0.1:3000. The app uses TanStack Start, React 18, and Vite. Converter components live in `pages/`; file routes live in `routes/`. The document and page metadata render on the server, while the interactive Evergreen UI and Monaco editors render on the client. Heavy conversions run in browser workers or WebAssembly; the existing server-backed converters use `server/converters/`.
+
+```sh
+yarn typecheck
+yarn test
+yarn build
+yarn start
+```
+
+The production server uses Nitro and requires Node.js. `.output/` is a self-contained deployment artifact, including the older TypeScript compiler and declaration files needed by the converters. Vercel configuration retains the existing redirects; no deployment is needed for local development.
+
+With a development or production server running:
+
+```sh
+TEST_BASE_URL=http://127.0.0.1:3000 yarn test:api
+TEST_BASE_URL=http://127.0.0.1:3000 yarn test:browser
+```
+
+Browser tests use an installed Google Chrome. They cover every converter's default example, representative edited inputs, navigation/persistence, metadata, redirects, and 404 responses. Evergreen 4 and the existing Monaco wrapper still emit React deprecation warnings in development; upgrading that UI is separate from this framework migration.
+
 ## Credits
 
 The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
@@ -24,11 +53,9 @@ The logo has been designed by [mikicon](https://thenounproject.com/mikicon/).
 
 MIT @ Ritesh Kumar
 
-## Development
+## Adding a converter
 
-- Run `yarn && yarn dev` for development.
-- Every route is a diggerent file in the `pages/*` directory
-- You can add a new transformer by adding a file there and adding the route in `utils/routes.tsx`
+Add the converter component in `pages/`, a matching file route in `routes/`, and its navigation entry in `utils/routes.tsx`. TanStack Router regenerates `routeTree.gen.ts` during development and builds.
 
 ## Self Hosting
 

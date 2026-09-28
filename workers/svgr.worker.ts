@@ -1,4 +1,9 @@
-import convert from "@svgr/core/lib/convert";
+import convertModule from "@svgr/core/lib/convert";
+import jsxModule from "@svgr/plugin-jsx";
+
+const convert =
+  typeof convertModule === "function" ? convertModule : convertModule.default;
+const jsx = typeof jsxModule === "function" ? jsxModule : jsxModule.default;
 
 const _self: any = self;
 
@@ -7,7 +12,7 @@ _self.onmessage = async ({ data: { payload, id } }) => {
 
   try {
     const result = await convert(value, {
-      plugins: [require("@svgr/plugin-jsx").default],
+      plugins: [jsx],
       svgo: false,
       native
     });
@@ -19,7 +24,7 @@ _self.onmessage = async ({ data: { payload, id } }) => {
   } catch (e) {
     _self.postMessage({
       id,
-      error: e.message
+      err: e.message
     });
   }
 };
