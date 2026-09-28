@@ -1,7 +1,7 @@
 import ConversionPanel from "@components/ConversionPanel";
 import * as React from "react";
 import { useCallback } from "react";
-import BabelWorker from "@workers/babel.worker";
+import BabelWorker from "@workers/babel.worker.ts?worker";
 import { getWorker } from "@utils/workerWrapper";
 import { BabelTransforms } from "@constants/babelTransforms";
 

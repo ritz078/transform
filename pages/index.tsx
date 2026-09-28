@@ -6,8 +6,8 @@ import { useCallback } from "react";
 import { Transformer } from "@components/ConversionPanel";
 import isSvg from "is-svg";
 import { getWorker } from "@utils/workerWrapper";
-import SvgrWorker from "@workers/svgr.worker";
-import SvgoWorker from "@workers/svgo.worker";
+import SvgrWorker from "@workers/svgr.worker.ts?worker";
+import SvgoWorker from "@workers/svgo.worker.ts?worker";
 
 let prettier, svgo, svgr;
 export default function Index() {

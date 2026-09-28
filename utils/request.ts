@@ -1,7 +1,6 @@
 import axios, { CancelTokenSource } from "axios";
-import { type } from "os";
 
-let cancelTokenSource: CancelTokenSource;
+let cancelTokenSource: CancelTokenSource | null;
 export default async function request(
   url: string,
   data: any,

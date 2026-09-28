@@ -1,5 +1,3 @@
-import { Module } from "webpack";
-
 const resolves = {};
 const rejects = {};
 let globalMsgId = 0;

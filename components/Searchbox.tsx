@@ -1,15 +1,18 @@
 import { routes } from "@utils/routes";
 import { Autocomplete, SearchInput } from "evergreen-ui";
 import React, { useCallback } from "react";
-import { useRouter } from "next/router";
+import { useNavigate } from "@tanstack/react-router";
 
 const SearchBox: React.FunctionComponent<{}> = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
 
-  const onSearchSelect = useCallback(changedItem => {
-    const route = routes.find(route => changedItem === route.searchTerm);
-    router.push(route.path);
-  }, []);
+  const onSearchSelect = useCallback(
+    changedItem => {
+      const route = routes.find(route => changedItem === route.searchTerm);
+      if (route) navigate({ to: route.path });
+    },
+    [navigate]
+  );
 
   return (
     <Autocomplete

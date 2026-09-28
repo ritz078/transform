@@ -23,10 +23,7 @@ export default function JsObjectToTypescript() {
 
   const transformer = useCallback(
     async ({ value }) => {
-      const result = JSON.stringify
-        (eval("("
-          + value
-          + ")"), null, 2);
+      const result = JSON.stringify(eval("(" + value + ")"), null, 2);
 
       const { run } = await import("json_typegen_wasm");
 
@@ -43,21 +40,20 @@ export default function JsObjectToTypescript() {
     [settings]
   );
 
-  const getSettingsElement = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => {
-      return (
-        <Form<Settings>
-          title={name}
-          onSubmit={setSettings}
-          open={open}
-          toggle={toggle}
-          formsFields={formFields}
-          initialValues={settings}
-        />
-      );
-    },
-    []
-  );
+  const getSettingsElement = useCallback<
+    NonNullable<EditorPanelProps["settingElement"]>
+  >(({ open, toggle }) => {
+    return (
+      <Form<Settings>
+        title={name}
+        onSubmit={setSettings}
+        open={open}
+        toggle={toggle}
+        formsFields={formFields}
+        initialValues={settings}
+      />
+    );
+  }, []);
 
   return (
     <ConversionPanel

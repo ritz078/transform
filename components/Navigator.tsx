@@ -1,102 +1,77 @@
-import React, { Fragment } from "react";
-import { Heading, Pane, Text } from "evergreen-ui";
-import { categorizedRoutes, Route } from "@utils/routes";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import SearchBox from "@components/Searchbox";
+import React, { useState } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { categorizedRoutes, routes } from "@utils/routes";
 
 export default function Navigator() {
-  const router = useRouter();
-
+  const pathname = useRouterState({ select: state => state.location.pathname });
+  const [filter, setFilter] = useState("");
   return (
-    <Pane
-      width={240}
-      height={"calc(100vh - 40px)"}
-      borderRight
-      display="flex"
-      flexDirection="column"
-      paddingTop={20}
-      backgroundColor="#FFFFFF"
+    <aside
+      className="flex w-60 shrink-0 flex-col border-r border-slate-200 bg-[#fafbfc] max-[800px]:w-[190px] max-[600px]:absolute max-[600px]:inset-y-0 max-[600px]:left-0 max-[600px]:z-20 max-[600px]:w-60 max-[600px]:shadow-xl"
+      aria-label="Transformers"
     >
-      <Pane paddingX={15}>
-        <SearchBox />
-      </Pane>
-
-      <Pane
-        display="flex"
-        flex={1}
-        overflowY="scroll"
-        flexDirection="column"
-        paddingBottom={10}
-      >
-        {categorizedRoutes.map(route => {
+      <div className="relative border-b border-slate-200 p-2.5">
+        <span
+          className="material-symbols-outlined pointer-events-none absolute top-[17px] left-[18px] text-base text-slate-400"
+          aria-hidden="true"
+        >
+          search
+        </span>
+        <input
+          className="h-[29px] w-full rounded-md border border-slate-200 bg-white pr-2 pl-7 text-[11px] text-slate-700 outline-none placeholder:text-slate-400 focus:border-[#635bff]"
+          value={filter}
+          onChange={event => setFilter(event.target.value)}
+          placeholder="Filter transformers..."
+          aria-label="Filter transformers"
+        />
+      </div>
+      <nav className="min-h-0 flex-1 overflow-y-auto p-2">
+        {categorizedRoutes.map(group => {
+          const items = group.content.filter(item =>
+            `${group.category} ${item.label}`
+              .toLowerCase()
+              .includes(filter.toLowerCase())
+          );
+          if (!items.length) return null;
           return (
-            <Fragment key={route.category}>
-              <Pane paddingX={10} marginTop={15} marginBottom={2}>
-                <Heading marginLeft={5} size={400}>
-                  {route.category}
-                </Heading>
-              </Pane>
-
-              {(route.content as Route[])
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((a: Route) => {
-                  const isActive = router.pathname === a.path;
-                  return (
-                    <Link key={a.label} href={a.path} prefetch={false}>
-                      <a
-                        style={{
-                          textDecoration: "none"
-                        }}
-                      >
-                        <Pane
-                          paddingLeft={16}
-                          paddingY={3}
-                          backgroundColor={isActive ? "#f3f3f3" : undefined}
-                          borderLeft={
-                            isActive
-                              ? "3px solid #009688"
-                              : "3px solid transparent"
-                          }
-                          css={{
-                            "&:hover": {
-                              backgroundColor: "#f5f5f5"
-                            }
-                          }}
-                        >
-                          <Text fontSize={13}>{a.label}</Text>
-                        </Pane>
-                      </a>
-                    </Link>
-                  );
-                })}
-            </Fragment>
+            <div className="mb-3" key={group.category}>
+              <div className="flex items-center justify-between px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-slate-400">
+                <span>{group.category}</span>
+                <span>{items.length}</span>
+              </div>
+              <div className="grid gap-0.5">
+                {items.map(item => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    preload={false}
+                    className={`flex min-h-7 items-center overflow-hidden rounded-md border px-2 py-1 text-[11px] whitespace-nowrap no-underline ${
+                      pathname === item.path
+                        ? "border-[#d8dcee] bg-[#eff2ff] font-semibold text-[#635bff]"
+                        : "border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-800"
+                    }`}
+                  >
+                    <span
+                      className={`mr-[7px] size-1.5 shrink-0 rounded-full ${
+                        pathname === item.path
+                          ? "bg-[#635bff]"
+                          : "bg-transparent"
+                      }`}
+                    />
+                    {group.category === "Others"
+                      ? item.label
+                      : `${group.category} ${item.label}`}
+                  </Link>
+                ))}
+              </div>
+            </div>
           );
         })}
-      </Pane>
-
-      <Pane borderTop>
-        <a
-          href="https://vercel.com?utm_source=ritz078&utm_campaign=oss"
-          target="_blank"
-        >
-          <img
-            src="https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg"
-            alt="Vercel"
-            style={{
-              height: 40,
-              display: "block",
-              margin: "10px auto 0"
-            }}
-          />
-        </a>
-        <Heading size={400} paddingY={15} textAlign="center">
-          Created by{" "}
-          <a href="https://twitter.com/ritz078" target="_blank">
-            @ritz078
-          </a>
-        </Heading>
-      </Pane>
-    </Pane>
+      </nav>
+      <div className="flex justify-between border-t border-slate-200 bg-[#f6f9fc] px-3 py-2 font-mono text-[10px] text-slate-400">
+        <span>{routes.length} Converters</span>
+        <span>v2.0.2</span>
+      </div>
+    </aside>
   );
 }

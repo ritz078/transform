@@ -3,17 +3,14 @@ import {
   FilePicker,
   Heading,
   HTMLInputEvent,
-  IconButton,
   Pane,
   Popover,
   TextInput,
-  toaster,
-  Tooltip
+  toaster
 } from "evergreen-ui";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import React, { useCallback, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import copy from "clipboard-copy";
-import Npm from "@assets/svgs/Npm";
 import { useDropzone } from "react-dropzone";
 
 export interface EditorPanelProps {
@@ -41,9 +38,9 @@ export interface EditorPanelProps {
   };
 }
 
-const Monaco = dynamic(() => import("../components/Monaco"), {
-  ssr: false
-});
+const Monaco = lazy(() => import("./Monaco"));
+const toolbarIconClass =
+  "inline-flex size-7 shrink-0 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700";
 
 export default function EditorPanel({
   editable = true,
@@ -58,17 +55,21 @@ export default function EditorPanel({
   defaultValue,
   onChange,
   id,
-  packageDetails
+  packageDetails: _packageDetails
 }: EditorPanelProps) {
   const [showSettingsDialogue, setSettingsDialog] = useState(false);
   const [value, setValue] = useState(defaultValue);
   const [fetchingUrl, setFetchingUrl] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const options = {
-    fontSize: 14,
+    fontSize: 12.5,
     readOnly: !editable,
     codeLens: false,
-    fontFamily: "Menlo, Consolas, monospace, sans-serif",
+    fontFamily: "JetBrains Mono, Menlo, Consolas, monospace",
+    lineHeight: 24,
+    padding: { top: 6, bottom: 6 },
+    scrollBeyondLastLine: false,
     minimap: {
       enabled: false
     },
@@ -82,24 +83,24 @@ export default function EditorPanel({
     [showSettingsDialogue]
   );
 
-  useEffect(() => {
-    // @ts-ignore
-    window.__webpack_public_path__ = "/_next/static/";
-  }, []);
-
   const getSettings = useCallback(
     () => (
       <>
-        <Button
-          marginRight={10}
-          iconBefore="cog"
+        <button
+          type="button"
+          className="inline-flex h-7 items-center gap-1 rounded-md px-2 font-mono text-[11px] text-slate-500 hover:bg-slate-100 hover:text-slate-700"
           onClick={_toggleSettingsDialog}
-          height={28}
         >
+          <span
+            className="material-symbols-outlined text-sm"
+            aria-hidden="true"
+          >
+            tune
+          </span>
           Settings
-        </Button>
+        </button>
 
-        {settingElement({
+        {settingElement?.({
           toggle: _toggleSettingsDialog,
           open: showSettingsDialogue
         })}
@@ -115,7 +116,7 @@ export default function EditorPanel({
     reader.readAsText(file, "utf-8");
     reader.onload = () => {
       setValue(reader.result as string);
-      onChange(reader.result as string);
+      onChange?.(reader.result as string);
       close();
     };
   }, []);
@@ -132,10 +133,28 @@ export default function EditorPanel({
 
   const copyValue = useCallback(() => {
     copy(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
     toaster.success("Copied to clipboard.", {
       id
     });
   }, [value]);
+
+  const downloadValue = useCallback(() => {
+    const file = new Blob([value], { type: "text/plain" });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `transform-output.${
+      language === "typescript"
+        ? "ts"
+        : language === "javascript"
+        ? "jsx"
+        : language || "txt"
+    }`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [value, language]);
 
   const fetchFile = useCallback(
     close => {
@@ -146,7 +165,7 @@ export default function EditorPanel({
         setValue(value);
         setFetchingUrl("");
         close();
-        onChange(value);
+        onChange?.(value);
       })();
     },
     [fetchingUrl, onChange]
@@ -158,22 +177,21 @@ export default function EditorPanel({
   }, [defaultValue]);
 
   return (
-    <Pane display="flex" flex={1} flexDirection="column" overflow="hidden">
-      <Pane
-        display="flex"
-        height={40}
-        paddingX={10}
-        alignItems={"center"}
-        borderBottom
-        zIndex={2}
-        backgroundColor="#FFFFFF"
-        flexShrink={0}
-      >
-        <Pane flex={1}>
-          <Heading size={500} marginTop={0}>
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-white">
+      <div className="z-10 flex h-10 shrink-0 items-center border-b border-slate-200 bg-[#fafbfc] px-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            {editable ? "Input" : "Output"}
+          </span>
+          <span className="font-mono text-xs text-slate-300">/</span>
+          <span
+            className={`truncate font-mono text-[11px] font-medium ${
+              editable ? "text-slate-600" : "text-[#635bff]"
+            }`}
+          >
             {title}
-          </Heading>
-        </Pane>
+          </span>
+        </div>
 
         {settingElement && getSettings()}
 
@@ -223,58 +241,78 @@ export default function EditorPanel({
             )}
             shouldCloseOnExternalClick
           >
-            <Tooltip content="Load File">
-              <IconButton height={28} marginRight={10} icon="upload" />
-            </Tooltip>
+            <button
+              type="button"
+              className={toolbarIconClass}
+              title="Load file or URL"
+              aria-label="Load file or URL"
+            >
+              <span
+                className="material-symbols-outlined text-sm"
+                aria-hidden="true"
+              >
+                upload
+              </span>
+            </button>
           </Popover>
         )}
 
         {hasClear && (
-          <Tooltip content="Clear">
-            <IconButton
-              height={28}
-              icon="trash"
-              intent="danger"
-              marginRight={10}
-              onClick={() => setValue("")}
-            />
-          </Tooltip>
+          <button
+            type="button"
+            className={toolbarIconClass}
+            title="Clear input"
+            aria-label="Clear input"
+            onClick={() => {
+              setValue("");
+              onChange?.("");
+            }}
+          >
+            <span
+              className="material-symbols-outlined text-sm"
+              aria-hidden="true"
+            >
+              delete
+            </span>
+          </button>
         )}
 
-        {packageDetails && (
-          <a
-            href={packageDetails.url}
-            style={{
-              display: "inline-flex"
-            }}
-            target="_blank"
+        {!editable && (
+          <button
+            type="button"
+            className={toolbarIconClass}
+            title="Download output"
+            aria-label="Download output"
+            onClick={downloadValue}
           >
-            <Tooltip content={packageDetails.name}>
-              <Npm />
-            </Tooltip>
-          </a>
+            <span
+              className="material-symbols-outlined text-sm"
+              aria-hidden="true"
+            >
+              download
+            </span>
+          </button>
         )}
 
         {hasCopy && (
-          <Button
-            appearance="primary"
-            marginRight={10}
-            iconBefore="duplicate"
+          <button
+            type="button"
+            className="inline-flex h-6 items-center gap-1.5 rounded-full bg-slate-900 px-2.5 font-mono text-[11px] font-medium text-white hover:bg-slate-800"
             onClick={copyValue}
-            height={28}
           >
-            Copy
-          </Button>
+            <span
+              className="material-symbols-outlined text-[13px]"
+              aria-hidden="true"
+            >
+              {copied ? "check" : "content_copy"}
+            </span>
+            {copied ? "Copied!" : "Copy"}
+          </button>
         )}
-      </Pane>
+      </div>
 
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          overflow: "hidden"
-        }}
+        className="flex min-h-0 flex-1 flex-col overflow-hidden"
         {...getRootProps()}
       >
         {topNotifications &&
@@ -283,16 +321,47 @@ export default function EditorPanel({
             toggleSettings: _toggleSettingsDialog
           })}
 
-        <Monaco
-          language={language}
-          value={value}
-          options={options}
-          onChange={value => {
-            setValue(value);
-            onChange(value);
-          }}
-        />
+        <Suspense fallback={<div role="status">Loading editor…</div>}>
+          <Monaco
+            language={language}
+            value={value}
+            options={options}
+            onChange={value => {
+              setValue(value);
+              onChange?.(value);
+            }}
+          />
+        </Suspense>
       </div>
-    </Pane>
+      <div className="flex h-8 shrink-0 items-center justify-between border-t border-slate-200 bg-[#fafbfc] px-3 font-mono text-[10px] text-slate-500">
+        <span>
+          {editable
+            ? `Source • ${new Blob([value]).size} B`
+            : `Target • ${language || "text"}`}
+          {!editable && _packageDetails && (
+            <>
+              {" "}
+              ·{" "}
+              <a
+                className="text-[#635bff] no-underline hover:underline"
+                href={_packageDetails.url}
+                target="_blank"
+                rel="noreferrer"
+                title={`Powered by ${_packageDetails.name}`}
+              >
+                {_packageDetails.name}
+              </a>
+            </>
+          )}
+        </span>
+        <span className={editable ? "text-emerald-500" : "text-slate-400"}>
+          {editable
+            ? value
+              ? "Ready to transform"
+              : "Empty input"
+            : "Generated output"}
+        </span>
+      </div>
+    </div>
   );
 }

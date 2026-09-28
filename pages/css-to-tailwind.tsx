@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { promises as fs } from "fs";
-import path from "path";
-import dynamic from "next/dynamic";
+import Monaco from "@components/Monaco";
+import nested from "postcss-nested";
+import rawTailwindConfig from "css-to-tailwindcss/node_modules/tailwindcss/stubs/simpleConfig.stub.js?raw";
 
 import {
   Dialog,
@@ -19,20 +19,19 @@ import { TailwindConverter, TailwindConverterConfig } from "css-to-tailwindcss";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import { useSettings } from "@hooks/useSettings";
 
-const Monaco = dynamic(() => import("../components/Monaco"), {
-  ssr: false
-});
-
 interface RawSettings {
   tailwindConfig?: string;
   remInPx?: string | null;
   arbitraryPropertiesIsEnabled?: boolean;
 }
 
-const evalConfig = (configValue: string) =>
+const evalConfig = (configValue?: string) =>
   eval(`const module = {}; ${configValue}; module.exports;`);
 
-const DEFAULT_POSTCSS_PLUGINS = [require("postcss-nested")];
+// The converter ships a separate PostCSS version with incompatible node types.
+const DEFAULT_POSTCSS_PLUGINS = ([
+  nested
+] as unknown) as TailwindConverterConfig["postCSSPlugins"];
 
 function decorateResult(result: string) {
   return `/*
@@ -52,8 +51,8 @@ function CssToTailwindSettings({
   open: boolean;
   toggle: () => void;
   onConfirm: (props: {
-    tailwindConfig: string;
-    remInPx: string;
+    tailwindConfig?: string;
+    remInPx?: string | null;
     arbitraryPropertiesIsEnabled: boolean;
   }) => boolean | Promise<boolean>;
   settings: RawSettings;
@@ -155,7 +154,13 @@ function CssToTailwindSettings({
   );
 }
 
-export default function CssToTailwind3({ defaultSettings }) {
+const defaultSettings: RawSettings = {
+  tailwindConfig: rawTailwindConfig,
+  remInPx: "16",
+  arbitraryPropertiesIsEnabled: false
+};
+
+export default function CssToTailwind3() {
   const [rawSettings, setRawSettings] = useSettings(
     "css-to-tailwind",
     defaultSettings
@@ -167,7 +172,7 @@ export default function CssToTailwind3({ defaultSettings }) {
       arbitraryPropertiesIsEnabled: !!rawSettings.arbitraryPropertiesIsEnabled
     };
 
-    if (isNaN(config["remInPx"])) {
+    if (isNaN(Number(config["remInPx"]))) {
       toaster.danger(
         "Invalid `REM in PIXELS` value (only `number` or `null` allowed). Fallback to `null` value"
       );
@@ -252,23 +257,4 @@ export default function CssToTailwind3({ defaultSettings }) {
       }}
     />
   );
-}
-
-export async function getStaticProps() {
-  const rawTailwindConfig = await fs.readFile(
-    path.resolve(
-      "./node_modules/css-to-tailwindcss/node_modules/tailwindcss/stubs/simpleConfig.stub.js"
-    ),
-    "utf-8"
-  );
-
-  return {
-    props: {
-      defaultSettings: {
-        tailwindConfig: rawTailwindConfig,
-        remInPx: "16",
-        arbitraryPropertiesIsEnabled: false
-      } as RawSettings
-    }
-  };
 }

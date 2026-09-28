@@ -1,4 +1,5 @@
 import SVGO from "svgo";
+import { svgoPlugins } from "./svgoPlugins";
 
 const _self: any = self;
 
@@ -15,9 +16,9 @@ interface Payload {
 _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
   delete payload.settings.optimizeSvg;
 
-  const plugins = Object.keys(payload.settings).filter(
-    key => payload.settings[key]
-  );
+  const plugins = Object.keys(payload.settings)
+    .filter(key => payload.settings[key])
+    .map(key => ({ [key]: svgoPlugins[key] }));
 
   try {
     const svgo = new SVGO({
@@ -33,7 +34,7 @@ _self.onmessage = ({ data: { id, payload } }: { data: Data }) => {
       });
     });
   } catch (e) {
-    if (IS_DEV) {
+    if (import.meta.env.DEV) {
       console.error(e);
     }
     _self.postMessage({

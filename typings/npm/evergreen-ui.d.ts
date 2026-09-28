@@ -1,9 +1,9 @@
 declare module "evergreen-ui" {
   import React from "react";
   import { EnhancerProps } from "ui-box/dist/types/enhancers";
-  import App from "next/app";
 
   export interface PaneProps extends EnhancerProps {
+    children?: React.ReactNode;
     elevation?: number;
     className?: string;
     css?: any;
@@ -100,6 +100,7 @@ declare module "evergreen-ui" {
   type TextSize = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
   export interface HeadingProps extends EnhancerProps {
+    children?: React.ReactNode;
     size?: TextSize;
     is?: string;
     onClick?: () => void;
@@ -240,6 +241,7 @@ declare module "evergreen-ui" {
   export class Alert extends React.PureComponent<AlertProps> {}
 
   export interface BadgeProps extends EnhancerProps {
+    children?: React.ReactNode;
     color?: string;
     isInteractive?: boolean;
     theme?: any;
@@ -253,6 +255,7 @@ declare module "evergreen-ui" {
   > {}
 
   export interface SelectProps extends EnhancerProps {
+    children?: React.ReactNode;
     value: string;
     onChange: (e) => void;
     name?: string;

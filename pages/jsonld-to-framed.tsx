@@ -8,7 +8,7 @@ export default function JsonldToFramed() {
     async ({ value, splitEditorValue }) => {
       const jsonLd = await frame(
         JSON.parse(value),
-        JSON.parse(splitEditorValue)
+        JSON.parse(splitEditorValue!)
       );
 
       return JSON.stringify(jsonLd, null, 2);

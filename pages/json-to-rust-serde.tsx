@@ -50,21 +50,20 @@ export default function JsonToRustSerde() {
     [settings]
   );
 
-  const getSettingsElement = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => {
-      return (
-        <Form<Settings>
-          title="JSON to Rust Serde"
-          onSubmit={setSettings}
-          open={open}
-          toggle={toggle}
-          formsFields={formFields}
-          initialValues={settings}
-        />
-      );
-    },
-    []
-  );
+  const getSettingsElement = useCallback<
+    NonNullable<EditorPanelProps["settingElement"]>
+  >(({ open, toggle }) => {
+    return (
+      <Form<Settings>
+        title="JSON to Rust Serde"
+        onSubmit={setSettings}
+        open={open}
+        toggle={toggle}
+        formsFields={formFields}
+        initialValues={settings}
+      />
+    );
+  }, []);
 
   return (
     <ConversionPanel

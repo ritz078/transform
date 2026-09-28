@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback } from "react";
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
 import { getWorker } from "@utils/workerWrapper";
-import GrapqlWorker from "@workers/graphql.worker";
+import GrapqlWorker from "@workers/graphql.worker.ts?worker";
 import { GraphqlTransforms } from "@constants/graphqlTransforms";
 
 let graphqlWorker, prettierWorker;

@@ -9,3 +9,12 @@ public/static/monaco/*.worker.js.map
 heroku
 
 .vercel
+
+.output
+.tanstack
+.playwright-cli
+test-results
+playwright-report
+
+# PR Lens writes its previews here. They are rebuilt on demand.
+.pr-lens/

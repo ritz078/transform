@@ -1,5 +1,5 @@
 import ConversionPanel, { Transformer } from "@components/ConversionPanel";
-import BabelWorker from "@workers/babel.worker";
+import BabelWorker from "@workers/babel.worker.ts?worker";
 import React, { useCallback } from "react";
 import { getWorker } from "@utils/workerWrapper";
 import { BabelTransforms } from "@constants/babelTransforms";
@@ -47,7 +47,9 @@ export default function ObjectStylesToTemplateLiteral() {
     [settings]
   );
 
-  const getSettingsPanel = useCallback<EditorPanelProps["settingElement"]>(
+  const getSettingsPanel = useCallback<
+    NonNullable<EditorPanelProps["settingElement"]>
+  >(
     ({ open, toggle }) => (
       <Form<Settings>
         onSubmit={setSettings}

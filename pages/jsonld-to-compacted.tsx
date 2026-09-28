@@ -8,7 +8,7 @@ export default function JsonldToCompacted() {
     async ({ value, splitEditorValue }) => {
       const jsonLd = await compact(
         JSON.parse(value),
-        JSON.parse(splitEditorValue)
+        JSON.parse(splitEditorValue!)
       );
 
       return JSON.stringify(jsonLd, null, 2);

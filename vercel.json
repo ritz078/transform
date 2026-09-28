@@ -1,9 +1,4 @@
 {
-  "build": {
-    "env": {
-      "NODE_OPTIONS": "--openssl-legacy-provider"
-    }
-  },
   "redirects": [
     {
       "source": "/svg-to-jsx",
@@ -21,5 +16,6 @@
       "source": "/json-schema-to-ts",
       "destination": "/json-schema-to-typescript"
     }
-  ]
+  ],
+  "framework": "tanstack-start"
 }

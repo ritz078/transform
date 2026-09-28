@@ -7,7 +7,7 @@ import Form, { InputType } from "@components/Form";
 import { useSettings } from "@hooks/useSettings";
 import isSvg from "is-svg";
 import { Alert, Heading } from "evergreen-ui";
-import Router from "next/router";
+import { useNavigate } from "@tanstack/react-router";
 
 interface Settings {
   createFunction: boolean;
@@ -24,6 +24,7 @@ const formFields = [
 
 export default function HtmlToJsxComponent() {
   const name = "HTML to JSX";
+  const navigate = useNavigate();
 
   const [settings, setSettings] = useSettings(name, {
     createFunction: false
@@ -49,21 +50,20 @@ export default function HtmlToJsxComponent() {
     [settings]
   );
 
-  const getSettingsElement = useCallback<EditorPanelProps["settingElement"]>(
-    ({ open, toggle }) => {
-      return (
-        <Form<Settings>
-          title="HTML to JSX"
-          onSubmit={setSettings}
-          open={open}
-          toggle={toggle}
-          formsFields={formFields}
-          initialValues={settings}
-        />
-      );
-    },
-    []
-  );
+  const getSettingsElement = useCallback<
+    NonNullable<EditorPanelProps["settingElement"]>
+  >(({ open, toggle }) => {
+    return (
+      <Form<Settings>
+        title="HTML to JSX"
+        onSubmit={setSettings}
+        open={open}
+        toggle={toggle}
+        formsFields={formFields}
+        initialValues={settings}
+      />
+    );
+  }, []);
 
   return (
     <ConversionPanel
@@ -86,7 +86,7 @@ export default function HtmlToJsxComponent() {
                     size={400}
                     is="a"
                     color={"blue"}
-                    onClick={() => Router.push("/svg-to-jsx")}
+                    onClick={() => navigate({ to: "/" })}
                   >
                     SVG to JSX converter.
                   </Heading>
